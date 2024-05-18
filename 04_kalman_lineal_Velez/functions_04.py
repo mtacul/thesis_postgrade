@@ -145,6 +145,46 @@ def A_B(I_x,I_y,I_z,w0_O,w0,w1,w2,deltat,h,b_body, b_orbit):
     
     return A,B,C,A_discrete,B_discrete,C_discrete
 
+#%% Modelo lineal continuo
+def rk4_step_PD(dynamics, x, A, B, u, h):
+    k1 = h * dynamics(A, x, B, u)
+    k2 = h * dynamics(A, x + 0.5 * k1, B, u)
+    k3 = h * dynamics(A, x + 0.5 * k2, B, u)
+    k4 = h * dynamics(A, x + k3, B, u)
+        
+    # Update components of q
+    q0_new = x[0] + (k1[0] + 2 * k2[0] + 2 * k3[0] + k4[0]) / 6
+    q1_new = x[1] + (k1[1] + 2 * k2[1] + 2 * k3[1] + k4[1]) / 6
+    q2_new = x[2] + (k1[2] + 2 * k2[2] + 2 * k3[2] + k4[2]) / 6
+    
+    q_new_real = np.array([q0_new, q1_new, q2_new])
+
+    # Update components of w
+    w0_new = x[3] + (k1[3] + 2 * k2[3] + 2 * k3[3] + k4[3]) / 6
+    w1_new = x[4] + (k1[4] + 2 * k2[4] + 2 * k3[4] + k4[4]) / 6
+    w2_new = x[5] + (k1[5] + 2 * k2[5] + 2 * k3[5] + k4[5]) / 6
+    w_new = np.array([w0_new, w1_new, w2_new])
+
+    return q_new_real, w_new
+
+# funcion de la ecuacicon xDot = Ax - Bu 
+def dynamics(A, x, B, u):
+    return np.dot(A, x) - np.dot(B, u)
+
+def mod_lineal_cont(x,u,deltat,h,A,B):
+    
+    for j in range(int(deltat/h)):
+        q_rot,w_new = rk4_step_PD(dynamics, x, A, B, u, h)
+        if  1-q_rot[0]**2-q_rot[1]**2-q_rot[2]**2 < 0:
+            q_rot = q_rot / np.linalg.norm(q_rot)
+            x_new = np.hstack((np.transpose(q_rot), np.transpose(w_new)))
+            q3s_rot = 0
+
+        else:
+            x_new = np.hstack((np.transpose(q_rot), np.transpose(w_new)))
+            q3s_rot = np.sqrt(1-q_rot[0]**2-q_rot[1]**2-q_rot[2]**2)
+                
+    return x_new, q3s_rot
 #%% Modelo lineal discreto
 
 def mod_lineal_disc(x,u,deltat, h,A_discrete,B_discrete):
