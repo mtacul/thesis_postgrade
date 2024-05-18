@@ -37,7 +37,7 @@ vsun_z = array_datos[:, 12]
 w0_O = 0.00163
 
 deltat = 2
-limite =  1002
+limite =  602
 t = np.arange(0, limite, deltat)
 
 I_x = 0.037
