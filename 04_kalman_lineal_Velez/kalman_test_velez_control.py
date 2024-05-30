@@ -10,6 +10,7 @@ import control as ctrl
 import pandas as pd
 import matplotlib.pyplot as plt
 from scipy.spatial.transform import Rotation
+from sklearn.decomposition import PCA
 
 # %%
 archivo_csv = "Vectores_orbit_ECI.csv"
@@ -37,7 +38,7 @@ vsun_z = array_datos[:, 12]
 w0_O = 0.00163
 
 deltat = 2
-limite = 62
+limite = 1000
 t = np.arange(0, limite, deltat)
 
 I_x = 0.037
@@ -53,11 +54,11 @@ sigma_b = 1e-6
 
 
 #%%
-q= np.array([0,0.7071,0,0.7071])
-# q= np.array([0,0,0,1])
+# q= np.array([0,0.7071,0,0.7071])
+q= np.array([0,0,0,1])
 w = np.array([0.0001, 0.0001, 0.0001])
-q_est = np.array([0.00985969, 0.70703804, 0.00985969, 0.70703804])
-# q_est= np.array([0.0120039,0.0116517,0.0160542,0.999731])
+# q_est = np.array([0.00985969, 0.70703804, 0.00985969, 0.70703804])
+q_est= np.array([0.0120039,0.0116517,0.0160542,0.999731])
 
 q0_est = [q_est[0]]
 q1_est = [q_est[1]]
@@ -88,19 +89,49 @@ s_body_i = functions_04.rotacion_v(q_real, si_orbit, sigma_ss)
 hh =0.01
 
 [A,B,C,A_discrete,B_discrete,C_discrete] = functions_04.A_B(I_x, I_y, I_z, w0_O, w0_eq, w1_eq, w2_eq, deltat, hh, b_body_i, bi_orbit)
+B_matrices = [B_discrete]
+#%%
+for i in range(len(t)-1):
+
+    print(t[i+1])
+    
+    # u_est = np.array([15,15,15])
+
+    b_orbit = [Bx_orbit[i+1],By_orbit[i+1],Bz_orbit[i+1]]
+
+    [A,B,C,A_discrete,B_discrete,C_discrete] = functions_04.A_B(I_x, I_y, I_z, w0_O, w0_eq, w1_eq, w2_eq, deltat, hh,np.ones(3),b_orbit)
+
+    B_matrices.append(B_discrete)
+
+# Aplana y apila todas las matrices en una sola matriz grande
+data = np.array([matrix.flatten() for matrix in B_matrices])
+
+# Crear una instancia del PCA
+n_components = 1  # Queremos una representación compacta, así que usamos 1 componente principal
+pca = PCA(n_components=n_components)
+
+# Ajustar el PCA a los datos y transformarlos
+transformed_data = pca.fit_transform(data)
+
+# Para obtener una representación compacta, calculamos la media de las transformaciones
+mean_transformed = np.mean(transformed_data, axis=0)
+
+# Inversa la transformación de PCA para volver al espacio original (18 dimensiones)
+mean_transformed_back = pca.inverse_transform(mean_transformed)
+
+# Reshape el vector resultante de 18 elementos a una matriz de 6x3
+B_prom = mean_transformed_back.reshape(6, 3)
+x0 = np.array([ -100 ,   200, -300,  -200,
+  -400, -100])
+
+optimal_x = functions_04.opt_K(A_discrete, B_prom, deltat, hh, x0)
+K = np.hstack([np.diag(optimal_x[:3]), np.diag(optimal_x[3:])])
+
+# xx = np.array([ -0.0913548 ,-1.77969, -4.60771, -0.0736712, -0.11651, 0.0342056])
+# K = np.hstack([np.diag(xx[:3]), np.diag(xx[3:])])
 
 diagonal_values = np.array([0.5**2, 0.5**2, 0.5**2, 0.1**2, 0.1**2, 0.1**2])
-
 P_ki = np.diag(diagonal_values)
-
-x0 = np.array([ -10 ,   20, -30,  -20,
-  -40, -100])
-
-optimal_x = functions_04.opt_K(A_discrete, B_discrete, deltat, hh, x0)
-# diag_K = np.array([ -241.00245091,    43.60100138, -3058.43592597,  -559.64142154,
-#   -154.34336893, -5160.75960109])
-K = np.hstack([np.diag(optimal_x[:3]), np.diag(optimal_x[3:])])
-x0 = optimal_x
 #%%
 np.random.seed(42)
 for i in range(len(t)-1):
@@ -119,16 +150,9 @@ for i in range(len(t)-1):
     vsun_orbit = [vx_sun_orbit[i+1],vy_sun_orbit[i+1],vz_sun_orbit[i+1]]
     s_body = functions_04.rotacion_v(q_real, vsun_orbit, sigma_ss)
 
-    # print(x_est)
-    # print(q_real)
-    # print(w_gyros)
     
     [A,B,C,A_discrete,B_discrete,C_discrete] = functions_04.A_B(I_x, I_y, I_z, w0_O, w0_eq, w1_eq, w2_eq, deltat, hh, b_body, b_orbit)
-    # optimal_x = functions_04.opt_K(A_discrete, B_discrete, deltat, hh, x0)
-    # K = np.hstack([np.diag(optimal_x[:3]), np.diag(optimal_x[3:])])
-    # x0 = optimal_x
-    [q_posteriori, w_posteriori, P_k_pos,K_k] = functions_04.kalman_lineal(A_discrete, B_discrete,C_discrete, x_real, u_est, b_body, b_orbit, P_ki, sigma_b, sigma_ss, deltat,w_gyros,hh)
-    # asasd
+    [q_posteriori, w_posteriori, P_k_pos,K_k] = functions_04.kalman_lineal(A_discrete, B_prom,C_discrete, x_est, u_est, b_body, b_orbit, P_ki, sigma_b, sigma_ss, deltat,hh)
     
     q0_est.append(q_posteriori[0])
     q1_est.append(q_posteriori[1])
@@ -141,7 +165,7 @@ for i in range(len(t)-1):
     P_ki = P_k_pos
     
     [xx_new_d, qq3_new_d] = functions_04.mod_lineal_disc(
-        x_real, u_est, deltat, hh, A_discrete,B_discrete)
+        x_real, u_est, deltat, hh, A_discrete,B_prom)
     
     x_real = xx_new_d
 
@@ -153,9 +177,7 @@ for i in range(len(t)-1):
     w1_real.append(xx_new_d[4])
     w2_real.append(xx_new_d[5])
 
-    # q_real = np.array([q0_real[-1], q1_real[-1], q2_real[-1], q3_real[-1]])
-    # www_real = np.array([w0_real[-1], w1_real[-1], w2_real[-1]])
-    # ww_real = functions_03.simulate_gyros_reading(www_real, 0,0)
+
 
 [MSE_cuat, MSE_omega]  = functions_04.cuat_MSE_NL(q0_real, q1_real, q2_real, q3_real, w0_real, w1_real, w2_real, q0_est, q1_est, q2_est, q3_est, w0_est, w1_est, w2_est)   
 

@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 """
-Created on Fri May 17 21:07:38 2024
+Created on Sun May 26 01:28:20 2024
 
 @author: nachi
 """
-import functions_03
+
 import numpy as np
+from sklearn.decomposition import PCA
+import functions_03
 import control as ctrl
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -35,9 +37,10 @@ vsun_y = array_datos[:, 11]
 vsun_z = array_datos[:, 12]
 #%%
 w0_O = 0.00163
-# 5600 aprox es una orbita
+# 5760 aprox es una orbita
 deltat = 2
-limite =  5602
+limite = 5762*2
+# limite =  5602*15
 t = np.arange(0, limite, deltat)
 
 I_x = 0.037
@@ -77,23 +80,75 @@ si_orbit = [vx_sun_orbit[0],vy_sun_orbit[0],vz_sun_orbit[0]]
 s_body_i = functions_03.rotacion_v(q_real, si_orbit, 0.036)
 hh =0.01
 
-[A,B,C,A_discrete,B_discrete,C_discrete] = functions_03.A_B(I_x, I_y, I_z, w0_O, w0_eq, w1_eq, w2_eq, deltat, hh, b_body_i, s_body_i)
+[A,B,C,A_discrete,B_discrete,C_discrete] = functions_03.A_B(I_x, I_y, I_z, w0_O, w0_eq, w1_eq, w2_eq, deltat, hh, bi_orbit,b_body_i, s_body_i)
 
+eigs =[]
 
-# x0 = np.array([ -10 ,   20, -30,  -20,
-#   -40, -100])
+# # Define weight matrices for LQR
+# Q = np.eye(A.shape[0])*0.001
+# R = np.eye(3)*4  # Assuming B has 3 columns, matching dimensions
+# P = solve_discrete_are(A_discrete, B_discrete, Q, R)
+# K = np.linalg.inv(R) @ B_discrete.T @ P
+
+# eig_K = np.linalg.eig(A_discrete-B @ K)
+# eigs.append(eig_K[0])
+
+# x0 = np.array([ -0.0913548 ,-1.77969, -4.60771, -0.0736712, -0.11651, 0.0342056])
 
 # optimal_x = functions_03.opt_K(A_discrete, B_discrete, deltat, hh, x0)
 # K = np.hstack([np.diag(optimal_x[:3]), np.diag(optimal_x[3:])])
 
 B_matrices = [B_discrete]
+
+#%%
+# for i in range(len(t[0:2882])-1):
+for i in range(len(t)-1):
+
+    print(t[i+1])
+    
+    # u_est = np.array([15,15,15])
+
+    b_orbit = [Bx_orbit[i+1],By_orbit[i+1],Bz_orbit[i+1]]
+
+    [A,B,C,A_discrete,B_discrete,C_discrete] = functions_03.A_B(I_x, I_y, I_z, w0_O, w0_eq, w1_eq, w2_eq, deltat, hh,b_orbit, np.zeros(3), np.zeros(3))
+
+    B_matrices.append(B_discrete)
+
+# Aplana y apila todas las matrices en una sola matriz grande
+data = np.array([matrix.flatten() for matrix in B_matrices])
+
+# Crear una instancia del PCA
+n_components = 1  # Queremos una representación compacta, así que usamos 1 componente principal
+pca = PCA(n_components=n_components)
+
+# Ajustar el PCA a los datos y transformarlos
+transformed_data = pca.fit_transform(data)
+
+# Para obtener una representación compacta, calculamos la media de las transformaciones
+mean_transformed = np.mean(transformed_data, axis=0)
+
+# Inversa la transformación de PCA para volver al espacio original (18 dimensiones)
+mean_transformed_back = pca.inverse_transform(mean_transformed)
+
+# Reshape el vector resultante de 18 elementos a una matriz de 6x3
+B_prom = mean_transformed_back.reshape(6, 3)
+
+x0 = np.array([ -10 ,   20, -30,  -20,
+  -40, -100])
+
+optimal_x = functions_03.opt_K(A_discrete, B_prom, deltat, hh, x0)
+K = np.hstack([np.diag(optimal_x[:3]), np.diag(optimal_x[3:])])
+
+xx = np.array([ -0.0913548 ,-1.77969, -4.60771, -0.0736712, -0.11651, 0.0342056])
+K = np.hstack([np.diag(xx[:3]), np.diag(xx[3:])])
+
 #%%
 np.random.seed(42)
 for i in range(len(t)-1):
     print(t[i+1])
     
-    u_est = np.array([15,15,15])
-    # u_est = np.dot(K,x_real)
+    # u_est = np.array([15,15,15])
+    u_est = np.dot(K,x_real)
 
     b_orbit = [Bx_orbit[i+1],By_orbit[i+1],Bz_orbit[i+1]]
     b_body = functions_03.rotacion_v(q_real, b_orbit, sigma_b)
@@ -102,12 +157,17 @@ for i in range(len(t)-1):
     s_body = functions_03.rotacion_v(q_real, vsun_orbit, sigma_ss)
 
 
-    [A,B,C,A_discrete,B_discrete,C_discrete] = functions_03.A_B(I_x, I_y, I_z, w0_O, w0_eq, w1_eq, w2_eq, deltat, hh, b_body, s_body)
-    # asasd
-    B_matrices.append(B_discrete)
+    [A,B,C,A_discrete,B_discrete,C_discrete] = functions_03.A_B(I_x, I_y, I_z, w0_O, w0_eq, w1_eq, w2_eq, deltat, hh, b_orbit,b_body, s_body)
+
     
     [xx_new_d, qq3_new_d] = functions_03.mod_lineal_disc(
-        x_real, u_est, deltat, hh, A_discrete,B_discrete)
+        x_real, u_est, deltat, hh, A_discrete,B_prom)
+    
+    # P = solve_discrete_are(A_discrete, B_discrete, Q, R)
+    # K = np.linalg.inv(R) @ B_discrete.T @ P
+    
+    # eig_K = np.linalg.eig(A_discrete-B @ K)
+    # eigs.append(eig_K[0])
     
     # optimal_x = functions_03.opt_K(A_discrete, B_discrete, deltat, hh, x0)
     # K = np.hstack([np.diag(optimal_x[:3]), np.diag(optimal_x[3:])])
@@ -127,57 +187,6 @@ for i in range(len(t)-1):
     # ww_real = functions_03.simulate_gyros_reading(www_real, 0,0)
 
 Bs_a = np.array(B_matrices)
-
-#%%
-
-import numpy as np
-from scipy.linalg import solve_discrete_are
-
-# Define matrix A
-A = np.array([
-    [1.00000000e+00, 0.00000000e+00, 0.00000000e+00, 1.00000000e-02, 0.00000000e+00, 0.00000000e+00],
-    [0.00000000e+00, 1.00000000e+00, 0.00000000e+00, 0.00000000e+00, 1.00000000e-02, 1.46229111e-07],
-    [0.00000000e+00, 8.97330778e-17, 1.00000000e+00, 0.00000000e+00, -2.81446667e-08, 1.00000000e-02],
-    [3.18828000e-10, 0.00000000e+00, 0.00000000e+00, 1.00000000e+00, 0.00000000e+00, 0.00000000e+00],
-    [0.00000000e+00, -9.56484000e-09, 0.00000000e+00, 0.00000000e+00, 1.00000000e+00, 2.92458222e-05],
-    [0.00000000e+00, 2.69199234e-14, 0.00000000e+00, 0.00000000e+00, -5.62893333e-06, 1.00000000e+00]
-])
-
-# Define weight matrices for LQR
-Q = np.eye(A.shape[0])
-R = np.eye(3)  # Assuming B has 3 columns, matching dimensions
-
-# Define time intervals and corresponding B matrices
-time_intervals = np.arange(0, 5600 + 2, 2)  # Intervals from 0 to 5600 seconds with a step of 2 seconds
-
-# Calculate K for each interval
-K_matrices = []
-for B in B_matrices:
-    P = solve_discrete_are(A, B, Q, R)
-    K = np.linalg.inv(R) @ B.T @ P
-    K_matrices.append(K)
-
-def piecewise_controller(x, current_time, time_intervals, K_matrices):
-    # Determine the current interval
-    interval_index = np.searchsorted(time_intervals, current_time) - 1
-    if interval_index < 0:
-        interval_index = 0
-    elif interval_index >= len(K_matrices):
-        interval_index = len(K_matrices) - 1
-    # Use the corresponding K matrix
-    K_current = K_matrices[interval_index]
-    return -K_current @ x
-
-# Example function to get current time
-def get_current_time():
-    # In a real application, replace with actual time retrieval logic
-    return np.random.choice(time_intervals)  # Replace with actual time retrieval
-
-# Example control loop
-state = np.random.rand(6)  # Replace with actual state
-current_time = get_current_time()
-control_signal = piecewise_controller(state, current_time, time_intervals, K_matrices)
-print(control_signal)
 
     
 # %%
@@ -205,3 +214,5 @@ axes0[1].grid()
 
 plt.tight_layout()
 plt.show()
+
+

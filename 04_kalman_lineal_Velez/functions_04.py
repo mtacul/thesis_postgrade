@@ -125,7 +125,7 @@ def H_Velez(Bref,Bmagn):
 def A_B(I_x,I_y,I_z,w0_O,w0,w1,w2,deltat,h,b_body, b_orbit):
     
     A =A_PD(I_x,I_y,I_z,w0_O, w0,w1,w2)
-    B = B_PD(I_x,I_y,I_z,b_body)
+    B = B_PD(I_x,I_y,I_z,b_orbit)
     
     # Define an identity matrix for C and a zero matrix for D to complete state-space model
     # C = np.eye(6)  # Assuming a 6x6 identity matrix for C
@@ -255,7 +255,7 @@ def P_posteriori(K_k,H_k,P_k_priori,R_k):
 
 # y = np.array([0,0,0,0,0,0])
 
-def kalman_lineal(A, B, C, x, u, b, b_eci, P_ki, sigma_m, sigma_ss,deltat,w,hh):
+def kalman_lineal(A, B, C, x, u, b, b_eci, P_ki, sigma_m, sigma_ss,deltat,hh):
 # def kalman_lineal(A, B, C, x, u, b, b_eci, P_ki, ruido, ruido_ss,deltat,s):
     
     H_k = C
@@ -269,7 +269,7 @@ def kalman_lineal(A, B, C, x, u, b, b_eci, P_ki, sigma_m, sigma_ss,deltat,w,hh):
     
     P_k_priori = P_k_prior(A,P_ki,Q_ki)
     
-    z_sensor = np.hstack((b[0],b[1],b[2], w[0], w[1], w[2]))
+    z_sensor = np.hstack((b[0],b[1],b[2], w_priori[0], w_priori[1], w_priori[2]))
     z_modelo = np.dot(H_k,x)
     y_03 = np.cross(b,b_eci) / (np.linalg.norm(b) * np.linalg.norm(b_eci))
     print(y_03)

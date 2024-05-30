@@ -88,7 +88,7 @@ s_orbit_i = [vx_sun_orbit[0],vy_sun_orbit[0],vz_sun_orbit[0]]
 b_body_i = functions_02.rotacion_v(q, b_orbit_i, 0)
 s_body_i = functions_02.rotacion_v(q, s_orbit_i, 0)
 
-[A,B,C,A_discrete,B_discrete,C_discrete] = functions_02.A_B(I_x, I_y, I_z, w0_O, w0, w1, w2, deltat, hh, b_body_i, s_body_i)
+[A,B,C,A_discrete,B_discrete,C_discrete] = functions_02.A_B(I_x, I_y, I_z, w0_O, w0, w1, w2, deltat, hh,b_orbit_i, b_body_i, s_body_i)
 
 #%%
 [x_new, q3_new] = functions_02.mod_lineal_cont(x,u_disc,deltat,hh,A,B)
@@ -159,8 +159,8 @@ for i in range(len(t)-1):
     bb_body_nlc = functions_02.rotacion_v(qq_nl, b_orbit_i, 0)
     ss_body_nlc = functions_02.rotacion_v(qq_nl, s_orbit_i, 0)
     
-    [A,B,C,A_discrete,B_discrete,C_discrete] = functions_02.A_B(I_x, I_y, I_z, w0_O, 0, 0, 0, deltat, hh, bb_body_lc, ss_body_lc)
-    [A_ld,B_ld,C_ld,A_discrete_ld,B_discrete_ld,C_discrete_ld] = functions_02.A_B(I_x, I_y, I_z, w0_O, 0, 0, 0, deltat, hh, bb_body_ld, ss_body_ld)
+    [A,B,C,A_discrete,B_discrete,C_discrete] = functions_02.A_B(I_x, I_y, I_z, w0_O, 0, 0, 0, deltat, hh,bb_orbit, bb_body_lc, ss_body_lc)
+    [A_ld,B_ld,C_ld,A_discrete_ld,B_discrete_ld,C_discrete_ld] = functions_02.A_B(I_x, I_y, I_z, w0_O, 0, 0, 0, deltat, hh, bb_orbit,bb_body_ld, ss_body_ld)
 
     [xx_new, qq3_new] = functions_02.mod_lineal_cont(xx,uu,deltat,hh,A,B)
     [xx_new_d, qq3_new_d] = functions_02.mod_lineal_disc(xx_disc,uu_disc,deltat,hh,A_discrete_ld,B_discrete_ld)

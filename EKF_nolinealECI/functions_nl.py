@@ -5,6 +5,7 @@ Created on Wed May  8 01:17:39 2024
 @author: nachi
 """
 import numpy as np
+import control as ctrl
 
 def quat_mult(dqk,qk_priori):
     
@@ -63,18 +64,18 @@ def simulate_gyros_reading(w,ruido,s_bias):
     #aplicar el ruido del sensor
     noise = np.random.normal(0, ruido, 1)
     
-    bias = np.random.normal(0,s_bias,1)
-    # bias_x = np.random.normal(0,s_bias[0],1)
-    # bias_y = np.random.normal(0,s_bias[1],1)    
-    # bias_z = np.random.normal(0,s_bias[2],1)    
+    # bias = np.random.normal(0,s_bias,1)
+    bias_x = np.random.normal(0,abs(s_bias[0]),1)
+    bias_y = np.random.normal(0,abs(s_bias[1]),1)    
+    bias_z = np.random.normal(0,abs(s_bias[2]),1)    
     
     #Simular la medicion del giroscopio
-    measurement = w + noise + bias
-    # w_x = w[0] + noise + bias_x
-    # w_y = w[1] + noise + bias_y
-    # w_z = w[2] + noise + bias_z
+    # measurement = w + noise + bias
+    w_x = w[0] + noise + bias_x
+    w_y = w[1] + noise + bias_y
+    w_z = w[2] + noise + bias_z
     
-    # measurement = np.hstack((w_x,w_y,w_z))
+    measurement = np.array([w_x,w_y,w_z])
     return measurement
 
 def rotacion_v(q, b_i):
@@ -86,10 +87,82 @@ def rotacion_v(q, b_i):
     
     return B_body_n
 
-#%% Modelo no lineal continuo
+# #%% Modelo lineal discreto
 
+# # Matriz linealizada de la funcion dinamica no lineal derivada respecto al vector 
+# # estado en el punto de equilibrio x = [0,0,0,0,0,0] (tres primeros cuaterniones y
+# # tres componentes de velocidad angular)
+# def A_PD(I_x,I_y,I_z,w0_O, w0,w1,w2):
+#     A1 = np.array([0, 0.5*w2, -0.5*w1, 0.5, 0,0])
+#     A2 = np.array([-0.5*w2,0,0.5*w0,0,0.5,0])
+#     A3 = np.array([0.5*w1,-0.5*w0,0,0,0,0.5])
+#     A4 = np.array([6*w0_O**2*(I_x-I_y), 0, 0, 0, w2*(I_y-I_z)/I_x, w1*(I_y-I_z)/I_x])
+#     A5 = np.array([0, 6*w0_O**2*(I_z-I_y), 0, w2*(I_x-I_z)/I_y,0, (w0+w0_O)*(I_x-I_z)/I_y + I_y*w0_O])
+#     A6 = np.array([0, 0, 0, w1*(I_y-I_x)/I_z, (w0+w0_O)*(I_y-I_x)/I_z - I_z*w0_O, 0])
+    
+#     A_k = np.array([A1,A2,A3,A4,A5,A6])
+    
+#     return A_k    
+
+
+# #Matriz linealizada de la accion de control derivada respecto al vector estado
+# # en el punto de equilibrio x = [0,0,0,0,0,0]
+# def B_PD(I_x,I_y,I_z,B_magnet):
+#     b_norm = np.linalg.norm(B_magnet)
+#     B123 = np.zeros((3,3))
+#     B4 = np.array([(-(B_magnet[2]**2)-B_magnet[1]**2)/(b_norm*I_x), B_magnet[1]*B_magnet[0]/(b_norm*I_x), B_magnet[2]*B_magnet[0]/(b_norm*I_x)])
+#     B5 = np.array([B_magnet[0]*B_magnet[1]/(b_norm*I_y), (-B_magnet[2]**2-B_magnet[0]**2)/(b_norm*I_y), B_magnet[2]*B_magnet[1]/(b_norm*I_y)])
+#     B6 = np.array([B_magnet[0]*B_magnet[2]/(b_norm*I_z), B_magnet[1]*B_magnet[2]/(b_norm*I_z), (-B_magnet[1]**2-B_magnet[0]**2)/(b_norm*I_z)])
+    
+#     B_k = np.vstack((B123,B4,B5,B6))
+#     #B_k = np.array([B123,B4,B5,B6])
+
+#     return B_k
+
+# # Obtencion de las matrices A y B de manera discreta
+# def A_B(I_x,I_y,I_z,w0_O,w0,w1,w2,deltat,h,b_body, s_body):
+    
+#     A =A_PD(I_x,I_y,I_z,w0_O, w0,w1,w2)
+#     B = B_PD(I_x,I_y,I_z,b_body)
+    
+#     # Define an identity matrix for C and a zero matrix for D to complete state-space model
+#     # C = np.eye(6)  # Assuming a 6x6 identity matrix for C
+#     C = H_k_bar(b_body[0],b_body[1],b_body[2], s_body[0],s_body[1],s_body[2])
+#     D = np.zeros((6, 3))  # Assuming D has the same number of rows as A and the same number of columns as B
+
+#     # Create the continuous state-space model
+#     sys_continuous = ctrl.StateSpace(A, B, C, D)
+
+#     # Discretize the system
+#     sys_discrete = ctrl.c2d(sys_continuous, deltat*h, method='zoh')
+
+#     # Extract the discretized A and B matrices
+#     A_discrete = sys_discrete.A
+#     B_discrete = sys_discrete.B
+#     C_discrete = sys_discrete.C
+    
+#     return A,B,C,A_discrete,B_discrete,C_discrete
+
+# def mod_lineal_disc(x,u,deltat, h,A_discrete,B_discrete):
+        
+#     for i in range(int(1/h)):
+#         x_k_1 = np.dot(A_discrete,x) - np.dot(B_discrete,u)
+#         q_rot = x_k_1[0:3]
+#         w_new = x_k_1[3:6]
+    
+#         if  1-q_rot[0]**2-q_rot[1]**2-q_rot[2]**2 < 0:
+#             q_rot = q_rot / np.linalg.norm(q_rot)
+#             x_new = np.hstack((np.transpose(q_rot), np.transpose(w_new)))
+#             q3s_rot = 0
+    
+#         else:
+#             x_new = np.hstack((np.transpose(q_rot), np.transpose(w_new)))
+#             q3s_rot = np.sqrt(1-q_rot[0]**2-q_rot[1]**2-q_rot[2]**2)
+        
+#     return x_new, q3s_rot
 
 #Funciones ecuaciones no lineales, en conjunto con su resolucion en RK4
+#%% Modelo no lineal continuo
 
 def f1_K(t, q0, q1, q2,q3, w0, w1, w2): #q0_dot
     return 0.5*(q1*w2 - q2*w1 + w0*q3)
@@ -103,24 +176,39 @@ def f3_K(t, q0, q1, q2,q3, w0, w1, w2): #q2_dot
 def f4_K(t, q0, q1, q2,q3, w0, w1, w2): #q3_dot
     return 0.5*(-q0*w0 - q1*w1 - w2*q2)
 
-def f5_K(t, q0, q1, q2, q3, w0, w1, w2,tau_x_ctrl,tau_x_per,I_x,I_y,I_z):#w1_dot
-    return (w1*w2*(I_y-I_z))/I_x + tau_x_ctrl/I_x + tau_x_per/I_x
+def f5_K(t, q0, q1, q2,q3, w0, w1, w2,w0_o,tau_x_ctrl,tau_x_per,I_x,I_y,I_z):#w1_dot
+    part_1_w0 = w1 + w0_o*(2*(q0*q1 - q2*q3))
+    part_2_w0 = w2 + w0_o*(2*(q0*q2 + q1*q3))
+    part_3_w0 = w0_o*(2*q3*0.5*(-q0*w0 - q1*w1 - w2*q2)+2*q0*0.5*(q1*w2 - q2*w1 + w0*q3)-2*q1*0.5*(-q0*w2 + q2*w0 + w1*q3)-2*q2*0.5*(q0*w1 - q1*w0 + w2*q3))
+    part_4_w0 = tau_x_ctrl/I_x
+    part_5_w0 = tau_x_per/I_x
+    return part_1_w0*part_2_w0*(I_y-I_z)/I_x - part_3_w0 + part_4_w0 + part_5_w0
 
-def f6_K(t, q0, q1, q2, q3, w0, w1, w2,tau_y_ctrl,tau_y_per,I_x,I_y,I_z): #w2_dot
-    return (w0*w2*(I_x-I_z))/I_y + tau_y_ctrl/I_y + tau_y_ctrl/I_y
+def f6_K(t, q0, q1, q2,q3, w0, w1, w2,w0_o,tau_y_ctrl,tau_y_per,I_x,I_y,I_z): #w2_dot
+    part_1_w1 = w0 + w0_o*(q3**2+q0**2-q1**2-q2**2)
+    part_2_w1 = w2 + w0_o*(2*(q0*q2 + q1*q3))
+    part_3_w1 = w0_o*(q0*q1*0.5*(q1*w2 - q2*w1 + w0*q3) + q0*q1*0.5*(-q0*w2 + q2*w0 + w1*q3)-q2*q3*0.5*(q0*w1 - q1*w0 + w2*q3)-q2*q3*0.5*(-q0*w0 - q1*w1 - w2*q2))
+    part_4_w1 = tau_y_ctrl/I_y
+    part_5_w1 = tau_y_per/I_y
+    return part_1_w1*part_2_w1*(I_x-I_z)/I_y - part_3_w1 + part_4_w1 +part_5_w1
 
-def f7_K(t, q0, q1, q2, q3, w0, w1, w2,tau_z_ctrl,tau_z_per,I_x,I_y,I_z): #w3_dot
-    return (w0*w1*(I_x-I_y))/I_z + tau_z_ctrl/I_z + tau_z_per/I_z
+def f7_K(t, q0, q1, q2,q3, w0, w1, w2,w0_o,tau_z_ctrl,tau_z_per,I_x,I_y,I_z): #w3_dot
+    part_1_w2 = w0 + w0_o*(q3**2+q0**2-q1**2-q2**2)
+    part_2_w2 = w1 + w0_o*(2*(q0*q1 - q2*q3))
+    part_3_w2 = w0_o*(q0*q2*0.5*(q1*w2 - q2*w1 + w0*q3) + q0*q2*0.5*(q0*w1 - q1*w0 + w2*q3)+ q1*q3*0.5*(-q0*w2 + q2*w0 + w1*q3)+ q1*q3*0.5*(-q0*w0 - q1*w1 - w2*q2))
+    part_4_w2 = tau_z_ctrl/I_z
+    part_5_w2 = tau_z_per/I_z
+    return part_1_w2*part_2_w2*(I_x-I_y)/I_z - part_3_w2 + part_4_w2 + part_5_w2
 
-def rk4_EKF_step(t, q0, q1, q2,q3, w0, w1, w2, h, tau_x_ctrl,tau_x_per,tau_y_ctrl,tau_y_per,tau_z_ctrl,tau_z_per,I_x,I_y,I_z):
+def rk4_EKF_step(t, q0, q1, q2,q3, w0, w1, w2, h, w0_o,tau_x_ctrl,tau_x_per,tau_y_ctrl,tau_y_per,tau_z_ctrl,tau_z_per,I_x,I_y,I_z):
     #k1 = h * f1(x, y1, y2)
     k1_1 = h * f1_K(t, q0, q1, q2,q3, w0, w1, w2)
     k1_2 = h * f2_K(t, q0, q1, q2,q3, w0, w1, w2)
     k1_3 = h * f3_K(t, q0, q1, q2,q3, w0, w1, w2)
     k1_4 = h * f4_K(t, q0, q1, q2,q3, w0, w1, w2)
-    k1_5 = h * f5_K(t, q0, q1, q2,q3, w0, w1, w2, tau_x_ctrl,tau_x_per,I_x,I_y,I_z)
-    k1_6 = h * f6_K(t, q0, q1, q2,q3, w0, w1, w2, tau_y_ctrl,tau_y_per,I_x,I_y,I_z)
-    k1_7 = h * f7_K(t, q0, q1, q2,q3, w0, w1, w2, tau_z_ctrl,tau_z_per,I_x,I_y,I_z)
+    k1_5 = h * f5_K(t, q0, q1, q2,q3, w0, w1, w2,w0_o, tau_x_ctrl,tau_x_per,I_x,I_y,I_z)
+    k1_6 = h * f6_K(t, q0, q1, q2,q3, w0, w1, w2,w0_o, tau_y_ctrl,tau_y_per,I_x,I_y,I_z)
+    k1_7 = h * f7_K(t, q0, q1, q2,q3, w0, w1, w2,w0_o, tau_z_ctrl,tau_z_per,I_x,I_y,I_z)
     
     k2_1 = h * f1_K(t + 0.5 * h, q0 + 0.5 * k1_1, q1 + 0.5 * k1_2, q2 + 0.5 * k1_3,
                   q3 + 0.5 * k1_4,w0 + 0.5 * k1_5, w1 + 0.5 * k1_6, w2 + 0.5 * k1_7)
@@ -131,11 +219,11 @@ def rk4_EKF_step(t, q0, q1, q2,q3, w0, w1, w2, h, tau_x_ctrl,tau_x_per,tau_y_ctr
     k2_4 = h * f4_K(t + 0.5 * h, q0 + 0.5 * k1_1, q1 + 0.5 * k1_2, q2 + 0.5 * k1_3,
                   q3 + 0.5 * k1_4,w0 + 0.5 * k1_5, w1 + 0.5 * k1_6, w2 + 0.5 * k1_7)
     k2_5 = h * f5_K(t + 0.5 * h, q0 + 0.5 * k1_1, q1 + 0.5 * k1_2, q2 + 0.5 * k1_3,
-                  q3 + 0.5 * k1_4,w0 + 0.5 * k1_5, w1 + 0.5 * k1_6, w2 + 0.5 * k1_7, tau_x_ctrl,tau_x_per,I_x,I_y,I_z)
+                  q3 + 0.5 * k1_4,w0 + 0.5 * k1_5, w1 + 0.5 * k1_6, w2 + 0.5 * k1_7,w0_o, tau_x_ctrl,tau_x_per,I_x,I_y,I_z)
     k2_6 = h * f6_K(t + 0.5 * h, q0 + 0.5 * k1_1, q1 + 0.5 * k1_2, q2 + 0.5 * k1_3,
-                  q3 + 0.5 * k1_4,w0 + 0.5 * k1_5, w1 + 0.5 * k1_6, w2 + 0.5 * k1_7, tau_y_ctrl,tau_y_per,I_x,I_y,I_z)
+                  q3 + 0.5 * k1_4,w0 + 0.5 * k1_5, w1 + 0.5 * k1_6, w2 + 0.5 * k1_7,w0_o, tau_y_ctrl,tau_y_per,I_x,I_y,I_z)
     k2_7 = h * f7_K(t + 0.5 * h, q0 + 0.5 * k1_1, q1 + 0.5 * k1_2, q2 + 0.5 * k1_3,
-                  q3 + 0.5 * k1_4,w0 + 0.5 * k1_5, w1 + 0.5 * k1_6, w2 + 0.5 * k1_7, tau_z_ctrl,tau_z_per,I_x,I_y,I_z)
+                  q3 + 0.5 * k1_4,w0 + 0.5 * k1_5, w1 + 0.5 * k1_6, w2 + 0.5 * k1_7,w0_o, tau_z_ctrl,tau_z_per,I_x,I_y,I_z)
     
     k3_1 = h * f1_K(t + 0.5 * h, q0 + 0.5 * k2_1, q1 + 0.5 * k2_2, q2 + 0.5 * k2_3,
                   q3 + 0.5 * k2_4, w0 + 0.5 * k2_5, w1 + 0.5 * k2_6, w2 + 0.5 * k2_7)
@@ -147,13 +235,13 @@ def rk4_EKF_step(t, q0, q1, q2,q3, w0, w1, w2, h, tau_x_ctrl,tau_x_per,tau_y_ctr
                   q3 + 0.5 * k2_4, w0 + 0.5 * k2_5, w1 + 0.5 * k2_6, w2 + 0.5 * k2_7)
 
     k3_5 = h * f5_K(t + 0.5 * h, q0 + 0.5 * k2_1, q1 + 0.5 * k2_2, q2 + 0.5 * k2_3,
-                  q3 + 0.5 * k2_4, w0 + 0.5 * k2_5, w1 + 0.5 * k2_6, w2 + 0.5 * k2_7,  tau_x_ctrl,
+                  q3 + 0.5 * k2_4, w0 + 0.5 * k2_5, w1 + 0.5 * k2_6, w2 + 0.5 * k2_7, w0_o, tau_x_ctrl,
                   tau_x_per,I_x,I_y,I_z)
     k3_6 = h * f6_K(t + 0.5 * h, q0 + 0.5 * k2_1, q1 + 0.5 * k2_2, q2 + 0.5 * k2_3,
-                  q3 + 0.5 * k2_4, w0 + 0.5 * k2_5, w1 + 0.5 * k2_6, w2 + 0.5 * k2_7,  tau_y_ctrl,
+                  q3 + 0.5 * k2_4, w0 + 0.5 * k2_5, w1 + 0.5 * k2_6, w2 + 0.5 * k2_7, w0_o, tau_y_ctrl,
                   tau_y_per,I_x,I_y,I_z)
     k3_7 = h * f7_K(t + 0.5 * h, q0 + 0.5 * k2_1, q1 + 0.5 * k2_2, q2 + 0.5 * k2_3,
-                  q3 + 0.5 * k2_4, w0 + 0.5 * k2_5, w1 + 0.5 * k2_6, w2 + 0.5 * k2_7,  tau_z_ctrl,
+                  q3 + 0.5 * k2_4, w0 + 0.5 * k2_5, w1 + 0.5 * k2_6, w2 + 0.5 * k2_7, w0_o, tau_z_ctrl,
                   tau_z_per,I_x,I_y,I_z)
 
     
@@ -166,13 +254,13 @@ def rk4_EKF_step(t, q0, q1, q2,q3, w0, w1, w2, h, tau_x_ctrl,tau_x_per,tau_y_ctr
     k4_4 = h * f4_K(t + 0.5 * h, q0 + 0.5 * k3_1, q1 + 0.5 * k3_2, q2 + 0.5 * k3_3,
                   q3 + 0.5 * k3_4, w0 + 0.5 * k3_5, w1 + 0.5 * k3_6, w2 + 0.5 * k3_7)
     k4_5 = h * f5_K(t + 0.5 * h, q0 + 0.5 * k3_1, q1 + 0.5 * k3_2, q2 + 0.5 * k3_3,
-                  q3 + 0.5 * k3_4, w0 + 0.5 * k3_5, w1 + 0.5 * k3_6, w2 + 0.5 * k3_7,  tau_x_ctrl,
+                  q3 + 0.5 * k3_4, w0 + 0.5 * k3_5, w1 + 0.5 * k3_6, w2 + 0.5 * k3_7, w0_o, tau_x_ctrl,
                   tau_x_per,I_x,I_y,I_z)
     k4_6 = h * f6_K(t + 0.5 * h, q0 + 0.5 * k3_1, q1 + 0.5 * k3_2, q2 + 0.5 * k3_3,
-                  q3 + 0.5 * k3_4, w0 + 0.5 * k3_5, w1 + 0.5 * k3_6, w2 + 0.5 * k3_7,  tau_y_ctrl,
+                  q3 + 0.5 * k3_4, w0 + 0.5 * k3_5, w1 + 0.5 * k3_6, w2 + 0.5 * k3_7, w0_o, tau_y_ctrl,
                   tau_y_per,I_x,I_y,I_z)
     k4_7 = h * f7_K(t + 0.5 * h, q0 + 0.5 * k3_1, q1 + 0.5 * k3_2, q2 + 0.5 * k3_3,
-                  q3 + 0.5 * k3_4, w0 + 0.5 * k3_5, w1 + 0.5 * k3_6, w2 + 0.5 * k3_7,  tau_z_ctrl,
+                  q3 + 0.5 * k3_4, w0 + 0.5 * k3_5, w1 + 0.5 * k3_6, w2 + 0.5 * k3_7, w0_o, tau_z_ctrl,
                   tau_z_per,I_x,I_y,I_z)
    
 
@@ -190,10 +278,9 @@ def rk4_EKF_step(t, q0, q1, q2,q3, w0, w1, w2, h, tau_x_ctrl,tau_x_per,tau_y_ctr
     w = [w0_new, w1_new, w2_new]
     return q, w
 
-#%%
-def mod_nolineal(x,u,deltat, b,h):
+
+def mod_nolineal(x,u,deltat, b,h,tt,I_x,I_y,I_z,w0_O):
     
-    tt = 2
     
     if  1-x[0]**2-x[1]**2-x[2]**2 < 0:
         x[0:3] = x[0:3] / np.linalg.norm(x[0:3])
@@ -202,9 +289,6 @@ def mod_nolineal(x,u,deltat, b,h):
     else:
         q3s_rot = np.sqrt(1-x[0]**2-x[1]**2-x[2]**2)
         
-    I_x = 0.037
-    I_y = 0.036
-    I_z = 0.006
     
     b_norm = np.linalg.norm(np.hstack((b[0],b[1],b[2])))
     tau_x_ctrl = ((b[0]*u[2]-b[2]*u[0])/b_norm)*b[2] - ((b[1]*u[0]-b[0]*u[1])/b_norm)*b[1]
@@ -213,7 +297,7 @@ def mod_nolineal(x,u,deltat, b,h):
 
     for j in range(int(deltat/h)):
         t, q0, q1, q2, q3, w0, w1, w2 = tt, x[0], x[1], x[2], q3s_rot, x[3], x[4], x[5]
-        q_rot, w_new = rk4_EKF_step(t, q0, q1, q2,q3, w0, w1, w2,h, tau_x_ctrl,0,tau_y_ctrl,0,tau_z_ctrl,0,I_x,I_y,I_z)
+        q_rot, w_new = rk4_EKF_step(t, q0, q1, q2,q3, w0, w1, w2,h,w0_O, tau_x_ctrl,0,tau_y_ctrl,0,tau_z_ctrl,0,I_x,I_y,I_z)
     
     q_rot_trunc = q_rot[0:3]
     x_new = np.hstack((np.transpose(q_rot_trunc), np.transpose(w_new)))
@@ -352,7 +436,7 @@ def P_posteriori(K_k,H_k,P_k_priori,R_k):
    return P_k_pos #SACAR MATRIZ P POSTERIORI ACTUALIZADA
 
 # Implementacion del kalman en funcion
-def kalman_baroni(q, w, bias_priori, deltaT, P_ki, b_body, s_body,  sigma_ww, sigma_bias, sigma_mm, sigma_ss):
+def kalman_baroni(q, w, bias_priori, deltaT, P_ki, b_body_med, s_body_med,b_body_est, s_body_est,  sigma_ww, sigma_bias, sigma_mm, sigma_ss):
     
     x = np.hstack((q[0:3],bias_priori))
     w_plus = w - bias_priori
@@ -362,26 +446,26 @@ def kalman_baroni(q, w, bias_priori, deltaT, P_ki, b_body, s_body,  sigma_ww, si
     G = G_k(deltaT)
     
     P_k_pr = P_k_priori(state_matrix,P_ki,G,Q)
-    H = H_k_bar(b_body[0], b_body[1],b_body[2], s_body[0], s_body[1], s_body[2])
+    H = H_k_bar(b_body_med[0], b_body_med[1],b_body_med[2], s_body_med[0], s_body_med[1], s_body_med[2])
     R = R_k(sigma_mm, sigma_ss)
     K_k = k_kalman(R,P_k_pr,H)
-    z_sensor = np.hstack((b_body[0],b_body[1],b_body[2],s_body[0],s_body[1],s_body[2]))
-    z_modelo = np.dot(H,x)
+    z_sensor = np.hstack((b_body_med[0],b_body_med[1],b_body_med[2],s_body_med[0],s_body_med[1],s_body_med[2]))
+    z_modelo = np.hstack((b_body_est[0],b_body_est[1],b_body_est[2],s_body_est[0],s_body_est[1],s_body_est[2]))
     y= z_sensor - z_modelo
     # print(H)
-    print("zsensor:",z_sensor)
-    print("zmodelo:",z_modelo)
-    print("y:",y)
+    # print("zsensor:",z_sensor)
+    # print("zmodelo:",z_modelo)
+    # print("y:",y)
 
     delta_x = np.dot(K_k,y)
-    print("deltax:",delta_x)
+    # print("deltax:",delta_x)
     delta_q_3 = delta_x[0:3]
     delta_bias = delta_x[3:6]
     
     delta_q = np.hstack((delta_q_3, np.sqrt(1-np.linalg.norm(delta_q_3)**2)))
     # delta_q = np.hstack((delta_q_3, 1))
     q_posteriori = quat_mult(delta_q,q_k_priori)
-    print("q_posteriori:",q_posteriori)
+    # print("q_posteriori:",q_posteriori)
 
     bias_posteriori = bias_priori - delta_bias
     

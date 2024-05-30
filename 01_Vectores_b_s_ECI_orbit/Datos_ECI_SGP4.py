@@ -34,7 +34,7 @@ else:
 
     # Define el tiempo de propagación en segundos 
     # propagation_time = 60*60*24*187
-    propagation_time = 5604*2
+    propagation_time = 5762
 
 
     #posicion y velocidad del satelite en la fecha inicial
@@ -227,7 +227,7 @@ else:
     #%% Guardar datos en un archivo csv
     
     # Nombre del archivo
-    archivo = "vectores_10.2k.csv"
+    archivo = "vectores_5.76k.csv"
 
     # Abrir el archivo en modo escritura
     with open(archivo, 'w') as f:

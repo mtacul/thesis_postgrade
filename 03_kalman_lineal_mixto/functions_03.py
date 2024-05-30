@@ -123,16 +123,16 @@ def H_k_bar(b0,b1,b2,s0,s1,s2):
     H_1 = np.hstack((H_11, H_12))
     H_2 = np.hstack((H_21,H_22))
     
-    H = np.vstack((H_1,H_2))
+    H = -np.vstack((H_1,H_2))
     
     return H
 
 
 # Obtencion de las matrices A y B de manera discreta
-def A_B(I_x,I_y,I_z,w0_O,w0,w1,w2,deltat,h,b_body, s_body):
+def A_B(I_x,I_y,I_z,w0_O,w0,w1,w2,deltat,h,b_orbit,b_body, s_body):
     
     A =A_PD(I_x,I_y,I_z,w0_O, w0,w1,w2)
-    B = B_PD(I_x,I_y,I_z,b_body)
+    B = B_PD(I_x,I_y,I_z,b_orbit)
     
     # Define an identity matrix for C and a zero matrix for D to complete state-space model
     # C = np.eye(6)  # Assuming a 6x6 identity matrix for C
@@ -262,7 +262,7 @@ def P_posteriori(K_k,H_k,P_k_priori,R_k):
 
 # y = np.array([0,0,0,0,0,0])
 
-def kalman_lineal(A, B, C, x, u, b, s, P_ki, sigma_m, sigma_ss,deltat,w,hh):
+def kalman_lineal(A, B, C, x, u, b,b_est, s,s_est, P_ki, sigma_m, sigma_ss,deltat,hh):
 # def kalman_lineal(A, B, C, x, u, b, b_eci, P_ki, ruido, ruido_ss,deltat,s):
     
     H_k = C
@@ -277,28 +277,35 @@ def kalman_lineal(A, B, C, x, u, b, s, P_ki, sigma_m, sigma_ss,deltat,w,hh):
     P_k_priori = P_k_prior(A,P_ki,Q_ki)
     
     z_sensor = np.hstack((b[0],b[1],b[2], s[0], s[1], s[2]))
-    z_modelo = np.dot(H_k,x)
+    z_modelo = np.hstack((b_est[0],b_est[1],b_est[2], s_est[0], s_est[1], s_est[2]))
     y= z_sensor - z_modelo
     
     R = R_k(sigma_m, sigma_ss)
     K_k = k_kalman(R,P_k_priori,H_k)
-    # print("zsensor:",z_sensor)
-    # print("zmodelo:",z_modelo)
-    # print("Y:",y)
+    print("zsensor:",z_sensor)
+    print("zmodelo:",z_modelo)
+    print("Y:",y)
     
     delta_x = np.dot(K_k,y)
-    # print("deltax",delta_x)
+    # delta_x2 = np.dot(-K_k,y)
+    print("deltax",delta_x)
+    # print("deltax2",delta_x2)
     delta_q_3 = delta_x[0:3]
     delta_w = delta_x[3:6]
     q3_delta =  np.sqrt(1-delta_q_3[0]**2-delta_q_3[1]**2-delta_q_3[2]**2)
     delta_q = np.hstack((delta_q_3, q3_delta))
     delta_qn = delta_q / np.linalg.norm(delta_q)
-    # print("deltaq",delta_qn)
+    # delta_q2 = np.hstack((-delta_q_3, q3_delta))
+    # delta_qn2 = delta_q2 / np.linalg.norm(delta_q2)
 
-    # print("delta_q obtenido por kalman:",delta_q,"\n")
+    print("delta_q obtenido por kalman:",delta_qn,"\n")
+    # print("delta_q2 obtenido por kalman:",delta_qn2,"\n")
     
     q_posteriori = quat_mult(delta_qn,q_priori)
-    # print("q posteriori multi:",q_posteriori,"\n")
+    # q_posteriori2 = quat_mult(delta_qn2,q_priori)
+    print("q priori multi:",q_priori,"\n")
+    print("q posteriori multi:",q_posteriori,"\n")
+    # print("q posteriori2 multi:",q_posteriori2,"\n")
     w_posteriori = w_priori + delta_w
 
     
@@ -396,6 +403,57 @@ def cuat_MSE_NL(q0,q1,q2,q3,w0,w1,w2,q0_nl,q1_nl,q2_nl,q3_nl,w0_nl,w1_nl,w2_nl):
     
     return MSE_cuat, MSE_omega
 
+def RPY_MSE(t, q0_disc, q1_disc, q2_disc, q3_disc,q0_control, q1_control, q2_control, q3_control):
+    
+    q_kalman = np.vstack((q0_disc, q1_disc, q2_disc, q3_disc))
+    q_kalman_t = np.transpose(q_kalman)
+    RPY_kalman = []
+    
+    q_control = np.vstack((q0_control, q1_control, q2_control, q3_control))
+    q_control_t = np.transpose(q_control)
+    RPY_control = []
+    
+    for i in range(len(t)):
+        RPY_EKF_id = quaternion_to_euler(q_kalman_t[i, :])
+        RPY_kalman.append(RPY_EKF_id)
+        RPY_control_id = quaternion_to_euler(q_control_t[i, :])
+        RPY_control.append(RPY_control_id)
+        
+    RPY_kalman = np.array(RPY_kalman)
+    RPY_control = np.array(RPY_control)
+    
+    restas_roll = []
+    restas_pitch = []
+    restas_yaw = []
+    
+    for i in range(len(t)):
+        dif_roll = abs(RPY_control[i,0] - RPY_kalman[i,0])
+        cuad_roll = dif_roll**2
+        
+        dif_pitch = abs(RPY_control[i,1] - RPY_kalman[i,1])
+        cuad_pitch = dif_pitch**2
+        
+        dif_yaw = abs(RPY_control[i,2] - RPY_kalman[i,2])
+        cuad_yaw = dif_yaw**2
+        
+        restas_roll.append(cuad_roll)
+        restas_pitch.append(cuad_pitch)
+        restas_yaw.append(cuad_yaw)
+    
+    restas_roll = np.array(restas_roll)
+    sumatoria_roll = np.sum(restas_roll)
+    mse_roll = sumatoria_roll / len(restas_roll)
+    
+    restas_pitch = np.array(restas_pitch)
+    sumatoria_pitch = np.sum(restas_pitch)
+    mse_pitch = sumatoria_pitch / len(restas_pitch)
+    
+    restas_yaw = np.array(restas_yaw)
+    sumatoria_yaw = np.sum(restas_yaw)
+    mse_yaw = sumatoria_yaw / len(restas_yaw)
+    
+    return RPY_kalman, RPY_control, mse_roll, mse_pitch, mse_yaw
+
 #%% Optimizacion del K
 
 # Variables globales para manejar la solución
@@ -442,3 +500,28 @@ def opt_K(A_discrete,B_discrete,deltat,h,x0):
         print("No solution found with all eigenvalues having magnitude less than 1.")
 
     return optimal_x
+
+#%%
+
+def quaternion_to_euler(q):
+    # Extracción de los componentes del cuaternión
+    x, y, z, w = q
+
+    t0 = +2.0 * (w * x + y * z)
+    t1 = +1.0 - 2.0 * (x**2 + y**2)
+    roll_x = np.arctan2(t0, t1)
+    
+    t2 = +2.0 * (w * y - z * x)
+    t2 = np.clip(t2, -1.0, 1.0)  # Clamp t2 to avoid numerical errors
+    pitch_y = np.arcsin(t2)
+    
+    t3 = +2.0 * (w * z + x * y)
+    t4 = +1.0 - 2.0 * (y**2 + z**2)
+    yaw_z = np.arctan2(t3, t4)
+         
+    # Convierte los ángulos a grados 
+    roll_deg = np.degrees(roll_x)
+    pitch_deg = np.degrees(pitch_y)
+    yaw_deg = np.degrees(yaw_z)
+
+    return roll_deg, pitch_deg, yaw_deg

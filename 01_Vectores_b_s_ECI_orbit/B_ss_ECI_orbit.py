@@ -13,8 +13,9 @@ import matplotlib.pyplot as plt
 from scipy.spatial.transform import Rotation
 
 #%%
-archivo_csv = "vectores_5.6k.csv"
+# archivo_csv = "vectores_5.6k.csv"
 # archivo_csv = "vectores_10.2k.csv"
+archivo_csv = "vectores_5.76k.csv"
 
 # Leer el archivo CSV en un DataFrame de pandas
 df = pd.read_csv(archivo_csv)

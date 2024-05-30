@@ -10,6 +10,7 @@ import control as ctrl
 import pandas as pd
 import matplotlib.pyplot as plt
 from scipy.spatial.transform import Rotation
+from sklearn.decomposition import PCA
 
 # %%
 archivo_csv = "Vectores_orbit_ECI.csv"
@@ -37,7 +38,7 @@ vsun_z = array_datos[:, 12]
 w0_O = 0.00163
 
 deltat = 2
-limite =  602
+limite =  5762*2
 t = np.arange(0, limite, deltat)
 
 I_x = 0.037
@@ -53,10 +54,12 @@ sigma_b = 1e-6
 
 #%%
 # q= np.array([0,0.7071,0,0.7071])
-q= np.array([0,0,0,1])
+# q= np.array([0,0,0,1])
+q = np.array([0.7071/np.sqrt(3),0.7071/np.sqrt(3),0.7071/np.sqrt(3),0.7071])
 w = np.array([0.0001, 0.0001, 0.0001])
 # q_est = np.array([0.00985969, 0.70703804, 0.00985969, 0.70703804])
-q_est= np.array([0.0120039,0.0116517,0.0160542,0.999731])
+# q_est= np.array([0.0120039,0.0116517,0.0160542,0.999731])
+q_est = np.array([0.366144,0.464586,0.300017,0.74839])
 
 q0_est = [q_est[0]]
 q1_est = [q_est[1]]
@@ -86,20 +89,56 @@ si_orbit = [vx_sun_orbit[0],vy_sun_orbit[0],vz_sun_orbit[0]]
 s_body_i = functions_03.rotacion_v(q_real, si_orbit, 0.036)
 hh =0.01
 
-[A,B,C,A_discrete,B_discrete,C_discrete] = functions_03.A_B(I_x, I_y, I_z, w0_O, w0_eq, w1_eq, w2_eq, deltat, hh, b_body_i, s_body_i)
+[A,B,C,A_discrete,B_discrete,C_discrete] = functions_03.A_B(I_x, I_y, I_z, w0_O, w0_eq, w1_eq, w2_eq, deltat, hh, bi_orbit,b_body_i, s_body_i)
 
-diagonal_values = np.array([0.5**2, 0.5**2, 0.5**2, 0.1**2, 0.1**2, 0.1**2])
+B_matrices = [B_discrete]
+#%%
+# for i in range(len(t[0:2882])-1):
+for i in range(len(t)-1):
 
-P_ki = np.diag(diagonal_values)
+    print(t[i+1])
+    
+    # u_est = np.array([15,15,15])
 
-x0 = np.array([ -10 ,   20, -30,  -20,
-  -40, -100])
+    b_orbit = [Bx_orbit[i+1],By_orbit[i+1],Bz_orbit[i+1]]
 
-optimal_x = functions_03.opt_K(A_discrete, B_discrete, deltat, hh, x0)
+    [A,B,C,A_discrete,B_discrete,C_discrete] = functions_03.A_B(I_x, I_y, I_z, w0_O, w0_eq, w1_eq, w2_eq, deltat, hh,b_orbit, np.zeros(3), np.zeros(3))
+
+    B_matrices.append(B_discrete)
+
+# Aplana y apila todas las matrices en una sola matriz grande
+data = np.array([matrix.flatten() for matrix in B_matrices])
+
+# Crear una instancia del PCA
+n_components = 1  # Queremos una representación compacta, así que usamos 1 componente principal
+pca = PCA(n_components=n_components)
+
+# Ajustar el PCA a los datos y transformarlos
+transformed_data = pca.fit_transform(data)
+
+# Para obtener una representación compacta, calculamos la media de las transformaciones
+mean_transformed = np.mean(transformed_data, axis=0)
+
+# Inversa la transformación de PCA para volver al espacio original (18 dimensiones)
+mean_transformed_back = pca.inverse_transform(mean_transformed)
+
+# Reshape el vector resultante de 18 elementos a una matriz de 6x3
+B_prom = mean_transformed_back.reshape(6, 3)
+x0 = np.array([ -100 ,   200, -300,  -200,
+  -400, -100])
+
+optimal_x = functions_03.opt_K(A_discrete, B_prom, deltat, hh, x0)
+K = np.hstack([np.diag(optimal_x[:3]), np.diag(optimal_x[3:])])
+
+
+# optimal_x = functions_03.opt_K(A_discrete, B_discrete, deltat, hh, x0)
 # diag_K = np.array([ -241.00245091,    43.60100138, -3058.43592597,  -559.64142154,
 #   -154.34336893, -5160.75960109])
-K = np.hstack([np.diag(optimal_x[:3]), np.diag(optimal_x[3:])])
-x0 = optimal_x
+# K = np.hstack([np.diag(optimal_x[:3]), np.diag(optimal_x[3:])])
+# x0 = optimal_x
+diagonal_values = np.array([0.5**2, 0.5**2, 0.5**2, 0.1**2, 0.1**2, 0.1**2])
+P_ki = np.diag(diagonal_values)
+
 #%%
 np.random.seed(42)
 for i in range(len(t)-1):
@@ -124,8 +163,8 @@ for i in range(len(t)-1):
     
     # print(b_body,w_gyros)
     # print(x_est)
-    [A,B,C,A_discrete,B_discrete,C_discrete] = functions_03.A_B(I_x, I_y, I_z, w0_O, w0_eq, w1_eq, w2_eq, deltat, hh, b_body, s_body)
-    [q_posteriori, w_posteriori, P_k_pos,K_k] = functions_03.kalman_lineal(A_discrete, B_discrete,C_discrete, x_real, u_est, b_body, s_body, P_ki, sigma_b, sigma_ss, deltat,w_gyros,hh)
+    [A,B,C,A_discrete,B_discrete,C_discrete] = functions_03.A_B(I_x, I_y, I_z, w0_O, w0_eq, w1_eq, w2_eq, deltat, hh, b_orbit,b_body, s_body)
+    [q_posteriori, w_posteriori, P_k_pos,K_k] = functions_03.kalman_lineal(A_discrete, B_prom,C_discrete, x_real, u_est, b_body, s_body, P_ki, sigma_b, sigma_ss, deltat,hh)
     # asasd
     
     q0_est.append(q_posteriori[0])
@@ -139,7 +178,7 @@ for i in range(len(t)-1):
     P_ki = P_k_pos
     
     [xx_new_d, qq3_new_d] = functions_03.mod_lineal_disc(
-        x_real, u_est, deltat, hh, A_discrete,B_discrete)
+        x_real, u_est, deltat, hh, A_discrete,B_prom)
     
     x_real = xx_new_d
 
@@ -151,12 +190,12 @@ for i in range(len(t)-1):
     w1_real.append(xx_new_d[4])
     w2_real.append(xx_new_d[5])
 
-    # q_real = np.array([q0_real[-1], q1_real[-1], q2_real[-1], q3_real[-1]])
-    # www_real = np.array([w0_real[-1], w1_real[-1], w2_real[-1]])
-    # ww_real = functions_03.simulate_gyros_reading(www_real, 0,0)
+    q_real = np.array([q0_real[-1], q1_real[-1], q2_real[-1], q3_real[-1]])
+    w_real = np.array([w0_real[-1], w1_real[-1], w2_real[-1]])
+    w_gyros = functions_03.simulate_gyros_reading(w_real, 0,0)
 
 [MSE_cuat, MSE_omega]  = functions_03.cuat_MSE_NL(q0_real, q1_real, q2_real, q3_real, w0_real, w1_real, w2_real, q0_est, q1_est, q2_est, q3_est, w0_est, w1_est, w2_est)   
-
+[RPY_all_est,RPY_all_id,mse_roll,mse_pitch,mse_yaw] = functions_03.RPY_MSE(t, q0_est, q1_est, q2_est, q3_est, q0_real, q1_real, q2_real, q3_real)   
     
 # %%
 fig0, axes0 = plt.subplots(nrows=1, ncols=2, figsize=(16, 4))
@@ -235,3 +274,40 @@ plt.title('MSE de cada velocidad angular entre lineal discreto y kalman lineal d
 # plt.ylim(-0.005,0.005)
 plt.grid()
 plt.show()
+
+fig0, axes0 = plt.subplots(nrows=1, ncols=2, figsize=(16, 4))
+
+axes0[0].plot(t, RPY_all_id[:,0], label='Roll modelo')
+axes0[0].plot(t, RPY_all_id[:,1], label='Pitch modelo')
+axes0[0].plot(t, RPY_all_id[:,2], label='Yaw modelo')
+axes0[0].set_xlabel('Tiempo [s]')
+axes0[0].set_ylabel('Angulos de Euler [°]')
+axes0[0].legend()
+axes0[0].set_title('Angulos de Euler obtenidos por el modelo de control lineal discreto')
+axes0[0].grid()
+# axes0[0].set_ylim(-1, 1)  # Ajusta los límites en el eje Y
+
+axes0[1].plot(t, RPY_all_est[:,0], label='Roll kalman')
+axes0[1].plot(t, RPY_all_est[:,1], label='Pitch kalman')
+axes0[1].plot(t, RPY_all_est[:,2], label='Yaw kalman')
+axes0[1].set_xlabel('Tiempo [s]')
+axes0[1].set_ylabel('Angulos de Euler [°]')
+axes0[1].legend()
+axes0[1].set_title('Angulos de Euler estimados por el filtro de kalman lineal discreto')
+axes0[1].grid()
+plt.tight_layout()
+plt.show()
+
+# R_P_Y = np.array([0,1,2])
+# plt.figure(figsize=(12, 6))
+# plt.scatter(R_P_Y [0], mse_roll, label='mse roll', color='r',marker='*')
+# plt.scatter(R_P_Y [1], mse_pitch, label='mse pitch', color='b',marker='*')
+# plt.scatter(R_P_Y [2], mse_yaw, label='mse yaw', color='k',marker='*')
+# plt.xlabel('Angulos de Euler')
+# plt.ylabel('Mean Square Error [°]')
+# plt.legend()
+# plt.title('MSE de cada angulo de Euler entre lineal discreto y kalman lineal discreto')
+# # plt.xlim(20000,100000)
+# # plt.ylim(-0.005,0.005)
+# plt.grid()
+# plt.show()

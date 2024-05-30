@@ -120,10 +120,10 @@ def H_k_bar(b0,b1,b2,s0,s1,s2):
 
 
 # Obtencion de las matrices A y B de manera discreta
-def A_B(I_x,I_y,I_z,w0_O,w0,w1,w2,deltat,h,b_body, s_body):
+def A_B(I_x,I_y,I_z,w0_O,w0,w1,w2,deltat,h,b_orbit,b_body, s_body):
     
     A =A_PD(I_x,I_y,I_z,w0_O, w0,w1,w2)
-    B = B_PD(I_x,I_y,I_z,b_body)
+    B = B_PD(I_x,I_y,I_z,b_orbit)
     
     # Define an identity matrix for C and a zero matrix for D to complete state-space model
     # C = np.eye(6)  # Assuming a 6x6 identity matrix for C
