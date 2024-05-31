@@ -53,14 +53,14 @@ K_Ex_app = functions_02.K(Kp_x, Kp_y, Kp_z, Kd_x, Kd_y, Kd_z)
 K_Ex_app_disc = functions_02.K(Kp_x_disc, Kp_y_disc, Kp_z_disc, Kd_x_disc, Kd_y_disc, Kd_z_disc)
 
 deltat = 2	
-limite = 5002
+limite = 3002
 # limite = 72
 t = np.arange(0, limite, deltat)
 																																																				
 #%%
 
-q = np.array([-0.7071/np.sqrt(3),0.7071/np.sqrt(3),-0.7071/np.sqrt(3),0.7071])
-# q = np.array([0,0,0,1])
+# q = np.array([-0.7071/np.sqrt(3),0.7071/np.sqrt(3),-0.7071/np.sqrt(3),0.7071])
+q = np.array([0,0,0,1])
 w= np.array([0.0001,0.0001,0.0001])
 
 x = np.hstack((np.transpose(q[:3]), np.transpose(w)))
@@ -123,7 +123,7 @@ uus = []
 uus_d = []
 
 for i in range(len(t)-1):
-    # print(t[i])
+    print(t[i])
     qq = np.array([q0[-1],q1[-1],q2[-1],q3[-1]])
     ww = np.array([w0[-1],w1[-1],w2[-1]])
     xx = np.hstack((np.transpose(qq[:3]), np.transpose(ww)))

@@ -79,7 +79,7 @@ def A_PD(I_x,I_y,I_z,wo_O, q0,q1,q2,w0,w1,w2):
     A3 = np.array([0.5*w1 - 0.5*w2*q0/q3, -0.5*w0 - 0.5*w2*q1/q3, 0.5*w2*q2/q3, -0.5*q1, 0.5*q0, 0.5*q3])
     A4 = np.array([6*wo_O**2*(I_x-I_y), 0, 0, 0, (w2+wo_O*(2*q0*q2-2*q1*q3))*(I_y-I_z)/I_x - wo_O*I_x*(-2*q1*q3+ 2*q2*q1), (w1+wo_O*(2*q0*q1-2*q2*q3))*(I_y-I_z)/I_x - wo_O*I_x*(2*q1*q0 - 2*q2*q3) ])
     A5 = np.array([0, 6*wo_O**2*(I_z-I_y), 0,(w2+wo_O*(2*q0*q2+ 2*q1*q3))*(I_x-I_z)/I_y - wo_O*I_y*(q3*q1+ q2*q0- q1*q3 + (q2*q0*q3+ q2*q1*q2+ q2*q2*q1)/q3) , - wo_O*I_y*(-q2*q1+ q3*q0- q0*q3 + (-q2*q0*q2+ q2*q1*q3+ q2*q2*q0)/q3), (w0+wo_O*(1-2*q1**2-2*q2**2))*(I_x-I_z)/I_y - wo_O*I_y*(q1*q1- q0*q0- q3*q3 + (q2*q0*q1- q2*q1*q0+ q2*q2*q3)/q3) ])
-    A6 = np.array([0, 0, 0, (w1+wo_O*(2*q0*q1- 2*q2*q3))*(I_x-I_y)/I_z - wo_O*I_z*(q3*q2- q1*q0+ q2*q3 - (q1*q0*q3+ q1*q1*q2- q1*q2*q1)/q3), (w0+wo_O*(1-2*q1**2-2*q2**2))*(I_x-I_y)/I_z - wo_O*I_z*(-q2*q2+ q0*q0+ q3*q3 - (q1*q0*q2+ q1*q1*q3- q1*q2*q0)/q3) , - wo_O*I_z*(q1*q2+ q3*q0- q0*q3 - (q1*q0*q1- q1*q1*q0+ q1*q2*q3)/q3)])
+    A6 = np.array([0, 0, 0, (w1+wo_O*(2*q0*q1- 2*q2*q3))*(I_y-I_x)/I_z - wo_O*I_z*(q3*q2- q1*q0+ q2*q3 - (q1*q0*q3+ q1*q1*q2- q1*q2*q1)/q3), (w0+wo_O*(1-2*q1**2-2*q2**2))*(I_y-I_x)/I_z - wo_O*I_z*(-q2*q2+ q0*q0+ q3*q3 - (q1*q0*q2+ q1*q1*q3- q1*q2*q0)/q3) , - wo_O*I_z*(q1*q2+ q3*q0- q0*q3 - (q1*q0*q1- q1*q1*q0+ q1*q2*q3)/q3)])
     
     A_k = np.array([A1,A2,A3,A4,A5,A6])
     
@@ -135,10 +135,10 @@ def H_k_bar(b0,b1,b2,s0,s1,s2):
 
 
 # Obtencion de las matrices A y B de manera discreta
-def A_B(I_x,I_y,I_z,wo_O,q0,q1,q2,w0,w1,w2,deltat,h,b_body, s_body):
+def A_B(I_x,I_y,I_z,wo_O,q0,q1,q2,w0,w1,w2,deltat,h,b_orbit, b_body, s_body):
     
     A =A_PD(I_x,I_y,I_z,wo_O, q0,q1,q2,w0,w1,w2)
-    B = B_PD(I_x,I_y,I_z,b_body)
+    B = B_PD(I_x,I_y,I_z,b_orbit)
     
     # Define an identity matrix for C and a zero matrix for D to complete state-space model
     # C = np.eye(6)  # Assuming a 6x6 identity matrix for C
@@ -217,7 +217,7 @@ def f7_K(t, q0, q1, q2,q3, w0, w1, w2,w0_o,tau_z_ctrl,tau_z_per,I_x,I_y,I_z): #w
     part_3_w2 = w0_o*(q0*q2*0.5*(q1*w2 - q2*w1 + w0*q3) + q0*q2*0.5*(q0*w1 - q1*w0 + w2*q3)+ q1*q3*0.5*(-q0*w2 + q2*w0 + w1*q3)+ q1*q3*0.5*(-q0*w0 - q1*w1 - w2*q2))
     part_4_w2 = tau_z_ctrl/I_z
     part_5_w2 = tau_z_per/I_z
-    return part_1_w2*part_2_w2*(I_x-I_y)/I_z - part_3_w2 + part_4_w2 + part_5_w2
+    return part_1_w2*part_2_w2*(I_y-I_x)/I_z - part_3_w2 + part_4_w2 + part_5_w2
 
 def rk4_EKF_step(t, q0, q1, q2,q3, w0, w1, w2, h, w0_o,tau_x_ctrl,tau_x_per,tau_y_ctrl,tau_y_per,tau_z_ctrl,tau_z_per,I_x,I_y,I_z):
     #k1 = h * f1(x, y1, y2)
@@ -374,7 +374,7 @@ def P_posteriori(K_k,H_k,P_k_priori,R_k):
 
 # y = np.array([0,0,0,0,0,0])
 
-def kalman_lineal(A, B, C, x, u, b, b_eci, P_ki, sigma_m, sigma_ss,deltat,w,hh):
+def kalman_lineal(A, B, C, x, u, b,b_est, s,s_est, P_ki, sigma_m, sigma_ss,deltat,hh):
 # def kalman_lineal(A, B, C, x, u, b, b_eci, P_ki, ruido, ruido_ss,deltat,s):
     
     H_k = C
@@ -388,29 +388,36 @@ def kalman_lineal(A, B, C, x, u, b, b_eci, P_ki, sigma_m, sigma_ss,deltat,w,hh):
     
     P_k_priori = P_k_prior(A,P_ki,Q_ki)
     
-    z_sensor = np.hstack((b[0],b[1],b[2], w[0], w[1], w[2]))
-    z_modelo = np.dot(H_k,x)
-    y = z_sensor - z_modelo
+    z_sensor = np.hstack((b[0],b[1],b[2], s[0], s[1], s[2]))
+    z_modelo = np.hstack((b_est[0],b_est[1],b_est[2], s_est[0], s_est[1], s_est[2]))
+    y= z_sensor - z_modelo
     
     R = R_k(sigma_m, sigma_ss)
     K_k = k_kalman(R,P_k_priori,H_k)
-    # print("zsensor:",z_sensor)
-    # print("zmodelo:",z_modelo)
-    # print("Y:",y)
+    print("zsensor:",z_sensor)
+    print("zmodelo:",z_modelo)
+    print("Y:",y)
     
     delta_x = np.dot(K_k,y)
-    # print("deltax",delta_x)
+    # delta_x2 = np.dot(-K_k,y)
+    print("deltax",delta_x)
+    # print("deltax2",delta_x2)
     delta_q_3 = delta_x[0:3]
     delta_w = delta_x[3:6]
     q3_delta =  np.sqrt(1-delta_q_3[0]**2-delta_q_3[1]**2-delta_q_3[2]**2)
     delta_q = np.hstack((delta_q_3, q3_delta))
     delta_qn = delta_q / np.linalg.norm(delta_q)
-    # print("deltaq",delta_qn)
+    # delta_q2 = np.hstack((-delta_q_3, q3_delta))
+    # delta_qn2 = delta_q2 / np.linalg.norm(delta_q2)
 
-    # print("delta_q obtenido por kalman:",delta_q,"\n")
+    print("delta_q obtenido por kalman:",delta_qn,"\n")
+    # print("delta_q2 obtenido por kalman:",delta_qn2,"\n")
     
     q_posteriori = quat_mult(delta_qn,q_priori)
-    # print("q posteriori multi:",q_posteriori,"\n")
+    # q_posteriori2 = quat_mult(delta_qn2,q_priori)
+    print("q priori multi:",q_priori,"\n")
+    print("q posteriori multi:",q_posteriori,"\n")
+    # print("q posteriori2 multi:",q_posteriori2,"\n")
     w_posteriori = w_priori + delta_w
 
     

@@ -245,7 +245,7 @@ def f7_K(t, q0, q1, q2,q3, w0, w1, w2,w0_o,tau_z_ctrl,tau_z_per,I_x,I_y,I_z): #w
     part_3_w2 = w0_o*(q0*q2*0.5*(q1*w2 - q2*w1 + w0*q3) + q0*q2*0.5*(q0*w1 - q1*w0 + w2*q3)+ q1*q3*0.5*(-q0*w2 + q2*w0 + w1*q3)+ q1*q3*0.5*(-q0*w0 - q1*w1 - w2*q2))
     part_4_w2 = tau_z_ctrl/I_z
     part_5_w2 = tau_z_per/I_z
-    return part_1_w2*part_2_w2*(I_x-I_y)/I_z - part_3_w2 + part_4_w2 + part_5_w2
+    return part_1_w2*part_2_w2*(I_y-I_x)/I_z - part_3_w2 + part_4_w2 + part_5_w2
 
 def rk4_EKF_step(t, q0, q1, q2,q3, w0, w1, w2, h, w0_o,tau_x_ctrl,tau_x_per,tau_y_ctrl,tau_y_per,tau_z_ctrl,tau_z_per,I_x,I_y,I_z):
     #k1 = h * f1(x, y1, y2)

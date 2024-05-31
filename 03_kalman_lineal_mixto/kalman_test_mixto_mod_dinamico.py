@@ -37,7 +37,7 @@ vsun_z = array_datos[:, 12]
 w0_O = 0.00163
 
 deltat = 2
-limite =  1002
+limite = 1002
 t = np.arange(0, limite, deltat)
 
 I_x = 0.037
@@ -52,11 +52,11 @@ sigma_ss = 0.036
 sigma_b = 1e-6
 
 #%%
-q= np.array([0,0.7071,0,0.7071])
-# q= np.array([0,0,0,1])
+# q= np.array([0,0.7071,0,0.7071])
+q= np.array([0,0,0,1])
 w = np.array([0.0001, 0.0001, 0.0001])
-q_est = np.array([0.00985969, 0.70703804, 0.00985969, 0.70703804])
-# q_est= np.array([0.0120039,0.0116517,0.0160542,0.999731])
+# q_est = np.array([0.00985969, 0.70703804, 0.00985969, 0.70703804])
+q_est= np.array([0.0120039,0.0116517,0.0160542,0.999731])
 
 q0_est = [q_est[0]]
 q1_est = [q_est[1]]
@@ -79,17 +79,8 @@ w_body = np.array([w0_real[-1], w1_real[-1], w2_real[-1]])
 w_gyros = functions_03.simulate_gyros_reading(w_body,0,0)
 x_real = np.hstack((np.transpose(q_real[:3]), np.transpose(w_gyros)))
 
-bi_orbit = [Bx_orbit[0],By_orbit[0],Bz_orbit[0]]
-b_body_i = functions_03.rotacion_v(q_real, bi_orbit, 1e-6)
-
-si_orbit = [vx_sun_orbit[0],vy_sun_orbit[0],vz_sun_orbit[0]]
-s_body_i = functions_03.rotacion_v(q_real, si_orbit, 0.036)
-hh =0.01
-
-[A,B,C,A_discrete,B_discrete,C_discrete] = functions_03.A_B(I_x, I_y, I_z, w0_O, w0_eq, w1_eq, w2_eq, deltat, hh, bi_orbit ,b_body_i, s_body_i)
-
 diagonal_values = np.array([0.5**2, 0.5**2, 0.5**2, 0.1**2, 0.1**2, 0.1**2])
-
+hh =0.01
 P_ki = np.diag(diagonal_values)
 #%%
 np.random.seed(42)
@@ -100,8 +91,6 @@ for i in range(len(t)-1):
     x_est = np.hstack((np.transpose(q_est[:3]), np.transpose(w_est)))
     u_est = np.array([15,15,15])
     
-    x_est = np.hstack((q_est[0:3],w_est))  
-
     b_orbit = [Bx_orbit[i],By_orbit[i],Bz_orbit[i]]
     b_body_med = functions_03.rotacion_v(q_real, b_orbit,sigma_b)
     b_body_est = functions_03.rotacion_v(q_est, b_orbit,sigma_b)

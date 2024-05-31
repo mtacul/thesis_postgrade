@@ -79,14 +79,7 @@ w_body = np.array([w0_real[-1], w1_real[-1], w2_real[-1]])
 w_gyros = functions_06.simulate_gyros_reading(w_body, 0,0)
 x_real = np.hstack((np.transpose(q_real[:3]), np.transpose(w_gyros)))
 
-bi_orbit = [Bx_orbit[0],By_orbit[0],Bz_orbit[0]]
-b_body_i = functions_06.rotacion_v(q_real, bi_orbit, sigma_b)
-
-si_orbit = [vx_sun_orbit[0],vy_sun_orbit[0],vz_sun_orbit[0]]
-s_body_i = functions_06.rotacion_v(q_real, si_orbit, sigma_ss)
 hh =0.01
-
-# [A,B,C,A_discrete,B_discrete,C_discrete] = functions_04.A_B(I_x, I_y, I_z, w0_O, w0_eq, w1_eq, w2_eq, deltat, hh, b_body_i, bi_orbit)
 
 diagonal_values = np.array([0.5**2, 0.5**2, 0.5**2, 0.1**2, 0.1**2, 0.1**2])
 
@@ -94,22 +87,22 @@ P_ki = np.diag(diagonal_values)
 #%%
 np.random.seed(42)
 for i in range(len(t)-1):
-    print(t[i+1])
+    print(t[i])
     q_est = np.array([q0_est[-1], q1_est[-1], q2_est[-1], q3_est[-1]])
     w_est = np.array([w0_est[-1], w1_est[-1], w2_est[-1]])
     x_est = np.hstack((np.transpose(q_est[:3]), np.transpose(w_est)))
-    u_est = np.array([15,15,15])
+    u_est = np.array([0.15,0.15,0.15])
     
-    x_est = np.hstack((q_est[0:3],w_est))  
+    b_orbit = [Bx_orbit[i],By_orbit[i],Bz_orbit[i]]
+    b_body_med = functions_06.rotacion_v(q_real, b_orbit,sigma_b)
+    b_body_est = functions_06.rotacion_v(q_real, b_orbit,sigma_b)
+    
+    s_orbit = [vx_sun_orbit[i],vy_sun_orbit[i],vz_sun_orbit[i]]
+    s_body_med = functions_06.rotacion_v(q_real, s_orbit,sigma_ss)
+    s_body_est = functions_06.rotacion_v(q_real, s_orbit,sigma_ss)
 
-    b_orbit = [Bx_orbit[i+1],By_orbit[i+1],Bz_orbit[i+1]]
-    b_body = functions_06.rotacion_v(q_real, b_orbit, sigma_b)
-
-    vsun_orbit = [vx_sun_orbit[i+1],vy_sun_orbit[i+1],vz_sun_orbit[i+1]]
-    s_body = functions_06.rotacion_v(q_real, vsun_orbit, sigma_ss)
-
-    [A,B,C,A_discrete,B_discrete,C_discrete] = functions_06.A_B(I_x, I_y, I_z, w0_O, q_est[0],q_est[1],q_est[2],w_est[0], w_est[1], w_est[2], deltat, hh, b_body, s_body)
-    [q_posteriori, w_posteriori, P_k_pos,K_k] = functions_06.kalman_lineal(A_discrete, B_discrete,C_discrete, x_real, u_est, b_body, b_orbit, P_ki, sigma_b, sigma_ss, deltat,w_gyros,hh)
+    [A,B,C,A_discrete,B_discrete,C_discrete] = functions_06.A_B(I_x, I_y, I_z, w0_O, q_est[0],q_est[1],q_est[2],w_est[0], w_est[1], w_est[2], deltat, hh,b_orbit, b_body_med, s_body_med)
+    [q_posteriori, w_posteriori, P_k_pos,K_k] = functions_06.kalman_lineal(A_discrete, B_discrete,C_discrete, x_est, u_est, b_body_med, b_body_est, s_body_med, s_body_est, P_ki, sigma_b, sigma_ss, deltat,hh)
     # asasd
     
     q0_est.append(q_posteriori[0])
@@ -123,19 +116,21 @@ for i in range(len(t)-1):
     P_ki = P_k_pos
     
     [xx_new_d, qq3_new_d] = functions_06.mod_nolineal(
-        x_real, u_est, deltat, b_body,hh,deltat,I_x,I_y,I_z,w0_O)
+        x_real, u_est, deltat, b_body_med,hh,deltat,I_x,I_y,I_z,w0_O)
     
     x_real = xx_new_d
-
+    w_gyros = functions_06.simulate_gyros_reading(x_real[3:6],0.00057595865,0.0008726646)
+    
     q0_real.append(xx_new_d[0])
     q1_real.append(xx_new_d[1])
     q2_real.append(xx_new_d[2])
     q3_real.append(qq3_new_d)
-    w0_real.append(xx_new_d[3])
-    w1_real.append(xx_new_d[4])
-    w2_real.append(xx_new_d[5])
+    w0_real.append(w_gyros[0])
+    w1_real.append(w_gyros[1])
+    w2_real.append(w_gyros[2])
 
-    # q_real = np.array([q0_real[-1], q1_real[-1], q2_real[-1], q3_real[-1]])
+    q_real = np.array([q0_real[-1], q1_real[-1], q2_real[-1], q3_real[-1]])
+    print("q_real: ", q_real)
     # www_real = np.array([w0_real[-1], w1_real[-1], w2_real[-1]])
     # ww_real = functions_03.simulate_gyros_reading(www_real, 0,0)
 
