@@ -76,7 +76,7 @@ w1_real = [w[1]]
 w2_real = [w[2]]
 q_real = np.array([q0_real[-1],q1_real[-1],q2_real[-1],q3_real[-1]])
 w_body = np.array([w0_real[-1], w1_real[-1], w2_real[-1]])
-w_gyros = functions_03.simulate_gyros_reading(w_body, 0,0)
+w_gyros = functions_03.simulate_gyros_reading(w_body,0,0)
 x_real = np.hstack((np.transpose(q_real[:3]), np.transpose(w_gyros)))
 
 bi_orbit = [Bx_orbit[0],By_orbit[0],Bz_orbit[0]]
@@ -133,13 +133,14 @@ for i in range(len(t)-1):
         x_real, u_est, deltat, hh, A_discrete,B_discrete)
     
     x_real = xx_new_d
+    w_gyros = functions_03.simulate_gyros_reading(x_real[3:6],0.00057595865,0.0008726646)
     q0_real.append(xx_new_d[0])
     q1_real.append(xx_new_d[1])
     q2_real.append(xx_new_d[2])
     q3_real.append(qq3_new_d)
-    w0_real.append(xx_new_d[3])
-    w1_real.append(xx_new_d[4])
-    w2_real.append(xx_new_d[5])
+    w0_real.append(w_gyros[0])
+    w1_real.append(w_gyros[1])
+    w2_real.append(w_gyros[2])
     q_real = np.array([q0_real[-1],q1_real[-1],q2_real[-1],q3_real[-1]])
 
     # q_real = np.array([q0_real[-1], q1_real[-1], q2_real[-1], q3_real[-1]])

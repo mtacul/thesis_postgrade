@@ -465,9 +465,9 @@ def eigenvalue_constraint(x, A, B):
     K = np.hstack([np.diag(x[:3]), np.diag(x[3:])])  # Crear matriz de control K
     A_prim = A - B @ K
     eigenvalues = np.linalg.eigvals(A_prim)
-    c = np.abs(eigenvalues) - 1  # Asegurarse de que todos los valores propios son menores que 1 en magnitud
+    c = np.abs(eigenvalues) - 0.99999  # Asegurarse de que todos los valores propios son menores que 1 en magnitud
 
-    if np.all(np.abs(eigenvalues) < 1):
+    if np.all(np.abs(eigenvalues) < 0.99999):
         found_solution = True
         optimal_x = x  # Guardar la solución
         raise StopIteration("Found a solution with all eigenvalues having magnitude less than 1.")  # Lanzar una excepción para detener la optimización
