@@ -38,7 +38,9 @@ vsun_z = array_datos[:, 12]
 w0_O = 0.00163
 
 deltat = 2
-limite =  5762*23
+# limite =  5762*69
+limite =  5762*20
+
 t = np.arange(0, limite, deltat)
 
 I_x = 0.037
@@ -122,8 +124,8 @@ optimal_x = functions_03.opt_K(A_discrete, B_prom, deltat, hh, x0)
 K = np.hstack([np.diag(optimal_x[:3]), np.diag(optimal_x[3:])])
 
 # xx = np.array([ -0.0913548 ,-1.77969, -4.60771, -0.0736712, -0.11651, 0.0342056])
-xx = np.array([-0.022446, -0.0616654, -0.0621981, -6.50674, -6.49394, -3.01551])
-K = np.hstack([np.diag(xx[:3]), np.diag(xx[3:])])
+# xx = np.array([-0.022446, -0.0616654, -0.0621981, -6.50674, -6.49394, -3.01551])
+# K = np.hstack([np.diag(xx[:3]), np.diag(xx[3:])])
 
 diagonal_values = np.array([0.5**2, 0.5**2, 0.5**2, 0.1**2, 0.1**2, 0.1**2])
 P_ki = np.diag(diagonal_values)
