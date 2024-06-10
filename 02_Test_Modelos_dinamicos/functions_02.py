@@ -63,8 +63,8 @@ def A_PD(I_x,I_y,I_z,w0_O, w0,w1,w2):
     A2 = np.array([-0.5*w2,0,0.5*w0,0,0.5,0])
     A3 = np.array([0.5*w1,-0.5*w0,0,0,0,0.5])
     A4 = np.array([6*w0_O**2*(I_x-I_y), 0, 0, 0, w2*(I_y-I_z)/I_x, w1*(I_y-I_z)/I_x])
-    A5 = np.array([0, 6*w0_O**2*(I_z-I_y), 0, w2*(I_x-I_z)/I_y,0, (w0+w0_O)*(I_x-I_z)/I_y + I_y*w0_O])
-    A6 = np.array([0, 0, 0, w1*(I_y-I_x)/I_z, (w0+w0_O)*(I_y-I_x)/I_z - I_z*w0_O, 0])
+    A5 = np.array([0, 6*w0_O**2*(I_z-I_y), 0, w2*(I_x-I_z)/I_y,0, (w0+w0_O)*(I_x-I_z)/I_y + w0_O])
+    A6 = np.array([0, 0, 0, w1*(I_y-I_x)/I_z, (w0+w0_O)*(I_y-I_x)/I_z - w0_O, 0])
     
     A_k = np.array([A1,A2,A3,A4,A5,A6])
     

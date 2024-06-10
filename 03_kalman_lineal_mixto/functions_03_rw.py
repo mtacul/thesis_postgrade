@@ -67,27 +67,27 @@ def rotacion_v(q, b_i, sigma):
 # Matriz linealizada de la funcion dinamica no lineal derivada respecto al vector 
 # estado en el punto de equilibrio x = [0,0,0,0,0,0] (tres primeros cuaterniones y
 # tres componentes de velocidad angular)
-def A_PD(I_x,I_y,I_z,w0_O, w0,w1,w2):
+def A_PD(I_x,I_y,I_z,w0_O, w0,w1,w2, I_s0_x, I_s1_y, I_s2_z, w_s0,w_s1,w_s2, J_x, J_y, J_z):
     A1 = np.array([0, 0.5*w2, -0.5*w1, 0.5, 0,0])
     A2 = np.array([-0.5*w2,0,0.5*w0,0,0.5,0])
     A3 = np.array([0.5*w1,-0.5*w0,0,0,0,0.5])
-    A4 = np.array([6*w0_O**2*(I_x-I_y), 0, 0, 0, w2*(I_y-I_z)/I_x, w1*(I_y-I_z)/I_x])
-    A5 = np.array([0, 6*w0_O**2*(I_z-I_y), 0, w2*(I_x-I_z)/I_y,0, (w0+w0_O)*(I_x-I_z)/I_y + w0_O])
-    A6 = np.array([0, 0, 0, w1*(I_y-I_x)/I_z, (w0+w0_O)*(I_y-I_x)/I_z - w0_O, 0])
+    A4 = np.array([6*w0_O**2*(I_x-I_y), 0, (-2*w0_O*w_s2*I_s2_z) / (J_x-I_s0_x), 0, w_s2*I_s2_z/(J_x-I_s0_x), -w_s1*I_s1_y/(J_x-I_s0_x)])
+    A5 = np.array([0, 6*w0_O**2*(I_z-I_y) + 2*w0_O**2*(J_z-J_x) / (J_y-I_s1_y) - (2*w0_O*w_s0*I_s0_x) / (J_y-I_s1_y), 0, w_s2*I_s2_z/(J_y-I_s1_y),0, w0_O + w0_O*(J_z-J_x)/(J_y-I_s1_y) - w_s0*I_s0_x/(J_y-I_s1_y)])
+    A6 = np.array([0, 0, -2*w0_O**2*(J_y-J_x) / (J_z-I_s2_z) + (2*w0_O*w_s0*I_s0_x) / (J_z-I_s2_z), w_s1*(J_y-J_x)/(J_z-I_s2_z) , -w0_O + w0_O*(J_y-J_x)/(J_z-I_s2_z) - w_s0*I_s0_x/(J_z-I_s2_z), 0])
     
     A_k = np.array([A1,A2,A3,A4,A5,A6])
     
-    return A_k    
+    return A_k     
 
 
-#Matriz linealizada de la accion de control derivada respecto al vector estado
+#Matriz linealizada de la accion de control derivada respecto al vector de entrada
 # en el punto de equilibrio x = [0,0,0,0,0,0]
-def B_PD(I_x,I_y,I_z,B_magnet):
-    b_norm = np.linalg.norm(B_magnet)
+def B_PD(I_s1_y,I_s2_z,w0_O):
     B123 = np.zeros((3,3))
-    B4 = np.array([(-(B_magnet[2]**2)-B_magnet[1]**2)/(b_norm*I_x), B_magnet[1]*B_magnet[0]/(b_norm*I_x), B_magnet[2]*B_magnet[0]/(b_norm*I_x)])
-    B5 = np.array([B_magnet[0]*B_magnet[1]/(b_norm*I_y), (-B_magnet[2]**2-B_magnet[0]**2)/(b_norm*I_y), B_magnet[2]*B_magnet[1]/(b_norm*I_y)])
-    B6 = np.array([B_magnet[0]*B_magnet[2]/(b_norm*I_z), B_magnet[1]*B_magnet[2]/(b_norm*I_z), (-B_magnet[1]**2-B_magnet[0]**2)/(b_norm*I_z)])
+    B4 = np.array([0,0,0])
+    # B4 = np.array([0,0,0])
+    B5 = np.array([0,0,I_s2_z*w0_O])
+    B6 = np.array([0,I_s1_y*w0_O,0])
     
     B_k = np.vstack((B123,B4,B5,B6))
     #B_k = np.array([B123,B4,B5,B6])
@@ -129,10 +129,10 @@ def H_k_bar(b0,b1,b2,s0,s1,s2):
 
 
 # Obtencion de las matrices A y B de manera discreta
-def A_B(I_x,I_y,I_z,w0_O,w0,w1,w2,deltat,h,b_orbit,b_body, s_body):
+def A_B(I_x,I_y,I_z,w0_O, w0,w1,w2, I_s0_x, I_s1_y, I_s2_z, w_s0,w_s1,w_s2, J_x, J_y, J_z,deltat,h,b_orbit,b_body, s_body):
     
-    A =A_PD(I_x,I_y,I_z,w0_O, w0,w1,w2)
-    B = B_PD(I_x,I_y,I_z,b_orbit)
+    A =A_PD(I_x,I_y,I_z,w0_O, w0,w1,w2, I_s0_x, I_s1_y, I_s2_z, w_s0,w_s1,w_s2, J_x, J_y, J_z)
+    B = B_PD(I_s1_y,I_s2_z,w0_O)
     
     # Define an identity matrix for C and a zero matrix for D to complete state-space model
     # C = np.eye(6)  # Assuming a 6x6 identity matrix for C
@@ -461,13 +461,14 @@ optimal_x = None
 found_solution = False
 
 def eigenvalue_constraint(x, A, B):
+    eigs = []
     global found_solution, optimal_x
     K = np.hstack([np.diag(x[:3]), np.diag(x[3:])])  # Crear matriz de control K
     A_prim = A - B @ K
     eigenvalues = np.linalg.eigvals(A_prim)
-    c = np.abs(eigenvalues) - 0.99999  # Asegurarse de que todos los valores propios son menores que 1 en magnitud
-
-    if np.all(np.abs(eigenvalues) < 0.99999):
+    c = np.abs(eigenvalues) - 1  # Asegurarse de que todos los valores propios son menores que 1 en magnitud
+    eigs.append(eigenvalues)
+    if np.all(np.abs(eigenvalues) < 1):
         found_solution = True
         optimal_x = x  # Guardar la solución
         raise StopIteration("Found a solution with all eigenvalues having magnitude less than 1.")  # Lanzar una excepción para detener la optimización
@@ -485,7 +486,8 @@ def opt_K(A_discrete,B_discrete,deltat,h,x0):
     optimal_x = None
     constraints = {'type': 'ineq', 'fun': eigenvalue_constraint, 'args': (A_discrete, B_discrete)}
     
-    for i in range(1000):
+    for i in range(600):
+        print(i)
         random_adjustment = np.random.rand(len(x0))*100
         current_x0 = x0 + random_adjustment
         try:
