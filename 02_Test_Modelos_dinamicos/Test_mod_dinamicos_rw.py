@@ -71,7 +71,9 @@ J_x = I_x + I_s0_x + I_s1_x + I_s2_x + m_s1*b_1**2 + m_s2*b_2**2
 J_y = I_y + I_s0_y + I_s1_y + I_s2_y + m_s0*b_0**2 + m_s2*b_2**2
 J_z = I_z + I_s0_z + I_s1_z + I_s2_z + m_s0*b_0**2 + m_s1*b_1**2
 
-
+w_s0 = 0.5
+w_s1 = 0.5
+w_s2 = 0.5
 																																															
 #%%
 
@@ -85,10 +87,6 @@ u = np.array([0.15,0.15,0.15])
 u_disc = np.array([0.15,0.15,0.15])
 
 w0_O = 0.00163
-
-w_s0 = u[0]
-w_s1 = u[1]
-w_s2 = u[2]
 
 w0 = 0
 w1 = 0
@@ -141,15 +139,13 @@ for i in range(len(t)-1):
     qq = np.array([q0[-1],q1[-1],q2[-1],q3[-1]])
     ww = np.array([w0[-1],w1[-1],w2[-1]])
     xx = np.hstack((np.transpose(qq[:3]), np.transpose(ww)))
-    uu = np.array([15,15,15])
-    w_s = uu
+    uu = np.array([0.15,0.15,0.15])
     uus.append(uu)
     
     qq_disc = np.array([q0_disc[-1],q1_disc[-1],q2_disc[-1],q3_disc[-1]])
     ww_disc = np.array([w0_disc[-1],w1_disc[-1],w2_disc[-1]])
     xx_disc = np.hstack((np.transpose(qq_disc[:3]), np.transpose(ww_disc)))
-    uu_disc = np.array([15,15,15])
-    w_s_disc = uu_disc
+    uu_disc = np.array([0.15,0.15,0.15])
     uus_d.append(uu_disc)
     
     # qq_nl = np.array([q0_nl[-1],q1_nl[-1],q2_nl[-1],q3_nl[-1]])
@@ -169,11 +165,8 @@ for i in range(len(t)-1):
     # bb_body_nlc = functions_02_rw.rotacion_v(qq_nl, b_orbit_i, 0)
     # ss_body_nlc = functions_02_rw.rotacion_v(qq_nl, s_orbit_i, 0)
     
-    [A,B,C,A_discrete,B_discrete,C_discrete] = functions_02_rw.A_B(I_x,I_y,I_z,w0_O, 0,0,0, I_s0_x, I_s1_y, I_s2_z, 0,0,0, J_x, J_y, J_z, deltat, hh,bb_orbit, bb_body_lc, ss_body_lc)
-    [A_ld,B_ld,C_ld,A_discrete_ld,B_discrete_ld,C_discrete_ld] = functions_02_rw.A_B(I_x,I_y,I_z,w0_O, 0,0,0, I_s0_x, I_s1_y, I_s2_z, 0,0,0, J_x, J_y, J_z, deltat, hh, bb_orbit,bb_body_ld, ss_body_ld)
-
     [xx_new, qq3_new] = functions_02_rw.mod_lineal_cont(xx,uu,deltat,hh,A,B)
-    [xx_new_d, qq3_new_d] = functions_02_rw.mod_lineal_disc(xx_disc,uu_disc,deltat,hh,A_discrete_ld,B_discrete_ld)
+    [xx_new_d, qq3_new_d] = functions_02_rw.mod_lineal_disc(xx_disc,uu_disc,deltat,hh,A_discrete,B_discrete)
     # [xx_new_nl, qq3_new_nl] = functions_02_rw.mod_nolineal(xx_nl,uu_nl,deltat,bb_body_nlc,hh)
     
     q0.append(xx_new[0])

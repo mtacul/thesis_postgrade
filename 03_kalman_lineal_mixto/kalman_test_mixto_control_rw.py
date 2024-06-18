@@ -39,7 +39,7 @@ w0_O = 0.00163
 
 deltat = 2
 # limite =  5762*69
-limite =  5762*5
+limite =  5762*20
 
 t = np.arange(0, limite, deltat)
 
@@ -79,6 +79,10 @@ I_s2_z = I_s0_z
 J_x = I_x + I_s0_x + I_s1_x + I_s2_x + m_s1*b_1**2 + m_s2*b_2**2
 J_y = I_y + I_s0_y + I_s1_y + I_s2_y + m_s0*b_0**2 + m_s2*b_2**2
 J_z = I_z + I_s0_z + I_s1_z + I_s2_z + m_s0*b_0**2 + m_s1*b_1**2
+
+w_s0 = 0.5
+w_s1 = 0.5
+w_s2 = 0.5
 #%%
 # q= np.array([0,0.7071,0,0.7071])
 # q= np.array([0,0,0,1])
@@ -116,20 +120,32 @@ si_orbit = [vx_sun_orbit[0],vy_sun_orbit[0],vz_sun_orbit[0]]
 s_body_i = functions_03_rw.rotacion_v(q_real, si_orbit, 0.036)
 hh =0.01
 
-[A,B,C,A_discrete,B_discrete,C_discrete] = functions_03_rw.A_B(I_x,I_y,I_z,w0_O, 0,0,0, I_s0_x, I_s1_y, I_s2_z, 0,0,0, J_x, J_y, J_z, deltat, hh, bi_orbit,b_body_i, s_body_i)
+[A,B,C,A_discrete,B_discrete,C_discrete] = functions_03_rw.A_B(I_x,I_y,I_z,w0_O,0,0,0 , I_s0_x, I_s1_y, I_s2_z, w_s0,w_s1,w_s2, J_x, J_y, J_z, deltat, hh, bi_orbit,b_body_i, s_body_i)
 
-# x0 = np.array([ -100, 200, 100,  20,
-#   -40, -90])
+x0 = np.array([ -100, 200, 100,  20,
+  -40, -90])
 # optimal_x = functions_03_rw.opt_K(A_discrete, B_discrete, deltat, hh, x0)
 # K = np.hstack([np.diag(optimal_x[:3]), np.diag(optimal_x[3:])])
 
-xx = np.array([8388.09654350503,	0.00773767796411971,	-17.5426208300126,	4204.19902252368,	-198.000422639466,	-50119.1191664241])
+xx = np.array([0.0230637,
+0.181903,
+0.310486,
+1.74021,
+3.92695,
+4.34901])
+
 # xx = np.array([ -0.0913548 ,-1.77969, -4.60771, -0.0736712, -0.11651, 0.0342056])
-# xx = np.array([-0.022446, -0.0616654, -0.0621981, -6.50674, -6.49394, -3.01551])
 K = np.hstack([np.diag(xx[:3]), np.diag(xx[3:])])
 
 diagonal_values = np.array([0.5**2, 0.5**2, 0.5**2, 0.1**2, 0.1**2, 0.1**2])
 P_ki = np.diag(diagonal_values)
+w_s_0 = [0.1]
+w_s_1 = [0.1]
+w_s_2 = [0.1]
+
+w_s_0_est = [0.1]
+w_s_1_est = [0.1]
+w_s_2_est = [0.1]
 #%%
 np.random.seed(42)
 for i in range(len(t)-1):
@@ -139,7 +155,21 @@ for i in range(len(t)-1):
     x_est = np.hstack((np.transpose(q_est[:3]), np.transpose(w_est)))
     # u_est = np.array([15,15,15])
     u_est = np.dot(K,x_est)
-    x_est = np.hstack((q_est[0:3],w_est))  
+    u_real = np.dot(K,x_real)
+    
+    h_est = u_est*deltat
+    w_s_est = np.array([h_est[0]/I_s0_x - w_est[0], h_est[1]/I_s1_y - w_est[1], h_est[2]/I_s2_z - w_est[2]])
+    
+    h_real = u_real*deltat
+    w_s_real = np.array([h_real[0]/I_s0_x - w_gyros[0], h_real[1]/I_s1_y - w_gyros[1], h_real[2]/I_s2_z - w_gyros[2]])
+    
+    w_s_0_est.append(w_s_est[0])
+    w_s_1_est.append(w_s_est[1])
+    w_s_2_est.append(w_s_est[2])
+    
+    w_s_0.append(w_s_real[0])
+    w_s_1.append(w_s_real[1])
+    w_s_2.append(w_s_real[2])
 
     b_orbit = [Bx_orbit[i],By_orbit[i],Bz_orbit[i]]
     b_body_med = functions_03_rw.rotacion_v(q_real, b_orbit,sigma_b)
@@ -233,6 +263,29 @@ axes0[1].set_xlabel('Tiempo [s]')
 axes0[1].set_ylabel('velocidad angular [rad/s]')
 axes0[1].legend()
 axes0[1].set_title('velocidades angulares estimados por el filtro de kalman lineal discreto')
+axes0[1].grid()
+plt.tight_layout()
+plt.show()
+
+fig0, axes0 = plt.subplots(nrows=1, ncols=2, figsize=(16, 4))
+
+axes0[0].plot(t, w_s_0, label='w0 RW')
+axes0[0].plot(t, w_s_1, label='w1 RW')
+axes0[0].plot(t, w_s_0, label='w2 RW')
+axes0[0].set_xlabel('Tiempo [s]')
+axes0[0].set_ylabel('velocidad angular [rad/s]')
+axes0[0].legend()
+axes0[0].set_title('velocidades angulares de las tres ruedas de reaccion')
+axes0[0].grid()
+# axes0[0].set_ylim(-1, 1)  # Ajusta los límites en el eje Y
+
+axes0[1].plot(t, w_s_0_est, label='w0 RW estimada')
+axes0[1].plot(t, w_s_1_est, label='w1 RW estimada')
+axes0[1].plot(t, w_s_2_est, label='w2 RW estimada')
+axes0[1].set_xlabel('Tiempo [s]')
+axes0[1].set_ylabel('velocidad angular [rad/s]')
+axes0[1].legend()
+axes0[1].set_title('velocidades angulares estimados en las tres ruedas de reaccion')
 axes0[1].grid()
 plt.tight_layout()
 plt.show()

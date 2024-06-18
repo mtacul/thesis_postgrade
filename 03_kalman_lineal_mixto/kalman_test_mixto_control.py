@@ -39,7 +39,7 @@ w0_O = 0.00163
 
 deltat = 2
 # limite =  5762*69
-limite =  5762*20
+limite =  5762*69
 
 t = np.arange(0, limite, deltat)
 
@@ -117,14 +117,21 @@ for ii in range(len(Bs_a[0,:,0])):
 
 B_prom = np.vstack((B_concanate[0:3],B_concanate[3:6],B_concanate[6:9],B_concanate[9:12],B_concanate[12:15],B_concanate[15:18]))
 
-x0 = np.array([ -10 ,   20, -30,  -20,
-  -40, -100])
+x0 = np.array([-0.022446, -0.0616654, -0.0621981, -6.50674, -6.49394, -3.01551])
 
 optimal_x = functions_03.opt_K(A_discrete, B_prom, deltat, hh, x0)
 K = np.hstack([np.diag(optimal_x[:3]), np.diag(optimal_x[3:])])
 
-# xx = np.array([ -0.0913548 ,-1.77969, -4.60771, -0.0736712, -0.11651, 0.0342056])
-# xx = np.array([-0.022446, -0.0616654, -0.0621981, -6.50674, -6.49394, -3.01551])
+# xx = -27.6785
+# -8.79229
+# -0.324694
+# -80.6614
+# -100.951
+# -123.428
+
+# xx = np.array([-3.71243,-1.05374,-6.16276,-2.67188,-1.02495,-0.165062])
+# xx = np.array([-10.2217,-0.0118415,-0.171874,3.02481,-4.02386,-6.91746]) esta
+# xx = np.array([-0.022446, -0.0616654, -0.0621981, -6.50674, -6.49394, -3.01551]) esta podria ser
 # K = np.hstack([np.diag(xx[:3]), np.diag(xx[3:])])
 
 diagonal_values = np.array([0.5**2, 0.5**2, 0.5**2, 0.1**2, 0.1**2, 0.1**2])
@@ -276,6 +283,8 @@ axes0[0].set_ylabel('Angulos de Euler [°]')
 axes0[0].legend()
 axes0[0].set_title('Angulos de Euler obtenidos por el modelo de control lineal discreto')
 axes0[0].grid()
+axes0[0].set_ylim(-20, 20)  # Ajusta los límites en el eje Y
+
 # axes0[0].set_ylim(-1, 1)  # Ajusta los límites en el eje Y
 
 axes0[1].plot(t, RPY_all_est[:,0], label='Roll kalman')

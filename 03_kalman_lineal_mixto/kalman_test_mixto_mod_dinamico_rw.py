@@ -76,6 +76,10 @@ I_s2_z = I_s0_z
 J_x = I_x + I_s0_x + I_s1_x + I_s2_x + m_s1*b_1**2 + m_s2*b_2**2
 J_y = I_y + I_s0_y + I_s1_y + I_s2_y + m_s0*b_0**2 + m_s2*b_2**2
 J_z = I_z + I_s0_z + I_s1_z + I_s2_z + m_s0*b_0**2 + m_s1*b_1**2
+
+w_s0 = 0.5
+w_s1 = 0.5
+w_s2 = 0.5
 #%%
 # q= np.array([0,0.7071,0,0.7071])
 q= np.array([0,0,0,1])
@@ -108,6 +112,8 @@ diagonal_values = np.array([0.5**2, 0.5**2, 0.5**2, 0.1**2, 0.1**2, 0.1**2])
 hh =0.01
 P_ki = np.diag(diagonal_values)
 A_dis = []
+
+
 #%%
 np.random.seed(42)
 for i in range(len(t)-1):
@@ -115,8 +121,9 @@ for i in range(len(t)-1):
     q_est = np.array([q0_est[-1], q1_est[-1], q2_est[-1], q3_est[-1]])
     w_est = np.array([w0_est[-1], w1_est[-1], w2_est[-1]])
     x_est = np.hstack((np.transpose(q_est[:3]), np.transpose(w_est)))
-    u_est = np.array([15,15,15])
-    w_s = u_est
+    u_est = np.array([0.15,0.15,0.15])
+    h_est = u_est*deltat
+    w_s = np.array([h_est[0]/I_s0_x - w_est[0], h_est[1]/I_s1_y - w_est[1], h_est[2]/I_s2_z - w_est[2]])
 
     b_orbit = [Bx_orbit[i],By_orbit[i],Bz_orbit[i]]
     b_body_med = functions_03_rw.rotacion_v(q_real, b_orbit,sigma_b)
