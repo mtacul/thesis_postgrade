@@ -525,3 +525,41 @@ def quaternion_to_euler(q):
     yaw_deg = np.degrees(yaw_z)
 
     return roll_deg, pitch_deg, yaw_deg
+
+def torquer(u_PD_NL,lim):
+    
+    if u_PD_NL[0]>lim: 
+        u_PD_NL[0] = lim
+    else:
+        u_PD_NL[0] = u_PD_NL[0]
+
+    if u_PD_NL[1]>lim:
+        u_PD_NL[1] = lim
+
+    else:
+        u_PD_NL[1] = u_PD_NL[1]
+
+    if u_PD_NL[2]>lim:
+        u_PD_NL[2] = lim
+    else:
+        u_PD_NL[2] = u_PD_NL[2]
+
+    if u_PD_NL[0]<-lim: 
+        u_PD_NL[0] = -lim
+
+    else:
+        u_PD_NL[0] = u_PD_NL[0]
+
+    if u_PD_NL[1]<-lim:
+        u_PD_NL[1] = -lim
+
+    else:
+        u_PD_NL[1] = u_PD_NL[1]
+
+    if u_PD_NL[2]<-lim:
+        u_PD_NL[2] = -lim
+
+    else:
+        u_PD_NL[2] = u_PD_NL[2]
+    
+    return u_PD_NL

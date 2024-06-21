@@ -216,3 +216,6 @@ plt.title('MSE de cada velocidad angular entre lineal discreto y kalman lineal d
 # plt.ylim(-0.005,0.005)
 plt.grid()
 plt.show()
+
+#%%
+

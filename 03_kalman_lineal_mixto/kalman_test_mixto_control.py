@@ -50,9 +50,57 @@ I_z = 0.006
 w0_eq = 0
 w1_eq = 0
 w2_eq = 0
+#%% seleccion de nivel de sensor
 
-sigma_ss = 0.036
-sigma_b = 1e-6
+# Definir los valores
+sigma_ss_values = {
+    1: 0.833,
+    2: 0.167,
+    3: 0.05
+}
+
+sigma_b_values = {
+    1: 1.18e-6,
+    2: 0.1e-6,
+    3: 0.012e-6
+}
+
+ruido_w_values = {
+    1: 0.12 * np.pi / 180,
+    2: 0.050 * np.pi / 180,
+    3: 0.033 * np.pi / 180
+}
+
+bias_w_values = {
+    1: (0.05 * np.pi / 180) / 3600,
+    2: (0.03 * np.pi / 180) / 3600,
+    3: (0.02 * np.pi / 180) / 3600
+}
+
+# Solicitar al usuario que seleccione una opción
+opcion = int(input("Seleccione una opción (1: bad, 2: med, 3: good): "))
+
+# Asignar los valores seleccionados
+sigma_ss = sigma_ss_values[opcion]
+sigma_b = sigma_b_values[opcion]
+ruido_w = ruido_w_values[opcion]
+bias_w = bias_w_values[opcion]
+
+#%% Seleccion de nivel de actuador
+
+# Definir los valores
+lim_tau_values = {
+    1: 0.24,
+    2: 1.19,
+    3: 15
+}
+
+# Solicitar al usuario que seleccione una opción
+opcion = int(input("Seleccione una opción (1: bad, 2: med, 3: good): "))
+
+# Asignar los valores seleccionados
+lim = lim_tau_values[opcion]
+
 
 #%%
 # q= np.array([0,0.7071,0,0.7071])

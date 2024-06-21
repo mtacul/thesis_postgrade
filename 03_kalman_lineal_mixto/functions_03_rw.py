@@ -68,27 +68,31 @@ def rotacion_v(q, b_i, sigma):
 # estado en el punto de equilibrio x = [0,0,0,0,0,0] (tres primeros cuaterniones y
 # tres componentes de velocidad angular)
 def A_PD(I_x,I_y,I_z,w0_O, w0,w1,w2, I_s0_x, I_s1_y, I_s2_z, w_s0,w_s1,w_s2, J_x, J_y, J_z):
-    A1 = np.array([0, 0.5*w2, -0.5*w1, 0.5, 0,0])
-    A2 = np.array([-0.5*w2,0,0.5*w0,0,0.5,0])
-    A3 = np.array([0.5*w1,-0.5*w0,0,0,0,0.5])
-    A4 = np.array([6*w0_O**2*(I_z-I_y), 0, (2*w0_O*w_s2*I_s2_z) / (J_x-I_s0_x), 0, -w_s2*I_s2_z/(J_x-I_s0_x), w_s1*I_s1_y/(J_x-I_s0_x)])
-    A5 = np.array([0, 6*w0_O**2*(I_z-I_x) + 2*w0_O**2*(J_x-J_z) / (J_y-I_s1_y) + (2*w0_O*w_s0*I_s0_x) / (J_y-I_s1_y), 0, -w_s2*I_s2_z/(J_y-I_s1_y),0, w0_O + w0_O*(J_z-J_x)/(J_y-I_s1_y) + w_s0*I_s0_x/(J_y-I_s1_y)])
-    A6 = np.array([0, 0, -2*w0_O**2*(J_x-J_y) / (J_z-I_s2_z) - (2*w0_O*w_s0*I_s0_x) / (J_z-I_s2_z), -w_s1*(J_x-J_y)/(J_z-I_s2_z) , -w0_O + w0_O*(J_x-J_y)/(J_z-I_s2_z) + w_s0*I_s0_x/(J_z-I_s2_z), 0])
-    
-    A_k = np.array([A1,A2,A3,A4,A5,A6])
+    A1 = np.array([0, 0.5*w2, -0.5*w1, 0.5, 0,0,0,0,0])
+    A2 = np.array([-0.5*w2,0,0.5*w0,0,0.5,0,0,0,0])
+    A3 = np.array([0.5*w1,-0.5*w0,0,0,0,0.5,0,0,0])
+    A4 = np.array([6*w0_O**2*(I_z-I_y), 0, (2*w0_O*w_s2*I_s2_z) / (J_x-I_s0_x), 0, -w_s2*I_s2_z/(J_x-I_s0_x), w_s1*I_s1_y/(J_x-I_s0_x), 0,0,0])
+    A5 = np.array([0, 6*w0_O**2*(I_z-I_x) + 2*w0_O**2*(J_x-J_z) / (J_y-I_s1_y) + (2*w0_O*w_s0*I_s0_x) / (J_y-I_s1_y), 0, -w_s2*I_s2_z/(J_y-I_s1_y),0, w0_O + w0_O*(J_z-J_x)/(J_y-I_s1_y) + w_s0*I_s0_x/(J_y-I_s1_y),0,0,-w0_O*I_s2_z/(J_y-I_s1_y)])
+    A6 = np.array([0, 0, -2*w0_O**2*(J_x-J_y) / (J_z-I_s2_z) - (2*w0_O*w_s0*I_s0_x) / (J_z-I_s2_z), -w_s1*(J_x-J_y)/(J_z-I_s2_z) , -w0_O + w0_O*(J_x-J_y)/(J_z-I_s2_z) + w_s0*I_s0_x/(J_z-I_s2_z), 0,0,-w0_O*I_s1_y/(J_z-I_s2_z),0])
+    A7 = np.array([0,0,-2*w0_O*w_s2*I_s2_z/(J_x-I_s0_x),0,w_s2*I_s2_z/(J_x-I_s0_x),-w_s1*I_s1_y/(J_x-I_s0_x), 0,0,0])
+    A8 = np.array([0, -2*w0_O**2*(J_x-J_z) / (J_y-I_s1_y) - (2*w0_O*w_s0*I_s0_x) / (J_y-I_s1_y), 0, w_s2*I_s2_z/(J_y-I_s1_y),0, -w0_O - w0_O*(J_z-J_x)/(J_y-I_s1_y) - w_s0*I_s0_x/(J_y-I_s1_y),0,0,w0_O*I_s2_z/(J_y-I_s1_y)])
+    A9 = np.array([0, 0, 2*w0_O**2*(J_x-J_y) / (J_z-I_s2_z) + (2*w0_O*w_s0*I_s0_x) / (J_z-I_s2_z), w_s1*(J_x-J_y)/(J_z-I_s2_z) , w0_O - w0_O*(J_x-J_y)/(J_z-I_s2_z) - w_s0*I_s0_x/(J_z-I_s2_z), 0,0,w0_O*I_s1_y/(J_z-I_s2_z),0])
+    A_k = np.array([A1,A2,A3,A4,A5,A6,A7,A8,A9])
     
     return A_k     
 
 
 #Matriz linealizada de la accion de control derivada respecto al vector de entrada
 # en el punto de equilibrio x = [0,0,0,0,0,0]
-def B_PD(w0_O):
+def B_PD(w0_O,I_s0_x,I_s1_y,I_s2_z):
     B123 = np.zeros((3,3))
     B4 = np.array([1,0,0])
     B5 = np.array([0,1,0])
     B6 = np.array([0,0,1])
-    
-    B_k = np.vstack((B123,B4,B5,B6))
+    B7 = np.array([1/I_s0_x - 1, 0, 0])
+    B8 = np.array([0, 1/I_s1_y - 1, 0])
+    B9 = np.array([0,0, 1/I_s2_z - 1])
+    B_k = np.vstack((B123,B4,B5,B6,B7,B8,B9))
     #B_k = np.array([B123,B4,B5,B6])
 
     return B_k
@@ -102,7 +106,7 @@ def K(Kp_x, Kp_y, Kp_z, Kd_x, Kd_y, Kd_z):
 
 # Matriz H, que representa las mediciones derivadas respecto al vector estado x 
 # (q0,q1,q2,biasx,biasy,biasz)
-def H_k_bar(b0,b1,b2,s0,s1,s2):
+def H_k_bar(b0,b1,b2,s0,s1,s2,I_s0_x,I_s1_y,I_s2_z):
     
     skew_b_1 = np.array([0, -b2, b1])
     skew_b_2 = np.array([b2,0,-b0])
@@ -116,13 +120,21 @@ def H_k_bar(b0,b1,b2,s0,s1,s2):
     
     H_11 = 2*skew_b
     H_12 = np.zeros((3,3))
+    H_13 = np.zeros((3,3))
+
     H_21 = 2*skew_s
     H_22 = H_12
+    H_23 = H_13
     
-    H_1 = np.hstack((H_11, H_12))
-    H_2 = np.hstack((H_21,H_22))
-    
-    H = -np.vstack((H_1,H_2))
+    H_31 = np.zeros((3,3))
+    H_32 = np.zeros((3,3))
+    diag = np.array([I_s0_x , I_s1_y, I_s2_z])
+    H_33 = np.diag(diag)
+
+    H_1 = -np.hstack((H_11, H_12,H_13))
+    H_2 = -np.hstack((H_21,H_22,H_23))
+    H_3 = np.hstack((H_31,H_32,H_33))
+    H = np.vstack((H_1,H_2,H_3))
     
     return H
 
@@ -131,12 +143,12 @@ def H_k_bar(b0,b1,b2,s0,s1,s2):
 def A_B(I_x,I_y,I_z,w0_O, w0,w1,w2, I_s0_x, I_s1_y, I_s2_z, w_s0,w_s1,w_s2, J_x, J_y, J_z,deltat,h,b_orbit,b_body, s_body):
     
     A =A_PD(I_x,I_y,I_z,w0_O, w0,w1,w2, I_s0_x, I_s1_y, I_s2_z, w_s0,w_s1,w_s2, J_x, J_y, J_z)
-    B = B_PD(w0_O)
+    B = B_PD(w0_O,I_s0_x,I_s1_y,I_s2_z)
     
     # Define an identity matrix for C and a zero matrix for D to complete state-space model
     # C = np.eye(6)  # Assuming a 6x6 identity matrix for C
-    C = H_k_bar(b_body[0],b_body[1],b_body[2], s_body[0],s_body[1],s_body[2])
-    D = np.zeros((6, 3))  # Assuming D has the same number of rows as A and the same number of columns as B
+    C = H_k_bar(b_body[0],b_body[1],b_body[2], s_body[0],s_body[1],s_body[2],I_s0_x,I_s1_y,I_s2_z)
+    D = np.zeros((9, 3))  # Assuming D has the same number of rows as A and the same number of columns as B
 
     # Create the continuous state-space model
     sys_continuous = ctrl.StateSpace(A, B, C, D)
@@ -199,14 +211,15 @@ def mod_lineal_disc(x,u,deltat, h,A_discrete,B_discrete):
         x_k_1 = np.dot(A_discrete,x) - np.dot(B_discrete,u)
         q_rot = x_k_1[0:3]
         w_new = x_k_1[3:6]
+        ws_new = x_k_1[6:9]
     
         if  1-q_rot[0]**2-q_rot[1]**2-q_rot[2]**2 < 0:
             q_rot = q_rot / np.linalg.norm(q_rot)
-            x_new = np.hstack((np.transpose(q_rot), np.transpose(w_new)))
+            x_new = np.hstack((np.transpose(q_rot), np.transpose(w_new), np.transpose(ws_new)))
             q3s_rot = 0
     
         else:
-            x_new = np.hstack((np.transpose(q_rot), np.transpose(w_new)))
+            x_new = np.hstack((np.transpose(q_rot), np.transpose(w_new), np.transpose(ws_new)))
             q3s_rot = np.sqrt(1-q_rot[0]**2-q_rot[1]**2-q_rot[2]**2)
         
     return x_new, q3s_rot
@@ -217,13 +230,21 @@ def mod_lineal_disc(x,u,deltat, h,A_discrete,B_discrete):
 def R_k(sigma_m, sigma_s):
     R_11 = np.eye(3) * sigma_m**2
     R_12 = np.zeros((3,3))
+    R_13 = R_12
+    
     R_21 = R_12
     R_22 = np.eye(3) * sigma_s**2
+    R_23 = R_12
     
-    R_1 = np.hstack((R_11, R_12))
-    R_2 = np.hstack((R_21,R_22))
+    R_31 = R_12
+    R_32 = R_12
+    R_33 = np.eye(3)
     
-    R = np.vstack((R_1,R_2))
+    R_1 = np.hstack((R_11, R_12,R_13))
+    R_2 = np.hstack((R_21,R_22, R_23))
+    R_3 = np.hstack((R_31,R_32, R_33))
+    
+    R = np.vstack((R_1,R_2,R_3))
     
     return R
 
@@ -231,13 +252,21 @@ def R_k(sigma_m, sigma_s):
 def Q_k(sigma_w,sigma_bias,deltat):
     Q_11 = np.eye(3) * (sigma_w**2*deltat + 1/3 * sigma_bias**2*deltat**3)
     Q_12 = np.eye(3) * -(1/2 * sigma_bias**2 * deltat**2)
+    Q_13 = np.zeros((3,3))
+    
     Q_21 = Q_12
     Q_22 = np.eye(3) * (sigma_bias**2 * deltat)
+    Q_23 = np.zeros((3,3))
     
-    Q_1 = np.hstack((Q_11, Q_12))
-    Q_2 = np.hstack((Q_21,Q_22))
+    Q_31 = Q_23
+    Q_32 = Q_23
+    Q_33 = Q_23
     
-    Q = np.vstack((Q_1,Q_2))
+    Q_1 = np.hstack((Q_11, Q_12,Q_13))
+    Q_2 = np.hstack((Q_21,Q_22,Q_23))
+    Q_3 = np.hstack((Q_31,Q_32,Q_33))
+    
+    Q = np.vstack((Q_1,Q_2,Q_3))
     
     return Q
 
@@ -255,13 +284,13 @@ def k_kalman(R_k, P_k_priori, H_mat):
 
 
 def P_posteriori(K_k,H_k,P_k_priori,R_k):
-   I = np.identity(6)
+   I = np.identity(9)
    P_k_pos = np.dot(np.dot(I - np.dot(K_k,H_k),P_k_priori),np.transpose(I - np.dot(K_k,H_k))) + np.dot(np.dot(K_k,R_k),np.transpose(K_k))
    return P_k_pos #SACAR MATRIZ P POSTERIORI ACTUALIZADA
 
 # y = np.array([0,0,0,0,0,0])
 
-def kalman_lineal(A, B, C, x, u, b,b_est, s,s_est, P_ki, sigma_m, sigma_ss,deltat,hh):
+def kalman_lineal(A, B, C, x, u, b,b_est, s,s_est, P_ki, sigma_m, sigma_ss,deltat,hh,h,h_est):
 # def kalman_lineal(A, B, C, x, u, b, b_eci, P_ki, ruido, ruido_ss,deltat,s):
     
     H_k = C
@@ -270,47 +299,49 @@ def kalman_lineal(A, B, C, x, u, b,b_est, s,s_est, P_ki, sigma_m, sigma_ss,delta
 
     # print("q priori obtenido por kalman:",q_priori,"\n")
     w_priori = x_priori[3:6]
+    ws_priori = x_priori[6:9]
     
     Q_ki = Q_k(5e-3, 3e-4,deltat)
     
     P_k_priori = P_k_prior(A,P_ki,Q_ki)
     
-    z_sensor = np.hstack((b[0],b[1],b[2], s[0], s[1], s[2]))
-    z_modelo = np.hstack((b_est[0],b_est[1],b_est[2], s_est[0], s_est[1], s_est[2]))
+    z_sensor = np.hstack((b[0],b[1],b[2], s[0], s[1], s[2],h[0],h[1],h[2]))
+    z_modelo = np.hstack((b_est[0],b_est[1],b_est[2], s_est[0], s_est[1], s_est[2],h_est[0],h_est[1],h_est[2]))
     y= z_sensor - z_modelo
     
     R = R_k(sigma_m, sigma_ss)
     K_k = k_kalman(R,P_k_priori,H_k)
-    print("zsensor:",z_sensor)
-    print("zmodelo:",z_modelo)
-    print("Y:",y)
+    # print("zsensor:",z_sensor)
+    # print("zmodelo:",z_modelo)
+    # print("Y:",y)
     
     delta_x = np.dot(K_k,y)
     # delta_x2 = np.dot(-K_k,y)
-    print("deltax",delta_x)
+    # print("deltax",delta_x)
     # print("deltax2",delta_x2)
     delta_q_3 = delta_x[0:3]
     delta_w = delta_x[3:6]
+    delta_ws = delta_x[6:9]
     q3_delta =  np.sqrt(1-delta_q_3[0]**2-delta_q_3[1]**2-delta_q_3[2]**2)
     delta_q = np.hstack((delta_q_3, q3_delta))
     delta_qn = delta_q / np.linalg.norm(delta_q)
     # delta_q2 = np.hstack((-delta_q_3, q3_delta))
     # delta_qn2 = delta_q2 / np.linalg.norm(delta_q2)
 
-    print("delta_q obtenido por kalman:",delta_qn,"\n")
+    # print("delta_q obtenido por kalman:",delta_qn,"\n")
     # print("delta_q2 obtenido por kalman:",delta_qn2,"\n")
     
     q_posteriori = quat_mult(delta_qn,q_priori)
     # q_posteriori2 = quat_mult(delta_qn2,q_priori)
-    print("q priori multi:",q_priori,"\n")
+    # print("q priori multi:",q_priori,"\n")
     print("q posteriori multi:",q_posteriori,"\n")
     # print("q posteriori2 multi:",q_posteriori2,"\n")
     w_posteriori = w_priori + delta_w
-
+    ws_posteriori = ws_priori + delta_ws
     
     P_ki = P_posteriori(K_k, H_k, P_k_priori,R)
     
-    return q_posteriori, w_posteriori, P_ki,K_k
+    return q_posteriori, w_posteriori, P_ki,K_k, ws_posteriori
 
 #%%
 def cuat_MSE_NL(q0,q1,q2,q3,w0,w1,w2,q0_nl,q1_nl,q2_nl,q3_nl,w0_nl,w1_nl,w2_nl):
@@ -526,3 +557,41 @@ def quaternion_to_euler(q):
     yaw_deg = np.degrees(yaw_z)
 
     return roll_deg, pitch_deg, yaw_deg
+
+def torquer(u_PD_NL,lim):
+    
+    if u_PD_NL[0]>lim: 
+        u_PD_NL[0] = lim
+    else:
+        u_PD_NL[0] = u_PD_NL[0]
+
+    if u_PD_NL[1]>lim:
+        u_PD_NL[1] = lim
+
+    else:
+        u_PD_NL[1] = u_PD_NL[1]
+
+    if u_PD_NL[2]>lim:
+        u_PD_NL[2] = lim
+    else:
+        u_PD_NL[2] = u_PD_NL[2]
+
+    if u_PD_NL[0]<-lim: 
+        u_PD_NL[0] = -lim
+
+    else:
+        u_PD_NL[0] = u_PD_NL[0]
+
+    if u_PD_NL[1]<-lim:
+        u_PD_NL[1] = -lim
+
+    else:
+        u_PD_NL[1] = u_PD_NL[1]
+
+    if u_PD_NL[2]<-lim:
+        u_PD_NL[2] = -lim
+
+    else:
+        u_PD_NL[2] = u_PD_NL[2]
+    
+    return u_PD_NL
