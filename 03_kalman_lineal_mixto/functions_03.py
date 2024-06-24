@@ -282,13 +282,13 @@ def kalman_lineal(A, B, C, x, u, b,b_est, s,s_est, P_ki, sigma_m, sigma_ss,delta
     
     R = R_k(sigma_m, sigma_ss)
     K_k = k_kalman(R,P_k_priori,H_k)
-    print("zsensor:",z_sensor)
-    print("zmodelo:",z_modelo)
-    print("Y:",y)
+    # print("zsensor:",z_sensor)
+    # print("zmodelo:",z_modelo)
+    # print("Y:",y)
     
     delta_x = np.dot(K_k,y)
     # delta_x2 = np.dot(-K_k,y)
-    print("deltax",delta_x)
+    # print("deltax",delta_x)
     # print("deltax2",delta_x2)
     delta_q_3 = delta_x[0:3]
     delta_w = delta_x[3:6]
@@ -298,12 +298,12 @@ def kalman_lineal(A, B, C, x, u, b,b_est, s,s_est, P_ki, sigma_m, sigma_ss,delta
     # delta_q2 = np.hstack((-delta_q_3, q3_delta))
     # delta_qn2 = delta_q2 / np.linalg.norm(delta_q2)
 
-    print("delta_q obtenido por kalman:",delta_qn,"\n")
+    # print("delta_q obtenido por kalman:",delta_qn,"\n")
     # print("delta_q2 obtenido por kalman:",delta_qn2,"\n")
     
     q_posteriori = quat_mult(delta_qn,q_priori)
     # q_posteriori2 = quat_mult(delta_qn2,q_priori)
-    print("q priori multi:",q_priori,"\n")
+    # print("q priori multi:",q_priori,"\n")
     print("q posteriori multi:",q_posteriori,"\n")
     # print("q posteriori2 multi:",q_posteriori2,"\n")
     w_posteriori = w_priori + delta_w

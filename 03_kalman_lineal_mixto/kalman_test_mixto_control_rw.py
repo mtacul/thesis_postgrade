@@ -41,7 +41,7 @@ w0_O = 0.00163
 
 deltat = 2
 # limite =  5762*69
-limite =  5762*20
+limite =  5762*69
 
 t = np.arange(0, limite, deltat)
 
@@ -91,10 +91,10 @@ lim_tau_values = {
 }
 
 # Solicitar al usuario que seleccione una opción
-opcion = int(input("Seleccione una opción (1: bad, 2: med, 3: good): "))
+opcion_tau = int(input("Seleccione una opción (1: bad, 2: med, 3: good): "))
 
 # Asignar los valores seleccionados
-lim = lim_tau_values[opcion]
+lim = lim_tau_values[opcion_tau]
 #%% rueda de reaccion
 
 I_x = 0.037
@@ -182,7 +182,13 @@ R = np.eye(B_discrete.shape[1])*10  # Matriz de costos de la entrada
 P = solve_discrete_are(A_discrete, -B_discrete, Q, R)
 
 # Calcular la matriz de retroalimentación K
-K = np.linalg.inv(R) @ B_discrete.T @ P
+K_LQR = np.linalg.inv(R) @ B_discrete.T @ P
+
+K = np.array([
+    [0.121868, 0, 0, -0.0156428, 0, 0, 0.121957, 0, 0],
+    [0, -0.0138998, -0.12107, 0, -1.47412, -5.16098, 0, 0.129422, 0.020727],
+    [0, -0.130499, 0.0140781, 0, -10.9589, -0.488414, 0, 0.0550693, 0.129979]
+])
 
 diagonal_values = np.array([0.5**2, 0.5**2, 0.5**2, 0.1**2, 0.1**2, 0.1**2,0.01**2,0.01**2,0.01**2])
 P_ki = np.diag(diagonal_values)
@@ -395,7 +401,43 @@ plt.show()
 # plt.show()
 
 
-# #%%
+#%%
+
+# Nombre del archivo basado en las opciones seleccionadas
+nombre_archivo = f"_sensor{opcion}_actuador{opcion_tau}_RW.csv"
+
+# Crear un diccionario con los datos
+datos = {
+    'Tiempo': t,
+    'Roll_est': RPY_all_est[:,0],
+    'Pitch_est': RPY_all_est[:,1],
+    'Yaw_est': RPY_all_est[:,2],
+    'q0_real': q0_real,
+    'q1_real': q1_real,
+    'q2_real': q2_real,
+    'q3_real': q3_real,
+    'q0_est': q0_est,
+    'q1_est': q1_est,
+    'q2_est': q2_est,
+    'q3_est': q3_est,
+    'w0_est': w0_est,
+    'w1_est': w1_est,
+    'w2_est': w2_est,
+    'w0_real': w0_real,
+    'w1_real': w1_real,
+    'w2_real': w2_real,
+    'Roll_real': RPY_all_id[:,0],
+    'Pitch_real': RPY_all_id[:,1],
+    'Yaw_real': RPY_all_id[:,2],
+}
+
+# Crear un DataFrame de pandas a partir del diccionario
+df_resultados = pd.DataFrame(datos)
+
+# Guardar el DataFrame en un archivo CSV
+df_resultados.to_csv(nombre_archivo, index=False)
+
+print(f"Los resultados se han guardado en {nombre_archivo}")
 # # Nombre del archivo
 # archivo_c = "control_rw.csv"
 

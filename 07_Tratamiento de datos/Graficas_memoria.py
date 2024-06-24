@@ -11,32 +11,34 @@ import pandas as pd
 import functions
 from scipy.signal import welch
 import numpy as np
-
-# archivo_c_csv = "control.csv"
-# archivo_c_csv = "control5s.csv"
-# archivo_c_csv = "control_TRIAD.csv"
-# archivo_c_csv = "control_bad_gyros.csv"
-# archivo_c_csv = "control_orbit.csv"
-# archivo_c_csv = "control_orbits.csv"
-
-    # "control_good_magnet_o_Worbit.csv"
+import scipy.stats as stats
 
 #%%
 
 # Definir la lista de archivos CSV disponibles
 archivos_disponibles = [
-    "control_bad_o.csv",
-    "control_med_o.csv",
-    "control_good_magnet_o.csv",
-    "control_good_magnetmed_o.csv",
-    "control_good_magnetbad_o.csv",
-    "control_good_magnetTRIAD_o.csv",
-    "control_rw.csv"
-
-]
+    "_sen1_act1_RW.csv",
+    "_sen1_act2_RW.csv",
+    "_sen1_act3_RW.csv",
+    "_sen2_act1_RW.csv",
+    "_sen2_act2_RW.csv",
+    "_sen2_act3_RW.csv",
+    "_sen3_act1_RW.csv",
+    "_sen3_act2_RW.csv",
+    "_sen3_act3_RW.csv",
+    "_sen1_act1_MT.csv",
+    "_sen1_act2_MT.csv",
+    "_sen1_act3_MT.csv",
+    "_sen2_act1_MT.csv",
+    "_sen2_act2_MT.csv",
+    "_sen2_act3_MT.csv",
+    "_sen3_act1_MT.csv",
+    "_sen3_act2_MT.csv",
+    "_sen3_act3_MT.csv"
+    ]
 
 # Mostrar el menú al usuario
-print("Seleccione un archivo CSV para abrir:")
+print("Seleccione un archivo CSV para abrir (1:bad, 2:med, 3:good):")
 for i, archivo in enumerate(archivos_disponibles, 1):
     print(f"{i}. {archivo}")
 
@@ -64,50 +66,27 @@ t_aux = array_datos_c[:,0]
 Roll = array_datos_c[:,1]
 Pitch =  array_datos_c[:,2]
 Yaw =  array_datos_c[:,3]
-q0_rot = array_datos_c[:,4]
-q1_rot = array_datos_c[:,5]
-q2_rot = array_datos_c[:,6]
-q3_rot = array_datos_c[:,7]
-q0_TRIADS = array_datos_c[:,8]
-q1_TRIADS = array_datos_c[:,9]
-q2_TRIADS = array_datos_c[:,10]
-q3_TRIADS = array_datos_c[:,11]
-w0_values = array_datos_c[:,12]
-w1_values = array_datos_c[:,13]
-w2_values = array_datos_c[:,14]
-# pot_act_x = abs(array_datos_c[:,15])
-# pot_act_y = abs(array_datos_c[:,16])
-# pot_act_z = abs(array_datos_c[:,17])
-# pot_magn_x = array_datos_c[:,18]
-# pot_magn_y = array_datos_c[:,19]
-# pot_magn_z = array_datos_c[:,20]
+q0_real = array_datos_c[:,4]
+q1_real = array_datos_c[:,5]
+q2_real = array_datos_c[:,6]
+q3_real = array_datos_c[:,7]
+q0_est = array_datos_c[:,8]
+q1_est = array_datos_c[:,9]
+q2_est = array_datos_c[:,10]
+q3_est = array_datos_c[:,11]
+w0_est = array_datos_c[:,12]
+w1_est = array_datos_c[:,13]
+w2_est = array_datos_c[:,14]
+Roll_low_pass = array_datos_c[:,18]
+Pitch_low_pass =  array_datos_c[:,19]
+Yaw_low_pass =  array_datos_c[:,20]
+
+#%% Densidad espectro potencia para el jitter
 
 #Filtro pasa alto para el Jitter y pasa bajo para exactitud de apuntamiento y agilidad
 Roll_high_pass = functions.high_pass_filter(Roll, 10, len(t_aux))
-Roll_low_pass = functions.low_pass_filter(Roll, 10, len(t_aux))
 Pitch_high_pass = functions.high_pass_filter(Pitch, 10, len(t_aux))
-Pitch_low_pass = functions.low_pass_filter(Pitch, 10, len(t_aux))
 Yaw_high_pass = functions.high_pass_filter(Yaw, 10, len(t_aux))
-Yaw_low_pass = functions.low_pass_filter(Yaw, 10, len(t_aux))
-
-#Caso de ruido debido a valores de q3 forzados a 0
-if archivo_c_csv == "control_good_magnetmed_o.csv": #or archivo_c_csv == "control_good_magnetbad_o.csv":
-    # Definir la sección en el cual ocurre el fallo
-    start_index = np.where(t_aux >= 45000)[0][0]
-    end_index = np.where(t_aux <= 55000)[0][-1]
-    
-    Yaw_lowpass = functions.low_pass_filter(Yaw[start_index:end_index+1],5, len(t_aux[start_index:end_index+1]))
-    Yaw_low_pass_section = functions.low_pass_filter(Yaw_high_pass[start_index:end_index+1], 5, len(t_aux[start_index:end_index+1]))
-    Yaw_new = np.zeros_like(Yaw)
-    Yaw_high_pass_new = np.zeros_like(Yaw)
-    Yaw_new[int(t_aux[0]):start_index] = Yaw[int(t_aux[0]):start_index]
-    Yaw_high_pass_new[int(t_aux[0]):start_index] = Yaw_high_pass[int(t_aux[0]):start_index]
-    Yaw_new[start_index:end_index+1]= Yaw_lowpass
-    Yaw_high_pass_new[start_index:end_index+1]= Yaw_low_pass_section
-    Yaw_new[end_index:int(t_aux[-1])] = Yaw[end_index:int(t_aux[-1])]
-    Yaw_high_pass_new[end_index:int(t_aux[-1])]= Yaw_high_pass[end_index:int(t_aux[-1])]
-    Yaw = Yaw_new
-    Yaw_high_pass = Yaw_high_pass_new
 
 frequencies_R, psd_R = welch(Roll_high_pass, len(t_aux), nperseg=1024)
 frequencies_P, psd_P = welch(Pitch_high_pass, len(t_aux), nperseg=1024)
@@ -146,20 +125,20 @@ psd_RPY = np.array([psd_bandwidth_1_R,psd_bandwidth_1_P,psd_bandwidth_1_Y])
 print("las densidades de potencia espectral en Roll, Pitch y Yaw son: \n",psd_RPY)
 print("\n")
 
+#%% Encontrar el tiempo de asentamiento en segundos de cada angulo de Euler
 
-# Encontrar el tiempo de asentamiento en segundos de cada angulo de Euler
-settling_band_R = 1
-settling_band_P = 1
-settling_band_Y = 1
+settling_band_R = 5
+settling_band_P = 5
+settling_band_Y = 5
 
-settling_error_sup_R = np.full(len(t_aux),settling_band_R+ Roll_low_pass[-1])
-settling_error_inf_R = np.full(len(t_aux),-settling_band_R+ Roll_low_pass[-1])
+settling_error_sup_R = np.full(len(t_aux),settling_band_R)
+settling_error_inf_R = np.full(len(t_aux),-settling_band_R)
 
-settling_error_sup_P = np.full(len(t_aux),settling_band_P+ Pitch_low_pass[-1])
-settling_error_inf_P = np.full(len(t_aux),-settling_band_P+ Pitch_low_pass[-1])
+settling_error_sup_P = np.full(len(t_aux),settling_band_P)
+settling_error_inf_P = np.full(len(t_aux),-settling_band_P)
 
-settling_error_sup_Y = np.full(len(t_aux),settling_band_Y+ Yaw_low_pass[-1])
-settling_error_inf_Y = np.full(len(t_aux),-settling_band_Y+ Yaw_low_pass[-1])
+settling_error_sup_Y = np.full(len(t_aux),settling_band_Y)
+settling_error_inf_Y = np.full(len(t_aux),-settling_band_Y)
 
 
 settling_time_indices_R = []
@@ -188,6 +167,8 @@ else:
     print("La señal no entra en la banda de asentamiento.")
     
 print("\n")
+
+
 settling_time_indices_P = []
 start_index_P = None
     
@@ -242,25 +223,91 @@ else:
 print("\n")
 
 
-#Seccion para calcular la exactitud de apuntamiento en cada angulo de Euler
+#%%Seccion para calcular la exactitud de apuntamiento en cada angulo de Euler
+
 time_R = np.array(settling_times_R[-1])
-data_R = Roll_low_pass[int(time_R[0]/2):int(time_R[1]/2)]
-accuracy_R = abs(np.mean(data_R))
+data_R = Roll[int(time_R[0]/2):int(time_R[1]/2)]
+# Calcular media y desviación estándar
+media_R = np.mean(data_R)
+sigma_R = np.std(data_R)
+# Calcular los límites de 3 sigma
+lim_inf_R = media_R - 3 * sigma_R
+lim_sup_R = media_R + 3 * sigma_R
+vals_confianza_R = np.sum((data_R >= lim_inf_R) & (data_R <= lim_sup_R))
+porc_confianza_R = (vals_confianza_R / len(data_R)) * 100
+
+# # Generar valores para la campana de Gauss
+# x_R = np.linspace(media_R - 4*sigma_R, media_R + 4*sigma_R, len(data_R))
+# y_R = stats.norm.pdf(x_R, media_R, sigma_R)
+# # Crear el histograma de los datos
+# plt.hist(data_R, bins=30, density=True, alpha=0.6, color='g')
+# # Graficar la campana de Gauss
+# plt.plot(x_R, y_R, 'k', linewidth=2)
+# plt.title("Distribución Normal del Roll obtenido")
+# plt.xlabel("Valor del Roll [°]")
+# plt.ylabel("Densidad de probabilidad")
+# plt.show()
+
+accuracy_R = 3*sigma_R
+
 
 time_P = np.array(settling_times_P[-1])
-data_P = Pitch_low_pass[int(time_P[0]/2):int(time_P[1]/2)]
-accuracy_P = abs(np.mean(data_P))
+data_P = Pitch[int(time_P[0]/2):int(time_P[1]/2)]
+# Calcular media y desviación estándar
+media_P = np.mean(data_P)
+sigma_P = np.std(data_P)
+# Calcular los límites de 3 sigma
+lim_inf_P = media_P - 3 * sigma_P
+lim_sup_P = media_P + 3 * sigma_P
+vals_confianza_P = np.sum((data_P >= lim_inf_P) & (data_P <= lim_sup_P))
+porc_confianza_P = (vals_confianza_P / len(data_P)) * 100
+
+# # Generar valores para la campana de Gauss
+# x_P = np.linspace(media_P - 4*sigma_P, media_P + 4*sigma_P, len(data_P))
+# y_P = stats.norm.pdf(x_P, media_P, sigma_P)
+# # Crear el histograma de los datos
+# plt.hist(data_P, bins=30, density=True, alpha=0.6, color='g')
+# # Graficar la campana de Gauss
+# plt.plot(x_P, y_P, 'k', linewidth=2)
+# plt.title("Distribución Normal del Roll obtenido")
+# plt.xlabel("Valor del Roll [°]")
+# plt.ylabel("Densidad de probabilidad")
+# plt.show()
+
+accuracy_P = 3*sigma_P
+
 
 time_Y = np.array(settling_times_Y[-1])
-data_Y = Yaw_low_pass[int(time_Y[0]/2):int(time_Y[1]/2)]
-accuracy_Y = abs(np.mean(data_Y))
+data_Y = Yaw[int(time_Y[0]/2):int(time_Y[1]/2)]
+# Calcular media y desviación estándar
+media_Y = np.mean(data_Y)
+sigma_Y = np.std(data_Y)
+# Calcular los límites de 3 sigma
+lim_inf_Y = media_Y - 3 * sigma_Y
+lim_sup_Y = media_Y + 3 * sigma_Y
+vals_confianza_Y = np.sum((data_Y >= lim_inf_Y) & (data_Y <= lim_sup_Y))
+porc_confianza_Y = (vals_confianza_Y / len(data_Y)) * 100
+
+# # Generar valores para la campana de Gauss
+# x_Y = np.linspace(media_Y - 4*sigma_Y, media_Y + 4*sigma_Y, len(data_Y))
+# y_Y = stats.norm.pdf(x_Y, media_Y, sigma_Y)
+# # Crear el histograma de los datos
+# plt.hist(data_Y, bins=30, density=True, alpha=0.6, color='g')
+# # Graficar la campana de Gauss
+# plt.plot(x_Y, y_Y, 'k', linewidth=2)
+# plt.title("Distribución Normal del Roll obtenido")
+# plt.xlabel("Valor del Roll [°]")
+# plt.ylabel("Densidad de probabilidad")
+# plt.show()
+
+accuracy_Y = 3*sigma_Y
+
 
 accuracy_RPY = np.array([accuracy_R,accuracy_P,accuracy_Y])
 print("La exactitud de apuntamiento para Roll, Pitch y Yaw son respecticamente: \n", accuracy_RPY, "[°]")
 
 
 #%%
-
 plt.figure(figsize=(12, 6))
 plt.plot(t_aux, Roll, label='Roll')
 plt.plot(t_aux, Pitch, label='Pitch')
@@ -303,35 +350,35 @@ plt.show()
 
 fig0, axes0 = plt.subplots(nrows=1, ncols=3, figsize=(16, 4))
 
-axes0[0].plot(t_aux, q0_rot, label='q0 PD_NL')
-axes0[0].plot(t_aux, q1_rot, label='q1 PD_NL')
-axes0[0].plot(t_aux, q2_rot, label='q2 PD_NL')
-axes0[0].plot(t_aux, q3_rot, label='q3 PD_NL')
+axes0[0].plot(t_aux, q0_real, label='q0_real')
+axes0[0].plot(t_aux, q1_real, label='q1_real')
+axes0[0].plot(t_aux, q2_real, label='q2_real')
+axes0[0].plot(t_aux, q3_real, label='q3_real')
 axes0[0].set_xlabel('Tiempo [s]')
 axes0[0].set_ylabel('cuaternión [-]')
 axes0[0].legend()
-axes0[0].set_title('cuaterniones controlados llevados a 000')
+axes0[0].set_title('cuaterniones del modelo llevados al equilibrio')
 axes0[0].grid()
 #axes0[0].set_ylim(-1, 1)  # Ajusta los límites en el eje Y
 
-axes0[1].plot(t_aux, w0_values, label='w0 PD_NL')
-axes0[1].plot(t_aux, w1_values, label='w1 PD_NL')
-axes0[1].plot(t_aux, w2_values, label='w2 PD_NL')
+axes0[1].plot(t_aux, w0_est, label='w0_est')
+axes0[1].plot(t_aux, w1_est, label='w1_est')
+axes0[1].plot(t_aux, w2_est, label='w2_est')
 axes0[1].set_xlabel('Tiempo [s]')
 axes0[1].set_ylabel('velocidad angular [rad/s]')
 axes0[1].legend()
-axes0[1].set_title('velocidades angulares controlados llevados a 000')
+axes0[1].set_title('velocidades angulares estimadas por EKF llevadas al equilibrio')
 axes0[1].grid()
 
 
-axes0[2].plot(t_aux, q0_TRIADS, label='q0 TRIAD')
-axes0[2].plot(t_aux, q1_TRIADS, label='q1 TRIAD')
-axes0[2].plot(t_aux, q2_TRIADS, label='q2 TRIAD')
-axes0[2].plot(t_aux, q3_TRIADS, label='q3 TRIAD')
+axes0[2].plot(t_aux, q0_est, label='q0_est')
+axes0[2].plot(t_aux, q1_est, label='q1_est')
+axes0[2].plot(t_aux, q2_est, label='q2_est')
+axes0[2].plot(t_aux, q3_est, label='q3_est')
 axes0[2].set_xlabel('Tiempo [s]')
-axes0[2].set_ylabel('cuaternión TRIAD [-]')
+axes0[2].set_ylabel('cuaternión EKF [-]')
 axes0[2].legend()
-axes0[2].set_title('cuaterniones TRIAD controlados llevados a 000')
+axes0[2].set_title('cuaterniones estimados por EKF llevados al equilibrio')
 axes0[2].grid()
 
 plt.tight_layout()
@@ -351,186 +398,99 @@ plt.show()
 # plt.grid()
 # plt.show()
 
-# plt.figure(figsize=(12, 6))
-# plt.plot(t_aux, Roll_low_pass, label='Roll')
-# plt.plot(t_aux, Pitch_low_pass, label='Pitch')
-# plt.plot(t_aux, Yaw_low_pass, label='Yaw')
-# plt.xlabel('Tiempo[s]')
-# plt.ylabel('Ángulos de Euler [°]')
-# plt.legend()
-# plt.title('Filtros pasa bajo')
-# # plt.xlim(0.8e7,1.7e7)
-# # plt.ylim(-0.002,0.002)
-# plt.grid()
-# plt.show()
+fig0, axes0 = plt.subplots(nrows=2, ncols=1, figsize=(7, 7))
 
+axes0[0].plot(t_aux, Roll_low_pass, label='Roll')
+axes0[0].set_xlabel('Tiempo [s]')
+axes0[0].set_ylabel('Ángulos de Euler [°]')
+axes0[0].legend()
+axes0[0].grid()
+#axes0[0].set_ylim(-1, 1)  # Ajusta los límites en el eje Y
 
-# fig0, axes0 = plt.subplots(nrows=2, ncols=1, figsize=(7, 7))
+axes0[1].plot(t_aux, Roll_low_pass, label='Roll')
+axes0[1].plot(t_aux, settling_error_sup_R , label='SET_sup_roll')
+axes0[1].plot(t_aux, settling_error_inf_R , label='SET_inf_roll')
+axes0[1].set_xlabel('Tiempo [s]')
+axes0[1].set_ylabel('Ángulos de Euler [°]')
+axes0[1].legend()
+# axes0[1].set_title('Filtros pasa bajo')
+axes0[1].grid()
+axes0[1].set_ylim(-10,10)  # Ajusta los límites en el eje Y
 
-# axes0[0].plot(t_aux, Roll_low_pass, label='Roll')
-# axes0[0].set_xlabel('Tiempo [s]')
-# axes0[0].set_ylabel('Ángulos de Euler [°]')
-# axes0[0].legend()
-# axes0[0].grid()
-# #axes0[0].set_ylim(-1, 1)  # Ajusta los límites en el eje Y
-
-# axes0[1].plot(t_aux, Roll_low_pass, label='Roll')
-# axes0[1].plot(t_aux, settling_error_sup_R , label='SET_sup_roll')
-# axes0[1].plot(t_aux, settling_error_inf_R , label='SET_inf_roll')
-# axes0[1].set_xlabel('Tiempo [s]')
-# axes0[1].set_ylabel('Ángulos de Euler [°]')
-# axes0[1].legend()
-# # axes0[1].set_title('Filtros pasa bajo')
-# axes0[1].grid()
-# axes0[1].set_ylim(-25,0)  # Ajusta los límites en el eje Y
-
-# plt.tight_layout()
-# plt.show()
-
-# fig0, axes0 = plt.subplots(nrows=2, ncols=1, figsize=(7, 7))
-
-# axes0[0].plot(t_aux, Pitch_low_pass, label='Pitch')
-# axes0[0].set_xlabel('Tiempo [s]')
-# axes0[0].set_ylabel('Ángulos de Euler [°]')
-# axes0[0].legend()
-# axes0[0].grid()
-# #axes0[0].set_ylim(-1, 1)  # Ajusta los límites en el eje Y
-
-# axes0[1].plot(t_aux, Pitch_low_pass, label='Pitch')
-# axes0[1].plot(t_aux, settling_error_sup_P , label='SET_sup_pitch')
-# axes0[1].plot(t_aux, settling_error_inf_P , label='SET_inf_pitch')
-# axes0[1].set_xlabel('Tiempo [s]')
-# axes0[1].set_ylabel('Ángulos de Euler [°]')
-# axes0[1].legend()
-# # axes0[1].set_title('Filtros pasa bajo')
-# axes0[1].grid()
-# axes0[1].set_ylim(-10,10)  # Ajusta los límites en el eje Y
-
-# plt.tight_layout()
-# plt.show()
-
-# fig0, axes0 = plt.subplots(nrows=2, ncols=1, figsize=(7, 7))
-
-# axes0[0].plot(t_aux, Yaw_low_pass, label='Yaw')
-# axes0[0].set_xlabel('Tiempo [s]')
-# axes0[0].set_ylabel('Ángulos de Euler [°]')
-# axes0[0].legend()
-# axes0[0].grid()
-# #axes0[0].set_ylim(-1, 1)  # Ajusta los límites en el eje Y
-
-# axes0[1].plot(t_aux, Yaw_low_pass, label='Yaw')
-# axes0[1].plot(t_aux, settling_error_sup_Y , label='SET_sup_yaw')
-# axes0[1].plot(t_aux, settling_error_inf_Y , label='SET_inf_yaw')
-# axes0[1].set_xlabel('Tiempo [s]')
-# axes0[1].set_ylabel('Ángulos de Euler [°]')
-# axes0[1].legend()
-# # axes0[1].set_title('Filtros pasa bajo')
-# axes0[1].grid()
-# axes0[1].set_ylim(-25,0)  # Ajusta los límites en el eje Y
-
-# plt.tight_layout()
-# plt.show()
-
-# plt.figure(figsize=(12, 6))
-# plt.plot(t_aux, Roll_low_pass, label='Roll')
-# plt.plot(t_aux, settling_error_sup_R , label='SET_sup_roll')
-# plt.plot(t_aux, settling_error_inf_R , label='SET_inf_roll')
-# plt.xlabel('Tiempo[s]')
-# plt.ylabel('Ángulos de Euler [°]')
-# plt.legend()
-# plt.title('Filtros pasa bajo')
-# # plt.ylim(-25,0)
-# # plt.xlim(0.8e7,1.7e7)
-# # plt.ylim(-0.002,0.002)
-# plt.grid()
-# plt.show()
-
-# plt.figure(figsize=(12, 6))
-# plt.plot(t_aux, Pitch_low_pass, label='Pitch')
-# plt.plot(t_aux, settling_error_sup_P , label='SET_sup_pitch')
-# plt.plot(t_aux, settling_error_inf_P , label='SET_inf_pitch')
-# plt.xlabel('Tiempo[s]')
-# plt.ylabel('Ángulos de Euler [°]')
-# plt.legend()
-# plt.title('Filtros pasa bajo')
-# # plt.ylim(-10,10)
-# # plt.xlim(0.8e7,1.7e7)
-# # plt.ylim(-0.002,0.002)
-# plt.grid()
-# plt.show()
-
-# plt.figure(figsize=(12, 6))
-# plt.plot(t_aux, Yaw_low_pass, label='Yaw')
-# plt.plot(t_aux, settling_error_sup_Y , label='SET_sup_yaw')
-# plt.plot(t_aux, settling_error_inf_Y , label='SET_inf_yaw')
-# plt.xlabel('Tiempo[s]')
-# plt.ylabel('Ángulos de Euler [°]')
-# plt.legend()
-# plt.title('Filtros pasa bajo')
-# # plt.ylim(-25,0)
-# # plt.xlim(0.8e7,1.7e7)
-# # plt.ylim(-0.002,0.002)
-# plt.grid()
-# plt.show()
-
-
-# plt.tight_layout()
-# plt.show()
-# plt.figure(figsize=(12, 6))
-# plt.plot(t_aux,  pot_magn_x, label='potencia gastada en x')
-# plt.plot(t_aux,  pot_magn_y, label='potencia gastada en y')
-# plt.plot(t_aux,  pot_magn_z, label='potencia gastada en z')
-# plt.xlabel('Tiempo')
-# plt.ylabel('Potencia [W]')
-# plt.legend()
-# plt.title('Potencia gastada por el sensor en sus tres direcciones')
-# # plt.ylim(-2,2)
-# # plt.xlim(0.8e7,1.7e7)
-# # plt.ylim(-0.002,0.002)
-# plt.grid()
-# plt.show()
-
-# plt.figure(figsize=(12, 6))
-# plt.plot(t_aux,  pot_act_x, label='potencia gastada en x')
-# plt.plot(t_aux,  pot_act_y, label='potencia gastada en y')
-# plt.plot(t_aux,  pot_act_z, label='potencia gastada en z')
-# plt.xlabel('Tiempo')
-# plt.ylabel('Potencia [W]')
-# plt.legend()
-# plt.title('Potencia gastada por el actuador en sus tres direcciones')
-# # plt.ylim(-2,2)
-# # plt.xlim(0.8e7,1.7e7)
-# # plt.ylim(-0.002,0.002)
-# plt.grid()
-# plt.show()
-
-plt.figure(figsize=(10, 6))
-plt.semilogy(frequencies_R, psd_R_R, label='PSD Roll')
-plt.fill_between(frequencies_R[indices_bandwidth_1_R], psd_R_R[indices_bandwidth_1_R], alpha=0.3, label='Ancho de banda 1')
-plt.title('Densidad Espectral de Potencia con Anchos de Banda Específicos en Roll')
-plt.xlabel('Frecuencia (Hz)')
-plt.ylabel('Densidad Espectral de Potencia')
-plt.legend()
-plt.grid(True)
+plt.tight_layout()
 plt.show()
 
-plt.figure(figsize=(10, 6))
-plt.semilogy(frequencies_P, psd_P_R, label='PSD Pitch')
-plt.fill_between(frequencies_P[indices_bandwidth_1_P], psd_P_R[indices_bandwidth_1_P], alpha=0.3, label='Ancho de banda 1')
-plt.title('Densidad Espectral de Potencia con Anchos de Banda Específicos en Pitch')
-plt.xlabel('Frecuencia (Hz)')
-plt.ylabel('Densidad Espectral de Potencia')
-plt.legend()
-plt.grid(True)
+fig0, axes0 = plt.subplots(nrows=2, ncols=1, figsize=(7, 7))
+
+axes0[0].plot(t_aux, Pitch_low_pass, label='Pitch')
+axes0[0].set_xlabel('Tiempo [s]')
+axes0[0].set_ylabel('Ángulos de Euler [°]')
+axes0[0].legend()
+axes0[0].grid()
+#axes0[0].set_ylim(-1, 1)  # Ajusta los límites en el eje Y
+
+axes0[1].plot(t_aux, Pitch_low_pass, label='Pitch')
+axes0[1].plot(t_aux, settling_error_sup_P , label='SET_sup_pitch')
+axes0[1].plot(t_aux, settling_error_inf_P , label='SET_inf_pitch')
+axes0[1].set_xlabel('Tiempo [s]')
+axes0[1].set_ylabel('Ángulos de Euler [°]')
+axes0[1].legend()
+# axes0[1].set_title('Filtros pasa bajo')
+axes0[1].grid()
+axes0[1].set_ylim(-10,10)  # Ajusta los límites en el eje Y
+
+plt.tight_layout()
 plt.show()
 
+fig0, axes0 = plt.subplots(nrows=2, ncols=1, figsize=(7, 7))
 
-plt.figure(figsize=(10, 6))
-plt.semilogy(frequencies_Y, psd_Y_R, label='PSD Yaw')
-plt.fill_between(frequencies_Y[indices_bandwidth_1_Y], psd_Y_R[indices_bandwidth_1_Y], alpha=0.3, label='Ancho de banda 1')
-plt.title('Densidad Espectral de Potencia con Anchos de Banda Específicos en Yaw')
-plt.xlabel('Frecuencia (Hz)')
-plt.ylabel('Densidad Espectral de Potencia')
-plt.legend()
-plt.grid(True)
+axes0[0].plot(t_aux, Yaw_low_pass, label='Yaw')
+axes0[0].set_xlabel('Tiempo [s]')
+axes0[0].set_ylabel('Ángulos de Euler [°]')
+axes0[0].legend()
+axes0[0].grid()
+#axes0[0].set_ylim(-1, 1)  # Ajusta los límites en el eje Y
+
+axes0[1].plot(t_aux, Yaw_low_pass, label='Yaw')
+axes0[1].plot(t_aux, settling_error_sup_Y , label='SET_sup_yaw')
+axes0[1].plot(t_aux, settling_error_inf_Y , label='SET_inf_yaw')
+axes0[1].set_xlabel('Tiempo [s]')
+axes0[1].set_ylabel('Ángulos de Euler [°]')
+axes0[1].legend()
+# axes0[1].set_title('Filtros pasa bajo')
+axes0[1].grid()
+axes0[1].set_ylim(-10,10)  # Ajusta los límites en el eje Y
+
+plt.tight_layout()
 plt.show()
+
+# plt.figure(figsize=(10, 6))
+# plt.semilogy(frequencies_R, psd_R_R, label='PSD Roll')
+# plt.fill_between(frequencies_R[indices_bandwidth_1_R], psd_R_R[indices_bandwidth_1_R], alpha=0.3, label='Ancho de banda 1')
+# plt.title('Densidad Espectral de Potencia con Anchos de Banda Específicos en Roll')
+# plt.xlabel('Frecuencia (Hz)')
+# plt.ylabel('Densidad Espectral de Potencia')
+# plt.legend()
+# plt.grid(True)
+# plt.show()
+
+# plt.figure(figsize=(10, 6))
+# plt.semilogy(frequencies_P, psd_P_R, label='PSD Pitch')
+# plt.fill_between(frequencies_P[indices_bandwidth_1_P], psd_P_R[indices_bandwidth_1_P], alpha=0.3, label='Ancho de banda 1')
+# plt.title('Densidad Espectral de Potencia con Anchos de Banda Específicos en Pitch')
+# plt.xlabel('Frecuencia (Hz)')
+# plt.ylabel('Densidad Espectral de Potencia')
+# plt.legend()
+# plt.grid(True)
+# plt.show()
+
+
+# plt.figure(figsize=(10, 6))
+# plt.semilogy(frequencies_Y, psd_Y_R, label='PSD Yaw')
+# plt.fill_between(frequencies_Y[indices_bandwidth_1_Y], psd_Y_R[indices_bandwidth_1_Y], alpha=0.3, label='Ancho de banda 1')
+# plt.title('Densidad Espectral de Potencia con Anchos de Banda Específicos en Yaw')
+# plt.xlabel('Frecuencia (Hz)')
+# plt.ylabel('Densidad Espectral de Potencia')
+# plt.legend()
+# plt.grid(True)
+# plt.show()

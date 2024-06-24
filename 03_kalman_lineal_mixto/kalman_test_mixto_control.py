@@ -96,7 +96,7 @@ lim_tau_values = {
 }
 
 # Solicitar al usuario que seleccione una opción
-opcion = int(input("Seleccione una opción (1: bad, 2: med, 3: good): "))
+opcion_tau = int(input("Seleccione una opción (1: bad, 2: med, 3: good): "))
 
 # Asignar los valores seleccionados
 lim = lim_tau_values[opcion]
@@ -165,10 +165,10 @@ for ii in range(len(Bs_a[0,:,0])):
 
 B_prom = np.vstack((B_concanate[0:3],B_concanate[3:6],B_concanate[6:9],B_concanate[9:12],B_concanate[12:15],B_concanate[15:18]))
 
-x0 = np.array([-0.022446, -0.0616654, -0.0621981, -6.50674, -6.49394, -3.01551])
+# x0 = np.array([-0.022446, -0.0616654, -0.0621981, -6.50674, -6.49394, -3.01551])
 
-optimal_x = functions_03.opt_K(A_discrete, B_prom, deltat, hh, x0)
-K = np.hstack([np.diag(optimal_x[:3]), np.diag(optimal_x[3:])])
+# optimal_x = functions_03.opt_K(A_discrete, B_prom, deltat, hh, x0)
+# K = np.hstack([np.diag(optimal_x[:3]), np.diag(optimal_x[3:])])
 
 # xx = -27.6785
 # -8.79229
@@ -177,10 +177,18 @@ K = np.hstack([np.diag(optimal_x[:3]), np.diag(optimal_x[3:])])
 # -100.951
 # -123.428
 
+xx = np.array([-4.9424,
+-0.43112,
+-0.272842,
+-10.6991,
+-25.1868,
+-13.9682
+])
+
 # xx = np.array([-3.71243,-1.05374,-6.16276,-2.67188,-1.02495,-0.165062])
 # xx = np.array([-10.2217,-0.0118415,-0.171874,3.02481,-4.02386,-6.91746]) esta
 # xx = np.array([-0.022446, -0.0616654, -0.0621981, -6.50674, -6.49394, -3.01551]) esta podria ser
-# K = np.hstack([np.diag(xx[:3]), np.diag(xx[3:])])
+K = np.hstack([np.diag(xx[:3]), np.diag(xx[3:])])
 
 diagonal_values = np.array([0.5**2, 0.5**2, 0.5**2, 0.1**2, 0.1**2, 0.1**2])
 P_ki = np.diag(diagonal_values)
@@ -193,6 +201,7 @@ for i in range(len(t)-1):
     x_est = np.hstack((np.transpose(q_est[:3]), np.transpose(w_est)))
     # u_est = np.array([15,15,15])
     u_est = np.dot(K,x_est)
+    u_est = functions_03.torquer(u_est,lim)
 
     x_est = np.hstack((q_est[0:3],w_est))  
 
@@ -203,10 +212,6 @@ for i in range(len(t)-1):
     s_orbit = [vx_sun_orbit[i],vy_sun_orbit[i],vz_sun_orbit[i]]
     s_body_med = functions_03.rotacion_v(q_real, s_orbit,sigma_ss)
     s_body_est = functions_03.rotacion_v(q_est, s_orbit,sigma_ss)
-
-    print(x_est)
-    print(q_real)
-    print(w_gyros)
     
     # print(b_body,w_gyros)
     # print(x_est)
@@ -228,7 +233,7 @@ for i in range(len(t)-1):
         x_real, u_est, deltat, hh, A_discrete,B_prom)
     
     x_real = xx_new_d
-    w_gyros = functions_03.simulate_gyros_reading(x_real[3:6],0.00057595865,0.0008726646)
+    w_gyros = functions_03.simulate_gyros_reading(x_real[3:6],ruido_w,bias_w)
     q0_real.append(xx_new_d[0])
     q1_real.append(xx_new_d[1])
     q2_real.append(xx_new_d[2])
@@ -346,16 +351,39 @@ axes0[1].grid()
 plt.tight_layout()
 plt.show()
 
-# R_P_Y = np.array([0,1,2])
-# plt.figure(figsize=(12, 6))
-# plt.scatter(R_P_Y [0], mse_roll, label='mse roll', color='r',marker='*')
-# plt.scatter(R_P_Y [1], mse_pitch, label='mse pitch', color='b',marker='*')
-# plt.scatter(R_P_Y [2], mse_yaw, label='mse yaw', color='k',marker='*')
-# plt.xlabel('Angulos de Euler')
-# plt.ylabel('Mean Square Error [°]')
-# plt.legend()
-# plt.title('MSE de cada angulo de Euler entre lineal discreto y kalman lineal discreto')
-# # plt.xlim(20000,100000)
-# # plt.ylim(-0.005,0.005)
-# plt.grid()
-# plt.show()
+#%%
+# Nombre del archivo basado en las opciones seleccionadas
+nombre_archivo = f"_sen{opcion}_act{opcion_tau}_MT.csv"
+
+# Crear un diccionario con los datos
+datos = {
+    'Tiempo': t,
+    'Roll_est': RPY_all_est[:,0],
+    'Pitch_est': RPY_all_est[:,1],
+    'Yaw_est': RPY_all_est[:,2],
+    'q0_real': q0_real,
+    'q1_real': q1_real,
+    'q2_real': q2_real,
+    'q3_real': q3_real,
+    'q0_est': q0_est,
+    'q1_est': q1_est,
+    'q2_est': q2_est,
+    'q3_est': q3_est,
+    'w0_est': w0_est,
+    'w1_est': w1_est,
+    'w2_est': w2_est,
+    'w0_real': w0_real,
+    'w1_real': w1_real,
+    'w2_real': w2_real,
+    'Roll_real': RPY_all_id[:,0],
+    'Pitch_real': RPY_all_id[:,1],
+    'Yaw_real': RPY_all_id[:,2],
+}
+
+# Crear un DataFrame de pandas a partir del diccionario
+df_resultados = pd.DataFrame(datos)
+
+# Guardar el DataFrame en un archivo CSV
+df_resultados.to_csv(nombre_archivo, index=False)
+
+print(f"Los resultados se han guardado en {nombre_archivo}")
