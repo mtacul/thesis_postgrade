@@ -86,6 +86,9 @@ q3_est_1 = array_datos_1[:,11]
 w0_est_1 = array_datos_1[:,12]
 w1_est_1 = array_datos_1[:,13]
 w2_est_1 = array_datos_1[:,14]
+w0_real_1 = array_datos_1[:,15]
+w1_real_1 = array_datos_1[:,16]
+w2_real_1 = array_datos_1[:,17]
 Roll_low_pass_1 = array_datos_1[:,18]
 Pitch_low_pass_1 =  array_datos_1[:,19]
 Yaw_low_pass_1 =  array_datos_1[:,20]
@@ -104,6 +107,9 @@ q3_est_2 = array_datos_2[:,11]
 w0_est_2 = array_datos_2[:,12]
 w1_est_2 = array_datos_2[:,13]
 w2_est_2 = array_datos_2[:,14]
+w0_real_2 = array_datos_2[:,15]
+w1_real_2 = array_datos_2[:,16]
+w2_real_2 = array_datos_2[:,17]
 Roll_low_pass_2 = array_datos_2[:,18]
 Pitch_low_pass_2 =  array_datos_2[:,19]
 Yaw_low_pass_2 =  array_datos_2[:,20]
@@ -122,6 +128,9 @@ q3_est_3 = array_datos_3[:,11]
 w0_est_3 = array_datos_3[:,12]
 w1_est_3 = array_datos_3[:,13]
 w2_est_3 = array_datos_3[:,14]
+w0_real_3 = array_datos_3[:,15]
+w1_real_3 = array_datos_3[:,16]
+w2_real_3 = array_datos_3[:,17]
 Roll_low_pass_3 = array_datos_3[:,18]
 Pitch_low_pass_3 =  array_datos_3[:,19]
 Yaw_low_pass_3 =  array_datos_3[:,20]
@@ -671,4 +680,59 @@ axes0[2].grid()
 # axes0[2].set_xlim(150000, 400000)  # Ajusta los límites en el eje Y
 
 plt.tight_layout()
+plt.show()
+
+#%%
+
+[MSE_cuat_1, MSE_omega_1]  = functions.cuat_MSE_NL(q0_real_1, q1_real_1, q2_real_1, q3_real_1, w0_real_1, w1_real_1, w2_real_1, q0_est_1, q1_est_1, q2_est_1, q3_est_1, w0_est_1, w1_est_1, w2_est_1)   
+[asd,asd,mse_roll_1,mse_pitch_1,mse_yaw_1] = functions.RPY_MSE(t_aux, q0_est_1, q1_est_1, q2_est_1, q3_est_1, q0_real_1, q1_real_1, q2_real_1, q3_real_1)   
+
+[MSE_cuat_2, MSE_omega_2]  = functions.cuat_MSE_NL(q0_real_2, q1_real_2, q2_real_2, q3_real_2, w0_real_2, w1_real_2, w2_real_2, q0_est_2, q1_est_2, q2_est_2, q3_est_2, w0_est_2, w1_est_2, w2_est_2)   
+[asd,asd,mse_roll_2,mse_pitch_2,mse_yaw_2] = functions.RPY_MSE(t_aux, q0_est_2, q1_est_2, q2_est_2, q3_est_2, q0_real_2, q1_real_2, q2_real_2, q3_real_2)   
+
+[MSE_cuat_3, MSE_omega_3]  = functions.cuat_MSE_NL(q0_real_3, q1_real_3, q2_real_3, q3_real_3, w0_real_3, w1_real_3, w2_real_3, q0_est_3, q1_est_3, q2_est_3, q3_est_3, w0_est_3, w1_est_3, w2_est_3)   
+[asd,asd,mse_roll_3,mse_pitch_3,mse_yaw_3] = functions.RPY_MSE(t_aux, q0_est_3, q1_est_3, q2_est_3, q3_est_3, q0_real_3, q1_real_3, q2_real_3, q3_real_3)   
+
+
+quats = np.array([0,1,2,3])
+plt.figure(figsize=(12, 6))
+plt.scatter(quats[0], MSE_cuat_1[0], label='mse q0_1', color='r',marker='*')
+plt.scatter(quats[1], MSE_cuat_1[1], label='mse q1_1', color='b',marker='*')
+plt.scatter(quats[2], MSE_cuat_1[2], label='mse q2_1', color='k',marker='*')
+plt.scatter(quats[3], MSE_cuat_1[3], label='mse q3_1', color='g',marker='*')
+plt.xlabel('Cuaterniones')
+plt.ylabel('Mean Square Error [-]')
+plt.legend()
+plt.title('MSE de cada cuaternion entre lineal discreto y kalman lineal discreto opcion 1')
+# plt.xlim(20000,100000)
+# plt.ylim(-0.005,0.005)
+plt.grid()
+plt.show()
+
+plt.figure(figsize=(12, 6))
+plt.scatter(quats[0], MSE_cuat_2[0], label='mse q0_2', color='r',marker='*')
+plt.scatter(quats[1], MSE_cuat_2[1], label='mse q1_2', color='b',marker='*')
+plt.scatter(quats[2], MSE_cuat_2[2], label='mse q2_2', color='k',marker='*')
+plt.scatter(quats[3], MSE_cuat_2[3], label='mse q3_2', color='g',marker='*')
+plt.xlabel('Cuaterniones')
+plt.ylabel('Mean Square Error [-]')
+plt.legend()
+plt.title('MSE de cada cuaternion entre lineal discreto y kalman lineal discreto opcion 2')
+# plt.xlim(20000,100000)
+# plt.ylim(-0.005,0.005)
+plt.grid()
+plt.show()
+
+plt.figure(figsize=(12, 6))
+plt.scatter(quats[0], MSE_cuat_3[0], label='mse q0_3', color='r',marker='*')
+plt.scatter(quats[1], MSE_cuat_3[1], label='mse q1_3', color='b',marker='*')
+plt.scatter(quats[2], MSE_cuat_3[2], label='mse q2_3', color='k',marker='*')
+plt.scatter(quats[3], MSE_cuat_3[3], label='mse q3_3', color='g',marker='*')
+plt.xlabel('Cuaterniones')
+plt.ylabel('Mean Square Error [-]')
+plt.legend()
+plt.title('MSE de cada cuaternion entre lineal discreto y kalman lineal discreto opcion 3')
+# plt.xlim(20000,100000)
+# plt.ylim(-0.005,0.005)
+plt.grid()
 plt.show()

@@ -17,15 +17,14 @@ import scipy.stats as stats
 
 # Definir la lista de archivos CSV disponibles
 archivos_disponibles = [
-    "_sen1_act1_RW.csv",
-    "_sen1_act2_RW.csv",
-    "_sen1_act3_RW.csv",
-    "_sen2_act1_RW.csv",
-    "_sen2_act2_RW.csv",
-    "_sen2_act3_RW.csv",
-    "_sen3_act1_RW.csv",
-    "_sen3_act2_RW.csv",
-    "_sen3_act3_RW.csv",
+    "_sen1_act1_RW_2.csv",
+    "_sen1_act2_RW_2.csv",
+    "_sen1_act3_RW_2.csv",
+    "_sen2_act1_RW_2.csv",
+    "_sen2_act2_RW_2.csv",
+    "_sen2_act3_RW_2.csv",
+    "_sen3_act1_RW_2.csv",
+    "_sen3_act2_RW_2.csv",
     "_sen3_act3_RW_2.csv",
     "_sen1_act1_MT.csv",
     "_sen1_act2_MT.csv",
@@ -78,6 +77,9 @@ q3_est = array_datos_c[:,11]
 w0_est = array_datos_c[:,12]
 w1_est = array_datos_c[:,13]
 w2_est = array_datos_c[:,14]
+w0_real = array_datos_c[:,15]
+w1_real = array_datos_c[:,16]
+w2_real = array_datos_c[:,17]
 Roll_low_pass = array_datos_c[:,18]
 Pitch_low_pass =  array_datos_c[:,19]
 Yaw_low_pass =  array_datos_c[:,20]
@@ -495,3 +497,35 @@ plt.show()
 # plt.legend()
 # plt.grid(True)
 # plt.show()
+
+[MSE_cuat, MSE_omega]  = functions.cuat_MSE_NL(q0_real, q1_real, q2_real, q3_real, w0_real, w1_real, w2_real, q0_est, q1_est, q2_est, q3_est, w0_est, w1_est, w2_est)   
+[RPY_all_est,RPY_all_id,mse_roll,mse_pitch,mse_yaw] = functions.RPY_MSE(t_aux, q0_est, q1_est, q2_est, q3_est, q0_real, q1_real, q2_real, q3_real)   
+
+quats = np.array([0,1,2,3])
+plt.figure(figsize=(12, 6))
+plt.scatter(quats[0], MSE_cuat[0], label='mse q0', color='r',marker='*')
+plt.scatter(quats[1], MSE_cuat[1], label='mse q1', color='b',marker='*')
+plt.scatter(quats[2], MSE_cuat[2], label='mse q2', color='k',marker='*')
+plt.scatter(quats[3], MSE_cuat[3], label='mse q3', color='g',marker='*')
+plt.xlabel('Cuaterniones')
+plt.ylabel('Mean Square Error [-]')
+plt.legend()
+plt.title('MSE de cada cuaternion entre lineal discreto y kalman lineal discreto')
+# plt.xlim(20000,100000)
+# plt.ylim(-0.005,0.005)
+plt.grid()
+plt.show()
+
+vels = np.array([0,1,2])
+plt.figure(figsize=(12, 6))
+plt.scatter(vels[0], MSE_omega[0], label='mse w0', color='r',marker='*')
+plt.scatter(vels[1], MSE_omega[1], label='mse w1', color='b',marker='*')
+plt.scatter(vels[2], MSE_omega[2], label='mse w2', color='k',marker='*')
+plt.xlabel('Velocidades angulares')
+plt.ylabel('Mean Square Error [rad/s]')
+plt.legend()
+plt.title('MSE de cada velocidad angular entre lineal discreto y kalman lineal discreto')
+# plt.xlim(20000,100000)
+# plt.ylim(-0.005,0.005)
+plt.grid()
+plt.show()    
