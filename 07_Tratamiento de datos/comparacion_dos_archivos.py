@@ -27,6 +27,7 @@ archivos_disponibles = [
     "_sen3_act1_RW.csv",
     "_sen3_act2_RW.csv",
     "_sen3_act3_RW.csv",
+    "_sen3_act3_RW_2.csv",
     "_sen1_act1_MT.csv",
     "_sen1_act2_MT.csv",
     "_sen1_act3_MT.csv",

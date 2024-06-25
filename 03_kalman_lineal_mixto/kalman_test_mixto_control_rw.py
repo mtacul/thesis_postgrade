@@ -85,8 +85,8 @@ bias_w = bias_w_values[opcion]
 
 # Definir los valores
 lim_tau_values = {
-    1: 0.00023,
-    2: 0.1,
+    1: 0.025,
+    2: 0.07,
     3: 0.250
 }
 
@@ -175,20 +175,24 @@ hh =0.01
 
 
 # Definir las matrices Q y R del coste del LQR
-Q = np.eye(A_discrete.shape[0])*0.1  # Matriz de costos del estado
-R = np.eye(B_discrete.shape[1])*10  # Matriz de costos de la entrada
+diag_Q = np.array([10,10,10,0.1,0.1,0.1,0.1,0.1,0.1])
+diag_R = np.array([10,10,10])
+Q = np.diag(diag_Q)
+R = np.diag(diag_R)
+# Q = np.eye(A_discrete.shape[0])*0.1 # Matriz de costos del estado
+# R = np.eye(B_discrete.shape[1])*10  # Matriz de costos de la entrada
 
 # Resolver la ecuación de Riccati
 P = solve_discrete_are(A_discrete, -B_discrete, Q, R)
 
 # Calcular la matriz de retroalimentación K
-K_LQR = np.linalg.inv(R) @ B_discrete.T @ P
+K = np.linalg.inv(R) @ B_discrete.T @ P
 
-K = np.array([
-    [0.121868, 0, 0, -0.0156428, 0, 0, 0.121957, 0, 0],
-    [0, -0.0138998, -0.12107, 0, -1.47412, -5.16098, 0, 0.129422, 0.020727],
-    [0, -0.130499, 0.0140781, 0, -10.9589, -0.488414, 0, 0.0550693, 0.129979]
-])
+# K = np.array([
+#     [0.121868, 0, 0, -0.0156428, 0, 0, 0.121957, 0, 0],
+#     [0, -0.0138998, -0.12107, 0, -1.47412, -5.16098, 0, 0.129422, 0.020727],
+#     [0, -0.130499, 0.0140781, 0, -10.9589, -0.488414, 0, 0.0550693, 0.129979]
+# ])
 
 diagonal_values = np.array([0.5**2, 0.5**2, 0.5**2, 0.1**2, 0.1**2, 0.1**2,0.01**2,0.01**2,0.01**2])
 P_ki = np.diag(diagonal_values)
@@ -404,7 +408,7 @@ plt.show()
 #%%
 
 # Nombre del archivo basado en las opciones seleccionadas
-nombre_archivo = f"_sensor{opcion}_actuador{opcion_tau}_RW.csv"
+nombre_archivo = f"_sen{opcion}_act{opcion_tau}_RW_2.csv"
 
 # Crear un diccionario con los datos
 datos = {

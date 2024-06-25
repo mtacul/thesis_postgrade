@@ -40,7 +40,7 @@ w0_O = 0.00163
 
 deltat = 2
 # limite =  5762*69
-limite =  5762*10
+limite =  5762*69
 
 t = np.arange(0, limite, deltat)
 
@@ -168,8 +168,8 @@ B_prom = np.vstack((B_concanate[0:3],B_concanate[3:6],B_concanate[6:9],B_concana
 
 
 # Definir las matrices Q y R del coste del LQR
-Q = np.eye(A_discrete.shape[0])*0.1  # Matriz de costos del estado
-R = np.eye(B_discrete.shape[1])*10  # Matriz de costos de la entrada
+Q = np.eye(A_discrete.shape[0])*100  # Matriz de costos del estado
+R = np.eye(B_discrete.shape[1])*100  # Matriz de costos de la entrada
 
 # Resolver la ecuación de Riccati
 P = solve_discrete_are(A_discrete, -B_prom, Q, R)
