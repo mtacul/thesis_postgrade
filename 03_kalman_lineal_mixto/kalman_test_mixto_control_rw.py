@@ -49,31 +49,35 @@ t = np.arange(0, limite, deltat)
 
 # Definir los valores
 sigma_ss_values = {
-    1: 0.833,
-    2: 0.167,
-    3: 0.05
+    1: np.sin(0.833*np.pi/180),
+    2: np.sin(0.167*np.pi/180),
+    3: np.sin(0.05*np.pi/180),
+    4: 0
 }
 
 sigma_b_values = {
     1: 1.18e-6,
     2: 0.1e-6,
-    3: 0.012e-6
+    3: 0.012e-6,
+    4: 0
 }
 
 ruido_w_values = {
     1: 0.12 * np.pi / 180,
     2: 0.050 * np.pi / 180,
-    3: 0.033 * np.pi / 180
+    3: 0.033 * np.pi / 180,
+    4: 0
 }
 
 bias_w_values = {
     1: (0.05 * np.pi / 180) / 3600,
     2: (0.03 * np.pi / 180) / 3600,
-    3: (0.02 * np.pi / 180) / 3600
+    3: (0.02 * np.pi / 180) / 3600,
+    4: 0
 }
 
 # Solicitar al usuario que seleccione una opción
-opcion = int(input("Seleccione una opción (1: bad, 2: med, 3: good): "))
+opcion = int(input("Seleccione un nivel de sensor (1: bad, 2: med, 3: good, 4: sin ruido): "))
 
 # Asignar los valores seleccionados
 sigma_ss = sigma_ss_values[opcion]
@@ -91,7 +95,7 @@ lim_tau_values = {
 }
 
 # Solicitar al usuario que seleccione una opción
-opcion_tau = int(input("Seleccione una opción (1: bad, 2: med, 3: good): "))
+opcion_tau = int(input("Seleccione un nivel de actuador (1: bad, 2: med, 3: good): "))
 
 # Asignar los valores seleccionados
 lim = lim_tau_values[opcion_tau]
@@ -126,12 +130,12 @@ J_y = I_y + I_s0_y + I_s1_y + I_s2_y + m_s0*b_0**2 + m_s2*b_2**2
 J_z = I_z + I_s0_z + I_s1_z + I_s2_z + m_s0*b_0**2 + m_s1*b_1**2
 
 #%%
-# q= np.array([0,0.7071,0,0.7071])
+# q= np.array([0.7071,0,0,0.7071])
 # q= np.array([0,0,0,1])
 q = np.array([0.7071/np.sqrt(3),0.7071/np.sqrt(3),0.7071/np.sqrt(3),0.7071])
 w = np.array([0.0001, 0.0001, 0.0001])
 ws = np.array([0.00001, 0.00001, 0.00001])
-# q_est = np.array([0.00985969, 0.70703804, 0.00985969, 0.70703804])
+# q_est = np.array([0.70703804,0.00985969, 0.00985969, 0.70703804])
 # q_est= np.array([0.0120039,0.0116517,0.0160542,0.999731])
 q_est = np.array([0.366144,0.464586,0.300017,0.74839])
 
@@ -145,7 +149,6 @@ w2_est = [w[2]]
 w0s_est = [ws[0]]
 w1s_est = [ws[1]]
 w2s_est = [ws[2]]
-# x_est = np.hstack((q_est[0:3],w))
 
 q0_real = [q[0]]
 q1_real = [q[1]]
@@ -173,26 +176,25 @@ hh =0.01
 
 [A,B,C,A_discrete,B_discrete,C_discrete] = functions_03_rw.A_B(I_x,I_y,I_z,w0_O,0,0,0 , I_s0_x, I_s1_y, I_s2_z, 0,0,0, J_x, J_y, J_z, deltat, hh, bi_orbit,b_body_i, s_body_i)
 
+# x0 = np.array([-0.022446, -0.0616654, -0.0621981, -6.50674, -6.49394, -3.01551,-60.50674, -60.49394, -30.01551])
+
+# optimal_x = functions_03_rw.opt_K(A_discrete, B_discrete, deltat, hh, x0)
+# K = np.hstack([np.diag(optimal_x[:3]), np.diag(optimal_x[3:6]),np.diag(optimal_x[6:])])
 
 # Definir las matrices Q y R del coste del LQR
-diag_Q = np.array([10,10,10,0.1,0.1,0.1,0.1,0.1,0.1])
-diag_R = np.array([10,10,10])
+diag_Q = np.array([100, 1000000, 10000, 0.1, 0.1, 0.10, 0.01, 10, 10])*10000
+diag_R = np.array([0.1,0.1,0.1])*100000
+
 Q = np.diag(diag_Q)
 R = np.diag(diag_R)
-# Q = np.eye(A_discrete.shape[0])*0.1 # Matriz de costos del estado
-# R = np.eye(B_discrete.shape[1])*10  # Matriz de costos de la entrada
+# Q = np.eye(A_discrete.shape[0])*1 # Matriz de costos del estado
+# R = np.eye(B_discrete.shape[1])*1  # Matriz de costos de la entrada
 
 # Resolver la ecuación de Riccati
-P = solve_discrete_are(A_discrete, -B_discrete, Q, R)
+P = solve_discrete_are(A_discrete, B_discrete, Q, R)
 
 # Calcular la matriz de retroalimentación K
-K = np.linalg.inv(R) @ B_discrete.T @ P
-
-# K = np.array([
-#     [0.121868, 0, 0, -0.0156428, 0, 0, 0.121957, 0, 0],
-#     [0, -0.0138998, -0.12107, 0, -1.47412, -5.16098, 0, 0.129422, 0.020727],
-#     [0, -0.130499, 0.0140781, 0, -10.9589, -0.488414, 0, 0.0550693, 0.129979]
-# ])
+K = np.linalg.inv(B_discrete.T @ P @ B_discrete + R) @ (B_discrete.T @ P @ A_discrete)
 
 diagonal_values = np.array([0.5**2, 0.5**2, 0.5**2, 0.1**2, 0.1**2, 0.1**2,0.01**2,0.01**2,0.01**2])
 P_ki = np.diag(diagonal_values)
@@ -206,10 +208,11 @@ for i in range(len(t)-1):
     ws_est = np.array([w0s_est[-1], w1s_est[-1], w2s_est[-1]])
 
     x_est = np.hstack((np.transpose(q_est[:3]), np.transpose(w_est), np.transpose(ws_est)))
-    u_est = np.dot(K,x_est)
-    us.append(u_est)
-    
+    u_est = np.dot(-K,x_est)
+
     u_est = functions_03_rw.torquer(u_est,lim)
+    us.append(u_est)
+
     h_est = np.array([x_est[6]/I_s0_x-x_est[3], x_est[7]/I_s1_y-x_est[4], x_est[8]/I_s2_z-x_est[5]])
     
     b_orbit = [Bx_orbit[i],By_orbit[i],Bz_orbit[i]]
@@ -220,15 +223,12 @@ for i in range(len(t)-1):
     s_body_med = functions_03_rw.rotacion_v(q_real, s_orbit,sigma_ss)
     s_body_est = functions_03_rw.rotacion_v(q_est, s_orbit,sigma_ss)
 
-    # print(x_est)
-    # print(q_real)
-    # print(w_gyros)
-    
-    # print(b_body,w_gyros)
-    # print(x_est)
     [A,B,C,A_discrete,B_discrete,C_discrete] = functions_03_rw.A_B(I_x,I_y,I_z,w0_O, 0,0,0, I_s0_x, I_s1_y, I_s2_z,0,0,0, J_x, J_y, J_z,  deltat, hh,b_orbit, b_body_med, s_body_med)
-    [q_posteriori, w_posteriori, P_k_pos,K_k, ws_posteriori] = functions_03_rw.kalman_lineal(A_discrete, B_discrete,C_discrete, x_est, u_est, b_body_med, b_body_est, s_body_med, s_body_est, P_ki, sigma_b, sigma_ss, deltat,hh,h_real,h_est)
-        # asasd
+    
+    if opcion == 4:
+        [q_posteriori, w_posteriori, P_k_pos,K_k, ws_posteriori] = functions_03_rw.kalman_lineal(A_discrete, B_discrete,C_discrete, x_est, u_est, b_body_med, b_body_est, s_body_med, s_body_est, P_ki, 0.012e-6, 0.05, deltat,hh,h_real,h_est)
+    elif opcion == 1 or opcion == 2 or opcion == 3:
+        [q_posteriori, w_posteriori, P_k_pos,K_k, ws_posteriori] = functions_03_rw.kalman_lineal(A_discrete, B_discrete,C_discrete, x_est, u_est, b_body_med, b_body_est, s_body_med, s_body_est, P_ki, sigma_b, sigma_ss, deltat,hh,h_real,h_est)
     
     q0_est.append(q_posteriori[0])
     q1_est.append(q_posteriori[1])
@@ -259,6 +259,7 @@ for i in range(len(t)-1):
     w1s_real.append(ws_real[1])
     w2s_real.append(ws_real[2])
     q_real = np.array([q0_real[-1],q1_real[-1],q2_real[-1],q3_real[-1]])
+    print("q_real",q_real)
     h_real = np.array([x_real[6]/I_s0_x-x_real[3], x_real[7]/I_s1_y-x_real[4], x_real[8]/I_s2_z-x_real[5]])
 
 
@@ -366,26 +367,46 @@ plt.title('MSE de cada velocidad angular entre lineal discreto y kalman lineal d
 plt.grid()
 plt.show()
 
-fig0, axes0 = plt.subplots(nrows=1, ncols=2, figsize=(16, 4))
+fig0, axes0 = plt.subplots(nrows=4, ncols=1, figsize=(18, 10))
 
-axes0[0].plot(t, RPY_all_id[:,0], label='Roll modelo')
-axes0[0].plot(t, RPY_all_id[:,1], label='Pitch modelo')
-axes0[0].plot(t, RPY_all_id[:,2], label='Yaw modelo')
+axes0[0].plot(t[0:len(RPY_all_id[:,0])], RPY_all_id[:,0], label='Roll modelo')
+axes0[0].plot(t[0:len(RPY_all_id[:,0])], RPY_all_id[:,1], label='Pitch modelo')
+axes0[0].plot(t[0:len(RPY_all_id[:,0])], RPY_all_id[:,2], label='Yaw modelo')
 axes0[0].set_xlabel('Tiempo [s]')
 axes0[0].set_ylabel('Angulos de Euler [°]')
 axes0[0].legend()
 axes0[0].set_title('Angulos de Euler obtenidos por el modelo de control lineal discreto')
 axes0[0].grid()
-# axes0[0].set_ylim(-1, 1)  # Ajusta los límites en el eje Y
 
-axes0[1].plot(t, RPY_all_est[:,0], label='Roll kalman')
-axes0[1].plot(t, RPY_all_est[:,1], label='Pitch kalman')
-axes0[1].plot(t, RPY_all_est[:,2], label='Yaw kalman')
+axes0[1].plot(t[0:len(RPY_all_est[:,0])], RPY_all_est[:,0], label='Roll kalman')
+axes0[1].plot(t[0:len(RPY_all_est[:,0])], RPY_all_est[:,1], label='Pitch kalman')
+axes0[1].plot(t[0:len(RPY_all_est[:,0])], RPY_all_est[:,2], label='Yaw kalman')
 axes0[1].set_xlabel('Tiempo [s]')
 axes0[1].set_ylabel('Angulos de Euler [°]')
 axes0[1].legend()
 axes0[1].set_title('Angulos de Euler estimados por el filtro de kalman lineal discreto')
 axes0[1].grid()
+
+axes0[2].plot(t[0:len(RPY_all_id[:,0])], RPY_all_id[:,0], label='Roll modelo')
+axes0[2].plot(t[0:len(RPY_all_id[:,0])], RPY_all_id[:,1], label='Pitch modelo')
+axes0[2].plot(t[0:len(RPY_all_id[:,0])], RPY_all_id[:,2], label='Yaw modelo')
+axes0[2].set_xlabel('Tiempo [s]')
+axes0[2].set_ylabel('Angulos de Euler [°]')
+axes0[2].legend()
+axes0[2].set_title('Angulos de Euler obtenidos por el modelo de control lineal discreto')
+axes0[2].grid()
+axes0[2].set_ylim(-10, 10)  # Ajusta los límites en el eje Y
+
+axes0[3].plot(t[0:len(RPY_all_est[:,0])], RPY_all_est[:,0], label='Roll kalman')
+axes0[3].plot(t[0:len(RPY_all_est[:,0])], RPY_all_est[:,1], label='Pitch kalman')
+axes0[3].plot(t[0:len(RPY_all_est[:,0])], RPY_all_est[:,2], label='Yaw kalman')
+axes0[3].set_xlabel('Tiempo [s]')
+axes0[3].set_ylabel('Angulos de Euler [°]')
+axes0[3].legend()
+axes0[3].set_title('Angulos de Euler estimados por el filtro de kalman lineal discreto')
+axes0[3].grid()
+axes0[3].set_ylim(-10, 10)  # Ajusta los límites en el eje Y
+
 plt.tight_layout()
 plt.show()
 
@@ -442,20 +463,3 @@ df_resultados = pd.DataFrame(datos)
 df_resultados.to_csv(nombre_archivo, index=False)
 
 print(f"Los resultados se han guardado en {nombre_archivo}")
-# # Nombre del archivo
-# archivo_c = "control_rw.csv"
-
-# # Abrir el archivo en modo escritura
-# with open(archivo_c, 'w') as f:
-#     # Escribir los encabezados
-#     f.write("t_aux, Roll,Pitch,Yaw, q0_rot, q1_rot, q2_rot, q3_rot, q0_TRIAD, q1_TRIAD, q2_TRIAD, q3_TRIAD, w0_values, w1_values, w2_values\n")
-
-#     # Escribir los datos en filas
-#     for i in range(len(t)):
-#         f.write("{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {} \n".format(
-#             t[i], RPY_all_est[i,0], RPY_all_est[i,1],RPY_all_est[i,2],q0_real[i],q1_real[i],q2_real[i],
-#             q3_real[i],q0_est[i],q1_est[i], q2_est[i], q3_est[i],
-#             w0_est[i], w1_est[i], w2_est[i]
-#         ))
-
-# print("Vectores guardados en el archivo:", archivo_c)

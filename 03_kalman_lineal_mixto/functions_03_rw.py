@@ -8,6 +8,7 @@ import numpy as np
 import control as ctrl
 import math
 from scipy.optimize import minimize
+from sigfig import round
 
 # Funcion para generar realismo del giroscopio
 def simulate_gyros_reading(w,ruido,bias):
@@ -84,14 +85,14 @@ def A_PD(I_x,I_y,I_z,w0_O, w0,w1,w2, I_s0_x, I_s1_y, I_s2_z, w_s0,w_s1,w_s2, J_x
 
 #Matriz linealizada de la accion de control derivada respecto al vector de entrada
 # en el punto de equilibrio x = [0,0,0,0,0,0]
-def B_PD(w0_O,I_s0_x,I_s1_y,I_s2_z):
+def B_PD(w0_O,I_s0_x,I_s1_y,I_s2_z,J_x,J_y,J_z):
     B123 = np.zeros((3,3))
-    B4 = np.array([1,0,0])
-    B5 = np.array([0,1,0])
-    B6 = np.array([0,0,1])
-    B7 = np.array([1/I_s0_x - 1, 0, 0])
-    B8 = np.array([0, 1/I_s1_y - 1, 0])
-    B9 = np.array([0,0, 1/I_s2_z - 1])
+    B4 = np.array([1/(J_x-I_s0_x),0,0])
+    B5 = np.array([0,1/(J_y-I_s1_y),0])
+    B6 = np.array([0,0,1/(J_z-I_s2_z)])
+    B7 = np.array([1/I_s0_x - 1/(J_x-I_s0_x), 0, 0])
+    B8 = np.array([0, 1/I_s1_y - 1/(J_y-I_s1_y), 0])
+    B9 = np.array([0,0, 1/I_s2_z - 1/(J_z-I_s2_z)])
     B_k = np.vstack((B123,B4,B5,B6,B7,B8,B9))
     #B_k = np.array([B123,B4,B5,B6])
 
@@ -143,7 +144,7 @@ def H_k_bar(b0,b1,b2,s0,s1,s2,I_s0_x,I_s1_y,I_s2_z):
 def A_B(I_x,I_y,I_z,w0_O, w0,w1,w2, I_s0_x, I_s1_y, I_s2_z, w_s0,w_s1,w_s2, J_x, J_y, J_z,deltat,h,b_orbit,b_body, s_body):
     
     A =A_PD(I_x,I_y,I_z,w0_O, w0,w1,w2, I_s0_x, I_s1_y, I_s2_z, w_s0,w_s1,w_s2, J_x, J_y, J_z)
-    B = B_PD(w0_O,I_s0_x,I_s1_y,I_s2_z)
+    B = B_PD(w0_O,I_s0_x,I_s1_y,I_s2_z,J_x,J_y,J_z)
     
     # Define an identity matrix for C and a zero matrix for D to complete state-space model
     # C = np.eye(6)  # Assuming a 6x6 identity matrix for C
@@ -164,6 +165,12 @@ def A_B(I_x,I_y,I_z,w0_O, w0,w1,w2, I_s0_x, I_s1_y, I_s2_z, w_s0,w_s1,w_s2, J_x,
     return A,B,C,A_discrete,B_discrete,C_discrete
 
 #%% Modelo lineal continuo
+
+# funcion de la ecuacion xDot = Ax - Bu 
+def dynamics(A, x, B, u):
+    return np.dot(A, x) + np.dot(B, u)
+
+
 def rk4_step_PD(dynamics, x, A, B, u, h):
     k1 = h * dynamics(A, x, B, u)
     k2 = h * dynamics(A, x + 0.5 * k1, B, u)
@@ -183,32 +190,35 @@ def rk4_step_PD(dynamics, x, A, B, u, h):
     w2_new = x[5] + (k1[5] + 2 * k2[5] + 2 * k3[5] + k4[5]) / 6
     w_new = np.array([w0_new, w1_new, w2_new])
 
-    return q_new_real, w_new
+    # Update components of ws
+    ws0_new = x[6] + (k1[6] + 2 * k2[6] + 2 * k3[6] + k4[6]) / 6
+    ws1_new = x[7] + (k1[7] + 2 * k2[7] + 2 * k3[7] + k4[7]) / 6
+    ws2_new = x[8] + (k1[8] + 2 * k2[8] + 2 * k3[8] + k4[8]) / 6
+    ws_new = np.array([ws0_new, ws1_new, ws2_new])
+    return q_new_real, w_new, ws_new
 
-# funcion de la ecuacicon xDot = Ax - Bu 
-def dynamics(A, x, B, u):
-    return np.dot(A, x) - np.dot(B, u)
 
 def mod_lineal_cont(x,u,deltat,h,A,B):
     
     for j in range(int(deltat/h)):
-        q_rot,w_new = rk4_step_PD(dynamics, x, A, B, u, h)
+        q_rot,w_new,ws_new = rk4_step_PD(dynamics, x, A, B, u, h)
         if  1-q_rot[0]**2-q_rot[1]**2-q_rot[2]**2 < 0:
             q_rot = q_rot / np.linalg.norm(q_rot)
-            x_new = np.hstack((np.transpose(q_rot), np.transpose(w_new)))
+            x_new = np.hstack((np.transpose(q_rot), np.transpose(w_new),np.transpose(ws_new)))
             q3s_rot = 0
 
         else:
-            x_new = np.hstack((np.transpose(q_rot), np.transpose(w_new)))
+            x_new = np.hstack((np.transpose(q_rot), np.transpose(w_new),np.transpose(ws_new)))
             q3s_rot = np.sqrt(1-q_rot[0]**2-q_rot[1]**2-q_rot[2]**2)
                 
     return x_new, q3s_rot
+
 #%% Modelo lineal discreto
 
 def mod_lineal_disc(x,u,deltat, h,A_discrete,B_discrete):
         
     for i in range(int(1/h)):
-        x_k_1 = np.dot(A_discrete,x) - np.dot(B_discrete,u)
+        x_k_1 = np.dot(A_discrete,x) + np.dot(B_discrete,u)
         q_rot = x_k_1[0:3]
         w_new = x_k_1[3:6]
         ws_new = x_k_1[6:9]
@@ -493,8 +503,8 @@ found_solution = False
 def eigenvalue_constraint(x, A, B):
     eigs = []
     global found_solution, optimal_x
-    K = np.hstack([np.diag(x[:3]), np.diag(x[3:])])  # Crear matriz de control K
-    A_prim = A - B @ K
+    K = np.hstack([np.diag(x[:3]), np.diag(x[3:6]),np.diag(x[6:])])  # Crear matriz de control K
+    A_prim = A + B @ K
     eigenvalues = np.linalg.eigvals(A_prim)
     c = np.abs(eigenvalues) - 1  # Asegurarse de que todos los valores propios son menores que 1 en magnitud
     eigs.append(eigenvalues)
@@ -559,18 +569,20 @@ def quaternion_to_euler(q):
     return roll_deg, pitch_deg, yaw_deg
 
 def torquer(u_PD_NL,lim):
-    
+    # Número de cifras significativas
+    sig = 2
+    u_PD_NL = np.array([round(x, sigfigs=sig) for x in u_PD_NL])
+
     if u_PD_NL[0]>lim: 
         u_PD_NL[0] = lim
     else:
         u_PD_NL[0] = u_PD_NL[0]
-
+        
     if u_PD_NL[1]>lim:
         u_PD_NL[1] = lim
-
     else:
         u_PD_NL[1] = u_PD_NL[1]
-
+        
     if u_PD_NL[2]>lim:
         u_PD_NL[2] = lim
     else:
@@ -578,13 +590,12 @@ def torquer(u_PD_NL,lim):
 
     if u_PD_NL[0]<-lim: 
         u_PD_NL[0] = -lim
-
+        
     else:
         u_PD_NL[0] = u_PD_NL[0]
 
     if u_PD_NL[1]<-lim:
         u_PD_NL[1] = -lim
-
     else:
         u_PD_NL[1] = u_PD_NL[1]
 
@@ -593,5 +604,5 @@ def torquer(u_PD_NL,lim):
 
     else:
         u_PD_NL[2] = u_PD_NL[2]
-    
+        
     return u_PD_NL

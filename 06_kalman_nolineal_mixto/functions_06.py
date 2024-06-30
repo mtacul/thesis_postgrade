@@ -7,6 +7,8 @@ Created on Sat May 11 23:33:44 2024
 import numpy as np
 import control as ctrl
 import math
+from scipy.optimize import minimize
+from sigfig import round
 
 # Funcion para generar realismo del giroscopio
 def simulate_gyros_reading(w,ruido,bias):
@@ -66,20 +68,13 @@ def rotacion_v(q, b_i, sigma):
 # Matriz linealizada de la funcion dinamica no lineal derivada respecto al vector 
 # estado en el punto de equilibrio x = [0,0,0,0,0,0] (tres primeros cuaterniones y
 # tres componentes de velocidad angular)
-def A_PD(I_x,I_y,I_z,wo_O, q0,q1,q2,w0,w1,w2):
-    
-    if 1-q0**2-q1**2-q2**2 < 0:
-        q3 = 0.00000000001
-        print("dio negativo dentro de la raiz")
-    else:
-        q3 = np.sqrt(1-q0**2-q1**2-q2**2)
-        
-    A1 = np.array([-0.5*q0*w0/q3, 0.5*w2 - 0.5*q1*w0/q3, -0.5*w1 - 0.5*q2*w0/q3, q3*0.5, -q2*0.5, q1*0.5])
-    A2 = np.array([-0.5*w2 - 0.5*w1*q0/q3, -0.5*w1*q1/q3, 0.5*w0 - 0.5*w1*q2/q3, 0.5*q2, 0.5*q3, -0.5*q0])
-    A3 = np.array([0.5*w1 - 0.5*w2*q0/q3, -0.5*w0 - 0.5*w2*q1/q3, 0.5*w2*q2/q3, -0.5*q1, 0.5*q0, 0.5*q3])
-    A4 = np.array([6*wo_O**2*(I_x-I_y), 0, 0, 0, (w2+wo_O*(2*q0*q2-2*q1*q3))*(I_y-I_z)/I_x - wo_O*I_x*(-2*q1*q3+ 2*q2*q1), (w1+wo_O*(2*q0*q1-2*q2*q3))*(I_y-I_z)/I_x - wo_O*I_x*(2*q1*q0 - 2*q2*q3) ])
-    A5 = np.array([0, 6*wo_O**2*(I_z-I_y), 0,(w2+wo_O*(2*q0*q2+ 2*q1*q3))*(I_x-I_z)/I_y - wo_O*I_y*(q3*q1+ q2*q0- q1*q3 + (q2*q0*q3+ q2*q1*q2+ q2*q2*q1)/q3) , - wo_O*I_y*(-q2*q1+ q3*q0- q0*q3 + (-q2*q0*q2+ q2*q1*q3+ q2*q2*q0)/q3), (w0+wo_O*(1-2*q1**2-2*q2**2))*(I_x-I_z)/I_y - wo_O*I_y*(q1*q1- q0*q0- q3*q3 + (q2*q0*q1- q2*q1*q0+ q2*q2*q3)/q3) ])
-    A6 = np.array([0, 0, 0, (w1+wo_O*(2*q0*q1- 2*q2*q3))*(I_y-I_x)/I_z - wo_O*I_z*(q3*q2- q1*q0+ q2*q3 - (q1*q0*q3+ q1*q1*q2- q1*q2*q1)/q3), (w0+wo_O*(1-2*q1**2-2*q2**2))*(I_y-I_x)/I_z - wo_O*I_z*(-q2*q2+ q0*q0+ q3*q3 - (q1*q0*q2+ q1*q1*q3- q1*q2*q0)/q3) , - wo_O*I_z*(q1*q2+ q3*q0- q0*q3 - (q1*q0*q1- q1*q1*q0+ q1*q2*q3)/q3)])
+def A_PD(I_x,I_y,I_z,w0_O, w0,w1,w2):
+    A1 = np.array([0, 0.5*w2, -0.5*w1, 0.5, 0,0])
+    A2 = np.array([-0.5*w2,0,0.5*w0,0,0.5,0])
+    A3 = np.array([0.5*w1,-0.5*w0,0,0,0,0.5])
+    A4 = np.array([6*w0_O**2*(I_z-I_y), 0, 0, 0, w2*(I_y-I_z)/I_x, w1*(I_y-I_z)/I_x])
+    A5 = np.array([0, 6*w0_O**2*(I_z-I_x), 0, w2*(I_x-I_z)/I_y,0, (w0+w0_O)*(I_x-I_z)/I_y + w0_O])
+    A6 = np.array([0, 0, 0, w1*(I_x-I_y)/I_z, (w0+w0_O)*(I_x-I_y)/I_z - w0_O, 0])
     
     A_k = np.array([A1,A2,A3,A4,A5,A6])
     
@@ -129,20 +124,20 @@ def H_k_bar(b0,b1,b2,s0,s1,s2):
     H_1 = np.hstack((H_11, H_12))
     H_2 = np.hstack((H_21,H_22))
     
-    H = np.vstack((H_1,H_2))
+    H = -np.vstack((H_1,H_2))
     
     return H
 
 
 # Obtencion de las matrices A y B de manera discreta
-def A_B(I_x,I_y,I_z,wo_O,q0,q1,q2,w0,w1,w2,deltat,h,b_orbit, b_body, s_body):
+def A_B(I_x,I_y,I_z,w0_O,w0,w1,w2,deltat,h,b_orbit,b_body, s_body):
     
-    A =A_PD(I_x,I_y,I_z,wo_O, q0,q1,q2,w0,w1,w2)
+    A =A_PD(I_x,I_y,I_z,w0_O, w0,w1,w2)
     B = B_PD(I_x,I_y,I_z,b_orbit)
     
     # Define an identity matrix for C and a zero matrix for D to complete state-space model
     # C = np.eye(6)  # Assuming a 6x6 identity matrix for C
-    C = H_k_bar(b_body[0],b_body[1], b_body[2],s_body[0],s_body[1],s_body[2])
+    C = H_k_bar(b_body[0],b_body[1],b_body[2], s_body[0],s_body[1],s_body[2])
     D = np.zeros((6, 3))  # Assuming D has the same number of rows as A and the same number of columns as B
 
     # Create the continuous state-space model
@@ -158,7 +153,46 @@ def A_B(I_x,I_y,I_z,wo_O,q0,q1,q2,w0,w1,w2,deltat,h,b_orbit, b_body, s_body):
     
     return A,B,C,A_discrete,B_discrete,C_discrete
 
+#%% Modelo lineal continuo
+def rk4_step_PD(dynamics, x, A, B, u, h):
+    k1 = h * dynamics(A, x, B, u)
+    k2 = h * dynamics(A, x + 0.5 * k1, B, u)
+    k3 = h * dynamics(A, x + 0.5 * k2, B, u)
+    k4 = h * dynamics(A, x + k3, B, u)
+        
+    # Update components of q
+    q0_new = x[0] + (k1[0] + 2 * k2[0] + 2 * k3[0] + k4[0]) / 6
+    q1_new = x[1] + (k1[1] + 2 * k2[1] + 2 * k3[1] + k4[1]) / 6
+    q2_new = x[2] + (k1[2] + 2 * k2[2] + 2 * k3[2] + k4[2]) / 6
+    
+    q_new_real = np.array([q0_new, q1_new, q2_new])
 
+    # Update components of w
+    w0_new = x[3] + (k1[3] + 2 * k2[3] + 2 * k3[3] + k4[3]) / 6
+    w1_new = x[4] + (k1[4] + 2 * k2[4] + 2 * k3[4] + k4[4]) / 6
+    w2_new = x[5] + (k1[5] + 2 * k2[5] + 2 * k3[5] + k4[5]) / 6
+    w_new = np.array([w0_new, w1_new, w2_new])
+
+    return q_new_real, w_new
+
+# funcion de la ecuacicon xDot = Ax - Bu 
+def dynamics(A, x, B, u):
+    return np.dot(A, x) - np.dot(B, u)
+
+def mod_lineal_cont(x,u,deltat,h,A,B):
+    
+    for j in range(int(deltat/h)):
+        q_rot,w_new = rk4_step_PD(dynamics, x, A, B, u, h)
+        if  1-q_rot[0]**2-q_rot[1]**2-q_rot[2]**2 < 0:
+            q_rot = q_rot / np.linalg.norm(q_rot)
+            x_new = np.hstack((np.transpose(q_rot), np.transpose(w_new)))
+            q3s_rot = 0
+
+        else:
+            x_new = np.hstack((np.transpose(q_rot), np.transpose(w_new)))
+            q3s_rot = np.sqrt(1-q_rot[0]**2-q_rot[1]**2-q_rot[2]**2)
+                
+    return x_new, q3s_rot
 #%% Modelo lineal discreto
 
 def mod_lineal_disc(x,u,deltat, h,A_discrete,B_discrete):
@@ -178,7 +212,6 @@ def mod_lineal_disc(x,u,deltat, h,A_discrete,B_discrete):
             q3s_rot = np.sqrt(1-q_rot[0]**2-q_rot[1]**2-q_rot[2]**2)
         
     return x_new, q3s_rot
-
 #%% Modelo no lineal continuo
 
 #Funciones ecuaciones no lineales, en conjunto con su resolucion en RK4
@@ -198,7 +231,7 @@ def f4_K(t, q0, q1, q2,q3, w0, w1, w2): #q3_dot
 def f5_K(t, q0, q1, q2,q3, w0, w1, w2,w0_o,tau_x_ctrl,tau_x_per,I_x,I_y,I_z):#w1_dot
     part_1_w0 = w1 + w0_o*(2*(q0*q1 - q2*q3))
     part_2_w0 = w2 + w0_o*(2*(q0*q2 + q1*q3))
-    part_3_w0 = w0_o*(2*q3*0.5*(-q0*w0 - q1*w1 - w2*q2)+2*q0*0.5*(q1*w2 - q2*w1 + w0*q3)-2*q1*0.5*(-q0*w2 + q2*w0 + w1*q3)-2*q2*0.5*(q0*w1 - q1*w0 + w2*q3))
+    part_3_w0 = w0_o*(-4*q1*0.5*(-q0*w2 + q2*w0 + w1*q3) - 4*q2*0.5*(q0*w1 - q1*w0 + w2*q3))
     part_4_w0 = tau_x_ctrl/I_x
     part_5_w0 = tau_x_per/I_x
     return part_1_w0*part_2_w0*(I_y-I_z)/I_x - part_3_w0 + part_4_w0 + part_5_w0
@@ -206,7 +239,7 @@ def f5_K(t, q0, q1, q2,q3, w0, w1, w2,w0_o,tau_x_ctrl,tau_x_per,I_x,I_y,I_z):#w1
 def f6_K(t, q0, q1, q2,q3, w0, w1, w2,w0_o,tau_y_ctrl,tau_y_per,I_x,I_y,I_z): #w2_dot
     part_1_w1 = w0 + w0_o*(q3**2+q0**2-q1**2-q2**2)
     part_2_w1 = w2 + w0_o*(2*(q0*q2 + q1*q3))
-    part_3_w1 = w0_o*(q0*q1*0.5*(q1*w2 - q2*w1 + w0*q3) + q0*q1*0.5*(-q0*w2 + q2*w0 + w1*q3)-q2*q3*0.5*(q0*w1 - q1*w0 + w2*q3)-q2*q3*0.5*(-q0*w0 - q1*w1 - w2*q2))
+    part_3_w1 = w0_o*2*(0.5*(q1*w2 - q2*w1 + w0*q3)*q1 + q0*0.5*(-q0*w2 + q2*w0 + w1*q3) - 0.5*(q0*w1 - q1*w0 + w2*q3)*q3 - q2*0.5*(-q0*w0 - q1*w1 - w2*q2))
     part_4_w1 = tau_y_ctrl/I_y
     part_5_w1 = tau_y_per/I_y
     return part_1_w1*part_2_w1*(I_x-I_z)/I_y - part_3_w1 + part_4_w1 +part_5_w1
@@ -214,10 +247,10 @@ def f6_K(t, q0, q1, q2,q3, w0, w1, w2,w0_o,tau_y_ctrl,tau_y_per,I_x,I_y,I_z): #w
 def f7_K(t, q0, q1, q2,q3, w0, w1, w2,w0_o,tau_z_ctrl,tau_z_per,I_x,I_y,I_z): #w3_dot
     part_1_w2 = w0 + w0_o*(q3**2+q0**2-q1**2-q2**2)
     part_2_w2 = w1 + w0_o*(2*(q0*q1 - q2*q3))
-    part_3_w2 = w0_o*(q0*q2*0.5*(q1*w2 - q2*w1 + w0*q3) + q0*q2*0.5*(q0*w1 - q1*w0 + w2*q3)+ q1*q3*0.5*(-q0*w2 + q2*w0 + w1*q3)+ q1*q3*0.5*(-q0*w0 - q1*w1 - w2*q2))
+    part_3_w2 = w0_o*2*(0.5*(q1*w2 - q2*w1 + w0*q3)*q2 + q0*0.5*(q0*w1 - q1*w0 + w2*q3) + 0.5*(-q0*w2 + q2*w0 + w1*q3)*q3 + q1*0.5*(-q0*w0 - q1*w1 - w2*q2))
     part_4_w2 = tau_z_ctrl/I_z
     part_5_w2 = tau_z_per/I_z
-    return part_1_w2*part_2_w2*(I_y-I_x)/I_z - part_3_w2 + part_4_w2 + part_5_w2
+    return part_1_w2*part_2_w2*(I_x-I_y)/I_z - part_3_w2 + part_4_w2 + part_5_w2
 
 def rk4_EKF_step(t, q0, q1, q2,q3, w0, w1, w2, h, w0_o,tau_x_ctrl,tau_x_per,tau_y_ctrl,tau_y_per,tau_z_ctrl,tau_z_per,I_x,I_y,I_z):
     #k1 = h * f1(x, y1, y2)
@@ -394,13 +427,13 @@ def kalman_lineal(A, B, C, x, u, b,b_est, s,s_est, P_ki, sigma_m, sigma_ss,delta
     
     R = R_k(sigma_m, sigma_ss)
     K_k = k_kalman(R,P_k_priori,H_k)
-    print("zsensor:",z_sensor)
-    print("zmodelo:",z_modelo)
-    print("Y:",y)
+    # print("zsensor:",z_sensor)
+    # print("zmodelo:",z_modelo)
+    # print("Y:",y)
     
     delta_x = np.dot(K_k,y)
     # delta_x2 = np.dot(-K_k,y)
-    print("deltax",delta_x)
+    # print("deltax",delta_x)
     # print("deltax2",delta_x2)
     delta_q_3 = delta_x[0:3]
     delta_w = delta_x[3:6]
@@ -410,12 +443,12 @@ def kalman_lineal(A, B, C, x, u, b,b_est, s,s_est, P_ki, sigma_m, sigma_ss,delta
     # delta_q2 = np.hstack((-delta_q_3, q3_delta))
     # delta_qn2 = delta_q2 / np.linalg.norm(delta_q2)
 
-    print("delta_q obtenido por kalman:",delta_qn,"\n")
+    # print("delta_q obtenido por kalman:",delta_qn,"\n")
     # print("delta_q2 obtenido por kalman:",delta_qn2,"\n")
     
     q_posteriori = quat_mult(delta_qn,q_priori)
     # q_posteriori2 = quat_mult(delta_qn2,q_priori)
-    print("q priori multi:",q_priori,"\n")
+    # print("q priori multi:",q_priori,"\n")
     print("q posteriori multi:",q_posteriori,"\n")
     # print("q posteriori2 multi:",q_posteriori2,"\n")
     w_posteriori = w_priori + delta_w
@@ -514,3 +547,165 @@ def cuat_MSE_NL(q0,q1,q2,q3,w0,w1,w2,q0_nl,q1_nl,q2_nl,q3_nl,w0_nl,w1_nl,w2_nl):
     MSE_omega = np.array([mse_w0_nl,mse_w1_nl,mse_w2_nl])
     
     return MSE_cuat, MSE_omega
+
+def RPY_MSE(t, q0_disc, q1_disc, q2_disc, q3_disc,q0_control, q1_control, q2_control, q3_control):
+    
+    q_kalman = np.vstack((q0_disc, q1_disc, q2_disc, q3_disc))
+    q_kalman_t = np.transpose(q_kalman)
+    RPY_kalman = []
+    
+    q_control = np.vstack((q0_control, q1_control, q2_control, q3_control))
+    q_control_t = np.transpose(q_control)
+    RPY_control = []
+    
+    for i in range(len(t)):
+        RPY_EKF_id = quaternion_to_euler(q_kalman_t[i, :])
+        RPY_kalman.append(RPY_EKF_id)
+        RPY_control_id = quaternion_to_euler(q_control_t[i, :])
+        RPY_control.append(RPY_control_id)
+        
+    RPY_kalman = np.array(RPY_kalman)
+    RPY_control = np.array(RPY_control)
+    
+    restas_roll = []
+    restas_pitch = []
+    restas_yaw = []
+    
+    for i in range(len(t)):
+        dif_roll = abs(RPY_control[i,0] - RPY_kalman[i,0])
+        cuad_roll = dif_roll**2
+        
+        dif_pitch = abs(RPY_control[i,1] - RPY_kalman[i,1])
+        cuad_pitch = dif_pitch**2
+        
+        dif_yaw = abs(RPY_control[i,2] - RPY_kalman[i,2])
+        cuad_yaw = dif_yaw**2
+        
+        restas_roll.append(cuad_roll)
+        restas_pitch.append(cuad_pitch)
+        restas_yaw.append(cuad_yaw)
+    
+    restas_roll = np.array(restas_roll)
+    sumatoria_roll = np.sum(restas_roll)
+    mse_roll = sumatoria_roll / len(restas_roll)
+    
+    restas_pitch = np.array(restas_pitch)
+    sumatoria_pitch = np.sum(restas_pitch)
+    mse_pitch = sumatoria_pitch / len(restas_pitch)
+    
+    restas_yaw = np.array(restas_yaw)
+    sumatoria_yaw = np.sum(restas_yaw)
+    mse_yaw = sumatoria_yaw / len(restas_yaw)
+    
+    return RPY_kalman, RPY_control, mse_roll, mse_pitch, mse_yaw
+
+#%% Optimizacion del K
+
+# Variables globales para manejar la solución
+optimal_x = None
+found_solution = False
+
+def eigenvalue_constraint(x, A, B):
+    global found_solution, optimal_x
+    K = np.hstack([np.diag(x[:3]), np.diag(x[3:])])  # Crear matriz de control K
+    A_prim = A - B @ K
+    eigenvalues = np.linalg.eigvals(A_prim)
+    c = np.abs(eigenvalues) - 0.99999  # Asegurarse de que todos los valores propios son menores que 1 en magnitud
+
+    if np.all(np.abs(eigenvalues) < 0.99999):
+        found_solution = True
+        optimal_x = x  # Guardar la solución
+        raise StopIteration("Found a solution with all eigenvalues having magnitude less than 1.")  # Lanzar una excepción para detener la optimización
+
+    return c
+    
+def objective_function(x):
+    return np.sqrt(np.sum(x**2))
+    
+    
+def opt_K(A_discrete,B_discrete,deltat,h,x0):
+    global found_solution, optimal_x
+    
+    found_solution = False
+    optimal_x = None
+    constraints = {'type': 'ineq', 'fun': eigenvalue_constraint, 'args': (A_discrete, B_discrete)}
+    
+    for i in range(1000):
+        random_adjustment = np.random.rand(len(x0))*100
+        current_x0 = x0 + random_adjustment
+        try:
+            res = minimize(objective_function, current_x0, method='SLSQP', constraints=[constraints])
+        except StopIteration as e:
+            print(e)
+            break  # Detener la iteración si se encuentra una solución válida
+    
+    if found_solution:
+        print("Optimal solution found with all eigenvalues having magnitude less than 1:", optimal_x)
+    else:
+        print("No solution found with all eigenvalues having magnitude less than 1.")
+
+    return optimal_x
+
+#%%
+
+def quaternion_to_euler(q):
+    # Extracción de los componentes del cuaternión
+    x, y, z, w = q
+
+    t0 = +2.0 * (w * x + y * z)
+    t1 = +1.0 - 2.0 * (x**2 + y**2)
+    roll_x = np.arctan2(t0, t1)
+    
+    t2 = +2.0 * (w * y - z * x)
+    t2 = np.clip(t2, -1.0, 1.0)  # Clamp t2 to avoid numerical errors
+    pitch_y = np.arcsin(t2)
+    
+    t3 = +2.0 * (w * z + x * y)
+    t4 = +1.0 - 2.0 * (y**2 + z**2)
+    yaw_z = np.arctan2(t3, t4)
+         
+    # Convierte los ángulos a grados 
+    roll_deg = np.degrees(roll_x)
+    pitch_deg = np.degrees(pitch_y)
+    yaw_deg = np.degrees(yaw_z)
+
+    return roll_deg, pitch_deg, yaw_deg
+
+def torquer(u_PD_NL,lim):
+    # Número de cifras significativas
+    sig = 2
+    u_PD_NL = np.array([round(x, sigfigs=sig) for x in u_PD_NL])
+
+    if u_PD_NL[0]>lim: 
+        u_PD_NL[0] = lim
+    else:
+        u_PD_NL[0] = u_PD_NL[0]
+        
+    if u_PD_NL[1]>lim:
+        u_PD_NL[1] = lim
+    else:
+        u_PD_NL[1] = u_PD_NL[1]
+        
+    if u_PD_NL[2]>lim:
+        u_PD_NL[2] = lim
+    else:
+        u_PD_NL[2] = u_PD_NL[2]
+
+    if u_PD_NL[0]<-lim: 
+        u_PD_NL[0] = -lim
+        
+    else:
+        u_PD_NL[0] = u_PD_NL[0]
+
+    if u_PD_NL[1]<-lim:
+        u_PD_NL[1] = -lim
+    else:
+        u_PD_NL[1] = u_PD_NL[1]
+
+    if u_PD_NL[2]<-lim:
+        u_PD_NL[2] = -lim
+
+    else:
+        u_PD_NL[2] = u_PD_NL[2]
+        
+    return u_PD_NL

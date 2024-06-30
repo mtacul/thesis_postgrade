@@ -4,7 +4,7 @@ import re
 def rename_files(directory, extension):
     # Compilar una expresión regular que coincida con la fecha al inicio del nombre del archivo
     # Asumiendo que la fecha está en formato YYYY-MM-DD
-    date_pattern = re.compile(r'uador')
+    date_pattern = re.compile(r'_2')
 
     # Cambiar al directorio especificado
     os.chdir(directory)

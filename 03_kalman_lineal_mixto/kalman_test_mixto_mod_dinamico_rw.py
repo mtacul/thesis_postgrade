@@ -37,7 +37,7 @@ vsun_z = array_datos[:, 12]
 w0_O = 0.00163
 
 deltat = 2
-limite = 102
+limite = 1002
 t = np.arange(0, limite, deltat)
 
 w0_eq = 0
@@ -130,7 +130,7 @@ for i in range(len(t)-1):
     ws_est = np.array([w0s_est[-1], w1s_est[-1], w2s_est[-1]])
 
     x_est = np.hstack((np.transpose(q_est[:3]), np.transpose(w_est), np.transpose(ws_est)))
-    u_est = np.array([0.15,0.15,0.15])
+    u_est = np.array([0.015,0.015,0.015])
     h_est = np.array([x_est[6]/I_s0_x-x_est[3], x_est[7]/I_s1_y-x_est[4], x_est[8]/I_s2_z-x_est[5]])
 
     b_orbit = [Bx_orbit[i],By_orbit[i],Bz_orbit[i]]

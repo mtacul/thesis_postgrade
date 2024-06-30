@@ -127,7 +127,7 @@ for i in range(len(t)-1):
     qq = np.array([q0[-1],q1[-1],q2[-1],q3[-1]])
     ww = np.array([w0[-1],w1[-1],w2[-1]])
     xx = np.hstack((np.transpose(qq[:3]), np.transpose(ww)))
-    uu = np.array([0.15,0.15,0.15])
+    uu = np.array([15,15,15])
     # uu = np.dot(K_Ex_app_disc,xx)
     # uu = np.dot(K_Ex_app,xx)
     uus.append(uu)
@@ -136,7 +136,7 @@ for i in range(len(t)-1):
     ww_disc = np.array([w0_disc[-1],w1_disc[-1],w2_disc[-1]])
     xx_disc = np.hstack((np.transpose(qq_disc[:3]), np.transpose(ww_disc)))
     # uu_disc = np.dot(K_Ex_app_disc,xx_disc)
-    uu_disc = np.array([0.15,0.15,0.15])
+    uu_disc = np.array([15,15,15])
 
     uus_d.append(uu_disc)
     
@@ -145,7 +145,7 @@ for i in range(len(t)-1):
     xx_nl = np.hstack((np.transpose(qq_nl[:3]), np.transpose(ww_nl)))
     # uu_nl = np.dot(K_Ex_app_disc,xx_nl)
     # uu_nl = np.dot(K_Ex_app,xx_nl)
-    uu_nl = np.array([0.15,0.15,0.15])
+    uu_nl = np.array([15,15,15])
 
     bb_orbit = [Bx_orbit[i],By_orbit[i],Bz_orbit[i]]
     ss_orbit = [vx_sun_orbit[i],vy_sun_orbit[i],vz_sun_orbit[i]]

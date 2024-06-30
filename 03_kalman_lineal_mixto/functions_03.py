@@ -8,6 +8,7 @@ import numpy as np
 import control as ctrl
 import math
 from scipy.optimize import minimize
+from sigfig import round
 
 # Funcion para generar realismo del giroscopio
 def simulate_gyros_reading(w,ruido,bias):
@@ -176,7 +177,7 @@ def rk4_step_PD(dynamics, x, A, B, u, h):
 
 # funcion de la ecuacicon xDot = Ax - Bu 
 def dynamics(A, x, B, u):
-    return np.dot(A, x) - np.dot(B, u)
+    return np.dot(A, x) + np.dot(B, u)
 
 def mod_lineal_cont(x,u,deltat,h,A,B):
     
@@ -197,7 +198,7 @@ def mod_lineal_cont(x,u,deltat,h,A,B):
 def mod_lineal_disc(x,u,deltat, h,A_discrete,B_discrete):
         
     for i in range(int(1/h)):
-        x_k_1 = np.dot(A_discrete,x) - np.dot(B_discrete,u)
+        x_k_1 = np.dot(A_discrete,x) + np.dot(B_discrete,u)
         q_rot = x_k_1[0:3]
         w_new = x_k_1[3:6]
     
@@ -463,11 +464,11 @@ found_solution = False
 def eigenvalue_constraint(x, A, B):
     global found_solution, optimal_x
     K = np.hstack([np.diag(x[:3]), np.diag(x[3:])])  # Crear matriz de control K
-    A_prim = A - B @ K
+    A_prim = A + B @ K
     eigenvalues = np.linalg.eigvals(A_prim)
-    c = np.abs(eigenvalues) - 0.99999  # Asegurarse de que todos los valores propios son menores que 1 en magnitud
+    c = np.abs(eigenvalues) - 0.999  # Asegurarse de que todos los valores propios son menores que 1 en magnitud
 
-    if np.all(np.abs(eigenvalues) < 0.99999):
+    if np.all(np.abs(eigenvalues) < 0.999):
         found_solution = True
         optimal_x = x  # Guardar la solución
         raise StopIteration("Found a solution with all eigenvalues having magnitude less than 1.")  # Lanzar una excepción para detener la optimización
@@ -486,7 +487,7 @@ def opt_K(A_discrete,B_discrete,deltat,h,x0):
     constraints = {'type': 'ineq', 'fun': eigenvalue_constraint, 'args': (A_discrete, B_discrete)}
     
     for i in range(1000):
-        random_adjustment = np.random.rand(len(x0))*100
+        random_adjustment = np.random.rand(len(x0))*500
         current_x0 = x0 + random_adjustment
         try:
             res = minimize(objective_function, current_x0, method='SLSQP', constraints=[constraints])
@@ -527,18 +528,20 @@ def quaternion_to_euler(q):
     return roll_deg, pitch_deg, yaw_deg
 
 def torquer(u_PD_NL,lim):
-    
+    # Número de cifras significativas
+    sig = 2
+    u_PD_NL = np.array([round(x, sigfigs=sig) for x in u_PD_NL])
+
     if u_PD_NL[0]>lim: 
         u_PD_NL[0] = lim
     else:
         u_PD_NL[0] = u_PD_NL[0]
-
+        
     if u_PD_NL[1]>lim:
         u_PD_NL[1] = lim
-
     else:
         u_PD_NL[1] = u_PD_NL[1]
-
+        
     if u_PD_NL[2]>lim:
         u_PD_NL[2] = lim
     else:
@@ -546,13 +549,12 @@ def torquer(u_PD_NL,lim):
 
     if u_PD_NL[0]<-lim: 
         u_PD_NL[0] = -lim
-
+        
     else:
         u_PD_NL[0] = u_PD_NL[0]
 
     if u_PD_NL[1]<-lim:
         u_PD_NL[1] = -lim
-
     else:
         u_PD_NL[1] = u_PD_NL[1]
 
@@ -561,5 +563,5 @@ def torquer(u_PD_NL,lim):
 
     else:
         u_PD_NL[2] = u_PD_NL[2]
-    
+        
     return u_PD_NL
