@@ -177,7 +177,7 @@ def rk4_step_PD(dynamics, x, A, B, u, h):
 
 # funcion de la ecuacicon xDot = Ax - Bu 
 def dynamics(A, x, B, u):
-    return np.dot(A, x) - np.dot(B, u)
+    return np.dot(A, x) + np.dot(B, u)
 
 def mod_lineal_cont(x,u,deltat,h,A,B):
     
@@ -332,9 +332,7 @@ def rk4_EKF_step(t, q0, q1, q2,q3, w0, w1, w2, h, w0_o,tau_x_ctrl,tau_x_per,tau_
 
 
 def mod_nolineal(x,u,deltat, b,h,tt,I_x,I_y,I_z,w0_O):
-    
-    w0_O = 0.00163
-    
+        
     if  1-x[0]**2-x[1]**2-x[2]**2 < 0:
         x[0:3] = x[0:3] / np.linalg.norm(x[0:3])
         q3s_rot = 0
@@ -351,6 +349,144 @@ def mod_nolineal(x,u,deltat, b,h,tt,I_x,I_y,I_z,w0_O):
     for j in range(int(deltat/h)):
         t, q0, q1, q2, q3, w0, w1, w2 = tt, x[0], x[1], x[2], q3s_rot, x[3], x[4], x[5]
         q_rot, w_new = rk4_EKF_step(t, q0, q1, q2,q3, w0, w1, w2,h,w0_O, tau_x_ctrl,0,tau_y_ctrl,0,tau_z_ctrl,0,I_x,I_y,I_z)
+    
+    q_rot_trunc = q_rot[0:3]
+    x_new = np.hstack((np.transpose(q_rot_trunc), np.transpose(w_new)))
+    
+    return x_new, q_rot[3]
+
+#%%
+def f1(t, q0, q1, q2,q3, w0, w1, w2): #q0_dot
+    return 0.5*(q1*w2 - q2*w1 + w0*q3)
+
+def f2(t, q0, q1, q2,q3, w0, w1, w2): #q1_dot
+    return 0.5*(-q0*w2 + q2*w0 + w1*q3)
+
+def f3(t, q0, q1, q2,q3, w0, w1, w2): #q2_dot
+    return 0.5*(q0*w1 - q1*w0 + w2*q3)
+
+def f4(t, q0, q1, q2,q3, w0, w1, w2): #q3_dot
+    return 0.5*(-q0*w0 - q1*w1 - w2*q2)
+
+def f5(t, q0, q1, q2,q3, w0, w1, w2,w0_o,tau_x_ctrl,tau_x_per,I_x,I_y,I_z):#w1_dot
+    part_1_w0 = w1
+    part_2_w0 = w2
+    part_4_w0 = tau_x_ctrl/I_x
+    part_5_w0 = tau_x_per/I_x
+    return part_1_w0*part_2_w0*(I_y-I_z)/I_x + part_4_w0 + part_5_w0
+
+def f6(t, q0, q1, q2,q3, w0, w1, w2,w0_o,tau_y_ctrl,tau_y_per,I_x,I_y,I_z): #w2_dot
+    part_1_w1 = w0
+    part_2_w1 = w2
+    part_4_w1 = tau_y_ctrl/I_y
+    part_5_w1 = tau_y_per/I_y
+    return part_1_w1*part_2_w1*(I_x-I_z)/I_y + part_4_w1 +part_5_w1
+
+def f7(t, q0, q1, q2,q3, w0, w1, w2,w0_o,tau_z_ctrl,tau_z_per,I_x,I_y,I_z): #w3_dot
+    part_1_w2 = w0 
+    part_2_w2 = w1 
+    part_4_w2 = tau_z_ctrl/I_z
+    part_5_w2 = tau_z_per/I_z
+    return part_1_w2*part_2_w2*(I_x-I_y)/I_z + part_4_w2 + part_5_w2
+
+def rk4_EKF_step2(t, q0, q1, q2,q3, w0, w1, w2, h, w0_o,tau_x_ctrl,tau_x_per,tau_y_ctrl,tau_y_per,tau_z_ctrl,tau_z_per,I_x,I_y,I_z):
+    #k1 = h * f1(x, y1, y2)
+    k1_1 = h * f1(t, q0, q1, q2,q3, w0, w1, w2)
+    k1_2 = h * f2(t, q0, q1, q2,q3, w0, w1, w2)
+    k1_3 = h * f3(t, q0, q1, q2,q3, w0, w1, w2)
+    k1_4 = h * f4(t, q0, q1, q2,q3, w0, w1, w2)
+    k1_5 = h * f5(t, q0, q1, q2,q3, w0, w1, w2,w0_o, tau_x_ctrl,tau_x_per,I_x,I_y,I_z)
+    k1_6 = h * f6(t, q0, q1, q2,q3, w0, w1, w2,w0_o, tau_y_ctrl,tau_y_per,I_x,I_y,I_z)
+    k1_7 = h * f7(t, q0, q1, q2,q3, w0, w1, w2,w0_o, tau_z_ctrl,tau_z_per,I_x,I_y,I_z)
+    
+    k2_1 = h * f1(t + 0.5 * h, q0 + 0.5 * k1_1, q1 + 0.5 * k1_2, q2 + 0.5 * k1_3,
+                  q3 + 0.5 * k1_4,w0 + 0.5 * k1_5, w1 + 0.5 * k1_6, w2 + 0.5 * k1_7)
+    k2_2 = h * f2(t + 0.5 * h, q0 + 0.5 * k1_1, q1 + 0.5 * k1_2, q2 + 0.5 * k1_3,
+                  q3 + 0.5 * k1_4,w0 + 0.5 * k1_5, w1 + 0.5 * k1_6, w2 + 0.5 * k1_7)
+    k2_3 = h * f3(t + 0.5 * h, q0 + 0.5 * k1_1, q1 + 0.5 * k1_2, q2 + 0.5 * k1_3,
+                  q3 + 0.5 * k1_4,w0 + 0.5 * k1_5, w1 + 0.5 * k1_6, w2 + 0.5 * k1_7)
+    k2_4 = h * f4(t + 0.5 * h, q0 + 0.5 * k1_1, q1 + 0.5 * k1_2, q2 + 0.5 * k1_3,
+                  q3 + 0.5 * k1_4,w0 + 0.5 * k1_5, w1 + 0.5 * k1_6, w2 + 0.5 * k1_7)
+    k2_5 = h * f5(t + 0.5 * h, q0 + 0.5 * k1_1, q1 + 0.5 * k1_2, q2 + 0.5 * k1_3,
+                  q3 + 0.5 * k1_4,w0 + 0.5 * k1_5, w1 + 0.5 * k1_6, w2 + 0.5 * k1_7,w0_o, tau_x_ctrl,tau_x_per,I_x,I_y,I_z)
+    k2_6 = h * f6(t + 0.5 * h, q0 + 0.5 * k1_1, q1 + 0.5 * k1_2, q2 + 0.5 * k1_3,
+                  q3 + 0.5 * k1_4,w0 + 0.5 * k1_5, w1 + 0.5 * k1_6, w2 + 0.5 * k1_7,w0_o, tau_y_ctrl,tau_y_per,I_x,I_y,I_z)
+    k2_7 = h * f7(t + 0.5 * h, q0 + 0.5 * k1_1, q1 + 0.5 * k1_2, q2 + 0.5 * k1_3,
+                  q3 + 0.5 * k1_4,w0 + 0.5 * k1_5, w1 + 0.5 * k1_6, w2 + 0.5 * k1_7,w0_o, tau_z_ctrl,tau_z_per,I_x,I_y,I_z)
+    
+    k3_1 = h * f1(t + 0.5 * h, q0 + 0.5 * k2_1, q1 + 0.5 * k2_2, q2 + 0.5 * k2_3,
+                  q3 + 0.5 * k2_4, w0 + 0.5 * k2_5, w1 + 0.5 * k2_6, w2 + 0.5 * k2_7)
+    k3_2 = h * f2(t + 0.5 * h, q0 + 0.5 * k2_1, q1 + 0.5 * k2_2, q2 + 0.5 * k2_3,
+                  q3 + 0.5 * k2_4, w0 + 0.5 * k2_5, w1 + 0.5 * k2_6, w2 + 0.5 * k2_7)
+    k3_3 = h * f3(t + 0.5 * h, q0 + 0.5 * k2_1, q1 + 0.5 * k2_2, q2 + 0.5 * k2_3,
+                  q3 + 0.5 * k2_4, w0 + 0.5 * k2_5, w1 + 0.5 * k2_6, w2 + 0.5 * k2_7)
+    k3_4 = h * f4(t + 0.5 * h, q0 + 0.5 * k2_1, q1 + 0.5 * k2_2, q2 + 0.5 * k2_3,
+                  q3 + 0.5 * k2_4, w0 + 0.5 * k2_5, w1 + 0.5 * k2_6, w2 + 0.5 * k2_7)
+
+    k3_5 = h * f5(t + 0.5 * h, q0 + 0.5 * k2_1, q1 + 0.5 * k2_2, q2 + 0.5 * k2_3,
+                  q3 + 0.5 * k2_4, w0 + 0.5 * k2_5, w1 + 0.5 * k2_6, w2 + 0.5 * k2_7, w0_o, tau_x_ctrl,
+                  tau_x_per,I_x,I_y,I_z)
+    k3_6 = h * f6(t + 0.5 * h, q0 + 0.5 * k2_1, q1 + 0.5 * k2_2, q2 + 0.5 * k2_3,
+                  q3 + 0.5 * k2_4, w0 + 0.5 * k2_5, w1 + 0.5 * k2_6, w2 + 0.5 * k2_7, w0_o, tau_y_ctrl,
+                  tau_y_per,I_x,I_y,I_z)
+    k3_7 = h * f7(t + 0.5 * h, q0 + 0.5 * k2_1, q1 + 0.5 * k2_2, q2 + 0.5 * k2_3,
+                  q3 + 0.5 * k2_4, w0 + 0.5 * k2_5, w1 + 0.5 * k2_6, w2 + 0.5 * k2_7, w0_o, tau_z_ctrl,
+                  tau_z_per,I_x,I_y,I_z)
+
+    
+    k4_1 = h * f1(t + 0.5 * h, q0 + 0.5 * k3_1, q1 + 0.5 * k3_2, q2 + 0.5 * k3_3,
+                  q3 + 0.5 * k3_4, w0 + 0.5 * k3_5, w1 + 0.5 * k3_6, w2 + 0.5 * k3_7)
+    k4_2 = h * f2(t + 0.5 * h, q0 + 0.5 * k3_1, q1 + 0.5 * k3_2, q2 + 0.5 * k3_3,
+                  q3 + 0.5 * k3_4, w0 + 0.5 * k3_5, w1 + 0.5 * k3_6, w2 + 0.5 * k3_7)
+    k4_3 = h * f3(t + 0.5 * h, q0 + 0.5 * k3_1, q1 + 0.5 * k3_2, q2 + 0.5 * k3_3,
+                  q3 + 0.5 * k3_4, w0 + 0.5 * k3_5, w1 + 0.5 * k3_6, w2 + 0.5 * k3_7)
+    k4_4 = h * f4(t + 0.5 * h, q0 + 0.5 * k3_1, q1 + 0.5 * k3_2, q2 + 0.5 * k3_3,
+                  q3 + 0.5 * k3_4, w0 + 0.5 * k3_5, w1 + 0.5 * k3_6, w2 + 0.5 * k3_7)
+    k4_5 = h * f5(t + 0.5 * h, q0 + 0.5 * k3_1, q1 + 0.5 * k3_2, q2 + 0.5 * k3_3,
+                  q3 + 0.5 * k3_4, w0 + 0.5 * k3_5, w1 + 0.5 * k3_6, w2 + 0.5 * k3_7, w0_o, tau_x_ctrl,
+                  tau_x_per,I_x,I_y,I_z)
+    k4_6 = h * f6(t + 0.5 * h, q0 + 0.5 * k3_1, q1 + 0.5 * k3_2, q2 + 0.5 * k3_3,
+                  q3 + 0.5 * k3_4, w0 + 0.5 * k3_5, w1 + 0.5 * k3_6, w2 + 0.5 * k3_7, w0_o, tau_y_ctrl,
+                  tau_y_per,I_x,I_y,I_z)
+    k4_7 = h * f7(t + 0.5 * h, q0 + 0.5 * k3_1, q1 + 0.5 * k3_2, q2 + 0.5 * k3_3,
+                  q3 + 0.5 * k3_4, w0 + 0.5 * k3_5, w1 + 0.5 * k3_6, w2 + 0.5 * k3_7, w0_o, tau_z_ctrl,
+                  tau_z_per,I_x,I_y,I_z)
+   
+
+    q0_new = q0 + (k1_1 + 2 * k2_1 + 2 * k3_1 + k4_1) / 6    
+    q1_new = q1 + (k1_2 + 2 * k2_2 + 2 * k3_2 + k4_2) / 6
+    q2_new = q2 + (k1_3 + 2 * k2_3 + 2 * k3_3 + k4_3) / 6
+    q3_new = q3 + (k1_4 + 2 * k2_4 + 2 * k3_4 + k4_4) / 6
+
+    q = [q0_new, q1_new, q2_new,q3_new]
+    q = q / np.linalg.norm(q)
+    
+    w0_new = w0 + (k1_5 + 2 * k2_5 + 2 * k3_5 + k4_5) / 6
+    w1_new = w1 + (k1_6 + 2 * k2_6 + 2 * k3_6 + k4_6) / 6
+    w2_new = w2 + (k1_7 + 2 * k2_7 + 2 * k3_7 + k4_7) / 6
+    w = [w0_new, w1_new, w2_new]
+    return q, w
+
+
+def mod_nolineal2(x,u,deltat, b,h,tt,I_x,I_y,I_z,w0_O):
+    
+    
+    if  1-x[0]**2-x[1]**2-x[2]**2 < 0:
+        x[0:3] = x[0:3] / np.linalg.norm(x[0:3])
+        q3s_rot = 0
+
+    else:
+        q3s_rot = np.sqrt(1-x[0]**2-x[1]**2-x[2]**2)
+        
+    
+    b_norm = np.linalg.norm(np.hstack((b[0],b[1],b[2])))
+    tau_x_ctrl = ((b[0]*u[2]-b[2]*u[0])/b_norm)*b[2] - ((b[1]*u[0]-b[0]*u[1])/b_norm)*b[1]
+    tau_y_ctrl = ((b[2]*u[1]-b[1]*u[2])/b_norm)*-b[2] + ((b[1]*u[0]-b[0]*u[1])/b_norm)*b[0]
+    tau_z_ctrl = ((b[2]*u[1]-b[1]*u[2])/b_norm)*b[1] - ((b[0]*u[2]-b[2]*u[0])/b_norm)*b[0]
+
+    for j in range(int(deltat/h)):
+        t, q0, q1, q2, q3, w0, w1, w2 = tt, x[0], x[1], x[2], q3s_rot, x[3], x[4], x[5]
+        q_rot, w_new = rk4_EKF_step2(t, q0, q1, q2,q3, w0, w1, w2,h,w0_O, tau_x_ctrl,0,tau_y_ctrl,0,tau_z_ctrl,0,I_x,I_y,I_z)
     
     q_rot_trunc = q_rot[0:3]
     x_new = np.hstack((np.transpose(q_rot_trunc), np.transpose(w_new)))

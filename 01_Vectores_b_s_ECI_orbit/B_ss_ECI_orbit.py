@@ -13,9 +13,9 @@ import matplotlib.pyplot as plt
 from scipy.spatial.transform import Rotation
 
 #%%
-# archivo_csv = "vectores_5.6k.csv"
+archivo_csv = "vectores_400k.csv"
 # archivo_csv = "vectores_10.2k.csv"
-archivo_csv = "vectores_5.76k.csv"
+# archivo_csv = "vectores_5.76k.csv"
 
 # Leer el archivo CSV en un DataFrame de pandas
 df = pd.read_csv(archivo_csv)
@@ -51,6 +51,7 @@ vy_sun_orbit = []
 vz_sun_orbit = []
 
 for i in range(len(t_aux)):
+    print(t_aux[i])
     Rs_ECI_orbit = np.vstack((X_orbits[i,:],Y_orbits[i,:],Z_orbits[i,:]))
     q_ECI_orbit= Rotation.from_matrix(Rs_ECI_orbit).as_quat()
     
@@ -172,20 +173,21 @@ axes0[1].grid()
 plt.tight_layout()
 plt.show()
 
-# # Nombre del archivo
-# archivo_c = "Vectores_orbit_ECI.csv"
+# Nombre del archivo
+archivo_c = "Vectores_orbit_ECI.csv"
 
-# # Abrir el archivo en modo escritura
-# with open(archivo_c, 'w') as f:
-#     # Escribir los encabezados
-#     f.write("t, Bx_orbit, By_orbit, Bz_orbit, Bx_IGRF, By_IGRF, Bz_IGRF, vx_sun_orbit,vy_sun_orbit,vz_sun_orbit,vsun_x,vsun_y,vsun_z \n")
+# Abrir el archivo en modo escritura
+with open(archivo_c, 'w') as f:
+    # Escribir los encabezados
+    f.write("t, Bx_orbit, By_orbit, Bz_orbit, Bx_IGRF, By_IGRF, Bz_IGRF, vx_sun_orbit,vy_sun_orbit,vz_sun_orbit,vsun_x,vsun_y,vsun_z,q0_e2o,q1_e2o,q2_e2o,q3_e2o \n")
 
-#     # Escribir los datos en filas
-#     for i in range(len(Bx_orbit)):
-#         f.write("{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}\n".format( 
-#             t_aux[i],Bx_orbit[i], By_orbit[i], Bz_orbit[i],  Bx_IGRF[i],  By_IGRF[i],  Bz_IGRF[i],
-#             vx_sun_orbit[i], vy_sun_orbit[i],vz_sun_orbit[i],vsun_x[i],vsun_y[i],vsun_z[i]))
+    # Escribir los datos en filas
+    for i in range(len(Bx_orbit)):
+        f.write("{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},{}, {}, {},{} \n".format( 
+            t_aux[i],Bx_orbit[i], By_orbit[i], Bz_orbit[i],  Bx_IGRF[i],  By_IGRF[i],  Bz_IGRF[i],
+            vx_sun_orbit[i], vy_sun_orbit[i],vz_sun_orbit[i],vsun_x[i],vsun_y[i],vsun_z[i],
+            q0_e2o[i],q1_e2o[i],q2_e2o[i],q3_e2o[i]))
 
-# print("Vectores guardados en el archivo:", archivo_c)
+print("Vectores guardados en el archivo:", archivo_c)
 
 
