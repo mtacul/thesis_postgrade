@@ -647,34 +647,224 @@ nombre_archivo_3 = os.path.splitext(os.path.basename(archivos_seleccionados[2]))
 
 #%%
 
-fig0, axes0 = plt.subplots(nrows=3, ncols=1, figsize=(13, 8))
+fig0, axes0 = plt.subplots(nrows=3, ncols=3, figsize=(13, 8))
 
-axes0[0].plot(t_aux, Roll_1, label= {nombre_archivo_1})
-axes0[0].plot(t_aux, Roll_2, label= {nombre_archivo_2})
-axes0[0].plot(t_aux, Roll_3, label= {nombre_archivo_3})
-axes0[0].set_xlabel('Tiempo [s]')
-axes0[0].set_ylabel('Roll [°]')
-axes0[0].legend()
-axes0[0].grid()
+axes0[0,0].plot(t_aux, Roll_1, label= {nombre_archivo_1})
+axes0[0,0].set_xlabel('Tiempo [s]')
+axes0[0,0].set_ylabel('Roll [°]')
+axes0[0,0].legend()
+axes0[0,0].grid()
 #axes0[0].set_ylim(-1, 1)  # Ajusta los límites en el eje Y
 
-axes0[1].plot(t_aux, Pitch_1, label={nombre_archivo_1})
-axes0[1].plot(t_aux, Pitch_2, label={nombre_archivo_2})
-axes0[1].plot(t_aux, Pitch_3, label={nombre_archivo_3})
-axes0[1].set_xlabel('Tiempo [s]')
-axes0[1].set_ylabel('Pitch [°]')
-axes0[1].legend()
-axes0[1].grid()
+axes0[0,1].plot(t_aux, Roll_2, label= {nombre_archivo_2})
+axes0[0,1].set_xlabel('Tiempo [s]')
+axes0[0,1].set_ylabel('Roll [°]')
+axes0[0,1].legend()
+axes0[0,1].grid()
+#axes0[0].set_ylim(-1, 1)  # Ajusta los límites en el eje Y
+
+axes0[0,2].plot(t_aux, Roll_3, label= {nombre_archivo_3})
+axes0[0,2].set_xlabel('Tiempo [s]')
+axes0[0,2].set_ylabel('Roll [°]')
+axes0[0,2].legend()
+axes0[0,2].grid()
+#axes0[0].set_ylim(-1, 1)  # Ajusta los límites en el eje Y
+
+axes0[1,0].plot(t_aux, Pitch_1, label={nombre_archivo_1})
+axes0[1,0].set_xlabel('Tiempo [s]')
+axes0[1,0].set_ylabel('Pitch [°]')
+axes0[1,0].legend()
+axes0[1,0].grid()
 # axes0[1].set_ylim(-20, -5)  # Ajusta los límites en el eje Y
 # axes0[1].set_xlim(150000, 400000)  # Ajusta los límites en el eje Y
 
-axes0[2].plot(t_aux, Yaw_1, label={nombre_archivo_1})
-axes0[2].plot(t_aux, Yaw_2, label={nombre_archivo_2})
-axes0[2].plot(t_aux, Yaw_3, label={nombre_archivo_3})
-axes0[2].set_xlabel('Tiempo [s]')
-axes0[2].set_ylabel('Yaw [°]')
-axes0[2].legend()
-axes0[2].grid()
+axes0[1,1].plot(t_aux, Pitch_2, label={nombre_archivo_2})
+axes0[1,1].set_xlabel('Tiempo [s]')
+axes0[1,1].set_ylabel('Pitch [°]')
+axes0[1,1].legend()
+axes0[1,1].grid()
+# axes0[1].set_ylim(-20, -5)  # Ajusta los límites en el eje Y
+# axes0[1].set_xlim(150000, 400000)  # Ajusta los límites en el eje Y
+
+axes0[1,2].plot(t_aux, Pitch_3, label={nombre_archivo_3})
+axes0[1,2].set_xlabel('Tiempo [s]')
+axes0[1,2].set_ylabel('Pitch [°]')
+axes0[1,2].legend()
+axes0[1,2].grid()
+# axes0[1].set_ylim(-20, -5)  # Ajusta los límites en el eje Y
+# axes0[1].set_xlim(150000, 400000)  # Ajusta los límites en el eje Y
+
+axes0[2,0].plot(t_aux, Yaw_1, label={nombre_archivo_1})
+axes0[2,0].set_xlabel('Tiempo [s]')
+axes0[2,0].set_ylabel('Yaw [°]')
+axes0[2,0].legend()
+axes0[2,0].grid()
+
+axes0[2,1].plot(t_aux, Yaw_2, label={nombre_archivo_2})
+axes0[2,1].set_xlabel('Tiempo [s]')
+axes0[2,1].set_ylabel('Yaw [°]')
+axes0[2,1].legend()
+axes0[2,1].grid()
+
+axes0[2,2].plot(t_aux, Yaw_3, label={nombre_archivo_3})
+axes0[2,2].set_xlabel('Tiempo [s]')
+axes0[2,2].set_ylabel('Yaw [°]')
+axes0[2,2].legend()
+axes0[2,2].grid()
+# axes0[2].set_ylim(-20, -5)  # Ajusta los límites en el eje Y
+# axes0[2].set_xlim(150000, 400000)  # Ajusta los límites en el eje Y
+
+plt.tight_layout()
+plt.show()
+
+#%%
+fig0, axes0 = plt.subplots(nrows=3, ncols=3, figsize=(13, 8))
+
+axes0[0,0].plot(t_aux, Roll_1, label= {nombre_archivo_1})
+axes0[0,0].set_xlabel('Tiempo [s]')
+axes0[0,0].set_ylabel('Roll [°]')
+axes0[0,0].legend()
+axes0[0,0].grid()
+axes0[0,0].set_ylim(-5, 5)  # Ajusta los límites en el eje Y
+
+axes0[0,1].plot(t_aux, Roll_2, label= {nombre_archivo_2})
+axes0[0,1].set_xlabel('Tiempo [s]')
+axes0[0,1].set_ylabel('Roll [°]')
+axes0[0,1].legend()
+axes0[0,1].grid()
+axes0[0,1].set_ylim(-5, 5)  # Ajusta los límites en el eje Y
+
+axes0[0,2].plot(t_aux, Roll_3, label= {nombre_archivo_3})
+axes0[0,2].set_xlabel('Tiempo [s]')
+axes0[0,2].set_ylabel('Roll [°]')
+axes0[0,2].legend()
+axes0[0,2].grid()
+axes0[0,2].set_ylim(-5, 5)  # Ajusta los límites en el eje Y
+
+axes0[1,0].plot(t_aux, Pitch_1, label={nombre_archivo_1})
+axes0[1,0].set_xlabel('Tiempo [s]')
+axes0[1,0].set_ylabel('Pitch [°]')
+axes0[1,0].legend()
+axes0[1,0].grid()
+axes0[1,0].set_ylim(-5, 5)  # Ajusta los límites en el eje Y
+# axes0[1].set_ylim(-20, -5)  # Ajusta los límites en el eje Y
+# axes0[1].set_xlim(150000, 400000)  # Ajusta los límites en el eje Y
+
+axes0[1,1].plot(t_aux, Pitch_2, label={nombre_archivo_2})
+axes0[1,1].set_xlabel('Tiempo [s]')
+axes0[1,1].set_ylabel('Pitch [°]')
+axes0[1,1].legend()
+axes0[1,1].grid()
+axes0[1,1].set_ylim(-5, 5)  # Ajusta los límites en el eje Y
+# axes0[1].set_ylim(-20, -5)  # Ajusta los límites en el eje Y
+# axes0[1].set_xlim(150000, 400000)  # Ajusta los límites en el eje Y
+
+axes0[1,2].plot(t_aux, Pitch_3, label={nombre_archivo_3})
+axes0[1,2].set_xlabel('Tiempo [s]')
+axes0[1,2].set_ylabel('Pitch [°]')
+axes0[1,2].legend()
+axes0[1,2].grid()
+axes0[1,2].set_ylim(-5, 5)  # Ajusta los límites en el eje Y
+# axes0[1].set_ylim(-20, -5)  # Ajusta los límites en el eje Y
+# axes0[1].set_xlim(150000, 400000)  # Ajusta los límites en el eje Y
+
+axes0[2,0].plot(t_aux, Yaw_1, label={nombre_archivo_1})
+axes0[2,0].set_xlabel('Tiempo [s]')
+axes0[2,0].set_ylabel('Yaw [°]')
+axes0[2,0].legend()
+axes0[2,0].grid()
+axes0[2,0].set_ylim(-5, 5)  # Ajusta los límites en el eje Y
+
+axes0[2,1].plot(t_aux, Yaw_2, label={nombre_archivo_2})
+axes0[2,1].set_xlabel('Tiempo [s]')
+axes0[2,1].set_ylabel('Yaw [°]')
+axes0[2,1].legend()
+axes0[2,1].grid()
+axes0[2,1].set_ylim(-5, 5)  # Ajusta los límites en el eje Y
+
+axes0[2,2].plot(t_aux, Yaw_3, label={nombre_archivo_3})
+axes0[2,2].set_xlabel('Tiempo [s]')
+axes0[2,2].set_ylabel('Yaw [°]')
+axes0[2,2].legend()
+axes0[2,2].grid()
+axes0[2,2].set_ylim(-5, 5)  # Ajusta los límites en el eje Y
+# axes0[2].set_ylim(-20, -5)  # Ajusta los límites en el eje Y
+# axes0[2].set_xlim(150000, 400000)  # Ajusta los límites en el eje Y
+
+plt.tight_layout()
+plt.show()
+
+#%%
+fig0, axes0 = plt.subplots(nrows=3, ncols=3, figsize=(13, 8))
+
+axes0[0,0].plot(t_aux, Roll_low_pass_1, label= {nombre_archivo_1})
+axes0[0,0].set_xlabel('Tiempo [s]')
+axes0[0,0].set_ylabel('Roll [°]')
+axes0[0,0].legend()
+axes0[0,0].grid()
+axes0[0,0].set_ylim(-5, 5)  # Ajusta los límites en el eje Y
+
+axes0[0,1].plot(t_aux, Roll_low_pass_2, label= {nombre_archivo_2})
+axes0[0,1].set_xlabel('Tiempo [s]')
+axes0[0,1].set_ylabel('Roll [°]')
+axes0[0,1].legend()
+axes0[0,1].grid()
+axes0[0,1].set_ylim(-5, 5)  # Ajusta los límites en el eje Y
+
+axes0[0,2].plot(t_aux, Roll_low_pass_3, label= {nombre_archivo_3})
+axes0[0,2].set_xlabel('Tiempo [s]')
+axes0[0,2].set_ylabel('Roll [°]')
+axes0[0,2].legend()
+axes0[0,2].grid()
+axes0[0,2].set_ylim(-5, 5)  # Ajusta los límites en el eje Y
+
+axes0[1,0].plot(t_aux, Pitch_low_pass_1, label={nombre_archivo_1})
+axes0[1,0].set_xlabel('Tiempo [s]')
+axes0[1,0].set_ylabel('Pitch [°]')
+axes0[1,0].legend()
+axes0[1,0].grid()
+axes0[1,0].set_ylim(-5, 5)  # Ajusta los límites en el eje Y
+# axes0[1].set_ylim(-20, -5)  # Ajusta los límites en el eje Y
+# axes0[1].set_xlim(150000, 400000)  # Ajusta los límites en el eje Y
+
+axes0[1,1].plot(t_aux, Pitch_low_pass_2, label={nombre_archivo_2})
+axes0[1,1].set_xlabel('Tiempo [s]')
+axes0[1,1].set_ylabel('Pitch [°]')
+axes0[1,1].legend()
+axes0[1,1].grid()
+axes0[1,1].set_ylim(-5, 5)  # Ajusta los límites en el eje Y
+# axes0[1].set_ylim(-20, -5)  # Ajusta los límites en el eje Y
+# axes0[1].set_xlim(150000, 400000)  # Ajusta los límites en el eje Y
+
+axes0[1,2].plot(t_aux, Pitch_low_pass_3, label={nombre_archivo_3})
+axes0[1,2].set_xlabel('Tiempo [s]')
+axes0[1,2].set_ylabel('Pitch [°]')
+axes0[1,2].legend()
+axes0[1,2].grid()
+axes0[1,2].set_ylim(-5, 5)  # Ajusta los límites en el eje Y
+# axes0[1].set_ylim(-20, -5)  # Ajusta los límites en el eje Y
+# axes0[1].set_xlim(150000, 400000)  # Ajusta los límites en el eje Y
+
+axes0[2,0].plot(t_aux, Yaw_low_pass_1, label={nombre_archivo_1})
+axes0[2,0].set_xlabel('Tiempo [s]')
+axes0[2,0].set_ylabel('Yaw [°]')
+axes0[2,0].legend()
+axes0[2,0].grid()
+axes0[2,0].set_ylim(-5, 5)  # Ajusta los límites en el eje Y
+
+axes0[2,1].plot(t_aux, Yaw_low_pass_2, label={nombre_archivo_2})
+axes0[2,1].set_xlabel('Tiempo [s]')
+axes0[2,1].set_ylabel('Yaw [°]')
+axes0[2,1].legend()
+axes0[2,1].grid()
+axes0[2,1].set_ylim(-5, 5)  # Ajusta los límites en el eje Y
+
+axes0[2,2].plot(t_aux, Yaw_low_pass_3, label={nombre_archivo_3})
+axes0[2,2].set_xlabel('Tiempo [s]')
+axes0[2,2].set_ylabel('Yaw [°]')
+axes0[2,2].legend()
+axes0[2,2].grid()
+axes0[2,2].set_ylim(-5, 5)  # Ajusta los límites en el eje Y
 # axes0[2].set_ylim(-20, -5)  # Ajusta los límites en el eje Y
 # axes0[2].set_xlim(150000, 400000)  # Ajusta los límites en el eje Y
 

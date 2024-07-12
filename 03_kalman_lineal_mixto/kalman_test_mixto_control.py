@@ -95,7 +95,7 @@ bias_w = bias_w_values[opcion]
 
 # Definir los valores
 lim_tau_values = {
-    1: 0.24,
+    1: 0.5,
     2: 1.19,
     3: 15
 }
@@ -148,8 +148,8 @@ hh =0.01
 
 B_matrices = [B_discrete]
 #%%
-# for i in range(len(t[0:2882])-1):
-for i in range(len(t)-1):
+for i in range(len(t[0:2882])-1):
+# for i in range(len(t)-1):
 
     print(t[i+1])
     
@@ -170,31 +170,32 @@ for ii in range(len(Bs_a[0,:,0])):
 
 B_prom = np.vstack((B_concanate[0:3],B_concanate[3:6],B_concanate[6:9],B_concanate[9:12],B_concanate[12:15],B_concanate[15:18]))
 
-# x0 = np.array([37.0034,
-# 85.5048,
-# 51.4523,
-# 65.333,
-# 25.471,
-# 74.9946,])
+# x0 = np.array([331.118,
+# 250.109,
+# 442.579,
+# 370.116,
+# 333.062,
+# 515.586
+# ])*0.1
 
 # optimal_x = functions_03.opt_K(A_discrete, B_prom, deltat, hh, x0)
 # K = np.hstack([np.diag(optimal_x[:3]), np.diag(optimal_x[3:])])
 
-xx = np.array([335.118,
-253.109,
-448.579,
-375.116,
-335.062,
-510.586
+# xx = np.array([331.118,
+# 250.109,
+# 442.579,
+# 370.116,
+# 333.062,
+# 515.586
+# ])
+
+xx = np.array([38.4185,
+25.3888,
+57.0654,
+64.6042,
+37.0606,
+82.303
 ])
-
-# xx = np.array([37.0034,
-# 85.5048,
-# 51.4523,
-# 65.333,
-# 25.471,
-# 74.9946,])
-
 K = np.hstack([np.diag(xx[:3]), np.diag(xx[3:])])
 
 diagonal_values = np.array([0.5**2, 0.5**2, 0.5**2, 0.1**2, 0.1**2, 0.1**2])
@@ -223,9 +224,9 @@ for i in range(len(t)-1):
     [A,B,C,A_discrete,B_discrete,C_discrete] = functions_03.A_B(I_x, I_y, I_z, w0_O, w0_eq, w1_eq, w2_eq, deltat, hh,b_orbit, b_body_med, s_body_med)
     
     if opcion == 4:
-        [q_posteriori, w_posteriori, P_k_pos,K_k] = functions_03.kalman_lineal(A_discrete, B_discrete,C_discrete, x_est, u_est, b_body_med, b_body_est, s_body_med, s_body_est, P_ki, 0.012e-6, 0.05, deltat,hh)
+        [q_posteriori, w_posteriori, P_k_pos,K_k] = functions_03.kalman_lineal(A_discrete, B_prom,C_discrete, x_est, u_est, b_body_med, b_body_est, s_body_med, s_body_est, P_ki, 0.012e-6, 0.05, deltat,hh)
     elif opcion == 1 or opcion == 2 or opcion == 3:
-        [q_posteriori, w_posteriori, P_k_pos,K_k] = functions_03.kalman_lineal(A_discrete, B_discrete,C_discrete, x_est, u_est, b_body_med, b_body_est, s_body_med, s_body_est, P_ki, sigma_b, sigma_ss, deltat,hh)
+        [q_posteriori, w_posteriori, P_k_pos,K_k] = functions_03.kalman_lineal(A_discrete, B_prom,C_discrete, x_est, u_est, b_body_med, b_body_est, s_body_med, s_body_est, P_ki, sigma_b, sigma_ss, deltat,hh)
 
     q0_est.append(q_posteriori[0])
     q1_est.append(q_posteriori[1])

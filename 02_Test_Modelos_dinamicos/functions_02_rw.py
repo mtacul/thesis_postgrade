@@ -144,7 +144,7 @@ def A_B(I_x,I_y,I_z,w0_O, w0,w1,w2, I_s0_x, I_s1_y, I_s2_z, w_s0,w_s1,w_s2, J_x,
     sys_continuous = ctrl.StateSpace(A, B, C, D)
 
     # Discretize the system
-    sys_discrete = ctrl.c2d(sys_continuous, deltat*h, method='zoh')
+    sys_discrete = ctrl.c2d(sys_continuous, h, method='zoh')
 
     # Extract the discretized A and B matrices
     A_discrete = sys_discrete.A
@@ -409,10 +409,6 @@ def mod_nolineal(x,u,deltat,h, I_x,I_y,I_z,w0_O, I_s0, I_s1, I_s2, J_x, J_y, J_z
 
     else:
         q3s_rot = np.sqrt(1-x[0]**2-x[1]**2-x[2]**2)
-        
-    I_x = 0.037
-    I_y = 0.036
-    I_z = 0.006
     
     tau_x_ctrl = u[0]
     tau_y_ctrl = u[1]

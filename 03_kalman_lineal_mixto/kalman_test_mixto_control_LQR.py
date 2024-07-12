@@ -40,7 +40,7 @@ w0_O = 0.00163
 
 deltat = 2
 # limite =  5762*69
-limite =  5762*69
+limite =  5762*10
 
 t = np.arange(0, limite, deltat)
 
@@ -55,31 +55,35 @@ w2_eq = 0
 
 # Definir los valores
 sigma_ss_values = {
-    1: 0.833,
-    2: 0.167,
-    3: 0.05
+    1: np.sin(0.833*np.pi/180),
+    2: np.sin(0.167*np.pi/180),
+    3: np.sin(0.05*np.pi/180),
+    4: 0
 }
 
 sigma_b_values = {
     1: 1.18e-6,
     2: 0.1e-6,
-    3: 0.012e-6
+    3: 0.012e-6,
+    4: 0
 }
 
 ruido_w_values = {
     1: 0.12 * np.pi / 180,
     2: 0.050 * np.pi / 180,
-    3: 0.033 * np.pi / 180
+    3: 0.033 * np.pi / 180,
+    4: 0
 }
 
 bias_w_values = {
     1: (0.05 * np.pi / 180) / 3600,
     2: (0.03 * np.pi / 180) / 3600,
-    3: (0.02 * np.pi / 180) / 3600
+    3: (0.02 * np.pi / 180) / 3600,
+    4: 0
 }
 
 # Solicitar al usuario que seleccione una opción
-opcion = int(input("Seleccione una opción (1: bad, 2: med, 3: good): "))
+opcion = int(input("Seleccione un nivel de sensor (1: bad, 2: med, 3: good, 4: sin ruido): "))
 
 # Asignar los valores seleccionados
 sigma_ss = sigma_ss_values[opcion]
@@ -91,16 +95,16 @@ bias_w = bias_w_values[opcion]
 
 # Definir los valores
 lim_tau_values = {
-    1: 0.24,
+    1: 0.5,
     2: 1.19,
     3: 15
 }
 
 # Solicitar al usuario que seleccione una opción
-opcion_tau = int(input("Seleccione una opción (1: bad, 2: med, 3: good): "))
+opcion_tau = int(input("Seleccione un nivel de actuador (1: bad, 2: med, 3: good): "))
 
 # Asignar los valores seleccionados
-lim = lim_tau_values[opcion]
+lim = lim_tau_values[opcion_tau]
 
 
 #%%
@@ -144,8 +148,8 @@ hh =0.01
 
 B_matrices = [B_discrete]
 #%%
-# for i in range(len(t[0:2882])-1):
-for i in range(len(t)-1):
+for i in range(len(t[0:2882])-1):
+# for i in range(len(t)-1):
 
     print(t[i+1])
     
@@ -168,14 +172,20 @@ B_prom = np.vstack((B_concanate[0:3],B_concanate[3:6],B_concanate[6:9],B_concana
 
 
 # Definir las matrices Q y R del coste del LQR
-Q = np.eye(A_discrete.shape[0])*100  # Matriz de costos del estado
-R = np.eye(B_discrete.shape[1])*100  # Matriz de costos de la entrada
+# diag_Q = np.array([100, 1000000, 10000, 0.1, 0.1, 0.10, 0.01, 10, 10])*10000
+# diag_R = np.array([0.1,0.1,0.1])*100000
+diag_Q = np.array([100000, 10000, 1000, 10, 0.1, 0.1])*10000
+diag_R = np.array([0.1,0.1,0.1])*10000
+
+Q = np.diag(diag_Q)
+R = np.diag(diag_R)
 
 # Resolver la ecuación de Riccati
-P = solve_discrete_are(A_discrete, -B_prom, Q, R)
+P = solve_discrete_are(A_discrete, B_prom, Q, R)
 
 # Calcular la matriz de retroalimentación K
-K = np.linalg.inv(R) @ B_discrete.T @ P
+K = np.linalg.inv(B_discrete.T @ P @ B_discrete + R) @ (B_discrete.T @ P @ A_discrete)
+
 
 diagonal_values = np.array([0.5**2, 0.5**2, 0.5**2, 0.1**2, 0.1**2, 0.1**2])
 P_ki = np.diag(diagonal_values)
@@ -187,7 +197,7 @@ for i in range(len(t)-1):
     w_est = np.array([w0_est[-1], w1_est[-1], w2_est[-1]])
     x_est = np.hstack((np.transpose(q_est[:3]), np.transpose(w_est)))
     # u_est = np.array([15,15,15])
-    u_est = np.dot(K,x_est)
+    u_est = np.dot(-K,x_est)
     u_est = functions_03.torquer(u_est,lim)
 
     x_est = np.hstack((q_est[0:3],w_est))  
@@ -202,10 +212,14 @@ for i in range(len(t)-1):
     
     # print(b_body,w_gyros)
     # print(x_est)
+
     [A,B,C,A_discrete,B_discrete,C_discrete] = functions_03.A_B(I_x, I_y, I_z, w0_O, w0_eq, w1_eq, w2_eq, deltat, hh,b_orbit, b_body_med, s_body_med)
-    [q_posteriori, w_posteriori, P_k_pos,K_k] = functions_03.kalman_lineal(A_discrete, B_discrete,C_discrete, x_est, u_est, b_body_med, b_body_est, s_body_med, s_body_est, P_ki, sigma_b, sigma_ss, deltat,hh)
-        # asasd
     
+    if opcion == 4:
+        [q_posteriori, w_posteriori, P_k_pos,K_k] = functions_03.kalman_lineal(A_discrete, B_prom,C_discrete, x_est, u_est, b_body_med, b_body_est, s_body_med, s_body_est, P_ki, 0.012e-6, np.sin(0.05*np.pi/180), deltat,hh)
+    elif opcion == 1 or opcion == 2 or opcion == 3:
+        [q_posteriori, w_posteriori, P_k_pos,K_k] = functions_03.kalman_lineal(A_discrete, B_prom,C_discrete, x_est, u_est, b_body_med, b_body_est, s_body_med, s_body_est, P_ki, sigma_b,sigma_ss, deltat,hh)
+
     q0_est.append(q_posteriori[0])
     q1_est.append(q_posteriori[1])
     q2_est.append(q_posteriori[2])

@@ -93,7 +93,7 @@ s_body_i = functions_02.rotacion_v(q, s_orbit_i, 0)
 #%%
 [x_new, q3_new] = functions_02.mod_lineal_cont(x,u_disc,deltat,hh,A,B)
 [x_new_d, q3_new_d] =functions_02.mod_lineal_disc(x,u_disc,deltat,hh,A_discrete,B_discrete)
-[x_new_nl, q3_new_nl] = functions_02.mod_nolineal(x,u,deltat,b_body_i,hh)
+[x_new_nl, q3_new_nl] = functions_02.mod_nolineal(x,u,deltat,b_body_i,hh,w0_O,I_x,I_y,I_z)
 
 q0 = [q[0]]
 q1 = [q[1]]
@@ -150,21 +150,21 @@ for i in range(len(t)-1):
     bb_orbit = [Bx_orbit[i],By_orbit[i],Bz_orbit[i]]
     ss_orbit = [vx_sun_orbit[i],vy_sun_orbit[i],vz_sun_orbit[i]]
     
-    bb_body_lc = functions_02.rotacion_v(qq , b_orbit_i, 0)
-    ss_body_lc = functions_02.rotacion_v(qq , s_orbit_i, 0)
+    bb_body_lc = functions_02.rotacion_v(qq , bb_orbit, 0)
+    ss_body_lc = functions_02.rotacion_v(qq , ss_orbit, 0)
     
-    bb_body_ld = functions_02.rotacion_v(qq_disc , b_orbit_i, 0)
-    ss_body_ld = functions_02.rotacion_v(qq_disc , s_orbit_i, 0)
+    bb_body_ld = functions_02.rotacion_v(qq_disc , bb_orbit, 0)
+    ss_body_ld = functions_02.rotacion_v(qq_disc , ss_orbit, 0)
     
-    bb_body_nlc = functions_02.rotacion_v(qq_nl, b_orbit_i, 0)
-    ss_body_nlc = functions_02.rotacion_v(qq_nl, s_orbit_i, 0)
+    bb_body_nlc = functions_02.rotacion_v(qq_nl, bb_orbit, 0)
+    ss_body_nlc = functions_02.rotacion_v(qq_nl, ss_orbit, 0)
     
     [A,B,C,A_discrete,B_discrete,C_discrete] = functions_02.A_B(I_x, I_y, I_z, w0_O, 0, 0, 0, deltat, hh,bb_orbit, bb_body_lc, ss_body_lc)
     [A_ld,B_ld,C_ld,A_discrete_ld,B_discrete_ld,C_discrete_ld] = functions_02.A_B(I_x, I_y, I_z, w0_O, 0, 0, 0, deltat, hh, bb_orbit,bb_body_ld, ss_body_ld)
 
     [xx_new, qq3_new] = functions_02.mod_lineal_cont(xx,uu,deltat,hh,A,B)
     [xx_new_d, qq3_new_d] = functions_02.mod_lineal_disc(xx_disc,uu_disc,deltat,hh,A_discrete_ld,B_discrete_ld)
-    [xx_new_nl, qq3_new_nl] = functions_02.mod_nolineal(xx_nl,uu_nl,deltat,bb_body_nlc,hh)
+    [xx_new_nl, qq3_new_nl] = functions_02.mod_nolineal(xx_nl,uu_nl,deltat,bb_body_nlc,hh, w0_O,I_x,I_y,I_z)
     
     q0.append(xx_new[0])
     q1.append(xx_new[1])

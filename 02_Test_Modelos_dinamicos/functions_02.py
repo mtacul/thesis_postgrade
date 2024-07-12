@@ -134,7 +134,7 @@ def A_B(I_x,I_y,I_z,w0_O,w0,w1,w2,deltat,h,b_orbit,b_body, s_body):
     sys_continuous = ctrl.StateSpace(A, B, C, D)
 
     # Discretize the system
-    sys_discrete = ctrl.c2d(sys_continuous, deltat*h, method='zoh')
+    sys_discrete = ctrl.c2d(sys_continuous, h, method='zoh')
 
     # Extract the discretized A and B matrices
     A_discrete = sys_discrete.A
@@ -191,7 +191,7 @@ def mod_lineal_cont(x,u,deltat,h,A,B):
 
 def mod_lineal_disc(x,u,deltat, h,A_discrete,B_discrete):
         
-    for i in range(int(deltat/h)):
+    for i in range(int(1/h)):
         x_k_1 = np.dot(A_discrete,x) + np.dot(B_discrete,u)
         q_rot = x_k_1[0:3]
         w_new = x_k_1[3:6]
@@ -326,11 +326,8 @@ def rk4_EKF_step(t, q0, q1, q2,q3, w0, w1, w2, h, w0_o,tau_x_ctrl,tau_x_per,tau_
     return q, w
 
 
-def mod_nolineal(x,u,deltat, b,h):
-    
-    w0_O = 0.00163
-    tt = 2
-    
+def mod_nolineal(x,u,deltat, b,h,w0_O,I_x,I_y,I_z):
+        
     if  1-x[0]**2-x[1]**2-x[2]**2 < 0:
         x[0:3] = x[0:3] / np.linalg.norm(x[0:3])
         q3s_rot = 0
@@ -338,17 +335,13 @@ def mod_nolineal(x,u,deltat, b,h):
     else:
         q3s_rot = np.sqrt(1-x[0]**2-x[1]**2-x[2]**2)
         
-    I_x = 0.037
-    I_y = 0.036
-    I_z = 0.006
-    
     b_norm = np.linalg.norm(np.hstack((b[0],b[1],b[2])))
     tau_x_ctrl = ((b[0]*u[2]-b[2]*u[0])/b_norm)*b[2] - ((b[1]*u[0]-b[0]*u[1])/b_norm)*b[1]
     tau_y_ctrl = ((b[2]*u[1]-b[1]*u[2])/b_norm)*-b[2] + ((b[1]*u[0]-b[0]*u[1])/b_norm)*b[0]
     tau_z_ctrl = ((b[2]*u[1]-b[1]*u[2])/b_norm)*b[1] - ((b[0]*u[2]-b[2]*u[0])/b_norm)*b[0]
 
     for j in range(int(deltat/h)):
-        t, q0, q1, q2, q3, w0, w1, w2 = tt, x[0], x[1], x[2], q3s_rot, x[3], x[4], x[5]
+        t, q0, q1, q2, q3, w0, w1, w2 = deltat, x[0], x[1], x[2], q3s_rot, x[3], x[4], x[5]
         q_rot, w_new = rk4_EKF_step(t, q0, q1, q2,q3, w0, w1, w2,h,w0_O, tau_x_ctrl,0,tau_y_ctrl,0,tau_z_ctrl,0,I_x,I_y,I_z)
     
     q_rot_trunc = q_rot[0:3]

@@ -144,7 +144,7 @@ def A_B(I_x,I_y,I_z,w0_O,w0,w1,w2,deltat,h,b_orbit,b_body, s_body):
     sys_continuous = ctrl.StateSpace(A, B, C, D)
 
     # Discretize the system
-    sys_discrete = ctrl.c2d(sys_continuous, deltat*h, method='zoh')
+    sys_discrete = ctrl.c2d(sys_continuous, h, method='zoh')
 
     # Extract the discretized A and B matrices
     A_discrete = sys_discrete.A
@@ -466,9 +466,9 @@ def eigenvalue_constraint(x, A, B):
     K = np.hstack([np.diag(x[:3]), np.diag(x[3:])])  # Crear matriz de control K
     A_prim = A + B @ K
     eigenvalues = np.linalg.eigvals(A_prim)
-    c = np.abs(eigenvalues) - 0.999  # Asegurarse de que todos los valores propios son menores que 1 en magnitud
+    c = np.abs(eigenvalues) - 0.9999  # Asegurarse de que todos los valores propios son menores que 1 en magnitud
 
-    if np.all(np.abs(eigenvalues) < 0.999):
+    if np.all(np.abs(eigenvalues) < 0.9999):
         found_solution = True
         optimal_x = x  # Guardar la solución
         raise StopIteration("Found a solution with all eigenvalues having magnitude less than 1.")  # Lanzar una excepción para detener la optimización
@@ -487,7 +487,7 @@ def opt_K(A_discrete,B_discrete,deltat,h,x0):
     constraints = {'type': 'ineq', 'fun': eigenvalue_constraint, 'args': (A_discrete, B_discrete)}
     
     for i in range(1000):
-        random_adjustment = np.random.rand(len(x0))*500
+        random_adjustment = np.random.rand(len(x0))*50
         current_x0 = x0 + random_adjustment
         try:
             res = minimize(objective_function, current_x0, method='SLSQP', constraints=[constraints])

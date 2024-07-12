@@ -155,7 +155,7 @@ def A_B(I_x,I_y,I_z,w0_O, w0,w1,w2, I_s0_x, I_s1_y, I_s2_z, w_s0,w_s1,w_s2, J_x,
     sys_continuous = ctrl.StateSpace(A, B, C, D)
 
     # Discretize the system
-    sys_discrete = ctrl.c2d(sys_continuous, deltat*h, method='zoh')
+    sys_discrete = ctrl.c2d(sys_continuous, h, method='zoh')
 
     # Extract the discretized A and B matrices
     A_discrete = sys_discrete.A
@@ -304,7 +304,8 @@ def kalman_lineal(A, B, C, x, u, b,b_est, s,s_est, P_ki, sigma_m, sigma_ss,delta
 # def kalman_lineal(A, B, C, x, u, b, b_eci, P_ki, ruido, ruido_ss,deltat,s):
     
     H_k = C
-    [x_priori,q3s_rot] = mod_lineal_disc(x, u, deltat, hh, A, B)
+    # [x_priori,q3s_rot] = mod_lineal_cont(x, u, deltat, hh, A, B)
+    [x_priori,q3s_rot] = mod_lineal_disc(x, u, deltat, hh, A, B) #para disc
     q_priori = np.hstack((x_priori[0:3], q3s_rot))
 
     # print("q priori obtenido por kalman:",q_priori,"\n")
@@ -606,3 +607,4 @@ def torquer(u_PD_NL,lim):
         u_PD_NL[2] = u_PD_NL[2]
         
     return u_PD_NL
+

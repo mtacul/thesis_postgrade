@@ -187,8 +187,6 @@ diag_R = np.array([0.1,0.1,0.1])*100000
 
 Q = np.diag(diag_Q)
 R = np.diag(diag_R)
-# Q = np.eye(A_discrete.shape[0])*1 # Matriz de costos del estado
-# R = np.eye(B_discrete.shape[1])*1  # Matriz de costos de la entrada
 
 # Resolver la ecuación de Riccati
 P = solve_discrete_are(A_discrete, B_discrete, Q, R)
