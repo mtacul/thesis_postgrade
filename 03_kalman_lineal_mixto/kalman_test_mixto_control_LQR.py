@@ -40,7 +40,7 @@ w0_O = 0.00163
 
 deltat = 2
 # limite =  5762*69
-limite =  5762*10
+limite =  5762*69
 
 t = np.arange(0, limite, deltat)
 
@@ -174,8 +174,8 @@ B_prom = np.vstack((B_concanate[0:3],B_concanate[3:6],B_concanate[6:9],B_concana
 # Definir las matrices Q y R del coste del LQR
 # diag_Q = np.array([100, 1000000, 10000, 0.1, 0.1, 0.10, 0.01, 10, 10])*10000
 # diag_R = np.array([0.1,0.1,0.1])*100000
-diag_Q = np.array([100000, 10000, 1000, 10, 0.1, 0.1])*10000
-diag_R = np.array([0.1,0.1,0.1])*10000
+diag_Q = np.array([100, 10, 100, 0.1, 0.1, 0.1])*1000000
+diag_R = np.array([0.1,0.1,0.1])*100000
 
 Q = np.diag(diag_Q)
 R = np.diag(diag_R)
@@ -184,7 +184,7 @@ R = np.diag(diag_R)
 P = solve_discrete_are(A_discrete, B_prom, Q, R)
 
 # Calcular la matriz de retroalimentación K
-K = np.linalg.inv(B_discrete.T @ P @ B_discrete + R) @ (B_discrete.T @ P @ A_discrete)
+K = np.linalg.inv(B_prom.T @ P @ B_prom + R) @ (B_prom.T @ P @ A_discrete)
 
 
 diagonal_values = np.array([0.5**2, 0.5**2, 0.5**2, 0.1**2, 0.1**2, 0.1**2])
@@ -337,9 +337,9 @@ axes0[0].set_ylabel('Angulos de Euler [°]')
 axes0[0].legend()
 axes0[0].set_title('Angulos de Euler obtenidos por el modelo de control lineal discreto')
 axes0[0].grid()
-# axes0[0].set_ylim(-20, 20)  # Ajusta los límites en el eje Y
+# axes0[0].set_xlim(0, 10000)  # Ajusta los límites en el eje Y
 
-# axes0[0].set_ylim(-1, 1)  # Ajusta los límites en el eje Y
+# axes0[0].set_ylim(-5, 5)  # Ajusta los límites en el eje Y
 
 axes0[1].plot(t, RPY_all_est[:,0], label='Roll kalman')
 axes0[1].plot(t, RPY_all_est[:,1], label='Pitch kalman')

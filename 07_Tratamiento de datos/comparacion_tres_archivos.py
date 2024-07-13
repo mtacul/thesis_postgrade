@@ -34,7 +34,17 @@ archivos_disponibles = [
     "_sen2_act3_MT.csv",
     "_sen3_act1_MT.csv",
     "_sen3_act2_MT.csv",
-    "_sen3_act3_MT.csv"
+    "_sen3_act3_MT.csv",
+    "_sen1_act1_MT_LQR.csv",
+    "_sen1_act2_MT_LQR.csv",
+    "_sen1_act3_MT_LQR.csv",
+    "_sen2_act1_MT_LQR.csv",
+    "_sen2_act2_MT_LQR.csv",
+    "_sen2_act3_MT_LQR.csv",
+    "_sen3_act1_MT_LQR.csv",
+    "_sen3_act2_MT_LQR.csv",
+    "_sen3_act3_MT_LQR.csv"
+    
     ]
 
 # Mostrar el menú al usuario

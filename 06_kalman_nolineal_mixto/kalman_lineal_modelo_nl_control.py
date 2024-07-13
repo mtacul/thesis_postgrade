@@ -60,9 +60,9 @@ w2_eq = 0
 
 # Definir los valores
 sigma_ss_values = {
-    1: 0.833,
-    2: 0.167,
-    3: 0.05,
+    1: np.sin(0.833*np.pi/180),
+    2: np.sin(0.167*np.pi/180),
+    3: np.sin(0.05*np.pi/180),
     4: 0
 }
 
@@ -157,8 +157,8 @@ hh =0.01
 
 B_matrices = [B_discrete]
 #%%
-# for i in range(len(t[0:2882])-1):
-for i in range(len(t)-1):
+for i in range(len(t[0:2882])-1):
+# for i in range(len(t)-1):
 
     print(t[i+1])
     
@@ -189,14 +189,13 @@ B_prom = np.vstack((B_concanate[0:3],B_concanate[3:6],B_concanate[6:9],B_concana
 # optimal_x = functions_06.opt_K(A_discrete, B_prom, deltat, hh, x0)
 # K = np.hstack([np.diag(optimal_x[:3]), np.diag(optimal_x[3:])])
 
-xx = np.array([335.118,
-253.109,
-448.579,
-375.116,
-335.062,
-510.586
+xx = np.array([38.4185,
+25.3888,
+57.0654,
+64.6042,
+37.0606,
+82.303
 ])
-
 K = np.hstack([np.diag(xx[:3]), np.diag(xx[3:])])
 
 diagonal_values = np.array([0.5**2, 0.5**2, 0.5**2, 0.1**2, 0.1**2, 0.1**2])
@@ -241,22 +240,22 @@ for i in range(len(t)-1):
 
     P_ki = P_k_pos
     
-    [xx_new_d, qq3_new_d] = functions_06.mod_nolineal2(
+    [xx_new_d, qq3_new_d] = functions_06.mod_nolineal(
         x_real, u_est, deltat, b_body_med,hh,deltat,I_x,I_y,I_z,w0_O)
     
-    q_e2b = [xx_new_d[0],xx_new_d[1],xx_new_d[2],qq3_new_d]
-    q_e2o = [q0_e2o[i+1],q1_e2o[i+1],q2_e2o[i+1],q3_e2o[i+1]]
-    q_b2o = functions_06.quat_mult(functions_06.inv_q(q_e2o) , q_e2b)
+    # q_e2b = [xx_new_d[0],xx_new_d[1],xx_new_d[2],qq3_new_d]
+    # q_e2o = [q0_e2o[i+1],q1_e2o[i+1],q2_e2o[i+1],q3_e2o[i+1]]
+    # q_b2o = functions_06.quat_mult(functions_06.inv_q(q_e2o) , q_e2b)
     
-    w_e2b = [xx_new_d[3],xx_new_d[4],xx_new_d[5]]
-    w_e2o = [w0_O,0,0]
-    w_e2o_quat = [w0_O,0,0,0]
-    inv_q_b2o = functions_06.inv_q(q_b2o)
-    rot_w_e2o = functions_06.quat_mult(functions_06.quat_mult(q_b2o,w_e2o_quat),inv_q_b2o)
-    rot_w_e2o_ar = np.array([rot_w_e2o[0],rot_w_e2o[1],rot_w_e2o[2]])
-    w_b2o = w_e2b - rot_w_e2o_ar
+    # w_e2b = [xx_new_d[3],xx_new_d[4],xx_new_d[5]]
+    # w_e2o = [w0_O,0,0]
+    # w_e2o_quat = [w0_O,0,0,0]
+    # inv_q_b2o = functions_06.inv_q(q_b2o)
+    # rot_w_e2o = functions_06.quat_mult(functions_06.quat_mult(q_b2o,w_e2o_quat),inv_q_b2o)
+    # rot_w_e2o_ar = np.array([rot_w_e2o[0],rot_w_e2o[1],rot_w_e2o[2]])
+    # w_b2o = w_e2b - rot_w_e2o_ar
     
-    x_real = np.array([q_b2o[0],q_b2o[1],q_b2o[2],w_b2o[0],w_b2o[1],w_b2o[2]])
+    x_real = np.array([xx_new_d[0],q_b2o[1],q_b2o[2],w_b2o[0],w_b2o[1],w_b2o[2]])
     w_gyros = functions_06.simulate_gyros_reading(w_b2o,ruido_w,bias_w)
     q0_real.append(q_b2o[0])
     q1_real.append(q_b2o[1])

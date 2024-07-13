@@ -144,7 +144,7 @@ def A_B(I_x,I_y,I_z,w0_O,w0,w1,w2,deltat,h,b_orbit,b_body, s_body):
     sys_continuous = ctrl.StateSpace(A, B, C, D)
 
     # Discretize the system
-    sys_discrete = ctrl.c2d(sys_continuous, deltat*h, method='zoh')
+    sys_discrete = ctrl.c2d(sys_continuous, h, method='zoh')
 
     # Extract the discretized A and B matrices
     A_discrete = sys_discrete.A
@@ -198,7 +198,7 @@ def mod_lineal_cont(x,u,deltat,h,A,B):
 def mod_lineal_disc(x,u,deltat, h,A_discrete,B_discrete):
         
     for i in range(int(1/h)):
-        x_k_1 = np.dot(A_discrete,x) - np.dot(B_discrete,u)
+        x_k_1 = np.dot(A_discrete,x) + np.dot(B_discrete,u)
         q_rot = x_k_1[0:3]
         w_new = x_k_1[3:6]
     

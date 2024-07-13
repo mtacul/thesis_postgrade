@@ -155,7 +155,7 @@ def A_B(I_x,I_y,I_z,w0_O, w0,w1,w2, I_s0_x, I_s1_y, I_s2_z, w_s0,w_s1,w_s2, J_x,
     sys_continuous = ctrl.StateSpace(A, B, C, D)
 
     # Discretize the system
-    sys_discrete = ctrl.c2d(sys_continuous, deltat*h, method='zoh')
+    sys_discrete = ctrl.c2d(sys_continuous, h, method='zoh')
 
     # Extract the discretized A and B matrices
     A_discrete = sys_discrete.A
@@ -188,7 +188,7 @@ def rk4_step_PD(dynamics, x, A, B, u, h):
 
 # funcion de la ecuacicon xDot = Ax - Bu 
 def dynamics(A, x, B, u):
-    return np.dot(A, x) - np.dot(B, u)
+    return np.dot(A, x) + np.dot(B, u)
 
 def mod_lineal_cont(x,u,deltat,h,A,B):
     
@@ -209,7 +209,7 @@ def mod_lineal_cont(x,u,deltat,h,A,B):
 def mod_lineal_disc(x,u,deltat, h,A_discrete,B_discrete):
         
     for i in range(int(1/h)):
-        x_k_1 = np.dot(A_discrete,x) - np.dot(B_discrete,u)
+        x_k_1 = np.dot(A_discrete,x) + np.dot(B_discrete,u)
         q_rot = x_k_1[0:3]
         w_new = x_k_1[3:6]
         ws_new = x_k_1[6:9]
@@ -224,6 +224,210 @@ def mod_lineal_disc(x,u,deltat, h,A_discrete,B_discrete):
             q3s_rot = np.sqrt(1-q_rot[0]**2-q_rot[1]**2-q_rot[2]**2)
         
     return x_new, q3s_rot
+
+
+#%% Modelo no lineal continuo
+
+#Funciones ecuaciones no lineales, en conjunto con su resolucion en RK4
+
+def f1_K(t, q0, q1, q2,q3, w0, w1, w2): #q0_dot
+    return 0.5*(q1*w2 - q2*w1 + w0*q3)
+
+def f2_K(t, q0, q1, q2,q3, w0, w1, w2): #q1_dot
+    return 0.5*(-q0*w2 + q2*w0 + w1*q3)
+
+def f3_K(t, q0, q1, q2,q3, w0, w1, w2): #q2_dot
+    return 0.5*(q0*w1 - q1*w0 + w2*q3)
+
+def f4_K(t, q0, q1, q2,q3, w0, w1, w2): #q3_dot
+    return 0.5*(-q0*w0 - q1*w1 - w2*q2)
+
+def f5_K(t, q0, q1, q2,q3, w0, w1, w2, w_s0,w_s1,w_s2, w0_o,tau_x_ctrl,tau_x_per,I_x,I_y,I_z,w0_O, I_s0, I_s1, I_s2, J_x, J_y, J_z):#w1_dot
+    part_1_w0 = w1 + w0_o*(2*(q0*q1 - q2*q3))
+    part_2_w0 = w2 + w0_o*(2*(q0*q2 + q1*q3))
+    part_3_w0 = w0_o*(-4*q1*0.5*(-q0*w2 + q2*w0 + w1*q3) - 4*q2*0.5*(q0*w1 - q1*w0 + w2*q3))
+    part_4_w0 = tau_x_ctrl/(J_x-I_s0)
+    part_5_w0 = tau_x_per/(J_x-I_s0)
+    return part_1_w0*part_2_w0*(J_y-I_z)/(J_x-I_s0) - part_1_w0*w_s2*I_s2/(J_x-I_s0) + part_2_w0*w_s1*I_s1/(J_x-I_s0) - part_3_w0 + part_4_w0 + part_5_w0
+
+def f6_K(t, q0, q1, q2,q3, w0, w1, w2, w_s0,w_s1,w_s2, w0_o,tau_y_ctrl,tau_y_per,I_x,I_y,I_z,w0_O, I_s0, I_s1, I_s2, J_x, J_y, J_z): #w2_dot
+    part_1_w1 = w0 + w0_o*(q3**2+q0**2-q1**2-q2**2)
+    part_2_w1 = w2 + w0_o*(2*(q0*q2 + q1*q3))
+    part_3_w1 = w0_o*2*(0.5*(q1*w2 - q2*w1 + w0*q3)*q1 + q0*0.5*(-q0*w2 + q2*w0 + w1*q3) - 0.5*(q0*w1 - q1*w0 + w2*q3)*q3 - q2*0.5*(-q0*w0 - q1*w1 - w2*q2))
+    part_4_w1 = tau_y_ctrl/(J_y-I_s1)
+    part_5_w1 = tau_y_per/(J_y-I_s1)
+    return part_1_w1*part_2_w1*(J_x-J_z)/(J_y-I_s1) - part_1_w1*w_s2*I_s2//(J_y-I_s1) + part_2_w1*w_s0*I_s0/(J_y-I_s1)- part_3_w1 + part_4_w1 +part_5_w1
+
+def f7_K(t, q0, q1, q2,q3, w0, w1, w2, w_s0,w_s1,w_s2, w0_o,tau_z_ctrl,tau_z_per,I_x,I_y,I_z,w0_O, I_s0, I_s1, I_s2, J_x, J_y, J_z): #w3_dot
+    part_1_w2 = w0 + w0_o*(q3**2+q0**2-q1**2-q2**2)
+    part_2_w2 = w1 + w0_o*(2*(q0*q1 - q2*q3))
+    part_3_w2 = w0_o*2*(0.5*(q1*w2 - q2*w1 + w0*q3)*q2 + q0*0.5*(q0*w1 - q1*w0 + w2*q3) + 0.5*(-q0*w2 + q2*w0 + w1*q3)*q3 + q1*0.5*(-q0*w0 - q1*w1 - w2*q2))
+    part_4_w2 = tau_z_ctrl/(J_z-I_s2)
+    part_5_w2 = tau_z_per/(J_z-I_s2)
+    return part_1_w2*part_2_w2*(J_x-J_y)/(J_z-I_s2) - part_1_w2*w_s1*I_s1/(J_z-I_s2) + part_2_w2*w_s0*I_s0/(J_z-I_s2) - part_3_w2 + part_4_w2 + part_5_w2
+
+def f8_K(t, q0, q1, q2,q3, w0, w1, w2, w_s0,w_s1,w_s2, w0_o,tau_x_ctrl,tau_x_per,I_x,I_y,I_z,w0_O, I_s0, I_s1, I_s2, J_x, J_y, J_z):#w1_dot
+    part_1_w0 = w1 + w0_o*(2*(q0*q1 - q2*q3))
+    part_2_w0 = w2 + w0_o*(2*(q0*q2 + q1*q3))
+    part_3_w0 = w0_o*(-4*q1*0.5*(-q0*w2 + q2*w0 + w1*q3) - 4*q2*0.5*(q0*w1 - q1*w0 + w2*q3))
+    part_4_w0 = tau_x_ctrl/(J_x-I_s0)
+    part_5_w0 = tau_x_per/(J_x-I_s0)
+    return tau_x_ctrl/I_s0 - part_1_w0*part_2_w0*(J_y-I_z)/(J_x-I_s0) - part_1_w0*w_s2*I_s2/(J_x-I_s0) + part_2_w0*w_s1*I_s1/(J_x-I_s0) - part_3_w0 + part_4_w0 + part_5_w0
+
+def f9_K(t, q0, q1, q2,q3, w0, w1, w2, w_s0,w_s1,w_s2, w0_o,tau_y_ctrl,tau_y_per,I_x,I_y,I_z,w0_O, I_s0, I_s1, I_s2, J_x, J_y, J_z): #w2_dot
+    part_1_w1 = w0 + w0_o*(q3**2+q0**2-q1**2-q2**2)
+    part_2_w1 = w2 + w0_o*(2*(q0*q2 + q1*q3))
+    part_3_w1 = w0_o*2*(0.5*(q1*w2 - q2*w1 + w0*q3)*q1 + q0*0.5*(-q0*w2 + q2*w0 + w1*q3) - 0.5*(q0*w1 - q1*w0 + w2*q3)*q3 - q2*0.5*(-q0*w0 - q1*w1 - w2*q2))
+    part_4_w1 = tau_y_ctrl/(J_y-I_s1)
+    part_5_w1 = tau_y_per/(J_y-I_s1)
+    return tau_y_ctrl/I_s1 - part_1_w1*part_2_w1*(J_x-J_z)/(J_y-I_s1) - part_1_w1*w_s2*I_s2//(J_y-I_s1) + part_2_w1*w_s0*I_s0/(J_y-I_s1)- part_3_w1 + part_4_w1 +part_5_w1
+
+def f10_K(t, q0, q1, q2,q3, w0, w1, w2, w_s0,w_s1,w_s2, w0_o,tau_z_ctrl,tau_z_per,I_x,I_y,I_z,w0_O, I_s0, I_s1, I_s2, J_x, J_y, J_z): #w3_dot
+    part_1_w2 = w0 + w0_o*(q3**2+q0**2-q1**2-q2**2)
+    part_2_w2 = w1 + w0_o*(2*(q0*q1 - q2*q3))
+    part_3_w2 = w0_o*2*(0.5*(q1*w2 - q2*w1 + w0*q3)*q2 + q0*0.5*(q0*w1 - q1*w0 + w2*q3) + 0.5*(-q0*w2 + q2*w0 + w1*q3)*q3 + q1*0.5*(-q0*w0 - q1*w1 - w2*q2))
+    part_4_w2 = tau_z_ctrl/(J_z-I_s2)
+    part_5_w2 = tau_z_per/(J_z-I_s2)
+    return tau_z_ctrl/I_s2 - part_1_w2*part_2_w2*(J_x-J_y)/(J_z-I_s2) - part_1_w2*w_s1*I_s1/(J_z-I_s2) + part_2_w2*w_s0*I_s0/(J_z-I_s2) - part_3_w2 + part_4_w2 + part_5_w2
+
+def rk4_EKF_step(t, q0, q1, q2,q3, w0, w1, w2,w_s0,w_s1,w_s2, h,tau_x_ctrl,tau_x_per,tau_y_ctrl,tau_y_per,tau_z_ctrl,tau_z_per,I_x,I_y,I_z,w0_O, I_s0, I_s1, I_s2, J_x, J_y, J_z):
+    #k1 = h * f1(x, y1, y2)
+    k1_1 = h * f1_K(t, q0, q1, q2,q3, w0, w1, w2)
+    k1_2 = h * f2_K(t, q0, q1, q2,q3, w0, w1, w2)
+    k1_3 = h * f3_K(t, q0, q1, q2,q3, w0, w1, w2)
+    k1_4 = h * f4_K(t, q0, q1, q2,q3, w0, w1, w2)
+    k1_5 = h * f5_K(t, q0, q1, q2,q3, w0, w1, w2, w_s0,w_s1,w_s2,w0_O,tau_x_ctrl,tau_x_per,I_x,I_y,I_z,w0_O, I_s0, I_s1, I_s2, J_x, J_y, J_z)
+    k1_6 = h * f6_K(t, q0, q1, q2,q3, w0, w1, w2, w_s0,w_s1,w_s2,w0_O,tau_x_ctrl,tau_x_per,I_x,I_y,I_z,w0_O, I_s0, I_s1, I_s2, J_x, J_y, J_z)
+    k1_7 = h * f7_K(t, q0, q1, q2,q3, w0, w1, w2, w_s0,w_s1,w_s2,w0_O,tau_x_ctrl,tau_x_per,I_x,I_y,I_z,w0_O, I_s0, I_s1, I_s2, J_x, J_y, J_z)
+    k1_8 = h * f8_K(t, q0, q1, q2,q3, w0, w1, w2, w_s0,w_s1,w_s2,w0_O,tau_x_ctrl,tau_x_per,I_x,I_y,I_z,w0_O, I_s0, I_s1, I_s2, J_x, J_y, J_z)
+    k1_9 = h * f9_K(t, q0, q1, q2,q3, w0, w1, w2, w_s0,w_s1,w_s2,w0_O,tau_x_ctrl,tau_x_per,I_x,I_y,I_z,w0_O, I_s0, I_s1, I_s2, J_x, J_y, J_z)
+    k1_10 = h * f10_K(t, q0, q1, q2,q3, w0, w1, w2, w_s0,w_s1,w_s2,w0_O,tau_x_ctrl,tau_x_per,I_x,I_y,I_z,w0_O, I_s0, I_s1, I_s2, J_x, J_y, J_z)
+
+    k2_1 = h * f1_K(t + 0.5 * h, q0 + 0.5 * k1_1, q1 + 0.5 * k1_2, q2 + 0.5 * k1_3,
+                  q3 + 0.5 * k1_4,w0 + 0.5 * k1_5, w1 + 0.5 * k1_6, w2 + 0.5 * k1_7)
+    k2_2 = h * f2_K(t + 0.5 * h, q0 + 0.5 * k1_1, q1 + 0.5 * k1_2, q2 + 0.5 * k1_3,
+                  q3 + 0.5 * k1_4,w0 + 0.5 * k1_5, w1 + 0.5 * k1_6, w2 + 0.5 * k1_7)
+    k2_3 = h * f3_K(t + 0.5 * h, q0 + 0.5 * k1_1, q1 + 0.5 * k1_2, q2 + 0.5 * k1_3,
+                  q3 + 0.5 * k1_4,w0 + 0.5 * k1_5, w1 + 0.5 * k1_6, w2 + 0.5 * k1_7)
+    k2_4 = h * f4_K(t + 0.5 * h, q0 + 0.5 * k1_1, q1 + 0.5 * k1_2, q2 + 0.5 * k1_3,
+                  q3 + 0.5 * k1_4,w0 + 0.5 * k1_5, w1 + 0.5 * k1_6, w2 + 0.5 * k1_7)
+    k2_5 = h * f5_K(t + 0.5 * h, q0 + 0.5 * k1_1, q1 + 0.5 * k1_2, q2 + 0.5 * k1_3,
+                  q3 + 0.5 * k1_4,w0 + 0.5 * k1_5, w1 + 0.5 * k1_6, w2 + 0.5 * k1_7,w_s0 + 0.5 * k1_8, w_s1 + 0.5 * k1_9, w_s2 + 0.5 * k1_10,w0_O, tau_x_ctrl,tau_x_per,I_x,I_y,I_z,w0_O, I_s0, I_s1, I_s2, J_x, J_y, J_z)
+    k2_6 = h * f6_K(t + 0.5 * h, q0 + 0.5 * k1_1, q1 + 0.5 * k1_2, q2 + 0.5 * k1_3,
+                  q3 + 0.5 * k1_4,w0 + 0.5 * k1_5, w1 + 0.5 * k1_6, w2 + 0.5 * k1_7,w_s0 + 0.5 * k1_8, w_s1 + 0.5 * k1_9, w_s2 + 0.5 * k1_10,w0_O, tau_y_ctrl,tau_y_per,I_x,I_y,I_z,w0_O, I_s0, I_s1, I_s2, J_x, J_y, J_z)
+    k2_7 = h * f7_K(t + 0.5 * h, q0 + 0.5 * k1_1, q1 + 0.5 * k1_2, q2 + 0.5 * k1_3,
+                  q3 + 0.5 * k1_4,w0 + 0.5 * k1_5, w1 + 0.5 * k1_6, w2 + 0.5 * k1_7,w_s0 + 0.5 * k1_8, w_s1 + 0.5 * k1_9, w_s2 + 0.5 * k1_10,w0_O, tau_z_ctrl,tau_z_per,I_x,I_y,I_z,w0_O, I_s0, I_s1, I_s2, J_x, J_y, J_z)
+    k2_8 = h * f8_K(t + 0.5 * h, q0 + 0.5 * k1_1, q1 + 0.5 * k1_2, q2 + 0.5 * k1_3,
+                  q3 + 0.5 * k1_4,w0 + 0.5 * k1_5, w1 + 0.5 * k1_6, w2 + 0.5 * k1_7,w_s0 + 0.5 * k1_8, w_s1 + 0.5 * k1_9, w_s2 + 0.5 * k1_10,w0_O, tau_x_ctrl,tau_x_per,I_x,I_y,I_z,w0_O, I_s0, I_s1, I_s2, J_x, J_y, J_z)
+    k2_9 = h * f9_K(t + 0.5 * h, q0 + 0.5 * k1_1, q1 + 0.5 * k1_2, q2 + 0.5 * k1_3,
+                  q3 + 0.5 * k1_4,w0 + 0.5 * k1_5, w1 + 0.5 * k1_6, w2 + 0.5 * k1_7,w_s0 + 0.5 * k1_8, w_s1 + 0.5 * k1_9, w_s2 + 0.5 * k1_10,w0_O, tau_y_ctrl,tau_y_per,I_x,I_y,I_z,w0_O, I_s0, I_s1, I_s2, J_x, J_y, J_z)
+    k2_10 = h * f10_K(t + 0.5 * h, q0 + 0.5 * k1_1, q1 + 0.5 * k1_2, q2 + 0.5 * k1_3,
+                  q3 + 0.5 * k1_4,w0 + 0.5 * k1_5, w1 + 0.5 * k1_6, w2 + 0.5 * k1_7,w_s0 + 0.5 * k1_8, w_s1 + 0.5 * k1_9, w_s2 + 0.5 * k1_10,w0_O, tau_z_ctrl,tau_z_per,I_x,I_y,I_z,w0_O, I_s0, I_s1, I_s2, J_x, J_y, J_z)
+
+
+    k3_1 = h * f1_K(t + 0.5 * h, q0 + 0.5 * k2_1, q1 + 0.5 * k2_2, q2 + 0.5 * k2_3,
+                  q3 + 0.5 * k2_4, w0 + 0.5 * k2_5, w1 + 0.5 * k2_6, w2 + 0.5 * k2_7)
+    k3_2 = h * f2_K(t + 0.5 * h, q0 + 0.5 * k2_1, q1 + 0.5 * k2_2, q2 + 0.5 * k2_3,
+                  q3 + 0.5 * k2_4, w0 + 0.5 * k2_5, w1 + 0.5 * k2_6, w2 + 0.5 * k2_7)
+    k3_3 = h * f3_K(t + 0.5 * h, q0 + 0.5 * k2_1, q1 + 0.5 * k2_2, q2 + 0.5 * k2_3,
+                  q3 + 0.5 * k2_4, w0 + 0.5 * k2_5, w1 + 0.5 * k2_6, w2 + 0.5 * k2_7)
+    k3_4 = h * f4_K(t + 0.5 * h, q0 + 0.5 * k2_1, q1 + 0.5 * k2_2, q2 + 0.5 * k2_3,
+                  q3 + 0.5 * k2_4, w0 + 0.5 * k2_5, w1 + 0.5 * k2_6, w2 + 0.5 * k2_7)
+
+    k3_5 = h * f5_K(t + 0.5 * h, q0 + 0.5 * k2_1, q1 + 0.5 * k2_2, q2 + 0.5 * k2_3,
+                  q3 + 0.5 * k2_4, w0 + 0.5 * k2_5, w1 + 0.5 * k2_6, w2 + 0.5 * k2_7,w_s0 + 0.5 * k2_8, w_s1 + 0.5 * k2_9, w_s2 + 0.5 * k2_10, w0_O, tau_x_ctrl,
+                  tau_x_per,I_x,I_y,I_z,w0_O, I_s0, I_s1, I_s2, J_x, J_y, J_z)
+    k3_6 = h * f6_K(t + 0.5 * h, q0 + 0.5 * k2_1, q1 + 0.5 * k2_2, q2 + 0.5 * k2_3,
+                  q3 + 0.5 * k2_4, w0 + 0.5 * k2_5, w1 + 0.5 * k2_6, w2 + 0.5 * k2_7,w_s0 + 0.5 * k2_8, w_s1 + 0.5 * k2_9, w_s2 + 0.5 * k2_10, w0_O, tau_y_ctrl,
+                  tau_y_per,I_x,I_y,I_z,w0_O, I_s0, I_s1, I_s2, J_x, J_y, J_z)
+    k3_7 = h * f7_K(t + 0.5 * h, q0 + 0.5 * k2_1, q1 + 0.5 * k2_2, q2 + 0.5 * k2_3,
+                  q3 + 0.5 * k2_4, w0 + 0.5 * k2_5, w1 + 0.5 * k2_6, w2 + 0.5 * k2_7,w_s0 + 0.5 * k2_8, w_s1 + 0.5 * k2_9, w_s2 + 0.5 * k2_10, w0_O, tau_z_ctrl,
+                  tau_z_per,I_x,I_y,I_z,w0_O, I_s0, I_s1, I_s2, J_x, J_y, J_z)
+    k3_8 = h * f8_K(t + 0.5 * h, q0 + 0.5 * k2_1, q1 + 0.5 * k2_2, q2 + 0.5 * k2_3,
+                  q3 + 0.5 * k2_4, w0 + 0.5 * k2_5, w1 + 0.5 * k2_6, w2 + 0.5 * k2_7,w_s0 + 0.5 * k2_8, w_s1 + 0.5 * k2_9, w_s2 + 0.5 * k2_10, w0_O, tau_x_ctrl,
+                  tau_x_per,I_x,I_y,I_z,w0_O, I_s0, I_s1, I_s2, J_x, J_y, J_z)
+    k3_9 = h * f9_K(t + 0.5 * h, q0 + 0.5 * k2_1, q1 + 0.5 * k2_2, q2 + 0.5 * k2_3,
+                  q3 + 0.5 * k2_4, w0 + 0.5 * k2_5, w1 + 0.5 * k2_6, w2 + 0.5 * k2_7,w_s0 + 0.5 * k2_8, w_s1 + 0.5 * k2_9, w_s2 + 0.5 * k2_10, w0_O, tau_y_ctrl,
+                  tau_y_per,I_x,I_y,I_z,w0_O, I_s0, I_s1, I_s2, J_x, J_y, J_z)
+    k3_10 = h * f10_K(t + 0.5 * h, q0 + 0.5 * k2_1, q1 + 0.5 * k2_2, q2 + 0.5 * k2_3,
+                  q3 + 0.5 * k2_4, w0 + 0.5 * k2_5, w1 + 0.5 * k2_6, w2 + 0.5 * k2_7,w_s0 + 0.5 * k2_8, w_s1 + 0.5 * k2_9, w_s2 + 0.5 * k2_10, w0_O, tau_z_ctrl,
+                  tau_z_per,I_x,I_y,I_z,w0_O, I_s0, I_s1, I_s2, J_x, J_y, J_z)
+
+    
+    k4_1 = h * f1_K(t + 0.5 * h, q0 + 0.5 * k3_1, q1 + 0.5 * k3_2, q2 + 0.5 * k3_3,
+                  q3 + 0.5 * k3_4, w0 + 0.5 * k3_5, w1 + 0.5 * k3_6, w2 + 0.5 * k3_7)
+    k4_2 = h * f2_K(t + 0.5 * h, q0 + 0.5 * k3_1, q1 + 0.5 * k3_2, q2 + 0.5 * k3_3,
+                  q3 + 0.5 * k3_4, w0 + 0.5 * k3_5, w1 + 0.5 * k3_6, w2 + 0.5 * k3_7)
+    k4_3 = h * f3_K(t + 0.5 * h, q0 + 0.5 * k3_1, q1 + 0.5 * k3_2, q2 + 0.5 * k3_3,
+                  q3 + 0.5 * k3_4, w0 + 0.5 * k3_5, w1 + 0.5 * k3_6, w2 + 0.5 * k3_7)
+    k4_4 = h * f4_K(t + 0.5 * h, q0 + 0.5 * k3_1, q1 + 0.5 * k3_2, q2 + 0.5 * k3_3,
+                  q3 + 0.5 * k3_4, w0 + 0.5 * k3_5, w1 + 0.5 * k3_6, w2 + 0.5 * k3_7)
+   
+    k4_5 = h * f5_K(t + 0.5 * h, q0 + 0.5 * k3_1, q1 + 0.5 * k3_2, q2 + 0.5 * k3_3,
+                  q3 + 0.5 * k3_4, w0 + 0.5 * k3_5, w1 + 0.5 * k3_6, w2 + 0.5 * k3_7,w_s0 + 0.5 * k3_8, w_s1 + 0.5 * k3_9, w_s2 + 0.5 * k3_10, w0_O, tau_x_ctrl,
+                  tau_x_per,I_x,I_y,I_z,w0_O, I_s0, I_s1, I_s2, J_x, J_y, J_z)
+    k4_6 = h * f6_K(t + 0.5 * h, q0 + 0.5 * k3_1, q1 + 0.5 * k3_2, q2 + 0.5 * k3_3,
+                  q3 + 0.5 * k3_4, w0 + 0.5 * k3_5, w1 + 0.5 * k3_6, w2 + 0.5 * k3_7,w_s0 + 0.5 * k3_8, w_s1 + 0.5 * k3_9, w_s2 + 0.5 * k3_10, w0_O, tau_y_ctrl,
+                  tau_y_per,I_x,I_y,I_z,w0_O, I_s0, I_s1, I_s2, J_x, J_y, J_z)
+    k4_7 = h * f7_K(t + 0.5 * h, q0 + 0.5 * k3_1, q1 + 0.5 * k3_2, q2 + 0.5 * k3_3,
+                  q3 + 0.5 * k3_4, w0 + 0.5 * k3_5, w1 + 0.5 * k3_6, w2 + 0.5 * k3_7,w_s0 + 0.5 * k3_8, w_s1 + 0.5 * k3_9, w_s2 + 0.5 * k3_10, w0_O, tau_z_ctrl,
+                  tau_z_per,I_x,I_y,I_z,w0_O, I_s0, I_s1, I_s2, J_x, J_y, J_z)
+    k4_8 = h * f8_K(t + 0.5 * h, q0 + 0.5 * k3_1, q1 + 0.5 * k3_2, q2 + 0.5 * k3_3,
+                  q3 + 0.5 * k3_4, w0 + 0.5 * k3_5, w1 + 0.5 * k3_6, w2 + 0.5 * k3_7,w_s0 + 0.5 * k3_8, w_s1 + 0.5 * k3_9, w_s2 + 0.5 * k3_10, w0_O, tau_x_ctrl,
+                  tau_x_per,I_x,I_y,I_z,w0_O, I_s0, I_s1, I_s2, J_x, J_y, J_z)
+    k4_9 = h * f9_K(t + 0.5 * h, q0 + 0.5 * k3_1, q1 + 0.5 * k3_2, q2 + 0.5 * k3_3,
+                  q3 + 0.5 * k3_4, w0 + 0.5 * k3_5, w1 + 0.5 * k3_6, w2 + 0.5 * k3_7,w_s0 + 0.5 * k3_8, w_s1 + 0.5 * k3_9, w_s2 + 0.5 * k3_10, w0_O, tau_y_ctrl,
+                  tau_y_per,I_x,I_y,I_z,w0_O, I_s0, I_s1, I_s2, J_x, J_y, J_z)
+    k4_10 = h * f10_K(t + 0.5 * h, q0 + 0.5 * k3_1, q1 + 0.5 * k3_2, q2 + 0.5 * k3_3,
+                  q3 + 0.5 * k3_4, w0 + 0.5 * k3_5, w1 + 0.5 * k3_6, w2 + 0.5 * k3_7,w_s0 + 0.5 * k3_8, w_s1 + 0.5 * k3_9, w_s2 + 0.5 * k3_10, w0_O, tau_z_ctrl,
+                  tau_z_per,I_x,I_y,I_z,w0_O, I_s0, I_s1, I_s2, J_x, J_y, J_z)
+
+    q0_new = q0 + (k1_1 + 2 * k2_1 + 2 * k3_1 + k4_1) / 6    
+    q1_new = q1 + (k1_2 + 2 * k2_2 + 2 * k3_2 + k4_2) / 6
+    q2_new = q2 + (k1_3 + 2 * k2_3 + 2 * k3_3 + k4_3) / 6
+    q3_new = q3 + (k1_4 + 2 * k2_4 + 2 * k3_4 + k4_4) / 6
+
+    q = [q0_new, q1_new, q2_new,q3_new]
+    q = q / np.linalg.norm(q)
+    
+    w0_new = w0 + (k1_5 + 2 * k2_5 + 2 * k3_5 + k4_5) / 6
+    w1_new = w1 + (k1_6 + 2 * k2_6 + 2 * k3_6 + k4_6) / 6
+    w2_new = w2 + (k1_7 + 2 * k2_7 + 2 * k3_7 + k4_7) / 6
+    w = [w0_new, w1_new, w2_new]
+    
+    w_s0_new = w_s0 + (k1_8 + 2 * k2_8 + 2 * k3_8 + k4_8) / 6
+    w_s1_new = w_s1 + (k1_9 + 2 * k2_9 + 2 * k3_9 + k4_9) / 6
+    w_s2_new = w_s2 + (k1_10 + 2 * k2_10 + 2 * k3_10 + k4_10) / 6
+    ws = [w_s0_new, w_s1_new, w_s2_new]
+
+    return q, w,ws
+
+
+def mod_nolineal(x,u,deltat,h, I_x,I_y,I_z,w0_O, I_s0, I_s1, I_s2, J_x, J_y, J_z):
+    
+    
+    if  1-x[0]**2-x[1]**2-x[2]**2 < 0:
+        x[0:3] = x[0:3] / np.linalg.norm(x[0:3])
+        q3s_rot = 0
+
+    else:
+        q3s_rot = np.sqrt(1-x[0]**2-x[1]**2-x[2]**2)
+    
+    tau_x_ctrl = u[0]
+    tau_y_ctrl = u[1]
+    tau_z_ctrl = u[2]
+    tau_x_per = 0
+    tau_y_per = 0
+    tau_z_per = 0
+
+    for j in range(int(deltat/h)):
+        t, q0, q1, q2, q3, w0, w1, w2, w_s0, w_s1, w_s2 = deltat, x[0], x[1], x[2], q3s_rot, x[3], x[4], x[5], x[6], x[7], x[8]
+        q_rot, w_new,ws_new = rk4_EKF_step(t, q0, q1, q2,q3, w0, w1, w2,w_s0,w_s1,w_s2, h,tau_x_ctrl,tau_x_per,tau_y_ctrl,tau_y_per,tau_z_ctrl,tau_z_per,I_x,I_y,I_z,w0_O, I_s0, I_s1, I_s2, J_x, J_y, J_z)
+    
+    q_rot_trunc = q_rot[0:3]
+    x_new = np.hstack((np.transpose(q_rot_trunc), np.transpose(w_new), np.transpose(ws_new)))
+    
+    return x_new, q_rot[3]
 #%% Filtro de kalman lineal y sus ecuaciones/matrices
 
 # Matriz C o H, que representa las variables de medicion derivadas respecto al estado
