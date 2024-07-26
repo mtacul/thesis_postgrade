@@ -39,7 +39,7 @@ w0_O = 0.00163
 
 deltat = 2
 # limite =  5762*69
-limite =  5762*69
+limite =  5762*60
 
 t = np.arange(0, limite, deltat)
 
@@ -211,33 +211,6 @@ for i in range(len(t)-1):
     u_est = np.dot(K,x_est)
     u_est = functions_03.torquer(u_est,lim)
 
-    x_est = np.hstack((q_est[0:3],w_est))  
-
-    b_orbit = [Bx_orbit[i],By_orbit[i],Bz_orbit[i]]
-    b_body_med = functions_03.rotacion_v(q_real, b_orbit,sigma_b)
-    b_body_est = functions_03.rotacion_v(q_est, b_orbit,sigma_b)
-    
-    s_orbit = [vx_sun_orbit[i],vy_sun_orbit[i],vz_sun_orbit[i]]
-    s_body_med = functions_03.rotacion_v(q_real, s_orbit,sigma_ss)
-    s_body_est = functions_03.rotacion_v(q_est, s_orbit,sigma_ss)
-    
-    [A,B,C,A_discrete,B_discrete,C_discrete] = functions_03.A_B(I_x, I_y, I_z, w0_O, w0_eq, w1_eq, w2_eq, deltat, hh,b_orbit, b_body_med, s_body_med)
-    
-    if opcion == 4:
-        [q_posteriori, w_posteriori, P_k_pos,K_k] = functions_03.kalman_lineal(A_discrete, B_prom,C_discrete, x_est, u_est, b_body_med, b_body_est, s_body_med, s_body_est, P_ki, 0.012e-6, 0.05, deltat,hh)
-    elif opcion == 1 or opcion == 2 or opcion == 3:
-        [q_posteriori, w_posteriori, P_k_pos,K_k] = functions_03.kalman_lineal(A_discrete, B_prom,C_discrete, x_est, u_est, b_body_med, b_body_est, s_body_med, s_body_est, P_ki, sigma_b, sigma_ss, deltat,hh)
-
-    q0_est.append(q_posteriori[0])
-    q1_est.append(q_posteriori[1])
-    q2_est.append(q_posteriori[2])
-    q3_est.append(q_posteriori[3])
-    w0_est.append(w_posteriori[0])
-    w1_est.append(w_posteriori[1])
-    w2_est.append(w_posteriori[2])
-
-    P_ki = P_k_pos
-    
     [xx_new_d, qq3_new_d] = functions_03.mod_lineal_disc(
         x_real, u_est, deltat, hh, A_discrete,B_prom)
     
@@ -253,7 +226,29 @@ for i in range(len(t)-1):
 
     q_real = np.array([q0_real[-1], q1_real[-1], q2_real[-1], q3_real[-1]])
     print("q_real",q_real)
+    
+    b_orbit = [Bx_orbit[i+1],By_orbit[i+1],Bz_orbit[i+1]]
+    b_body_med = functions_03.rotacion_v(q_real, b_orbit,sigma_b)
+    
+    s_orbit = [vx_sun_orbit[i],vy_sun_orbit[i],vz_sun_orbit[i]]
+    s_body_med = functions_03.rotacion_v(q_real, s_orbit,sigma_ss)
+    
+    [A,B,C,A_discrete,B_discrete,C_discrete] = functions_03.A_B(I_x, I_y, I_z, w0_O, w0_eq, w1_eq, w2_eq, deltat, hh,b_orbit, b_body_med, s_body_med)
+    
+    if opcion == 4:
+        [q_posteriori, w_posteriori, P_k_pos,K_k] = functions_03.kalman_lineal(A_discrete, B_prom,C_discrete, x_est, u_est, b_orbit,b_body_med, s_orbit,s_body_med, P_ki, sigma_b,sigma_ss, deltat,hh,1, 1)
+    elif opcion == 1 or opcion == 2 or opcion == 3:
+        [q_posteriori, w_posteriori, P_k_pos,K_k] = functions_03.kalman_lineal(A_discrete, B_prom,C_discrete, x_est, u_est, b_orbit,b_body_med, s_orbit,s_body_med, P_ki, sigma_b,sigma_ss, deltat,hh,sigma_b,sigma_ss)
 
+    q0_est.append(q_posteriori[0])
+    q1_est.append(q_posteriori[1])
+    q2_est.append(q_posteriori[2])
+    q3_est.append(q_posteriori[3])
+    w0_est.append(w_posteriori[0])
+    w1_est.append(w_posteriori[1])
+    w2_est.append(w_posteriori[2])
+
+    P_ki = P_k_pos
 
 [MSE_cuat, MSE_omega]  = functions_03.cuat_MSE_NL(q0_real, q1_real, q2_real, q3_real, w0_real, w1_real, w2_real, q0_est, q1_est, q2_est, q3_est, w0_est, w1_est, w2_est)   
 [RPY_all_est,RPY_all_id,mse_roll,mse_pitch,mse_yaw] = functions_03.RPY_MSE(t, q0_est, q1_est, q2_est, q3_est, q0_real, q1_real, q2_real, q3_real)   

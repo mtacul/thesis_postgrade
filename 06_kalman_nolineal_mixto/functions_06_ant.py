@@ -7,6 +7,7 @@ Created on Sat May 11 23:33:44 2024
 import numpy as np
 import control as ctrl
 import math
+from sigfig import round
 
 # Funcion para generar realismo del giroscopio
 def simulate_gyros_reading(w,ruido,bias):
@@ -85,6 +86,17 @@ def A_PD(I_x,I_y,I_z,wo_O, q0,q1,q2,w0,w1,w2):
     
     return A_k    
 
+# def A_PD(I_x,I_y,I_z,w0_O, w0,w1,w2):
+#     A1 = np.array([0, 0.5*w2, -0.5*w1, 0.5, 0,0])
+#     A2 = np.array([-0.5*w2,0,0.5*w0,0,0.5,0])
+#     A3 = np.array([0.5*w1,-0.5*w0,0,0,0,0.5])
+#     A4 = np.array([6*w0_O**2*(I_z-I_y), 0, 0, 0, w2*(I_y-I_z)/I_x, w1*(I_y-I_z)/I_x])
+#     A5 = np.array([0, 6*w0_O**2*(I_z-I_x), 0, w2*(I_x-I_z)/I_y,0, (w0+w0_O)*(I_x-I_z)/I_y + w0_O])
+#     A6 = np.array([0, 0, 0, w1*(I_x-I_y)/I_z, (w0+w0_O)*(I_x-I_y)/I_z - w0_O, 0])
+    
+#     A_k = np.array([A1,A2,A3,A4,A5,A6])
+    
+#     return A_k  
 
 #Matriz linealizada de la accion de control derivada respecto al vector estado
 # en el punto de equilibrio x = [0,0,0,0,0,0]
@@ -138,6 +150,7 @@ def H_k_bar(b0,b1,b2,s0,s1,s2):
 def A_B(I_x,I_y,I_z,wo_O,q0,q1,q2,w0,w1,w2,deltat,h,b_orbit, b_body, s_body):
     
     A =A_PD(I_x,I_y,I_z,wo_O, q0,q1,q2,w0,w1,w2)
+    # A = A_PD(I_x,I_y,I_z,wo_O, w0,w1,w2)
     B = B_PD(I_x,I_y,I_z,b_orbit)
     
     # Define an identity matrix for C and a zero matrix for D to complete state-space model
@@ -149,7 +162,7 @@ def A_B(I_x,I_y,I_z,wo_O,q0,q1,q2,w0,w1,w2,deltat,h,b_orbit, b_body, s_body):
     sys_continuous = ctrl.StateSpace(A, B, C, D)
 
     # Discretize the system
-    sys_discrete = ctrl.c2d(sys_continuous, deltat*h, method='zoh')
+    sys_discrete = ctrl.c2d(sys_continuous, h, method='zoh')
 
     # Extract the discretized A and B matrices
     A_discrete = sys_discrete.A
@@ -164,7 +177,7 @@ def A_B(I_x,I_y,I_z,wo_O,q0,q1,q2,w0,w1,w2,deltat,h,b_orbit, b_body, s_body):
 def mod_lineal_disc(x,u,deltat, h,A_discrete,B_discrete):
         
     for i in range(int(1/h)):
-        x_k_1 = np.dot(A_discrete,x) - np.dot(B_discrete,u)
+        x_k_1 = np.dot(A_discrete,x) + np.dot(B_discrete,u)
         q_rot = x_k_1[0:3]
         w_new = x_k_1[3:6]
     
@@ -178,6 +191,7 @@ def mod_lineal_disc(x,u,deltat, h,A_discrete,B_discrete):
             q3s_rot = np.sqrt(1-q_rot[0]**2-q_rot[1]**2-q_rot[2]**2)
         
     return x_new, q3s_rot
+
 
 #%% Modelo no lineal continuo
 
@@ -198,7 +212,7 @@ def f4_K(t, q0, q1, q2,q3, w0, w1, w2): #q3_dot
 def f5_K(t, q0, q1, q2,q3, w0, w1, w2,w0_o,tau_x_ctrl,tau_x_per,I_x,I_y,I_z):#w1_dot
     part_1_w0 = w1 + w0_o*(2*(q0*q1 - q2*q3))
     part_2_w0 = w2 + w0_o*(2*(q0*q2 + q1*q3))
-    part_3_w0 = w0_o*(2*q3*0.5*(-q0*w0 - q1*w1 - w2*q2)+2*q0*0.5*(q1*w2 - q2*w1 + w0*q3)-2*q1*0.5*(-q0*w2 + q2*w0 + w1*q3)-2*q2*0.5*(q0*w1 - q1*w0 + w2*q3))
+    part_3_w0 = w0_o*(-4*q1*0.5*(-q0*w2 + q2*w0 + w1*q3) - 4*q2*0.5*(q0*w1 - q1*w0 + w2*q3))
     part_4_w0 = tau_x_ctrl/I_x
     part_5_w0 = tau_x_per/I_x
     return part_1_w0*part_2_w0*(I_y-I_z)/I_x - part_3_w0 + part_4_w0 + part_5_w0
@@ -206,7 +220,7 @@ def f5_K(t, q0, q1, q2,q3, w0, w1, w2,w0_o,tau_x_ctrl,tau_x_per,I_x,I_y,I_z):#w1
 def f6_K(t, q0, q1, q2,q3, w0, w1, w2,w0_o,tau_y_ctrl,tau_y_per,I_x,I_y,I_z): #w2_dot
     part_1_w1 = w0 + w0_o*(q3**2+q0**2-q1**2-q2**2)
     part_2_w1 = w2 + w0_o*(2*(q0*q2 + q1*q3))
-    part_3_w1 = w0_o*(q0*q1*0.5*(q1*w2 - q2*w1 + w0*q3) + q0*q1*0.5*(-q0*w2 + q2*w0 + w1*q3)-q2*q3*0.5*(q0*w1 - q1*w0 + w2*q3)-q2*q3*0.5*(-q0*w0 - q1*w1 - w2*q2))
+    part_3_w1 = w0_o*2*(0.5*(q1*w2 - q2*w1 + w0*q3)*q1 + q0*0.5*(-q0*w2 + q2*w0 + w1*q3) - 0.5*(q0*w1 - q1*w0 + w2*q3)*q3 - q2*0.5*(-q0*w0 - q1*w1 - w2*q2))
     part_4_w1 = tau_y_ctrl/I_y
     part_5_w1 = tau_y_per/I_y
     return part_1_w1*part_2_w1*(I_x-I_z)/I_y - part_3_w1 + part_4_w1 +part_5_w1
@@ -214,10 +228,10 @@ def f6_K(t, q0, q1, q2,q3, w0, w1, w2,w0_o,tau_y_ctrl,tau_y_per,I_x,I_y,I_z): #w
 def f7_K(t, q0, q1, q2,q3, w0, w1, w2,w0_o,tau_z_ctrl,tau_z_per,I_x,I_y,I_z): #w3_dot
     part_1_w2 = w0 + w0_o*(q3**2+q0**2-q1**2-q2**2)
     part_2_w2 = w1 + w0_o*(2*(q0*q1 - q2*q3))
-    part_3_w2 = w0_o*(q0*q2*0.5*(q1*w2 - q2*w1 + w0*q3) + q0*q2*0.5*(q0*w1 - q1*w0 + w2*q3)+ q1*q3*0.5*(-q0*w2 + q2*w0 + w1*q3)+ q1*q3*0.5*(-q0*w0 - q1*w1 - w2*q2))
+    part_3_w2 = w0_o*2*(0.5*(q1*w2 - q2*w1 + w0*q3)*q2 + q0*0.5*(q0*w1 - q1*w0 + w2*q3) + 0.5*(-q0*w2 + q2*w0 + w1*q3)*q3 + q1*0.5*(-q0*w0 - q1*w1 - w2*q2))
     part_4_w2 = tau_z_ctrl/I_z
     part_5_w2 = tau_z_per/I_z
-    return part_1_w2*part_2_w2*(I_y-I_x)/I_z - part_3_w2 + part_4_w2 + part_5_w2
+    return part_1_w2*part_2_w2*(I_x-I_y)/I_z - part_3_w2 + part_4_w2 + part_5_w2
 
 def rk4_EKF_step(t, q0, q1, q2,q3, w0, w1, w2, h, w0_o,tau_x_ctrl,tau_x_per,tau_y_ctrl,tau_y_per,tau_z_ctrl,tau_z_per,I_x,I_y,I_z):
     #k1 = h * f1(x, y1, y2)
@@ -298,10 +312,8 @@ def rk4_EKF_step(t, q0, q1, q2,q3, w0, w1, w2, h, w0_o,tau_x_ctrl,tau_x_per,tau_
     return q, w
 
 
-def mod_nolineal(x,u,deltat, b,h,tt,I_x,I_y,I_z,w0_O):
-    
-    w0_O = 0.00163
-    
+def mod_nolineal(x,u,deltat, b,h,w0_O,I_x,I_y,I_z):
+        
     if  1-x[0]**2-x[1]**2-x[2]**2 < 0:
         x[0:3] = x[0:3] / np.linalg.norm(x[0:3])
         q3s_rot = 0
@@ -309,14 +321,13 @@ def mod_nolineal(x,u,deltat, b,h,tt,I_x,I_y,I_z,w0_O):
     else:
         q3s_rot = np.sqrt(1-x[0]**2-x[1]**2-x[2]**2)
         
-    
     b_norm = np.linalg.norm(np.hstack((b[0],b[1],b[2])))
     tau_x_ctrl = ((b[0]*u[2]-b[2]*u[0])/b_norm)*b[2] - ((b[1]*u[0]-b[0]*u[1])/b_norm)*b[1]
     tau_y_ctrl = ((b[2]*u[1]-b[1]*u[2])/b_norm)*-b[2] + ((b[1]*u[0]-b[0]*u[1])/b_norm)*b[0]
     tau_z_ctrl = ((b[2]*u[1]-b[1]*u[2])/b_norm)*b[1] - ((b[0]*u[2]-b[2]*u[0])/b_norm)*b[0]
 
     for j in range(int(deltat/h)):
-        t, q0, q1, q2, q3, w0, w1, w2 = tt, x[0], x[1], x[2], q3s_rot, x[3], x[4], x[5]
+        t, q0, q1, q2, q3, w0, w1, w2 = deltat, x[0], x[1], x[2], q3s_rot, x[3], x[4], x[5]
         q_rot, w_new = rk4_EKF_step(t, q0, q1, q2,q3, w0, w1, w2,h,w0_O, tau_x_ctrl,0,tau_y_ctrl,0,tau_z_ctrl,0,I_x,I_y,I_z)
     
     q_rot_trunc = q_rot[0:3]
@@ -394,30 +405,16 @@ def kalman_lineal(A, B, C, x, u, b,b_est, s,s_est, P_ki, sigma_m, sigma_ss,delta
     
     R = R_k(sigma_m, sigma_ss)
     K_k = k_kalman(R,P_k_priori,H_k)
-    print("zsensor:",z_sensor)
-    print("zmodelo:",z_modelo)
-    print("Y:",y)
     
     delta_x = np.dot(K_k,y)
-    # delta_x2 = np.dot(-K_k,y)
-    print("deltax",delta_x)
-    # print("deltax2",delta_x2)
     delta_q_3 = delta_x[0:3]
     delta_w = delta_x[3:6]
     q3_delta =  np.sqrt(1-delta_q_3[0]**2-delta_q_3[1]**2-delta_q_3[2]**2)
     delta_q = np.hstack((delta_q_3, q3_delta))
     delta_qn = delta_q / np.linalg.norm(delta_q)
-    # delta_q2 = np.hstack((-delta_q_3, q3_delta))
-    # delta_qn2 = delta_q2 / np.linalg.norm(delta_q2)
-
-    print("delta_q obtenido por kalman:",delta_qn,"\n")
-    # print("delta_q2 obtenido por kalman:",delta_qn2,"\n")
     
     q_posteriori = quat_mult(delta_qn,q_priori)
-    # q_posteriori2 = quat_mult(delta_qn2,q_priori)
-    print("q priori multi:",q_priori,"\n")
     print("q posteriori multi:",q_posteriori,"\n")
-    # print("q posteriori2 multi:",q_posteriori2,"\n")
     w_posteriori = w_priori + delta_w
 
     
@@ -514,3 +511,42 @@ def cuat_MSE_NL(q0,q1,q2,q3,w0,w1,w2,q0_nl,q1_nl,q2_nl,q3_nl,w0_nl,w1_nl,w2_nl):
     MSE_omega = np.array([mse_w0_nl,mse_w1_nl,mse_w2_nl])
     
     return MSE_cuat, MSE_omega
+
+def torquer(u_PD_NL,lim):
+    # Número de cifras significativas
+    sig = 2
+    u_PD_NL = np.array([round(x, sigfigs=sig) for x in u_PD_NL])
+
+    if u_PD_NL[0]>lim: 
+        u_PD_NL[0] = lim
+    else:
+        u_PD_NL[0] = u_PD_NL[0]
+        
+    if u_PD_NL[1]>lim:
+        u_PD_NL[1] = lim
+    else:
+        u_PD_NL[1] = u_PD_NL[1]
+        
+    if u_PD_NL[2]>lim:
+        u_PD_NL[2] = lim
+    else:
+        u_PD_NL[2] = u_PD_NL[2]
+
+    if u_PD_NL[0]<-lim: 
+        u_PD_NL[0] = -lim
+        
+    else:
+        u_PD_NL[0] = u_PD_NL[0]
+
+    if u_PD_NL[1]<-lim:
+        u_PD_NL[1] = -lim
+    else:
+        u_PD_NL[1] = u_PD_NL[1]
+
+    if u_PD_NL[2]<-lim:
+        u_PD_NL[2] = -lim
+
+    else:
+        u_PD_NL[2] = u_PD_NL[2]
+        
+    return u_PD_NL

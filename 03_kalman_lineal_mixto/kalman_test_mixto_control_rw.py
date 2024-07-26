@@ -41,7 +41,7 @@ w0_O = 0.00163
 
 deltat = 2
 # limite =  5762*69
-limite =  5762*69
+limite =  5762*60
 
 t = np.arange(0, limite, deltat)
 
@@ -211,35 +211,6 @@ for i in range(len(t)-1):
     u_est = functions_03_rw.torquer(u_est,lim)
     us.append(u_est)
 
-    h_est = np.array([x_est[6]/I_s0_x-x_est[3], x_est[7]/I_s1_y-x_est[4], x_est[8]/I_s2_z-x_est[5]])
-    
-    b_orbit = [Bx_orbit[i],By_orbit[i],Bz_orbit[i]]
-    b_body_med = functions_03_rw.rotacion_v(q_real, b_orbit,sigma_b)
-    b_body_est = functions_03_rw.rotacion_v(q_est, b_orbit,sigma_b)
-    
-    s_orbit = [vx_sun_orbit[i],vy_sun_orbit[i],vz_sun_orbit[i]]
-    s_body_med = functions_03_rw.rotacion_v(q_real, s_orbit,sigma_ss)
-    s_body_est = functions_03_rw.rotacion_v(q_est, s_orbit,sigma_ss)
-
-    [A,B,C,A_discrete,B_discrete,C_discrete] = functions_03_rw.A_B(I_x,I_y,I_z,w0_O, 0,0,0, I_s0_x, I_s1_y, I_s2_z,0,0,0, J_x, J_y, J_z,  deltat, hh,b_orbit, b_body_med, s_body_med)
-    
-    if opcion == 4:
-        [q_posteriori, w_posteriori, P_k_pos,K_k, ws_posteriori] = functions_03_rw.kalman_lineal(A_discrete, B_discrete,C_discrete, x_est, u_est, b_body_med, b_body_est, s_body_med, s_body_est, P_ki, 0.012e-6, 0.05, deltat,hh,h_real,h_est)
-    elif opcion == 1 or opcion == 2 or opcion == 3:
-        [q_posteriori, w_posteriori, P_k_pos,K_k, ws_posteriori] = functions_03_rw.kalman_lineal(A_discrete, B_discrete,C_discrete, x_est, u_est, b_body_med, b_body_est, s_body_med, s_body_est, P_ki, sigma_b, sigma_ss, deltat,hh,h_real,h_est)
-    
-    q0_est.append(q_posteriori[0])
-    q1_est.append(q_posteriori[1])
-    q2_est.append(q_posteriori[2])
-    q3_est.append(q_posteriori[3])
-    w0_est.append(w_posteriori[0])
-    w1_est.append(w_posteriori[1])
-    w2_est.append(w_posteriori[2])
-    w0s_est.append(ws_posteriori[0])
-    w1s_est.append(ws_posteriori[1])
-    w2s_est.append(ws_posteriori[2])
-    P_ki = P_k_pos
-    
     [xx_new_d, qq3_new_d] = functions_03_rw.mod_lineal_disc(
         x_real, u_est, deltat, hh, A_discrete,B_discrete)
     
@@ -259,6 +230,32 @@ for i in range(len(t)-1):
     q_real = np.array([q0_real[-1],q1_real[-1],q2_real[-1],q3_real[-1]])
     print("q_real",q_real)
     h_real = np.array([x_real[6]/I_s0_x-x_real[3], x_real[7]/I_s1_y-x_real[4], x_real[8]/I_s2_z-x_real[5]])
+
+    b_orbit = [Bx_orbit[i+1],By_orbit[i+1],Bz_orbit[i+1]]
+    b_body_med = functions_03_rw.rotacion_v(q_real, b_orbit,sigma_b)
+    
+    s_orbit = [vx_sun_orbit[i],vy_sun_orbit[i],vz_sun_orbit[i]]
+    s_body_med = functions_03_rw.rotacion_v(q_real, s_orbit,sigma_ss)
+
+    [A,B,C,A_discrete,B_discrete,C_discrete] = functions_03_rw.A_B(I_x,I_y,I_z,w0_O, 0,0,0, I_s0_x, I_s1_y, I_s2_z,0,0,0, J_x, J_y, J_z,  deltat, hh,b_orbit, b_body_med, s_body_med)
+    
+    if opcion == 4:
+        [q_posteriori, w_posteriori, P_k_pos,K_k, ws_posteriori] = functions_03_rw.kalman_lineal(A_discrete, B_discrete,C_discrete, x_est, u_est, b_orbit,b_body_med, s_orbit, s_body_med, P_ki, sigma_b,sigma_ss, deltat,hh,h_real,I_s0_x, I_s1_y, I_s2_z,1,1)
+    elif opcion == 1 or opcion == 2 or opcion == 3:
+        [q_posteriori, w_posteriori, P_k_pos,K_k, ws_posteriori] = functions_03_rw.kalman_lineal(A_discrete, B_discrete,C_discrete, x_est, u_est, b_orbit,b_body_med, s_orbit, s_body_med, P_ki, sigma_b, sigma_ss, deltat,hh,h_real,I_s0_x, I_s1_y, I_s2_z, sigma_b, sigma_ss)
+    
+    q0_est.append(q_posteriori[0])
+    q1_est.append(q_posteriori[1])
+    q2_est.append(q_posteriori[2])
+    q3_est.append(q_posteriori[3])
+    w0_est.append(w_posteriori[0])
+    w1_est.append(w_posteriori[1])
+    w2_est.append(w_posteriori[2])
+    w0s_est.append(ws_posteriori[0])
+    w1s_est.append(ws_posteriori[1])
+    w2s_est.append(ws_posteriori[2])
+    P_ki = P_k_pos
+    
 
 
 [MSE_cuat, MSE_omega]  = functions_03_rw.cuat_MSE_NL(q0_real, q1_real, q2_real, q3_real, w0_real, w1_real, w2_real, q0_est, q1_est, q2_est, q3_est, w0_est, w1_est, w2_est)   
@@ -393,7 +390,7 @@ axes0[2].set_ylabel('Angulos de Euler [°]')
 axes0[2].legend()
 axes0[2].set_title('Angulos de Euler obtenidos por el modelo de control lineal discreto')
 axes0[2].grid()
-axes0[2].set_ylim(-10, 10)  # Ajusta los límites en el eje Y
+axes0[2].set_ylim(-5, 5)  # Ajusta los límites en el eje Y
 
 axes0[3].plot(t[0:len(RPY_all_est[:,0])], RPY_all_est[:,0], label='Roll kalman')
 axes0[3].plot(t[0:len(RPY_all_est[:,0])], RPY_all_est[:,1], label='Pitch kalman')
@@ -427,7 +424,7 @@ plt.show()
 #%%
 
 # Nombre del archivo basado en las opciones seleccionadas
-nombre_archivo = f"_sen{opcion}_act{opcion_tau}_RW_2.csv"
+nombre_archivo = f"_sen{opcion}_act{opcion_tau}_RW.csv"
 
 # Crear un diccionario con los datos
 datos = {

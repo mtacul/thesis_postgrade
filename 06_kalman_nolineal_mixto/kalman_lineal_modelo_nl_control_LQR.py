@@ -46,7 +46,7 @@ w0_O = 0.00163
 
 deltat = 2
 # limite =  5762*69
-limite =  5762*0.01+100
+limite =  5762*2
 
 t = np.arange(0, limite, deltat)
 
@@ -116,15 +116,16 @@ lim = lim_tau_values[opcion_tau]
 
 #%%
 # q= np.array([0,0.7071,0,0.7071])
-# q= np.array([0,0,0,1])
-q = np.array([0.7071/np.sqrt(3),0.7071/np.sqrt(3),0.7071/np.sqrt(3),0.7071])
-qi_e2b = [q[0],q[1],q[2],q[3]]
-qi_e2o = [q0_e2o[0],q1_e2o[0],q2_e2o[0],q3_e2o[0]]
-q = functions_06.quat_mult(functions_06.inv_q(qi_e2o) , qi_e2b)
+q= np.array([0,0,0,1])
+# q = np.array([0.7071/np.sqrt(3),0.7071/np.sqrt(3),0.7071/np.sqrt(3),0.7071])
+# qi_e2b = [q[0],q[1],q[2],q[3]]
+# qi_e2o = [q0_e2o[0],q1_e2o[0],q2_e2o[0],q3_e2o[0]]
+# q = functions_06.quat_mult(functions_06.inv_q(qi_e2o) , qi_e2b)
 w = np.array([0.0001, 0.0001, 0.0001])
 # q_est = np.array([0.00985969, 0.70703804, 0.00985969, 0.70703804])
-# q_est= np.array([0.0120039,0.0116517,0.0160542,0.999731])
-q_est = np.array([0.462104,-0.362398,-0.664921,0.461527])
+q_est= np.array([0.0120039,0.0116517,0.0160542,0.999731])
+# q_est = np.array([0.462104,-0.362398,-0.664921,0.461527])
+# q_est = np.array([0.366144,0.464586,0.300017,0.74839])
 
 q0_est = [q_est[0]]
 q1_est = [q_est[1]]
@@ -180,62 +181,58 @@ for ii in range(len(Bs_a[0,:,0])):
 
 B_prom = np.vstack((B_concanate[0:3],B_concanate[3:6],B_concanate[6:9],B_concanate[9:12],B_concanate[12:15],B_concanate[15:18]))
 
-# x0 = np.array([37.0034,
-# 85.5048,
-# 51.4523,
-# 65.333,
-# 25.471,
-# 74.9946])
+data = [
+    [-91.8132, 2.57277, -38.2304, -760.182, -181.329, 769.805],
+    [-17.2438, -30.3811, 21.1528, -2326, -1026.82, 3928.53],
+    [34.8026, -8.39012, -89.9052, 5221.22, 1932.95, -8922.34]
+]
 
-# optimal_x = functions_06.opt_K(A_discrete, B_prom, deltat, hh, x0)
-# K = np.hstack([np.diag(optimal_x[:3]), np.diag(optimal_x[3:])])
 
-# Definir las matrices Q y R del coste del LQR
-# diag_Q = np.array([100, 1000000, 10000, 0.1, 0.1, 0.10, 0.01, 10, 10])*10000
-# diag_R = np.array([0.1,0.1,0.1])*100000
-diag_Q = np.array([100, 10, 100, 0.1, 0.1, 0.1])*1000000
-diag_R = np.array([0.1,0.1,0.1])*100000
-
-Q = np.diag(diag_Q)
-R = np.diag(diag_R)
-
-# Resolver la ecuación de Riccati
-P = solve_discrete_are(A_discrete, B_prom, Q, R)
-
-# Calcular la matriz de retroalimentación K
-K = np.linalg.inv(B_prom.T @ P @ B_prom + R) @ (B_prom.T @ P @ A_discrete)
+K = np.array(data)
 
 diagonal_values = np.array([0.5**2, 0.5**2, 0.5**2, 0.1**2, 0.1**2, 0.1**2])
 P_ki = np.diag(diagonal_values)
 #%%
 np.random.seed(42)
+
+b_body_med = b_body_i
 for i in range(len(t)-1):
     print(t[i+1])
     q_est = np.array([q0_est[-1], q1_est[-1], q2_est[-1], q3_est[-1]])
     w_est = np.array([w0_est[-1], w1_est[-1], w2_est[-1]])
     x_est = np.hstack((np.transpose(q_est[:3]), np.transpose(w_est)))
-    u_est = np.array([0.15,0.15,0.15])
-    # u_est = np.dot(-K,x_est)
-    u_est = functions_06.torquer(u_est,lim)
+    u_est = np.dot(-K,x_est)
+    u_est = functions_06.torquer(u_est,1e6)
 
-    x_est = np.hstack((q_est[0:3],w_est))  
+    [xx_new_d, qq3_new_d] = functions_06.mod_nolineal(
+        x_real, u_est, deltat, b_body_med,hh,deltat,I_x,I_y,I_z,w0_O)
+    
+    x_real = xx_new_d
+    w_gyros = functions_06.simulate_gyros_reading(x_real[3:6],ruido_w,bias_w)
 
-    b_orbit = [Bx_orbit[i],By_orbit[i],Bz_orbit[i]]
+    q0_real.append(xx_new_d[0])
+    q1_real.append(xx_new_d[1])
+    q2_real.append(xx_new_d[2])
+    q3_real.append(qq3_new_d)
+    w0_real.append(w_gyros[0])
+    w1_real.append(w_gyros[1])
+    w2_real.append(w_gyros[2])
+
+    q_real = np.array([q0_real[-1], q1_real[-1], q2_real[-1], q3_real[-1]])
+    print("q_real",q_real)
+    
+    b_orbit = [Bx_orbit[i+1],By_orbit[i+1],Bz_orbit[i+1]]
     b_body_med = functions_06.rotacion_v(q_real, b_orbit,sigma_b)
-    b_body_est = functions_06.rotacion_v(q_est, b_orbit,sigma_b)
     
-    s_orbit = [vx_sun_orbit[i],vy_sun_orbit[i],vz_sun_orbit[i]]
+    s_orbit = [vx_sun_orbit[i+1],vy_sun_orbit[i+1],vz_sun_orbit[i+1]]
     s_body_med = functions_06.rotacion_v(q_real, s_orbit,sigma_ss)
-    s_body_est = functions_06.rotacion_v(q_est, s_orbit,sigma_ss)
     
-    # print(b_body,w_gyros)
-    # print(x_est)
     [A,B,C,A_discrete,B_discrete,C_discrete] = functions_06.A_B(I_x, I_y, I_z, w0_O, w0_eq, w1_eq, w2_eq, deltat, hh,b_orbit, b_body_med, s_body_med)
     
     if opcion == 4:
-        [q_posteriori, w_posteriori, P_k_pos,K_k] = functions_06.kalman_lineal(A_discrete, B_discrete,C_discrete, x_est, u_est, b_body_med, b_body_est, s_body_med, s_body_est, P_ki, 0.012e-6, 0.05, deltat,hh)
+        [q_posteriori, w_posteriori, P_k_pos,K_k] = functions_06.kalman_lineal(A_discrete, B_prom,C_discrete, x_est, u_est, b_orbit,b_body_med, s_orbit,s_body_med, P_ki, sigma_b,sigma_ss, deltat,hh,0.012e-6, np.sin(0.05*np.pi/180))
     elif opcion == 1 or opcion == 2 or opcion == 3:
-        [q_posteriori, w_posteriori, P_k_pos,K_k] = functions_06.kalman_lineal(A_discrete, B_discrete,C_discrete, x_est, u_est, b_body_med, b_body_est, s_body_med, s_body_est, P_ki, sigma_b, sigma_ss, deltat,hh)
+        [q_posteriori, w_posteriori, P_k_pos,K_k] = functions_06.kalman_lineal(A_discrete, B_prom,C_discrete, x_est, u_est, b_orbit,b_body_med, s_orbit,s_body_med, P_ki, sigma_b,sigma_ss, deltat,hh,1,1)
 
     q0_est.append(q_posteriori[0])
     q1_est.append(q_posteriori[1])
@@ -247,37 +244,6 @@ for i in range(len(t)-1):
 
     P_ki = P_k_pos
     
-    [xx_new_d, qq3_new_d] = functions_06.mod_nolineal(
-        x_real, u_est, deltat, b_body_med,hh,deltat,I_x,I_y,I_z,w0_O)
-    
-    x_real = xx_new_d
-    w_gyros = functions_06.simulate_gyros_reading(x_real[3:6],ruido_w,bias_w)
-
-    # q_e2b = [xx_new_d[0],xx_new_d[1],xx_new_d[2],qq3_new_d]
-    # q_e2o = [q0_e2o[i+1],q1_e2o[i+1],q2_e2o[i+1],q3_e2o[i+1]]
-    # q_b2o = functions_06.quat_mult(functions_06.inv_q(q_e2o) , q_e2b)
-    
-    # w_e2b = [xx_new_d[3],xx_new_d[4],xx_new_d[5]]
-    # w_e2o = [w0_O,0,0]
-    # w_e2o_quat = [w0_O,0,0,0]
-    # inv_q_b2o = functions_06.inv_q(q_b2o)
-    # rot_w_e2o = functions_06.quat_mult(functions_06.quat_mult(q_b2o,w_e2o_quat),inv_q_b2o)
-    # rot_w_e2o_ar = np.array([rot_w_e2o[0],rot_w_e2o[1],rot_w_e2o[2]])
-    # w_b2o = w_e2b - rot_w_e2o_ar
-    
-    # x_real = np.array([q_b2o[0],q_b2o[1],q_b2o[2],w_b2o[0],w_b2o[1],w_b2o[2]])
-    # w_gyros = functions_06.simulate_gyros_reading(w_b2o,ruido_w,bias_w)
-    q0_real.append(xx_new_d[0])
-    q1_real.append(xx_new_d[1])
-    q2_real.append(xx_new_d[2])
-    q3_real.append(qq3_new_d)
-    w0_real.append(w_gyros[0])
-    w1_real.append(w_gyros[1])
-    w2_real.append(w_gyros[2])
-
-    q_real = np.array([q0_real[-1], q1_real[-1], q2_real[-1], q3_real[-1]])
-    print("q_real",q_real)
-
 
 [MSE_cuat, MSE_omega]  = functions_06.cuat_MSE_NL(q0_real, q1_real, q2_real, q3_real, w0_real, w1_real, w2_real, q0_est, q1_est, q2_est, q3_est, w0_est, w1_est, w2_est)   
 [RPY_all_est,RPY_all_id,mse_roll,mse_pitch,mse_yaw] = functions_06.RPY_MSE(t, q0_est, q1_est, q2_est, q3_est, q0_real, q1_real, q2_real, q3_real)   
@@ -292,7 +258,7 @@ axes0[0].plot(t, q3_real, label='q3 modelo')
 axes0[0].set_xlabel('Tiempo [s]')
 axes0[0].set_ylabel('cuaternion [-]')
 axes0[0].legend()
-axes0[0].set_title('cuaterniones obtenidos por el modelo de control lineal discreto')
+axes0[0].set_title('cuaterniones obtenidos por el modelo de control no lineal')
 axes0[0].grid()
 # axes0[0].set_ylim(-1, 1)  # Ajusta los límites en el eje Y
 
@@ -421,3 +387,19 @@ df_resultados = pd.DataFrame(datos)
 df_resultados.to_csv(nombre_archivo, index=False)
 
 print(f"Los resultados se han guardado en {nombre_archivo}")
+
+#%%
+    # q_e2b = [xx_new_d[0],xx_new_d[1],xx_new_d[2],qq3_new_d]
+    # q_e2o = [q0_e2o[i+1],q1_e2o[i+1],q2_e2o[i+1],q3_e2o[i+1]]
+    # q_b2o = functions_06.quat_mult(functions_06.inv_q(q_e2o) , q_e2b)
+    
+    # w_e2b = [xx_new_d[3],xx_new_d[4],xx_new_d[5]]
+    # w_e2o = [w0_O,0,0]
+    # w_e2o_quat = [w0_O,0,0,0]
+    # inv_q_b2o = functions_06.inv_q(q_b2o)
+    # rot_w_e2o = functions_06.quat_mult(functions_06.quat_mult(q_b2o,w_e2o_quat),inv_q_b2o)
+    # rot_w_e2o_ar = np.array([rot_w_e2o[0],rot_w_e2o[1],rot_w_e2o[2]])
+    # w_b2o = w_e2b - rot_w_e2o_ar
+    
+    # x_real = np.array([q_b2o[0],q_b2o[1],q_b2o[2],w_b2o[0],w_b2o[1],w_b2o[2]])
+    # w_gyros = functions_06.simulate_gyros_reading(w_b2o,ruido_w,bias_w)

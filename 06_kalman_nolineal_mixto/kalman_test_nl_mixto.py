@@ -4,7 +4,7 @@ Created on Tue Apr 30 15:13:44 2024
 
 @author: nachi
 """
-import functions_06
+import functions_06_ant
 import numpy as np
 import control as ctrl
 import pandas as pd
@@ -48,15 +48,23 @@ w0_eq = 0
 w1_eq = 0
 w2_eq = 0
 
+# sigma_ss = 0.036
+# sigma_b = 1e-6
+# ruido_w = 0.00057595865
+# bias_w = 0.0008726646
+
 sigma_ss = 0.036
 sigma_b = 1e-6
-
+ruido_w = 0
+bias_w = 0
 #%%
+q = np.array([0.7071/np.sqrt(3),0.7071/np.sqrt(3),0.7071/np.sqrt(3),0.7071])
 # q= np.array([0,0.7071,0,0.7071])
-q= np.array([0,0,0,1])
+# q= np.array([0,0,0,1])
 w = np.array([0.0001, 0.0001, 0.0001])
 # q_est = np.array([0.00985969, 0.70703804, 0.00985969, 0.70703804])
-q_est= np.array([0.0120039,0.0116517,0.0160542,0.999731])
+# q_est= np.array([0.0120039,0.0116517,0.0160542,0.999731])
+q_est = np.array([0.462104,-0.362398,-0.664921,0.461527])
 
 q0_est = [q_est[0]]
 q1_est = [q_est[1]]
@@ -76,10 +84,17 @@ w1_real = [w[1]]
 w2_real = [w[2]]
 q_real = np.array([q0_real[-1],q1_real[-1],q2_real[-1],q3_real[-1]])
 w_body = np.array([w0_real[-1], w1_real[-1], w2_real[-1]])
-w_gyros = functions_06.simulate_gyros_reading(w_body, 0,0)
+w_gyros = functions_06_ant.simulate_gyros_reading(w_body, 0,0)
 x_real = np.hstack((np.transpose(q_real[:3]), np.transpose(w_gyros)))
 
 hh =0.01
+
+data = [
+    [-91.8132, 2.57277, -38.2304, -760.182, -181.329, 769.805],
+    [-17.2438, -30.3811, 21.1528, -2326, -1026.82, 3928.53],
+    [34.8026, -8.39012, -89.9052, 5221.22, 1932.95, -8922.34]
+]
+K = np.array(data)
 
 diagonal_values = np.array([0.5**2, 0.5**2, 0.5**2, 0.1**2, 0.1**2, 0.1**2])
 
@@ -91,18 +106,21 @@ for i in range(len(t)-1):
     q_est = np.array([q0_est[-1], q1_est[-1], q2_est[-1], q3_est[-1]])
     w_est = np.array([w0_est[-1], w1_est[-1], w2_est[-1]])
     x_est = np.hstack((np.transpose(q_est[:3]), np.transpose(w_est)))
-    u_est = np.array([0.15,0.15,0.15])
+    u_est = np.array([0.15,0.15,0.15])*100
+    # u_est = np.dot(-K,x_est)
+    u_est = functions_06_ant.torquer(u_est,1e6)
     
     b_orbit = [Bx_orbit[i],By_orbit[i],Bz_orbit[i]]
-    b_body_med = functions_06.rotacion_v(q_real, b_orbit,sigma_b)
-    b_body_est = functions_06.rotacion_v(q_real, b_orbit,sigma_b)
+    b_body_med = functions_06_ant.rotacion_v(q_real, b_orbit,0)
+    b_body_est = functions_06_ant.rotacion_v(q_est, b_orbit,0)
     
     s_orbit = [vx_sun_orbit[i],vy_sun_orbit[i],vz_sun_orbit[i]]
-    s_body_med = functions_06.rotacion_v(q_real, s_orbit,sigma_ss)
-    s_body_est = functions_06.rotacion_v(q_real, s_orbit,sigma_ss)
+    s_body_med = functions_06_ant.rotacion_v(q_real, s_orbit,0)
+    s_body_est = functions_06_ant.rotacion_v(q_est, s_orbit,0)
 
-    [A,B,C,A_discrete,B_discrete,C_discrete] = functions_06.A_B(I_x, I_y, I_z, w0_O, q_est[0],q_est[1],q_est[2],w_est[0], w_est[1], w_est[2], deltat, hh,b_orbit, b_body_med, s_body_med)
-    [q_posteriori, w_posteriori, P_k_pos,K_k] = functions_06.kalman_lineal(A_discrete, B_discrete,C_discrete, x_est, u_est, b_body_med, b_body_est, s_body_med, s_body_est, P_ki, sigma_b, sigma_ss, deltat,hh)
+    [A,B,C,A_discrete,B_discrete,C_discrete] = functions_06_ant.A_B(I_x, I_y, I_z, w0_O, q_est[0],q_est[1],q_est[2],w_est[0], w_est[1], w_est[2], deltat, hh,b_orbit, b_body_med, s_body_med)
+    # [A,B,C,A_discrete,B_discrete,C_discrete] = functions_06_ant.A_B(I_x, I_y, I_z, w0_O, 0,0,0,0, 0, 0, deltat, hh,b_orbit, b_body_med, s_body_med)
+    [q_posteriori, w_posteriori, P_k_pos,K_k] = functions_06_ant.kalman_lineal(A_discrete, B_discrete,C_discrete, x_est, u_est, b_body_med, b_body_est, s_body_med, s_body_est, P_ki, sigma_b, sigma_ss, deltat,hh)
     # asasd
     
     q0_est.append(q_posteriori[0])
@@ -115,11 +133,11 @@ for i in range(len(t)-1):
 
     P_ki = P_k_pos
     
-    [xx_new_d, qq3_new_d] = functions_06.mod_nolineal(
-        x_real, u_est, deltat, b_body_med,hh,deltat,I_x,I_y,I_z,w0_O)
+    [xx_new_d, qq3_new_d] = functions_06_ant.mod_nolineal(
+        x_real, u_est, deltat, b_body_med,hh,w0_O,I_x,I_y,I_z,)
     
     x_real = xx_new_d
-    w_gyros = functions_06.simulate_gyros_reading(x_real[3:6],0.00057595865,0.0008726646)
+    w_gyros = functions_06_ant.simulate_gyros_reading(x_real[3:6],ruido_w,bias_w)
     
     q0_real.append(xx_new_d[0])
     q1_real.append(xx_new_d[1])
@@ -134,7 +152,7 @@ for i in range(len(t)-1):
     # www_real = np.array([w0_real[-1], w1_real[-1], w2_real[-1]])
     # ww_real = functions_03.simulate_gyros_reading(www_real, 0,0)
 
-[MSE_cuat, MSE_omega]  = functions_06.cuat_MSE_NL(q0_real, q1_real, q2_real, q3_real, w0_real, w1_real, w2_real, q0_est, q1_est, q2_est, q3_est, w0_est, w1_est, w2_est)   
+[MSE_cuat, MSE_omega]  = functions_06_ant.cuat_MSE_NL(q0_real, q1_real, q2_real, q3_real, w0_real, w1_real, w2_real, q0_est, q1_est, q2_est, q3_est, w0_est, w1_est, w2_est)   
 
     
 # %%
@@ -147,7 +165,7 @@ axes0[0].plot(t, q3_real, label='q3 modelo')
 axes0[0].set_xlabel('Tiempo [s]')
 axes0[0].set_ylabel('cuaternion [-]')
 axes0[0].legend()
-axes0[0].set_title('cuaterniones obtenidos por el modelo de control lineal discreto')
+axes0[0].set_title('cuaterniones obtenidos por el modelo de control no lineal MT')
 axes0[0].grid()
 # axes0[0].set_ylim(-1, 1)  # Ajusta los límites en el eje Y
 
@@ -158,7 +176,7 @@ axes0[1].plot(t, q3_est, label='q3 kalman')
 axes0[1].set_xlabel('Tiempo [s]')
 axes0[1].set_ylabel('cuaternion [-]')
 axes0[1].legend()
-axes0[1].set_title('cuaterniones estimados por el filtro de kalman lineal discreto')
+axes0[1].set_title('cuaterniones estimados por el filtro de kalman lineal discreto MT')
 axes0[1].grid()
 plt.tight_layout()
 plt.show()

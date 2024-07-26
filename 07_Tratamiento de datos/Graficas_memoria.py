@@ -17,15 +17,15 @@ import scipy.stats as stats
 
 # Definir la lista de archivos CSV disponibles
 archivos_disponibles = [
-    "_sen1_act1_RW_2.csv",
-    "_sen1_act2_RW_2.csv",
-    "_sen1_act3_RW_2.csv",
-    "_sen2_act1_RW_2.csv",
-    "_sen2_act2_RW_2.csv",
-    "_sen2_act3_RW_2.csv",
-    "_sen3_act1_RW_2.csv",
-    "_sen3_act2_RW_2.csv",
-    "_sen3_act3_RW_2.csv",
+    "_sen1_act1_RW.csv",
+    "_sen1_act2_RW.csv",
+    "_sen1_act3_RW.csv",
+    "_sen2_act1_RW.csv",
+    "_sen2_act2_RW.csv",
+    "_sen2_act3_RW.csv",
+    "_sen3_act1_RW.csv",
+    "_sen3_act2_RW.csv",
+    "_sen3_act3_RW.csv",
     "_sen1_act1_MT.csv",
     "_sen1_act2_MT.csv",
     "_sen1_act3_MT.csv",
@@ -34,8 +34,18 @@ archivos_disponibles = [
     "_sen2_act3_MT.csv",
     "_sen3_act1_MT.csv",
     "_sen3_act2_MT.csv",
-    "_sen3_act3_MT.csv"
+    "_sen3_act3_MT.csv",
+    "_sen1_act1_MT_LQR.csv",
+    "_sen1_act2_MT_LQR.csv",
+    "_sen1_act3_MT_LQR.csv",
+    "_sen2_act1_MT_LQR.csv",
+    "_sen2_act2_MT_LQR.csv",
+    "_sen2_act3_MT_LQR.csv",
+    "_sen3_act1_MT_LQR.csv",
+    "_sen3_act2_MT_LQR.csv",
+    "_sen3_act3_MT_LQR.csv"
     ]
+
 
 # Mostrar el menú al usuario
 print("Seleccione un archivo CSV para abrir (1:bad, 2:med, 3:good):")
@@ -265,17 +275,17 @@ lim_sup_P = media_P + 3 * sigma_P
 vals_confianza_P = np.sum((data_P >= lim_inf_P) & (data_P <= lim_sup_P))
 porc_confianza_P = (vals_confianza_P / len(data_P)) * 100
 
-# # Generar valores para la campana de Gauss
-# x_P = np.linspace(media_P - 4*sigma_P, media_P + 4*sigma_P, len(data_P))
-# y_P = stats.norm.pdf(x_P, media_P, sigma_P)
-# # Crear el histograma de los datos
-# plt.hist(data_P, bins=30, density=True, alpha=0.6, color='g')
-# # Graficar la campana de Gauss
-# plt.plot(x_P, y_P, 'k', linewidth=2)
-# plt.title("Distribución Normal del Roll obtenido")
-# plt.xlabel("Valor del Roll [°]")
-# plt.ylabel("Densidad de probabilidad")
-# plt.show()
+# Generar valores para la campana de Gauss
+x_P = np.linspace(media_P - 4*sigma_P, media_P + 4*sigma_P, len(data_P))
+y_P = stats.norm.pdf(x_P, media_P, sigma_P)
+# Crear el histograma de los datos
+plt.hist(data_P, bins=30, density=True, alpha=0.6, color='g')
+# Graficar la campana de Gauss
+plt.plot(x_P, y_P, 'k', linewidth=2)
+plt.title("Distribución Normal del Roll obtenido")
+plt.xlabel("Valor del Roll [°]")
+plt.ylabel("Densidad de probabilidad")
+plt.show()
 
 accuracy_P = 3*sigma_P
 

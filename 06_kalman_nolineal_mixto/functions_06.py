@@ -355,7 +355,7 @@ def mod_nolineal(x,u,deltat, b,h,tt,I_x,I_y,I_z,w0_O):
     
     return x_new, q_rot[3]
 
-#%%
+#%% ECI
 def f1(t, q0, q1, q2,q3, w0, w1, w2): #q0_dot
     return 0.5*(q1*w2 - q2*w1 + w0*q3)
 
@@ -543,7 +543,7 @@ def P_posteriori(K_k,H_k,P_k_priori,R_k):
 
 # y = np.array([0,0,0,0,0,0])
 
-def kalman_lineal(A, B, C, x, u, b,b_est, s,s_est, P_ki, sigma_m, sigma_ss,deltat,hh):
+def kalman_lineal(A, B, C, x, u, b_orbit,b_real, s_orbit,s_real, P_ki, sigma_b, sigma_s,deltat,hh,sigma_bb,sigma_ss):
 # def kalman_lineal(A, B, C, x, u, b, b_eci, P_ki, ruido, ruido_ss,deltat,s):
     
     H_k = C
@@ -556,12 +556,14 @@ def kalman_lineal(A, B, C, x, u, b,b_est, s,s_est, P_ki, sigma_m, sigma_ss,delta
     Q_ki = Q_k(5e-3, 3e-4,deltat)
     
     P_k_priori = P_k_prior(A,P_ki,Q_ki)
-    
-    z_sensor = np.hstack((b[0],b[1],b[2], s[0], s[1], s[2]))
+    b_est = rotacion_v(q_priori, b_orbit,sigma_b)
+    s_est = rotacion_v(q_priori, s_orbit,sigma_s)
+
+    z_sensor = np.hstack((b_real[0],b_real[1],b_real[2], s_real[0], s_real[1], s_real[2]))
     z_modelo = np.hstack((b_est[0],b_est[1],b_est[2], s_est[0], s_est[1], s_est[2]))
     y= z_sensor - z_modelo
     
-    R = R_k(sigma_m, sigma_ss)
+    R = R_k(sigma_bb, sigma_ss)
     K_k = k_kalman(R,P_k_priori,H_k)
     # print("zsensor:",z_sensor)
     # print("zmodelo:",z_modelo)

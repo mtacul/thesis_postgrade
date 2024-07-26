@@ -495,52 +495,42 @@ def P_posteriori(K_k,H_k,P_k_priori,R_k):
 
 # y = np.array([0,0,0,0,0,0])
 
-def kalman_lineal(A, B, C, x, u, b,b_est, s,s_est, P_ki, sigma_m, sigma_ss,deltat,hh,h,h_est):
+def kalman_lineal(A, B, C, x, u, b_orbit,b_real, s_orbit,s_real, P_ki, sigma_b, sigma_s,deltat,hh,h,I_s0_x,I_s1_y,I_s2_z,sigma_bb,sigma_ss):
 # def kalman_lineal(A, B, C, x, u, b, b_eci, P_ki, ruido, ruido_ss,deltat,s):
     
     H_k = C
-    [x_priori,q3s_rot] = mod_lineal_disc(x, u, deltat, hh, A, B)
+    # [x_priori,q3s_rot] = mod_lineal_cont(x, u, deltat, hh, A, B)
+    [x_priori,q3s_rot] = mod_lineal_disc(x, u, deltat, hh, A, B) #para disc
+    
     q_priori = np.hstack((x_priori[0:3], q3s_rot))
-
-    # print("q priori obtenido por kalman:",q_priori,"\n")
     w_priori = x_priori[3:6]
     ws_priori = x_priori[6:9]
     
     Q_ki = Q_k(5e-3, 3e-4,deltat)
     
     P_k_priori = P_k_prior(A,P_ki,Q_ki)
-    
-    z_sensor = np.hstack((b[0],b[1],b[2], s[0], s[1], s[2],h[0],h[1],h[2]))
+    b_est = rotacion_v(q_priori, b_orbit,sigma_b)
+    s_est = rotacion_v(q_priori, s_orbit,sigma_s)
+    h_est = np.array([x_priori[6]/I_s0_x-x_priori[3], x_priori[7]/I_s1_y-x_priori[4], x_priori[8]/I_s2_z-x_priori[5]])
+
+    z_sensor = np.hstack((b_real[0],b_real[1],b_real[2], s_real[0], s_real[1], s_real[2],h[0],h[1],h[2]))
     z_modelo = np.hstack((b_est[0],b_est[1],b_est[2], s_est[0], s_est[1], s_est[2],h_est[0],h_est[1],h_est[2]))
     y= z_sensor - z_modelo
     
-    R = R_k(sigma_m, sigma_ss)
+    R = R_k(sigma_bb, sigma_ss)
     K_k = k_kalman(R,P_k_priori,H_k)
-    # print("zsensor:",z_sensor)
-    # print("zmodelo:",z_modelo)
-    # print("Y:",y)
+
     
     delta_x = np.dot(K_k,y)
-    # delta_x2 = np.dot(-K_k,y)
-    # print("deltax",delta_x)
-    # print("deltax2",delta_x2)
     delta_q_3 = delta_x[0:3]
     delta_w = delta_x[3:6]
     delta_ws = delta_x[6:9]
     q3_delta =  np.sqrt(1-delta_q_3[0]**2-delta_q_3[1]**2-delta_q_3[2]**2)
     delta_q = np.hstack((delta_q_3, q3_delta))
     delta_qn = delta_q / np.linalg.norm(delta_q)
-    # delta_q2 = np.hstack((-delta_q_3, q3_delta))
-    # delta_qn2 = delta_q2 / np.linalg.norm(delta_q2)
 
-    # print("delta_q obtenido por kalman:",delta_qn,"\n")
-    # print("delta_q2 obtenido por kalman:",delta_qn2,"\n")
-    
     q_posteriori = quat_mult(delta_qn,q_priori)
-    # q_posteriori2 = quat_mult(delta_qn2,q_priori)
-    # print("q priori multi:",q_priori,"\n")
     print("q posteriori multi:",q_posteriori,"\n")
-    # print("q posteriori2 multi:",q_posteriori2,"\n")
     w_posteriori = w_priori + delta_w
     ws_posteriori = ws_priori + delta_ws
     

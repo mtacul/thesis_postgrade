@@ -53,7 +53,7 @@ K_Ex_app = functions_02.K(Kp_x, Kp_y, Kp_z, Kd_x, Kd_y, Kd_z)
 K_Ex_app_disc = functions_02.K(Kp_x_disc, Kp_y_disc, Kp_z_disc, Kd_x_disc, Kd_y_disc, Kd_z_disc)
 
 deltat = 2	
-limite = 3002
+limite = 4002
 # limite = 72
 t = np.arange(0, limite, deltat)
 																																																				
@@ -226,7 +226,7 @@ axes0[0].plot(t[0:len(q0)], q3[0:len(q0)], label='q3 lineal')
 axes0[0].set_xlabel('Tiempo [s]')
 axes0[0].set_ylabel('cuaternión [-]')
 axes0[0].legend()
-axes0[0].set_title('cuaterniones llevados a 0 lineales continuos')
+axes0[0].set_title('cuaterniones llevados a 0 lineales continuos MT')
 axes0[0].grid()
 # axes0[0].set_xlim(0, 2)  # Ajusta los límites en el eje x
 
@@ -237,7 +237,7 @@ axes0[1].plot(t[0:len(q0)], q3_disc[0:len(q0)], label='q3 discreto lineal')
 axes0[1].set_xlabel('Tiempo [s]')
 axes0[1].set_ylabel('cuaternion [-]')
 axes0[1].legend()
-axes0[1].set_title('cuaterniones llevados a 0 lineales discretos')
+axes0[1].set_title('cuaterniones llevados a 0 lineales discretos MT')
 axes0[1].grid()
 # axes0[1].set_xlim(0, 2)  # Ajusta los límites en el eje x
 
@@ -253,7 +253,7 @@ axes0[0].plot(t[0:len(q0_nl)], q3[0:len(q0_nl)], label='q3 lineal')
 axes0[0].set_xlabel('Tiempo [s]')
 axes0[0].set_ylabel('cuaternión [-]')
 axes0[0].legend()
-axes0[0].set_title('cuaterniones llevados a 0 lineales continuos')
+axes0[0].set_title('cuaterniones llevados a 0 lineales continuos MT')
 axes0[0].grid()
 # axes0[0].set_xlim(0, 2)  # Ajusta los límites en el eje x
 
@@ -264,7 +264,7 @@ axes0[1].plot(t[0:len(q0_nl)], q3_nl[0:len(q0_nl)], label='q3 no lineal')
 axes0[1].set_xlabel('Tiempo [s]')
 axes0[1].set_ylabel('cuaternion [-]')
 axes0[1].legend()
-axes0[1].set_title('cuaterniones llevados a 0 no lineales continuos')
+axes0[1].set_title('cuaterniones llevados a 0 no lineales continuos MT')
 axes0[1].grid()
 # axes0[1].set_xlim(0, 2)  # Ajusta los límites en el eje x
 
