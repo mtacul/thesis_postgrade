@@ -37,7 +37,7 @@ vsun_z = array_datos[:, 12]
 w0_O = 0.00163
 
 deltat = 2
-limite = 1002
+limite = 2002
 t = np.arange(0, limite, deltat)
 
 I_x = 0.037
@@ -48,8 +48,8 @@ w0_eq = 0
 w1_eq = 0
 w2_eq = 0
 
-sigma_ss = 0.036
-sigma_b = 1e-6
+sigma_ss = np.sin(0.833*np.pi/180)
+sigma_b = 1.18e-6
 
 #%%
 # q= np.array([0,0.7071,0,0.7071])
@@ -82,6 +82,14 @@ x_real = np.hstack((np.transpose(q_real[:3]), np.transpose(w_gyros)))
 diagonal_values = np.array([0.5**2, 0.5**2, 0.5**2, 0.1**2, 0.1**2, 0.1**2])
 hh =0.01
 P_ki = np.diag(diagonal_values)
+
+bi_orbit = [Bx_orbit[0],By_orbit[0],Bz_orbit[0]]
+b_body_i = functions_03.rotacion_v(q_real, bi_orbit, sigma_b)
+
+si_orbit = [vx_sun_orbit[0],vy_sun_orbit[0],vz_sun_orbit[0]]
+s_body_i = functions_03.rotacion_v(q_real, si_orbit, sigma_ss)
+[A,B,C,A_discrete,B_discrete,C_discrete] = functions_03.A_B(I_x, I_y, I_z, w0_O, w0_eq, w1_eq, w2_eq, deltat, hh,bi_orbit, b_body_i, s_body_i)
+
 #%%
 np.random.seed(42)
 for i in range(len(t)-1):
@@ -91,22 +99,30 @@ for i in range(len(t)-1):
     x_est = np.hstack((np.transpose(q_est[:3]), np.transpose(w_est)))
     u_est = np.array([15,15,15])
     
-    b_orbit = [Bx_orbit[i],By_orbit[i],Bz_orbit[i]]
-    b_body_med = functions_03.rotacion_v(q_real, b_orbit,sigma_b)
-    b_body_est = functions_03.rotacion_v(q_est, b_orbit,sigma_b)
+    [xx_new_d, qq3_new_d] = functions_03.mod_lineal_disc(
+        x_real, u_est, deltat, hh, A_discrete,B_discrete)
     
-    s_orbit = [vx_sun_orbit[i],vy_sun_orbit[i],vz_sun_orbit[i]]
-    s_body_med = functions_03.rotacion_v(q_real, s_orbit,sigma_ss)
-    s_body_est = functions_03.rotacion_v(q_est, s_orbit,sigma_ss)
+    x_real = xx_new_d
+    w_gyros = functions_03.simulate_gyros_reading(x_real[3:6],0.12 * np.pi / 180,(0.05 * np.pi / 180) / 3600)
+    q0_real.append(xx_new_d[0])
+    q1_real.append(xx_new_d[1])
+    q2_real.append(xx_new_d[2])
+    q3_real.append(qq3_new_d)
+    w0_real.append(w_gyros[0])
+    w1_real.append(w_gyros[1])
+    w2_real.append(w_gyros[2])
 
-    # print(x_est)
-    # print(q_real)
-    # print(w_gyros)
+    q_real = np.array([q0_real[-1],q1_real[-1],q2_real[-1],q3_real[-1]])
     
-    # print(b_body,w_gyros)
-    # print(x_est)
+    b_orbit = [Bx_orbit[i+1],By_orbit[i+1],Bz_orbit[i+1]]
+    b_body_med = functions_03.rotacion_v(q_real, b_orbit,sigma_b)
+    
+    s_orbit = [vx_sun_orbit[i+1],vy_sun_orbit[i+1],vz_sun_orbit[i+1]]
+    s_body_med = functions_03.rotacion_v(q_real, s_orbit,sigma_ss)
+
+
     [A,B,C,A_discrete,B_discrete,C_discrete] = functions_03.A_B(I_x, I_y, I_z, w0_O, w0_eq, w1_eq, w2_eq, deltat, hh,b_orbit, b_body_med, s_body_med)
-    [q_posteriori, w_posteriori, P_k_pos,K_k] = functions_03.kalman_lineal(A_discrete, B_discrete,C_discrete, x_est, u_est, b_body_med, b_body_est, s_body_med, s_body_est, P_ki, sigma_b, sigma_ss, deltat,hh)
+    [q_posteriori, w_posteriori, P_k_pos,K_k] = functions_03.kalman_lineal(A_discrete, B_discrete,C_discrete, x_est, u_est, b_orbit,b_body_med, s_orbit,s_body_med, P_ki, sigma_b,sigma_ss, deltat,hh,sigma_b,sigma_ss)
     
     q0_est.append(q_posteriori[0])
     q1_est.append(q_posteriori[1])
@@ -117,24 +133,7 @@ for i in range(len(t)-1):
     w2_est.append(w_posteriori[2])
 
     P_ki = P_k_pos
-    
-    [xx_new_d, qq3_new_d] = functions_03.mod_lineal_disc(
-        x_real, u_est, deltat, hh, A_discrete,B_discrete)
-    
-    x_real = xx_new_d
-    w_gyros = functions_03.simulate_gyros_reading(x_real[3:6],0.00057595865,0.0008726646)
-    q0_real.append(xx_new_d[0])
-    q1_real.append(xx_new_d[1])
-    q2_real.append(xx_new_d[2])
-    q3_real.append(qq3_new_d)
-    w0_real.append(w_gyros[0])
-    w1_real.append(w_gyros[1])
-    w2_real.append(w_gyros[2])
-    q_real = np.array([q0_real[-1],q1_real[-1],q2_real[-1],q3_real[-1]])
 
-    # q_real = np.array([q0_real[-1], q1_real[-1], q2_real[-1], q3_real[-1]])
-    # www_real = np.array([w0_real[-1], w1_real[-1], w2_real[-1]])
-    # ww_real = functions_03.simulate_gyros_reading(www_real, 0,0)
 
 [MSE_cuat, MSE_omega]  = functions_03.cuat_MSE_NL(q0_real, q1_real, q2_real, q3_real, w0_real, w1_real, w2_real, q0_est, q1_est, q2_est, q3_est, w0_est, w1_est, w2_est)   
 

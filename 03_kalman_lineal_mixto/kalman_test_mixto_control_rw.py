@@ -13,6 +13,7 @@ from scipy.spatial.transform import Rotation
 from sklearn.decomposition import PCA
 from scipy.signal import place_poles
 from scipy.linalg import solve_discrete_are
+from scipy.linalg import solve_continuous_are
 
 # %%
 archivo_csv = "Vectores_orbit_ECI.csv"

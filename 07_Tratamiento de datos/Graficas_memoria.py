@@ -301,17 +301,17 @@ lim_sup_Y = media_Y + 3 * sigma_Y
 vals_confianza_Y = np.sum((data_Y >= lim_inf_Y) & (data_Y <= lim_sup_Y))
 porc_confianza_Y = (vals_confianza_Y / len(data_Y)) * 100
 
-# # Generar valores para la campana de Gauss
-# x_Y = np.linspace(media_Y - 4*sigma_Y, media_Y + 4*sigma_Y, len(data_Y))
-# y_Y = stats.norm.pdf(x_Y, media_Y, sigma_Y)
-# # Crear el histograma de los datos
-# plt.hist(data_Y, bins=30, density=True, alpha=0.6, color='g')
-# # Graficar la campana de Gauss
-# plt.plot(x_Y, y_Y, 'k', linewidth=2)
-# plt.title("Distribución Normal del Roll obtenido")
-# plt.xlabel("Valor del Roll [°]")
-# plt.ylabel("Densidad de probabilidad")
-# plt.show()
+# Generar valores para la campana de Gauss
+x_Y = np.linspace(media_Y - 4*sigma_Y, media_Y + 4*sigma_Y, len(data_Y))
+y_Y = stats.norm.pdf(x_Y, media_Y, sigma_Y)
+# Crear el histograma de los datos
+plt.hist(data_Y, bins=30, density=True, alpha=0.6, color='g')
+# Graficar la campana de Gauss
+plt.plot(x_Y, y_Y, 'k', linewidth=2)
+plt.title("Distribución Normal del Roll obtenido")
+plt.xlabel("Valor del Roll [°]")
+plt.ylabel("Densidad de probabilidad")
+plt.show()
 
 accuracy_Y = 3*sigma_Y
 

@@ -39,7 +39,7 @@ w0_O = 0.00163
 
 deltat = 2
 # limite =  5762*69
-limite =  5762*60
+limite =  5762*0.01
 
 t = np.arange(0, limite, deltat)
 
