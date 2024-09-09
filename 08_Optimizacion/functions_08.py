@@ -9,6 +9,7 @@ import control as ctrl
 import math
 from scipy.optimize import minimize
 from sigfig import round
+from scipy.signal import butter, lfilter
 
 # Funcion para generar realismo del giroscopio
 def simulate_gyros_reading(w,ruido,bias):
@@ -554,3 +555,17 @@ def torquer(u_PD_NL,lim):
         u_PD_NL[2] = u_PD_NL[2]
         
     return u_PD_NL
+
+def high_pass_filter(signal, cutoff_freq, sample_rate, order=4):
+    nyquist = 0.5 * sample_rate
+    normal_cutoff = cutoff_freq / nyquist
+    b, a = butter(order, normal_cutoff, btype='high', analog=False)
+    filtered_signal = lfilter(b, a, signal)
+    return filtered_signal
+
+def low_pass_filter(signal, cutoff_freq, sample_rate, order=4):
+    nyquist = 0.5 * sample_rate
+    normal_cutoff = cutoff_freq / nyquist
+    b, a = butter(order, normal_cutoff, btype='low', analog=False)
+    filtered_signal = lfilter(b, a, signal)
+    return filtered_signal

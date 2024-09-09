@@ -40,7 +40,7 @@ w0_O = 0.00163
 
 deltat = 2
 # limite =  5762*69
-limite =  5762*60
+limite =  5762*6
 
 t = np.arange(0, limite, deltat)
 
@@ -70,14 +70,16 @@ sigma_b_values = {
 
 ruido_w_values = {
     1: 0.12 * np.pi / 180,
-    2: 0.050 * np.pi / 180,
+    2: 0,
+    # 2: 0.050 * np.pi / 180,
     3: 0.033 * np.pi / 180,
     4: 0
 }
 
 bias_w_values = {
     1: (0.05 * np.pi / 180) / 3600,
-    2: (0.03 * np.pi / 180) / 3600,
+    2: 0,
+    # 2: (0.03 * np.pi / 180) / 3600,
     3: (0.02 * np.pi / 180) / 3600,
     4: 0
 }
@@ -110,11 +112,11 @@ lim = lim_tau_values[opcion_tau]
 #%%
 # q= np.array([0,0.7071,0,0.7071])
 # q= np.array([0,0,0,1])
-q = np.array([0.7071/np.sqrt(3),0.7071/np.sqrt(3),0.7071/np.sqrt(3),0.7071])
+q = np.array([0.0789,0.0941,0.0789,0.9893])
 w = np.array([0.0001, 0.0001, 0.0001])
 # q_est = np.array([0.00985969, 0.70703804, 0.00985969, 0.70703804])
 # q_est= np.array([0.0120039,0.0116517,0.0160542,0.999731])
-q_est = np.array([0.366144,0.464586,0.300017,0.74839])
+q_est = np.array([0.0789,0.0941,0.0789,0.9893])
 
 q0_est = [q_est[0]]
 q1_est = [q_est[1]]
@@ -347,6 +349,69 @@ axes0[1].grid()
 plt.tight_layout()
 plt.show()
 
+fig0, axes0 = plt.subplots(nrows=3, ncols=1, figsize=(13, 8))
+
+axes0[0].plot(t, RPY_all_est[:,0], label= {'magnetorquer'})
+axes0[0].set_xlabel('Tiempo [s]')
+axes0[0].set_ylabel('Roll [°]')
+axes0[0].legend()
+axes0[0].grid()
+axes0[0].set_xlim(0, 30000)  # Ajusta los límites en el eje Y
+
+axes0[1].plot(t, RPY_all_est[:,1], label={'magnetorquer'},color='orange')
+axes0[1].set_xlabel('Tiempo [s]')
+axes0[1].set_ylabel('Pitch [°]')
+axes0[1].legend()
+axes0[1].grid()
+axes0[1].set_xlim(0, 30000) # Ajusta los límites en el eje Y
+# axes0[1].set_ylim(-20, -5)  # Ajusta los límites en el eje Y
+
+axes0[2].plot(t, RPY_all_est[:,2], label={'magnetorquer'},color='green')
+axes0[2].set_xlabel('Tiempo [s]')
+axes0[2].set_ylabel('Yaw [°]')
+axes0[2].legend()
+axes0[2].grid()
+axes0[2].set_xlim(0, 30000)  # Ajusta los límites en el eje Y
+
+plt.tight_layout()
+
+# Save the plot as an SVG file
+# plt.savefig('plot.svg', format='svg')
+
+# Show the plot (optional)
+plt.show()
+
+fig0, axes0 = plt.subplots(nrows=3, ncols=1, figsize=(13, 8))
+
+axes0[0].plot(t, RPY_all_id[:,0], label= {'magnetorquer'})
+axes0[0].set_xlabel('Tiempo [s]')
+axes0[0].set_ylabel('Roll [°]')
+axes0[0].legend()
+axes0[0].grid()
+axes0[0].set_xlim(0, 30000)  # Ajusta los límites en el eje Y
+
+axes0[1].plot(t, RPY_all_id[:,1], label={'magnetorquer'},color='orange')
+axes0[1].set_xlabel('Tiempo [s]')
+axes0[1].set_ylabel('Pitch [°]')
+axes0[1].legend()
+axes0[1].grid()
+axes0[1].set_xlim(0, 30000) # Ajusta los límites en el eje Y
+# axes0[1].set_ylim(-20, -5)  # Ajusta los límites en el eje Y
+
+axes0[2].plot(t, RPY_all_id[:,2], label={'magnetorquer'},color='green')
+axes0[2].set_xlabel('Tiempo [s]')
+axes0[2].set_ylabel('Yaw [°]')
+axes0[2].legend()
+axes0[2].grid()
+axes0[2].set_xlim(0, 30000)  # Ajusta los límites en el eje Y
+
+plt.tight_layout()
+
+# Save the plot as an SVG file
+# plt.savefig('plot.svg', format='svg')
+
+# Show the plot (optional)
+plt.show()
 #%%
 # Nombre del archivo basado en las opciones seleccionadas
 nombre_archivo = f"_sen{opcion}_act{opcion_tau}_MT_LQR.csv"

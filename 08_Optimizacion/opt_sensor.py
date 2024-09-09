@@ -100,6 +100,6 @@ if found_solution:
     print("Resultado de la optimización:")
     print("Desviación estándar del sensor de sol:", optimal_x[0])
     print("Desviación estándar del magnetómetro:", optimal_x[1])
-    print("Acc exactitud alcanzada:", optimal_acc)  # Usar el valor almacenado de acc
+    print("Norma exactitud alcanzada:", optimal_acc)  # Usar el valor almacenado de acc
 else:
     print("No se encontró una solución que cumpla con los criterios deseados.")

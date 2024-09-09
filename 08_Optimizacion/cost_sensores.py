@@ -5,14 +5,7 @@ Created on Fri Aug 23 15:43:36 2024
 @author: nachi
 """
 import numpy as np
-import control as ctrl
-import math
-from scipy.optimize import minimize
-from sigfig import round
-import pandas as pd
 import matplotlib.pyplot as plt
-from scipy.spatial.transform import Rotation
-from sklearn.decomposition import PCA
 from scipy.optimize import curve_fit
 
 # Datos proporcionados
@@ -43,31 +36,38 @@ precio_b = np.array([0,
                     0,
                     0
                     ])
-# Definición de la función lineal
-def linear_func(x, m, b):
-    return m * x + b
+# Función potencial: y = a * x^b
+def func_potencial(x, a, b):
+    return a * x**b
 
-# Ajuste de la función lineal
-params, _ = curve_fit(linear_func, sigmas_b, potencias_b)
-m, b = params
+# Función logarítmica: y = a * log(x) + b
+def func_log(x, a, b):
+    return a * np.log(x) + b
 
-# Predicción
-linear_fit = linear_func(sigmas_b, m, b)
+# Ajuste Potencial
+params_pot, _ = curve_fit(func_potencial, sigmas_b, potencias_b)
+a_pot, b_pot = params_pot
 
-# Visualización
-plt.figure(figsize=(8, 6))
-plt.scatter(sigmas_b, potencias_b, color='blue', label='Datos originales')
-plt.plot(sigmas_b, linear_fit, color='red', label=f'Ajuste lineal: y = {m:.2e}x + {b:.2e}')
-plt.xlabel('Desviación estándar del campo magnético (T)')
-plt.ylabel('Potencia consumida (W)')
-plt.title('Ajuste Lineal usando scipy.optimize')
+
+# Crear valores de x para la curva ajustada
+x_fit = np.linspace(min(sigmas_b), max(sigmas_b), 100)
+
+# Calcular los valores ajustados
+y_potencial = func_potencial(x_fit, a_pot, b_pot)
+
+# Graficar los datos originales
+plt.scatter(sigmas_b, potencias_b, label='Datos originales')
+
+# Graficar ajuste Potencial
+plt.plot(x_fit, y_potencial, label=f'Ajuste Potencial: $y = {a_pot:.2e} x^{{{b_pot:.2f}}}$', color='green')
+
+# Graficar ajuste Logarítmico
+
+# Formato de la gráfica
+plt.xlabel('Sigmas_b (T)')
+plt.ylabel('Potencias_b (W)')
 plt.legend()
-plt.grid(True)
 plt.show()
-
-# Coeficientes del ajuste
-print(f'Pendiente (m): {m:.2e}')
-print(f'Intersección (b): {b:.2e}')
 #%%
 
 # Datos proporcionados
