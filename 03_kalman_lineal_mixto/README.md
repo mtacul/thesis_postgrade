@@ -2,7 +2,7 @@
 
 
 # suite_MT_LQR.py / suite_RW_LQR
-Es el modulo de python que realiza la dinámica rotacional implementando como sensores los magnetometros, sensores de sol y giroscopios. El algoritmo de determinación de actitud es un filtro de kalman semiextendido. Las opciones de actuador son la implementacion de tres magnetorquers o 3 ruedas de reacción. El controlador utilizado es un LQR. Todo se realiza con los modelos dinámicos continuos discretos. Para las diferencias entre los modulos (que se diferencian en el uso de uno u otro actuador, siendo MT magnetorquer y RW rueda de reacción), se mostrara antes de la explicacion el nombre del modulo encerrado entre los siguiente simbolos /''\
+Es el modulo de python que realiza la dinámica rotacional implementando como sensores los magnetometros, sensores de sol y giroscopios. El algoritmo de determinación de actitud es un filtro de kalman semiextendido. Las opciones de actuador son la implementacion de tres magnetorquers o 3 ruedas de reacción. El controlador utilizado es un LQR. Todo se realiza con los modelos dinámicos continuos discretos. Para las diferencias entre los modulos (que se diferencian en el uso de uno u otro actuador, siendo MT magnetorquer y RW rueda de reacción), se mostrara antes de la explicacion el nombre del modulo encerrado entre los siguiente simbolos ''
 
 ### Librerias necesarias para utilizar el módulo
     pip install numpy
@@ -11,8 +11,8 @@ Es el modulo de python que realiza la dinámica rotacional implementando como se
     pip install scipy
 
 ### Importacion de librerias:
-    import functions_03        /'suite_MT_LQR.py'\
-    import functions_03_rw     /'suite_RW_LQR.py'\
+    import functions_03        'suite_MT_LQR.py'
+    import functions_03_rw     'suite_RW_LQR.py'
     import numpy as np
     import pandas as pd
     import matplotlib.pyplot as plt
@@ -90,7 +90,7 @@ Este modulo presenta las mismas secciones aplicada en 'suite_MT_LQR' a diferenci
 En el caso expuesto en el codigo se presenta una matriz K con valores de nxm, donde n es la cantidad de acciones de control y m es la cantidad de vectores de estado. Esta matriz presenta solo valores en las diagonales de las submatrices cuadradas 3x3 de K. Estos valores fueron calculados utilizando la funcion opt_K, ingresando una condicion inicial.
 
 # functions_03 / functions_03_rw
-Estos modulos de python guarda las funciones creadas para el desarrollo de esta sección para magnetorquers y rueda de reaccion por separado. Gracias a esto, se logro tener modulos cortos y simples de comprender en la Sección 03. Para las diferencias entre los modulos, se mostrara antes de la explicacion el nombre encerrado entre los siguiente simbolos /''\
+Estos modulos de python guarda las funciones creadas para el desarrollo de esta sección para magnetorquers y rueda de reaccion por separado. Gracias a esto, se logro tener modulos cortos y simples de comprender en la Sección 03. Para las diferencias entre los modulos, se mostrara antes de la explicacion el nombre encerrado entre los siguiente simbolos ''.
 
 ### Librerias necesarias para utilizar el módulo
     pip install control

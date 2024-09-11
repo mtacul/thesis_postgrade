@@ -2,9 +2,9 @@
 
 
 # suite_LQR_MT_sen.py / suite_LQR_RW_sen.py
-Es el modulo de python que realiza la dinámica rotacional implementando como sensores los magnetometros, sensores de sol y giroscopios. El algoritmo de determinación de actitud es un filtro de kalman semiextendido. Las opciones de actuador son la implementacion de tres magnetorquers o 3 ruedas de reacción. El controlador utilizado es un LQR. Todo se realiza con los modelos dinámicos continuos discretos. Para las diferencias entre los modulos (que se diferencian en el uso de uno u otro actuador, siendo MT magnetorquer y RW rueda de reacción), se mostrara antes de la explicacion el nombre del modulo encerrado entre los siguiente simbolos /''\
+Es el modulo de python que realiza la dinámica rotacional implementando como sensores los magnetometros, sensores de sol y giroscopios. El algoritmo de determinación de actitud es un filtro de kalman semiextendido. Las opciones de actuador son la implementacion de tres magnetorquers o 3 ruedas de reacción. El controlador utilizado es un LQR. Todo se realiza con los modelos dinámicos continuos discretos. Para las diferencias entre los modulos (que se diferencian en el uso de uno u otro actuador, siendo MT magnetorquer y RW rueda de reacción), se mostrara antes de la explicacion el nombre del modulo encerrado entre los siguiente simbolos ''.
 
-Aqui estan alojadas las funciones objetivos a optimizar, las cuales coinciden con las de la seccion 3, con la diferencia que deben recibir como entrada las desviaciones estandar de los sensores, para optimizar la norma de la exactitud de apuntamiento o la densidad espectro potencia.
+Aqui estan alojadas las funciones objetivos a optimizar, las cuales coinciden con las de la seccion 3. La diferencia es que deben recibir como entrada las desviaciones estandar de los sensores, para optimizar la norma de la exactitud de apuntamiento o la norma de la densidad espectro potencia.
 
 ### Librerias necesarias para utilizar el módulo
     pip install numpy
@@ -13,8 +13,8 @@ Aqui estan alojadas las funciones objetivos a optimizar, las cuales coinciden co
     pip install scipy
 
 ### Importacion de librerias:
-    import functions_06        /'suite_MT_LQR.py'\
-    import functions_06_rw     /'suite_RW_LQR.py'\
+    import functions_06        'suite_MT_LQR.py'
+    import functions_06_rw     'suite_RW_LQR.py'
     import numpy as np
     import pandas as pd
     import matplotlib.pyplot as plt
