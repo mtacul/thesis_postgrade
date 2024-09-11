@@ -38,7 +38,7 @@ def suite_act(lim):
     
     deltat = 2
     # limite =  5762*69
-    limite =  5762*5
+    limite =  5762*4
     t = np.arange(0, limite, deltat)
     
     #%% Parámetros geométricos y orbitales dados
@@ -90,7 +90,7 @@ def suite_act(lim):
     si_orbit = [vx_sun_orbit[0],vy_sun_orbit[0],vz_sun_orbit[0]]
     s_body_i = functions_06.rotacion_v(q_real, si_orbit, 0.036)
     hh =0.01
-    print('1')
+    # print('1')
     #%% Obtencion de un B_prom representativo
     
     [A,B,C,A_discrete,B_discrete,C_discrete] = functions_06.A_B(I_x, I_y, I_z, w0_O, 0, 0, 0, deltat, hh, bi_orbit,b_body_i, s_body_i)
@@ -139,7 +139,7 @@ def suite_act(lim):
     np.random.seed(42)
     
     for i in range(len(t)-1):
-        print(t[i+1])
+        # print(t[i+1])
         q_est = np.array([q0_est[-1], q1_est[-1], q2_est[-1], q3_est[-1]])
         w_est = np.array([w0_est[-1], w1_est[-1], w2_est[-1]])
         x_est = np.hstack((np.transpose(q_est[:3]), np.transpose(w_est)))
@@ -385,8 +385,9 @@ def suite_act(lim):
     # Calcular media y desviación estándar
     sigma_norm_1 = np.std(data_norm_1)
     accuracy_norm_1 = 3*sigma_norm_1
-    accuracy_norms = np.array([accuracy_norm_1])    
+    accuracy_norms = np.array([accuracy_norm_1]) 
     
+    print("El tiempo de asentamiento en RPY es:",time_R_1[0],"[s]","\n",time_P_1[0],"[s]","\n",time_Y_1[0],"[s]")
     #%% Graficas
 
     fig0, ax = plt.subplots(figsize=(15,5))  # Crea un solo set de ejes
