@@ -7,12 +7,12 @@ Created on Fri May  3 14:09:37 2024
 
 import functions_01
 import numpy as np
-import control as ctrl
 import pandas as pd
 import matplotlib.pyplot as plt
 from scipy.spatial.transform import Rotation
 
-#%%
+#%% Cargar datos del .csv obtenido
+
 archivo_csv = "vectores_400k.csv"
 # archivo_csv = "vectores_10.2k.csv"
 # archivo_csv = "vectores_5.76k.csv"
@@ -37,6 +37,8 @@ velocity = np.transpose(np.vstack((array_datos[:,4], array_datos[:,5], array_dat
 Z_orbits = position[:,:] / np.linalg.norm(position[:,:])
 X_orbits = np.cross(velocity[:,:],Z_orbits) / np.linalg.norm(np.cross(velocity[:,:],Z_orbits))
 Y_orbits = np.cross(Z_orbits,X_orbits)
+
+#%% Obtencion de los vectores en marco de referencia orbit
 
 q0_e2o = []
 q1_e2o = []
@@ -66,7 +68,7 @@ for i in range(len(t_aux)):
     B_orbit_n = np.array([B_orbit[0],B_orbit[1],B_orbit[2]])
     B_orbit = B_orbit_n / np.linalg.norm(B_orbit_n)
     
-    vsun_ECI_quat = [vsun_x[0],vsun_y[0],vsun_z[0],0]
+    vsun_ECI_quat = [vsun_x[i],vsun_y[i],vsun_z[i],0]
     inv_qi_s = functions_01.inv_q(q_ECI_orbit)
     vsun_orbit = functions_01.quat_mult(functions_01.quat_mult(q_ECI_orbit,vsun_ECI_quat),inv_qi_s)
     vsun_orbit_n = np.array([vsun_orbit[0],vsun_orbit[1],vsun_orbit[2]]) 
@@ -104,6 +106,8 @@ for i in range(len(Bx_orbit)):
     b_norm_eci.append(norm_eci)
     position_norm.append(norm_p)
 
+#%% Gráficas de los vectores rotados a orbit
+
 fig0, axes0 = plt.subplots(nrows=1, ncols=2, figsize=(16, 4))
 
 axes0[0].plot(t_aux, Bx_IGRF, label='Bx ECI')
@@ -130,21 +134,19 @@ plt.show()
 
 fig0, axes0 = plt.subplots(nrows=1, ncols=2, figsize=(16, 4))
 
-axes0[0].plot(t_aux, Bx_orbit, label='Bx orbit')
-axes0[0].plot(t_aux, By_orbit, label='By orbit')
-axes0[0].plot(t_aux, Bz_orbit, label='Bz orbit')
-axes0[0].plot(t_aux,b_norm, label='norma B orbit')
+axes0[0].plot(t_aux, vsun_x, label='vx ECI')
+axes0[0].plot(t_aux, vsun_y, label='vy ECI')
+axes0[0].plot(t_aux, vsun_z, label='vz ECI')
 axes0[0].set_xlabel('Tiempo [s]')
-axes0[0].set_ylabel('Fuerza magnetica [T]')
+axes0[0].set_ylabel('Vector sol [-]')
 axes0[0].legend()
-axes0[0].set_title('fuerza magnetica en ECI')
+axes0[0].set_title('vector sol en ECI')
 axes0[0].grid()
 # axes0[0].set_ylim(-1, 1)  # Ajusta los límites en el eje Y
 
 axes0[1].plot(t_aux, position[:,0], label='posicion del satélite en x')
 axes0[1].plot(t_aux, position[:,1], label='posicion del satélite en y')
 axes0[1].plot(t_aux, position[:,2], label='posicion del satélite en z')
-# axes0[1].plot(t_aux, position_norm, label='norma de la posicion del satélite')
 axes0[1].set_xlabel('Tiempo [s]')
 axes0[1].set_ylabel('posición [km]')
 axes0[1].legend()
@@ -155,15 +157,20 @@ plt.show()
 
 fig0, axes0 = plt.subplots(nrows=1, ncols=2, figsize=(16, 4))
 
+axes0[0].plot(t_aux, Bx_orbit, label='Bx orbit')
+axes0[0].plot(t_aux, By_orbit, label='By orbit')
+axes0[0].plot(t_aux, Bz_orbit, label='Bz orbit')
 axes0[0].plot(t_aux,b_norm, label='norma B orbit')
-axes0[0].plot(t_aux,b_norm_eci, label='norma B ECI')
 axes0[0].set_xlabel('Tiempo [s]')
 axes0[0].set_ylabel('Fuerza magnetica [T]')
 axes0[0].legend()
-axes0[0].set_title('fuerza magnetica')
+axes0[0].set_title('fuerza magnetica en orbit')
 axes0[0].grid()
 # axes0[0].set_ylim(-1, 1)  # Ajusta los límites en el eje Y
 
+axes0[1].plot(t_aux, position[:,0], label='posicion del satélite en x')
+axes0[1].plot(t_aux, position[:,1], label='posicion del satélite en y')
+axes0[1].plot(t_aux, position[:,2], label='posicion del satélite en z')
 axes0[1].plot(t_aux, position_norm, label='norma de la posicion del satélite')
 axes0[1].set_xlabel('Tiempo [s]')
 axes0[1].set_ylabel('posición [km]')
@@ -172,6 +179,53 @@ axes0[1].set_title('posiciones del satélite en ECI')
 axes0[1].grid()
 plt.tight_layout()
 plt.show()
+
+fig0, axes0 = plt.subplots(nrows=1, ncols=2, figsize=(16, 4))
+
+axes0[0].plot(t_aux, vx_sun_orbit, label='vx orbit')
+axes0[0].plot(t_aux, vy_sun_orbit, label='vy orbit')
+axes0[0].plot(t_aux, vz_sun_orbit, label='vz orbit')
+axes0[0].set_xlabel('Tiempo [s]')
+axes0[0].set_ylabel('vector sol [-]')
+axes0[0].legend()
+axes0[0].set_title('vector sol en orbit')
+axes0[0].grid()
+# axes0[0].set_ylim(-1, 1)  # Ajusta los límites en el eje Y
+
+axes0[1].plot(t_aux, position[:,0], label='posicion del satélite en x')
+axes0[1].plot(t_aux, position[:,1], label='posicion del satélite en y')
+axes0[1].plot(t_aux, position[:,2], label='posicion del satélite en z')
+axes0[1].plot(t_aux, position_norm, label='norma de la posicion del satélite')
+axes0[1].set_xlabel('Tiempo [s]')
+axes0[1].set_ylabel('posición [km]')
+axes0[1].legend()
+axes0[1].set_title('posiciones del satélite en ECI')
+axes0[1].grid()
+plt.tight_layout()
+plt.show()
+
+
+fig0, axes0 = plt.subplots(nrows=1, ncols=2, figsize=(16, 4))
+
+axes0[0].plot(t_aux,b_norm, label='norma B orbit')
+axes0[0].plot(t_aux,b_norm_eci, label='norma B ECI')
+axes0[0].set_xlabel('Tiempo [s]')
+axes0[0].set_ylabel('Fuerza magnetica [T]')
+axes0[0].legend()
+axes0[0].set_title('fuerza magnetica en orbit')
+axes0[0].grid()
+# axes0[0].set_ylim(-1, 1)  # Ajusta los límites en el eje Y
+
+axes0[1].plot(t_aux, position_norm, label='norma de la posicion del satélite')
+axes0[1].set_xlabel('Tiempo [s]')
+axes0[1].set_ylabel('posición [km]')
+axes0[1].legend()
+axes0[1].set_title('normas de posiciones del satélite en ECI')
+axes0[1].grid()
+plt.tight_layout()
+plt.show()
+
+#%% Guardar vectores orbit en un .csv
 
 # Nombre del archivo
 archivo_c = "Vectores_orbit_ECI.csv"

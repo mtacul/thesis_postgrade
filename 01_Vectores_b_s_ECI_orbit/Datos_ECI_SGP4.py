@@ -32,11 +32,6 @@ else:
     # Define la fecha inicial
     start_time = datetime(2023, 11, 1, 12, 0, 0)  # Ejemplo: 1 de noviembre de 2023, 12:00:00
 
-    # Define el tiempo de propagación en segundos 
-    # propagation_time = 60*60*24*187
-    propagation_time = 5762
-
-
     #posicion y velocidad del satelite en la fecha inicial
     position_i, velocity_i = satellite.propagate(start_time.year, start_time.month, start_time.day,
         start_time.hour, start_time.minute, start_time.second)
@@ -55,7 +50,8 @@ else:
     sunvectorin = functions_01.sun_vector(jd2000i)
     sunvectori = sunvectorin / np.linalg.norm(sunvectorin)
     
-
+    # Define el tiempo de propagación en segundos 
+    propagation_time = 5762
     
     #%% Listas donde guardar las variables ECI y body
     

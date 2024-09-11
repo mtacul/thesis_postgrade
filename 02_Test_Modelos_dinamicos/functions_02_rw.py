@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Created on Fri May 10 20:22:29 2024
 
@@ -89,14 +88,8 @@ def B_PD(w0_O,I_s0_x,I_s1_y,I_s2_z,J_x,J_y,J_z):
     return B_k
 
 
-# Matriz de ganancia
-def K(Kp_x, Kp_y, Kp_z, Kd_x, Kd_y, Kd_z):
-    K_gain = np.hstack((np.diag([Kp_x,Kp_y,Kp_z]), np.diag([Kd_x,Kd_y,Kd_z])))
-    return K_gain
-
-
 # Matriz H, que representa las mediciones derivadas respecto al vector estado x 
-# (q0,q1,q2,biasx,biasy,biasz)
+# (q0,q1,q2,wx,wy,wz)
 def H_k_bar(b0,b1,b2,s0,s1,s2,I_s0_x,I_s1_y,I_s2_z):
     
     skew_b_1 = np.array([0, -b2, b1])

@@ -10,18 +10,6 @@ import math
 from scipy.optimize import minimize
 from sigfig import round
 
-# Funcion para generar realismo del giroscopio
-def simulate_gyros_reading(w,ruido,bias):
-    # np.random.seed(42)  # Puedes cambiar el número 42 a cualquier otro número entero
-
-    #aplicar el ruido del sensor
-    noise = np.random.normal(0, ruido, 1)
-        
-    #Simular la medicion del giroscopio
-    measurement = w + noise + bias
-        
-    return measurement
-
 # inversa de un cuaternion
 def inv_q(q):
     inv_q = np.array([-q[0],-q[1],-q[2],q[3]])
@@ -64,6 +52,18 @@ def rotacion_v(q, b_i, sigma):
     B_magn = simulate_magnetometer_reading(B_body_n, sigma)
     
     return B_magn
+
+# Funcion para generar realismo del giroscopio
+def simulate_gyros_reading(w,ruido,bias):
+    # np.random.seed(42)  # Puedes cambiar el número 42 a cualquier otro número entero
+
+    #aplicar el ruido del sensor
+    noise = np.random.normal(0, ruido, 1)
+        
+    #Simular la medicion del giroscopio
+    measurement = w + noise + bias
+        
+    return measurement
 
 # Matriz linealizada de la funcion dinamica no lineal derivada respecto al vector 
 # estado en el punto de equilibrio x = [0,0,0,0,0,0] (tres primeros cuaterniones y
@@ -235,8 +235,6 @@ def mod_lineal_disc(x,u,deltat, h,A_discrete,B_discrete):
     return x_new, q3s_rot
 #%% Filtro de kalman lineal y sus ecuaciones/matrices
 
-# Matriz C o H, que representa las variables de medicion derivadas respecto al estado
-
 def R_k(sigma_m, sigma_s):
     R_11 = np.eye(3) * sigma_m**2
     R_12 = np.zeros((3,3))
@@ -258,7 +256,7 @@ def R_k(sigma_m, sigma_s):
     
     return R
 
-# Matriz de covarianza del ruido del proceso se subdivide en Q y G
+# Matriz de covarianza del ruido del proceso se subdivide en Q
 def Q_k(sigma_w,sigma_bias,deltat):
     Q_11 = np.eye(3) * (sigma_w**2*deltat + 1/3 * sigma_bias**2*deltat**3)
     Q_12 = np.eye(3) * -(1/2 * sigma_bias**2 * deltat**2)
@@ -298,13 +296,10 @@ def P_posteriori(K_k,H_k,P_k_priori,R_k):
    P_k_pos = np.dot(np.dot(I - np.dot(K_k,H_k),P_k_priori),np.transpose(I - np.dot(K_k,H_k))) + np.dot(np.dot(K_k,R_k),np.transpose(K_k))
    return P_k_pos #SACAR MATRIZ P POSTERIORI ACTUALIZADA
 
-# y = np.array([0,0,0,0,0,0])
 
 def kalman_lineal(A, B, C, x, u, b_orbit,b_real, s_orbit,s_real, P_ki, sigma_b, sigma_s,deltat,hh,h,I_s0_x,I_s1_y,I_s2_z,sigma_bb,sigma_ss):
-# def kalman_lineal(A, B, C, x, u, b, b_eci, P_ki, ruido, ruido_ss,deltat,s):
     
     H_k = C
-    # [x_priori,q3s_rot] = mod_lineal_cont(x, u, deltat, hh, A, B)
     [x_priori,q3s_rot] = mod_lineal_disc(x, u, deltat, hh, A, B) #para disc
     
     q_priori = np.hstack((x_priori[0:3], q3s_rot))
@@ -314,6 +309,9 @@ def kalman_lineal(A, B, C, x, u, b_orbit,b_real, s_orbit,s_real, P_ki, sigma_b, 
     Q_ki = Q_k(5e-3, 3e-4,deltat)
     
     P_k_priori = P_k_prior(A,P_ki,Q_ki)
+    R = R_k(sigma_bb, sigma_ss)
+    K_k = k_kalman(R,P_k_priori,H_k)
+    
     b_est = rotacion_v(q_priori, b_orbit,sigma_b)
     s_est = rotacion_v(q_priori, s_orbit,sigma_s)
     h_est = np.array([x_priori[6]/I_s0_x-x_priori[3], x_priori[7]/I_s1_y-x_priori[4], x_priori[8]/I_s2_z-x_priori[5]])
@@ -321,10 +319,6 @@ def kalman_lineal(A, B, C, x, u, b_orbit,b_real, s_orbit,s_real, P_ki, sigma_b, 
     z_sensor = np.hstack((b_real[0],b_real[1],b_real[2], s_real[0], s_real[1], s_real[2],h[0],h[1],h[2]))
     z_modelo = np.hstack((b_est[0],b_est[1],b_est[2], s_est[0], s_est[1], s_est[2],h_est[0],h_est[1],h_est[2]))
     y= z_sensor - z_modelo
-    
-    R = R_k(sigma_bb, sigma_ss)
-    K_k = k_kalman(R,P_k_priori,H_k)
-
     
     delta_x = np.dot(K_k,y)
     delta_q_3 = delta_x[0:3]
@@ -344,6 +338,69 @@ def kalman_lineal(A, B, C, x, u, b_orbit,b_real, s_orbit,s_real, P_ki, sigma_b, 
     return q_posteriori, w_posteriori, P_ki,K_k, ws_posteriori
 
 #%%
+
+def quaternion_to_euler(q):
+    # Extracción de los componentes del cuaternión
+    x, y, z, w = q
+
+    t0 = +2.0 * (w * x + y * z)
+    t1 = +1.0 - 2.0 * (x**2 + y**2)
+    roll_x = np.arctan2(t0, t1)
+    
+    t2 = +2.0 * (w * y - z * x)
+    t2 = np.clip(t2, -1.0, 1.0)  # Clamp t2 to avoid numerical errors
+    pitch_y = np.arcsin(t2)
+    
+    t3 = +2.0 * (w * z + x * y)
+    t4 = +1.0 - 2.0 * (y**2 + z**2)
+    yaw_z = np.arctan2(t3, t4)
+         
+    # Convierte los ángulos a grados 
+    roll_deg = np.degrees(roll_x)
+    pitch_deg = np.degrees(pitch_y)
+    yaw_deg = np.degrees(yaw_z)
+
+    return roll_deg, pitch_deg, yaw_deg
+
+def torquer(u_PD_NL,lim):
+    # Número de cifras significativas
+    sig = 2
+    u_PD_NL = np.array([round(x, sigfigs=sig) for x in u_PD_NL])
+
+    if u_PD_NL[0]>lim: 
+        u_PD_NL[0] = lim
+    else:
+        u_PD_NL[0] = u_PD_NL[0]
+        
+    if u_PD_NL[1]>lim:
+        u_PD_NL[1] = lim
+    else:
+        u_PD_NL[1] = u_PD_NL[1]
+        
+    if u_PD_NL[2]>lim:
+        u_PD_NL[2] = lim
+    else:
+        u_PD_NL[2] = u_PD_NL[2]
+
+    if u_PD_NL[0]<-lim: 
+        u_PD_NL[0] = -lim
+        
+    else:
+        u_PD_NL[0] = u_PD_NL[0]
+
+    if u_PD_NL[1]<-lim:
+        u_PD_NL[1] = -lim
+    else:
+        u_PD_NL[1] = u_PD_NL[1]
+
+    if u_PD_NL[2]<-lim:
+        u_PD_NL[2] = -lim
+
+    else:
+        u_PD_NL[2] = u_PD_NL[2]
+        
+    return u_PD_NL
+
 def cuat_MSE_NL(q0,q1,q2,q3,w0,w1,w2,q0_nl,q1_nl,q2_nl,q3_nl,w0_nl,w1_nl,w2_nl):
 
     restas_q0_nl = []
@@ -532,68 +589,4 @@ def opt_K(A_discrete,B_discrete,deltat,h,x0):
         print("No solution found with all eigenvalues having magnitude less than 1.")
 
     return optimal_x
-
-#%%
-
-def quaternion_to_euler(q):
-    # Extracción de los componentes del cuaternión
-    x, y, z, w = q
-
-    t0 = +2.0 * (w * x + y * z)
-    t1 = +1.0 - 2.0 * (x**2 + y**2)
-    roll_x = np.arctan2(t0, t1)
-    
-    t2 = +2.0 * (w * y - z * x)
-    t2 = np.clip(t2, -1.0, 1.0)  # Clamp t2 to avoid numerical errors
-    pitch_y = np.arcsin(t2)
-    
-    t3 = +2.0 * (w * z + x * y)
-    t4 = +1.0 - 2.0 * (y**2 + z**2)
-    yaw_z = np.arctan2(t3, t4)
-         
-    # Convierte los ángulos a grados 
-    roll_deg = np.degrees(roll_x)
-    pitch_deg = np.degrees(pitch_y)
-    yaw_deg = np.degrees(yaw_z)
-
-    return roll_deg, pitch_deg, yaw_deg
-
-def torquer(u_PD_NL,lim):
-    # Número de cifras significativas
-    sig = 2
-    u_PD_NL = np.array([round(x, sigfigs=sig) for x in u_PD_NL])
-
-    if u_PD_NL[0]>lim: 
-        u_PD_NL[0] = lim
-    else:
-        u_PD_NL[0] = u_PD_NL[0]
-        
-    if u_PD_NL[1]>lim:
-        u_PD_NL[1] = lim
-    else:
-        u_PD_NL[1] = u_PD_NL[1]
-        
-    if u_PD_NL[2]>lim:
-        u_PD_NL[2] = lim
-    else:
-        u_PD_NL[2] = u_PD_NL[2]
-
-    if u_PD_NL[0]<-lim: 
-        u_PD_NL[0] = -lim
-        
-    else:
-        u_PD_NL[0] = u_PD_NL[0]
-
-    if u_PD_NL[1]<-lim:
-        u_PD_NL[1] = -lim
-    else:
-        u_PD_NL[1] = u_PD_NL[1]
-
-    if u_PD_NL[2]<-lim:
-        u_PD_NL[2] = -lim
-
-    else:
-        u_PD_NL[2] = u_PD_NL[2]
-        
-    return u_PD_NL
 
