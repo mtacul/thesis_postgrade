@@ -1,0 +1,130 @@
+\begin{thebibliography}{10}
+
+\bibitem{ref1}
+nanosats.eu, ``Nanosats database,'' 2024.
+\newblock Accedido el: 16 de septiembre de 2024.
+
+\bibitem{ref22}
+H.~Curtis, {\em Orbital Mechanics for Engineering Students}.
+\newblock Elsevier, 2014.
+
+\bibitem{ref23}
+J.~Wertz, {\em Spacecraft Attitude Determination and Control}, vol.~73.
+\newblock Springer Netherlands, 1978.
+
+\bibitem{ref24}
+AcademiaLab, ``Elementos orbitales.''
+\newblock Accedido el: 17 de septiembre de 2024.
+
+\bibitem{ref27}
+H.~Schaub and J.~L. Junkins, ``Analytical mechanics of space systems,'' 2003.
+
+\bibitem{ref25}
+F.~L. Markley and J.~L. Crassidis, {\em Fundamentals of Spacecraft Attitude
+  Determination and Control}.
+\newblock Springer New York, 2014.
+
+\bibitem{ref2}
+SatCatalog, ``Cubesat launch costs,'' 2022.
+\newblock Accedido el: 16 de septiembre de 2024.
+
+\bibitem{ref3}
+nanosats.eu, ``Cubesat costs,'' 2024.
+\newblock Accedido el: 16 de septiembre de 2024.
+
+\bibitem{ref4}
+D.~Odonohue, ``Optical satellites,'' 2024.
+\newblock Accedido el: 16 de septiembre de 2024.
+
+\bibitem{ref5}
+J.~Wertz and W.~Larson, {\em Space mission analysis and design}.
+\newblock Space technology Series, 1999.
+
+\bibitem{ref6}
+M.~Tacul, ``Identificación y caracterización de índices de performance en el
+  apuntamiento de payload en cubesats,'' 2023.
+\newblock Accedido el: 16 de septiembre de 2024.
+
+\bibitem{ref7}
+J.~P. Mason, M.~Baumgart, B.~Rogler, C.~Downs, M.~Williams, T.~N. Woods,
+  S.~Palo, P.~C. Chamberlin, S.~Solomon, A.~Jones, X.~Li, R.~Kohnert, and
+  A.~Caspi, ``Minxss-1 cubesat on-orbit pointing and power performance: The
+  first flight of the blue canyon technologies xact 3-axis attitude
+  determination and control system,'' {\em Journal of Small Satellite
+  Missions}, vol.~10, no.~3, pp.~651--662, 2017.
+
+\bibitem{ref8}
+S.-G. Kim and J.-S. Chae, ``Attitude control system performance estimation for
+  next generation small satellite 1,'' {\em World Congress on Aeronautics,
+  Nano, Bio, Robotics and Energy (ANBRE15)}, vol.~1, p.~Incheon, August 2015.
+
+\bibitem{ref9}
+Z.~Ye, Y.~Xu, S.~Zheng, X.~Tong, X.~Xu, S.~Liu, H.~Xie, S.~Liu, C.~Wei, and
+  U.~Stilla, ``Resolving time-varying attitude jitter of an optical remote
+  sensing satellite based on a time-frequency analysis,'' {\em Optics Express},
+  vol.~28, p.~15805, May 2020.
+
+\bibitem{ref10}
+C.~Dennehy and O.~S. Alvarez-Salazar, ``A survey of the spacecraft
+  line-of-sight jitter problem,'' {\em NASA Technical Reports}, 2020.
+
+\bibitem{ref11}
+G.~Lavezzi, M.~E. Grottey, and M.~Ciarcia, ``Attitude control strategies for an
+  imaging cubesat,'' {\em 2019 IEEE International Conference on Electro
+  Information Technology (EIT)}, vol.~1, pp.~149--155, May 2019.
+
+\bibitem{ref12}
+R.~Votel and D.~Sinclair, ``Comparison of control moment gyros and reaction
+  wheels for small earth-observing satellites,'' {\em Conference on Small
+  Satellites Proceedings}, vol.~1, no.~1, pp.~1--10.
+
+\bibitem{ref13}
+E.~P. Babcock, E.~P. Babcock, and T.~Bretl, ``Cubesat attitude determination
+  via kalman filtering of magnetometer and solar cell data,'' {\em 25th Annual
+  AIAA/USU Conference on Small Satellites Proceedings}, vol.~1, no.~1,
+  pp.~1--10.
+
+\bibitem{ref14}
+D.~Torczynski, R.~Amini, and P.~Massioni, ``Magnetorquer based attitude control
+  for a nanosatellite testplatform,'' {\em AIAA Infotech@Aerospace 2010
+  Proceedings}, vol.~1, no.~1, pp.~1--10.
+
+\bibitem{ref15}
+D.~M. Vélez, E.~I. Dawson, and N.~E. Nassiff, ``Attitude determination and
+  control subsystem design for a cubesat,'' {\em Worcester Polytechnic
+  Institute Technical Reports}, vol.~1, no.~1, pp.~1--10.
+
+\bibitem{ref16}
+A.~Annenkova, S.~Biktimirov, K.~Latyshev, A.~Mahfouz, P.~Mukhachev, and
+  D.~Pritykin, ``Cubesat adcs model for preliminary design procedures within a
+  concurrent design approach,'' {\em AIP Conference Proceedings}, vol.~1,
+  no.~1, p.~140005, 2019.
+
+\bibitem{ref17}
+A.~Rassõlkin, T.~Vaimann, P.~Org, A.~Leibak, R.~Gordon, and E.~Priidel, ``Adcs
+  development for student cubesat satellites – taltech case study,'' {\em
+  Proceedings of the Estonian Academy of Sciences}, vol.~70, p.~268, 2021.
+
+\bibitem{ref18}
+P.~S. System, ``Spacecraft control toolbox,'' 2017.
+
+\bibitem{ref19}
+Mathworks, ``Model and simulate cubesats.''
+\newblock Accedido el: 16 de septiembre de 2024.
+
+\bibitem{ref20}
+Valispace, ``Fan tutorials.''
+\newblock Accedido el: 16 de septiembre de 2024.
+
+\bibitem{ref21}
+A.~Chaves, ``On the coupling of orbit and attitude determination of satellite
+  formations from atmospheric drag,'' pp.~29--31, 2020.
+
+\bibitem{ref26}
+J.~Sellers, {\em Understanding Space: An Introduction to Astronautics}.
+\newblock Space technology series, McGraw-Hill, 2000.
+
+\bibitem{ref28}
+T.~Kuwahara, ``«introduction to cubesat attitude control system,'' 2021.
+
+\end{thebibliography}

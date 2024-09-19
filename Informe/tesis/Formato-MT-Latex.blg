@@ -1,0 +1,112 @@
+This is BibTeX, Version 0.99d (TeX Live 2024)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: Formato-MT-Latex.aux
+A level-1 auxiliary file: Pagina_Titulo.aux
+A level-1 auxiliary file: C0-Agradecimientos.aux
+A level-1 auxiliary file: C0-Resumen.aux
+A level-1 auxiliary file: C0-Abstract.aux
+A level-1 auxiliary file: C1-Introduccion.aux
+A level-1 auxiliary file: C2-MarcoTeorico.aux
+A level-1 auxiliary file: C2-Latex.aux
+A level-1 auxiliary file: C3-Metodologia.aux
+A level-1 auxiliary file: C4-Resultados.aux
+A level-1 auxiliary file: C5-Discusion.aux
+A level-1 auxiliary file: C6-Conclusiones.aux
+The style file: ieeetr.bst
+A level-1 auxiliary file: Z1-Planos.aux
+A level-1 auxiliary file: Z2-Codigo.aux
+Database file #1: Referencias.bib
+Warning--entry type for "ref1" isn't style-file defined
+--line 1 of file Referencias.bib
+Warning--entry type for "ref2" isn't style-file defined
+--line 9 of file Referencias.bib
+Warning--entry type for "ref3" isn't style-file defined
+--line 17 of file Referencias.bib
+Warning--entry type for "ref4" isn't style-file defined
+--line 25 of file Referencias.bib
+You're missing a field name---line 114 of file Referencias.bib
+ :    pages = {1-10},  
+ :                     % Puedes ajustar esto según la información disponible.
+I'm skipping whatever remains of this entry
+You're missing a field name---line 125 of file Referencias.bib
+ :    pages = {1-10},  
+ :                     % Puedes ajustar esto según la información disponible.
+I'm skipping whatever remains of this entry
+You're missing a field name---line 137 of file Referencias.bib
+ :    pages = {1-10},  
+ :                     % Ajusta según la información disponible.
+I'm skipping whatever remains of this entry
+You're missing a field name---line 152 of file Referencias.bib
+ :    pages = {1-10},  
+ :                     % Ajusta según la información disponible.
+I'm skipping whatever remains of this entry
+Warning--entry type for "ref18" isn't style-file defined
+--line 182 of file Referencias.bib
+I was expecting a `,' or a `}'---line 187 of file Referencias.bib
+ :    
+ :    note = {Accedido el: 16 de septiembre de 2024}
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+Warning--entry type for "ref19" isn't style-file defined
+--line 191 of file Referencias.bib
+I was expecting a `,' or a `}'---line 196 of file Referencias.bib
+ :    
+ :    year = {2023}
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+Warning--entry type for "ref20" isn't style-file defined
+--line 199 of file Referencias.bib
+Warning--entry type for "ref24" isn't style-file defined
+--line 235 of file Referencias.bib
+Warning--entry type for "ref28" isn't style-file defined
+--line 271 of file Referencias.bib
+Warning--can't use both author and editor fields in ref23
+Warning--empty booktitle in ref27
+Warning--empty journal in ref6
+Warning--empty year in ref12
+Warning--empty year in ref13
+Warning--empty year in ref14
+Warning--empty year in ref15
+Warning--empty journal in ref21
+You've used 28 entries,
+            1876 wiz_defined-function locations,
+            625 strings with 7463 characters,
+and the built_in function-call counts, 5821 in all, are:
+= -- 536
+> -- 261
+< -- 0
++ -- 101
+- -- 73
+* -- 365
+:= -- 850
+add.period$ -- 38
+call.type$ -- 28
+change.case$ -- 23
+chr.to.int$ -- 0
+cite$ -- 36
+duplicate$ -- 286
+empty$ -- 593
+format.name$ -- 73
+if$ -- 1442
+int.to.chr$ -- 0
+int.to.str$ -- 28
+missing$ -- 24
+newline$ -- 100
+num.names$ -- 28
+pop$ -- 134
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 185
+stack$ -- 0
+substring$ -- 178
+swap$ -- 97
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 8
+while$ -- 46
+width$ -- 30
+write$ -- 257
+(There were 6 error messages)

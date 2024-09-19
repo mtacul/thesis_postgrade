@@ -1,0 +1,44 @@
+\contentsline {section}{Lista de Figuras}{1}{}%
+\contentsline {section}{Lista de Tablas}{2}{}%
+\contentsline {section}{Nomenclatura}{3}{}%
+\contentsline {section}{\numberline {1}Introducción}{4}{}%
+\contentsline {subsection}{\numberline {1.1}Contexto}{4}{}%
+\contentsline {subsection}{\numberline {1.2}Hipótesis}{7}{}%
+\contentsline {subsection}{\numberline {1.3}Objetivos}{7}{}%
+\contentsline {subsection}{\numberline {1.4}Metodología}{8}{}%
+\contentsline {subsection}{\numberline {1.5}Carta Gantt}{9}{}%
+\contentsline {section}{\numberline {2}Marco Teórico}{10}{}%
+\contentsline {subsection}{\numberline {2.1}Sistemas de referencia}{10}{}%
+\contentsline {subsection}{\numberline {2.2}Dinámica orbital}{11}{}%
+\contentsline {subsubsection}{\numberline {2.2.1}Parámetros orbitales}{12}{}%
+\contentsline {subsubsection}{\numberline {2.2.2}Perturbaciones presentes en LEO}{13}{}%
+\contentsline {subsection}{\numberline {2.3}Cinemática y dinámica de actitud}{14}{}%
+\contentsline {subsubsection}{\numberline {2.3.1}Actitud de un satélite y sus representaciones}{14}{}%
+\contentsline {subsubsection}{\numberline {2.3.2}Cuaterniones y cinemática de cuaterniones}{16}{}%
+\contentsline {subsubsection}{\numberline {2.3.3}Dinámica de actitud}{17}{}%
+\contentsline {subsection}{\numberline {2.4}Subsistema de determinación y control de actitud}{17}{}%
+\contentsline {subsubsection}{\numberline {2.4.1}Navigation (Sensores) \cite {ref6}}{18}{}%
+\contentsline {subsubsection}{\numberline {2.4.2}Guidance (Algoritmos) \cite {ref15}}{18}{}%
+\contentsline {subsubsection}{\numberline {2.4.3}Control (Controladores y actuadores)}{21}{}%
+\contentsline {subsection}{\numberline {2.5}System Engineering Envelopes}{22}{}%
+\contentsline {subsection}{\numberline {2.6}Controlabilidad y observabilidad de un sistema de control}{23}{}%
+\contentsline {subsection}{\numberline {2.7}Optimización en control}{24}{}%
+\contentsline {subsubsection}{\numberline {2.7.1}Funciones objetivos}{24}{}%
+\contentsline {subsubsection}{\numberline {2.7.2}Optimizadores en Python}{24}{}%
+\contentsline {section}{\numberline {3}Escritura en LaTeX}{26}{}%
+\contentsline {subsection}{\numberline {3.1}Referencias}{26}{}%
+\contentsline {subsection}{\numberline {3.2}Listas de elementos}{26}{}%
+\contentsline {subsection}{\numberline {3.3}Acrónimos y siglas}{26}{}%
+\contentsline {subsection}{\numberline {3.4}Ecuaciones y símbolos matemáticos}{26}{}%
+\contentsline {subsection}{\numberline {3.5}Figuras}{27}{}%
+\contentsline {subsubsection}{\numberline {3.5.1}Figuras simples}{27}{}%
+\contentsline {subsubsection}{\numberline {3.5.2}Figuras múltiples}{27}{}%
+\contentsline {subsection}{\numberline {3.6}Tablas}{27}{}%
+\contentsline {subsubsection}{\numberline {3.6.1}Tablas simples}{27}{}%
+\contentsline {subsubsection}{\numberline {3.6.2}Tablas personalizadas}{28}{}%
+\contentsline {section}{\numberline {4}Metodología}{30}{}%
+\contentsline {section}{\numberline {5}Resultados}{31}{}%
+\contentsline {section}{\numberline {6}Discusión}{32}{}%
+\contentsline {section}{\numberline {7}Conclusiones}{33}{}%
+\contentsline {section}{Anexo \numberline {A}Planos de fabricación}{36}{}%
+\contentsline {section}{Anexo \numberline {B}Código en Python}{37}{}%
