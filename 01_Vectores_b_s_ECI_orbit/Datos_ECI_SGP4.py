@@ -51,8 +51,9 @@ else:
     sunvectori = sunvectorin / np.linalg.norm(sunvectorin)
     
     # Define el tiempo de propagación en segundos 
-    propagation_time = 5762
-    
+    # propagation_time = 5762 * 5
+    propagation_time = 5762*69
+
     #%% Listas donde guardar las variables ECI y body
     
     positions = [position_i]
@@ -134,13 +135,13 @@ else:
     By_IGRF = np.array(By_IGRF)
     Bz_IGRF = np.array(Bz_IGRF)
     vsun_x = np.array(vsun_x)
-    vsun_y = np.array(vsun_z)
+    vsun_y = np.array(vsun_y)
     vsun_z = np.array(vsun_z)
     Bx_IGRF_n = np.array(Bx_IGRF_n)
     By_IGRF_n = np.array(By_IGRF_n)
     Bz_IGRF_n = np.array(Bz_IGRF_n)
     vsun_x_n = np.array(vsun_x_n)
-    vsun_y_n = np.array(vsun_z_n)
+    vsun_y_n = np.array(vsun_y_n)
     vsun_z_n = np.array(vsun_z_n)
     
     B_IGRF_n = np.transpose(np.vstack((Bx_IGRF_n,By_IGRF_n,Bz_IGRF_n)))
@@ -220,10 +221,125 @@ else:
     plt.tight_layout()
     plt.show()
     
+    # #%%
+    # fig0, ax = plt.subplots(figsize=(10,6))  # Crea un solo set de ejes
+    
+    # # Graficar los tres conjuntos de datos en la misma gráfica
+    # ax.plot(t_aux, positions[:,0], label='x')
+    # ax.plot(t_aux, positions[:,1], label='y')
+    # ax.plot(t_aux, positions[:,2], label='z')
+
+    # # Configurar etiquetas, leyenda y grid
+    # ax.set_xlabel('Tiempo [s]', fontsize=18)
+    # ax.set_ylabel('Posición [km]', fontsize=18)
+    # ax.legend(fontsize=18)
+    # ax.grid()
+    
+    # # Ajustar límites del eje X
+    # # ax.set_xlim(0, 30000)
+    
+    # # Ajustar el tamaño de las etiquetas de los ticks
+    # ax.tick_params(axis='both', which='major', labelsize=18)
+    
+    # plt.tight_layout()
+    
+    # # Guardar la gráfica como archivo SVG
+    # plt.savefig('pos.pdf', format='pdf')
+    
+    # # Mostrar la gráfica
+    # plt.show()
+    
+    
+    # fig0, ax = plt.subplots(figsize=(10,6))  # Crea un solo set de ejes
+    
+    # # Graficar los tres conjuntos de datos en la misma gráfica
+    # ax.plot(t_aux, velocities[:,0], label='x')
+    # ax.plot(t_aux, velocities[:,1], label='y')
+    # ax.plot(t_aux, velocities[:,2], label='z')
+
+    # # Configurar etiquetas, leyenda y grid
+    # ax.set_xlabel('Tiempo [s]', fontsize=18)
+    # ax.set_ylabel('Velocidad [km/s]', fontsize=18)
+    # ax.legend(fontsize=18)
+    # ax.grid()
+    
+    # # Ajustar límites del eje X
+    # # ax.set_xlim(0, 30000)
+    
+    # # Ajustar el tamaño de las etiquetas de los ticks
+    # ax.tick_params(axis='both', which='major', labelsize=18)
+    
+    # plt.tight_layout()
+    
+    # # Guardar la gráfica como archivo SVG
+    # plt.savefig('vel.pdf', format='pdf')
+    
+    # # Mostrar la gráfica
+    # plt.show()
+    
+    #%%
+    
+    fig0, ax = plt.subplots(figsize=(10,6))  # Crea un solo set de ejes
+    
+    # Graficar los tres conjuntos de datos en la misma gráfica
+    ax.plot(t_aux, vsun_x_n, label='x')
+    ax.plot(t_aux, vsun_y_n, label='y')
+    ax.plot(t_aux, vsun_z_n, label='z')
+
+    # Configurar etiquetas, leyenda y grid
+    ax.set_xlabel('Tiempo [s]', fontsize=18)
+    ax.set_ylabel('Vector sol [-]', fontsize=18)
+    ax.legend(fontsize=18)
+    ax.grid()
+    
+    # Ajustar límites del eje X
+    # ax.set_xlim(0, 30000)
+    
+    # Ajustar el tamaño de las etiquetas de los ticks
+    ax.tick_params(axis='both', which='major', labelsize=18)
+    
+    plt.tight_layout()
+    
+    # Guardar la gráfica como archivo SVG
+    plt.savefig('ss.pdf', format='pdf')
+    
+    # Mostrar la gráfica
+    plt.show()
+    
+    
+    fig0, ax = plt.subplots(figsize=(10,6))  # Crea un solo set de ejes
+    
+    # Graficar los tres conjuntos de datos en la misma gráfica
+    ax.plot(t_aux,Bx_IGRF_n, label='x')
+    ax.plot(t_aux, By_IGRF_n, label='y')
+    ax.plot(t_aux, Bz_IGRF_n, label='z')
+
+    # Configurar etiquetas, leyenda y grid
+    ax.set_xlabel('Tiempo [s]', fontsize=18)
+    ax.set_ylabel('Fuerza magnetica [nT]', fontsize=18)
+    ax.legend(fontsize=18)
+    ax.grid()
+    
+    # Ajustar límites del eje X
+    # ax.set_xlim(0, 30000)
+    
+    # Ajustar el tamaño de las etiquetas de los ticks
+    ax.tick_params(axis='both', which='major', labelsize=18)
+    
+    plt.tight_layout()
+    
+    # Guardar la gráfica como archivo SVG
+    plt.savefig('bb.pdf', format='pdf')
+    
+    # Mostrar la gráfica
+    plt.show()
+    
+    
+    
     #%% Guardar datos en un archivo csv
     
     # Nombre del archivo
-    archivo = "vectores_5.76k.csv"
+    archivo = "vectores_400k.csv"
 
     # Abrir el archivo en modo escritura
     with open(archivo, 'w') as f:

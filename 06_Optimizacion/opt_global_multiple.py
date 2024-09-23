@@ -76,12 +76,13 @@ def objective(x, *args):
 
 
 # Iterar sobre diferentes combinaciones de parámetros
-type_act_values = [0, 1]  # Por ejemplo: magnetorquer o rueda de reacción
-# type_act_values = [0]  # Por ejemplo: magnetorquer o rueda de reacción
-S_A_both_values = [0, 1, 2]  # Diferentes combinaciones de sensor y actuador
-# S_A_both_values = [2]  # Diferentes combinaciones de sensor y actuador
-type_rend_values = ['acc', 'time', 'acc_time', 'acc_psd', 'psd_time','all']  # Diferentes tipos de rendimiento
-# type_rend_values = ['acc_psd','psd_time','all']  # Diferentes tipos de rendimiento
+type_act_values = [0, 1]  # Por ejemplo: magnetorquer(0) o rueda de reacción(1)
+# type_act_values = [0]  
+S_A_both_values = [0, 1, 2]  # Diferentes combinaciones de sensor y actuador 0:sensor, 1:actuador, 2: ambos
+# S_A_both_values = [2]  
+# type_rend_values = ['acc', 'time', 'acc_time', 'acc_psd', 'psd_time','all']  # Diferentes tipos de rendimiento
+# type_rend_values = ['acc_psd','psd_time','all'] 
+type_rend_values = ['acc', 'time', 'acc_time','all'] 
 
 # hacer 'psd' por separado
 

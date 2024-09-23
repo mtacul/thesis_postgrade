@@ -232,9 +232,9 @@ psd_RPY_2 = np.array([psd_bandwidth_2_R,psd_bandwidth_2_P,psd_bandwidth_2_Y])
 
 #%% Encontrar el tiempo de asentamiento en segundos de cada angulo de Euler
 
-settling_band_R = 7
-settling_band_P = 7
-settling_band_Y = 7
+settling_band_R = 5
+settling_band_P = 5
+settling_band_Y = 5
 
 settling_error_sup_R = np.full(len(t_aux),settling_band_R)
 settling_error_inf_R = np.full(len(t_aux),-settling_band_R)
@@ -631,21 +631,21 @@ axes0[0,0].set_xlabel('Tiempo [s]')
 axes0[0,0].set_ylabel('Roll [°]')
 axes0[0,0].legend()
 axes0[0,0].grid()
-axes0[0,0].set_xlim(0, 30000)  # Ajusta los límites en el eje Y
+# axes0[0,0].set_xlim(0, 30000)  # Ajusta los límites en el eje Y
 
 axes0[0,1].plot(t_aux, Roll_2, label= {nombre_archivo_2})
 axes0[0,1].set_xlabel('Tiempo [s]')
 axes0[0,1].set_ylabel('Roll [°]')
 axes0[0,1].legend()
 axes0[0,1].grid()
-axes0[0,1].set_xlim(0, 30000)  # Ajusta los límites en el eje Y
+# axes0[0,1].set_xlim(0, 30000)  # Ajusta los límites en el eje Y
 
 axes0[1,0].plot(t_aux, Pitch_1, label={nombre_archivo_1},color='orange')
 axes0[1,0].set_xlabel('Tiempo [s]')
 axes0[1,0].set_ylabel('Pitch [°]')
 axes0[1,0].legend()
 axes0[1,0].grid()
-axes0[1,0].set_xlim(0, 30000) # Ajusta los límites en el eje Y
+# axes0[1,0].set_xlim(0, 30000) # Ajusta los límites en el eje Y
 # axes0[1].set_ylim(-20, -5)  # Ajusta los límites en el eje Y
 # axes0[1].set_xlim(150000, 400000)  # Ajusta los límites en el eje Y
 
@@ -654,7 +654,7 @@ axes0[1,1].set_xlabel('Tiempo [s]')
 axes0[1,1].set_ylabel('Pitch [°]')
 axes0[1,1].legend()
 axes0[1,1].grid()
-axes0[1,1].set_xlim(0, 30000)  # Ajusta los límites en el eje Y
+# axes0[1,1].set_xlim(0, 30000)  # Ajusta los límites en el eje Y
 # axes0[1].set_ylim(-20, -5)  # Ajusta los límites en el eje Y
 # axes0[1].set_xlim(150000, 400000)  # Ajusta los límites en el eje Y
 
@@ -663,18 +663,18 @@ axes0[2,0].set_xlabel('Tiempo [s]')
 axes0[2,0].set_ylabel('Yaw [°]')
 axes0[2,0].legend()
 axes0[2,0].grid()
-axes0[2,0].set_xlim(0, 30000)  # Ajusta los límites en el eje Y
+# axes0[2,0].set_xlim(0, 30000)  # Ajusta los límites en el eje Y
 
 axes0[2,1].plot(t_aux, Yaw_2, label={nombre_archivo_2},color='green')
 axes0[2,1].set_xlabel('Tiempo [s]')
 axes0[2,1].set_ylabel('Yaw [°]')
 axes0[2,1].legend()
 axes0[2,1].grid()
-axes0[2,1].set_xlim(0, 30000)  # Ajusta los límites en el eje Y
+# axes0[2,1].set_xlim(0, 30000)  # Ajusta los límites en el eje Y
 
 plt.tight_layout()
 # Save the plot as an SVG file
-plt.savefig('plot.svg', format='svg')
+plt.savefig('plot.pdf', format='pdf')
 
 # Show the plot (optional)
 plt.show()
@@ -704,7 +704,7 @@ axes0[1].set_xlim(0, 30000)   # Ajusta los límites en el eje Y
 
 plt.tight_layout()
 # Save the plot as an SVG file
-plt.savefig('norm_2.svg', format='svg')
+# plt.savefig('norm_2.svg', format='svg')
 
 # Mostrar el gráfico
 plt.show()
@@ -732,7 +732,7 @@ ax.tick_params(axis='both', which='major', labelsize=18)
 plt.tight_layout()
 
 # Guardar la gráfica como archivo SVG
-plt.savefig('norm2.svg', format='svg')
+# plt.savefig('norm2.svg', format='svg')
 
 # Mostrar la gráfica
 plt.show()

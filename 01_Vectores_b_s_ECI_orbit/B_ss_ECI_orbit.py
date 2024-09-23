@@ -13,9 +13,10 @@ from scipy.spatial.transform import Rotation
 
 #%% Cargar datos del .csv obtenido
 
-archivo_csv = "vectores_400k.csv"
+# archivo_csv = "vectores_5.76_x5_k.csv"
 # archivo_csv = "vectores_10.2k.csv"
 # archivo_csv = "vectores_5.76k.csv"
+archivo_csv = "vectores_400k.csv"
 
 # Leer el archivo CSV en un DataFrame de pandas
 df = pd.read_csv(archivo_csv)

@@ -24,6 +24,11 @@ F.~L. Markley and J.~L. Crassidis, {\em Fundamentals of Spacecraft Attitude
   Determination and Control}.
 \newblock Springer New York, 2014.
 
+\bibitem{ref6}
+M.~Tacul, ``Identificación y caracterización de índices de performance en el
+  apuntamiento de payload en cubesats,'' 2023.
+\newblock Accedido el: 16 de septiembre de 2024.
+
 \bibitem{ref2}
 SatCatalog, ``Cubesat launch costs,'' 2022.
 \newblock Accedido el: 16 de septiembre de 2024.
@@ -39,11 +44,6 @@ D.~Odonohue, ``Optical satellites,'' 2024.
 \bibitem{ref5}
 J.~Wertz and W.~Larson, {\em Space mission analysis and design}.
 \newblock Space technology Series, 1999.
-
-\bibitem{ref6}
-M.~Tacul, ``Identificación y caracterización de índices de performance en el
-  apuntamiento de payload en cubesats,'' 2023.
-\newblock Accedido el: 16 de septiembre de 2024.
 
 \bibitem{ref7}
 J.~P. Mason, M.~Baumgart, B.~Rogler, C.~Downs, M.~Williams, T.~N. Woods,
@@ -75,30 +75,27 @@ G.~Lavezzi, M.~E. Grottey, and M.~Ciarcia, ``Attitude control strategies for an
 
 \bibitem{ref12}
 R.~Votel and D.~Sinclair, ``Comparison of control moment gyros and reaction
-  wheels for small earth-observing satellites,'' {\em Conference on Small
-  Satellites Proceedings}, vol.~1, no.~1, pp.~1--10.
+  wheels for small earth-observing satellites,'' in {\em Conference on Small
+  Satellites}, 2012.
 
 \bibitem{ref13}
 E.~P. Babcock, E.~P. Babcock, and T.~Bretl, ``Cubesat attitude determination
-  via kalman filtering of magnetometer and solar cell data,'' {\em 25th Annual
-  AIAA/USU Conference on Small Satellites Proceedings}, vol.~1, no.~1,
-  pp.~1--10.
+  via kalman filtering of magnetometer and solar cell data,'' in {\em 25 th
+  Annual AIAA/USU Conference on Small Satellites}, 2011.
 
 \bibitem{ref14}
 D.~Torczynski, R.~Amini, and P.~Massioni, ``Magnetorquer based attitude control
-  for a nanosatellite testplatform,'' {\em AIAA Infotech@Aerospace 2010
-  Proceedings}, vol.~1, no.~1, pp.~1--10.
+  for a nanosatellite testplatform,'' in {\em AIAA Infotech@Aerospace 2010},
+  American Institute of Aeronautics and Astronautics, 4 2010.
 
 \bibitem{ref15}
 D.~M. Vélez, E.~I. Dawson, and N.~E. Nassiff, ``Attitude determination and
-  control subsystem design for a cubesat,'' {\em Worcester Polytechnic
-  Institute Technical Reports}, vol.~1, no.~1, pp.~1--10.
+  control subsystem design for a cubesat,'' 2012.
 
 \bibitem{ref16}
 A.~Annenkova, S.~Biktimirov, K.~Latyshev, A.~Mahfouz, P.~Mukhachev, and
   D.~Pritykin, ``Cubesat adcs model for preliminary design procedures within a
-  concurrent design approach,'' {\em AIP Conference Proceedings}, vol.~1,
-  no.~1, p.~140005, 2019.
+  concurrent design approach,'' 2019.
 
 \bibitem{ref17}
 A.~Rassõlkin, T.~Vaimann, P.~Org, A.~Leibak, R.~Gordon, and E.~Priidel, ``Adcs
@@ -107,24 +104,117 @@ A.~Rassõlkin, T.~Vaimann, P.~Org, A.~Leibak, R.~Gordon, and E.~Priidel, ``Adcs
 
 \bibitem{ref18}
 P.~S. System, ``Spacecraft control toolbox,'' 2017.
+\newblock Accedido el: 16 de septiembre de 2024.
 
 \bibitem{ref19}
-Mathworks, ``Model and simulate cubesats.''
+Mathworks, ``Model and simulate cubesats,'' 2023.
 \newblock Accedido el: 16 de septiembre de 2024.
 
 \bibitem{ref20}
 Valispace, ``Fan tutorials.''
 \newblock Accedido el: 16 de septiembre de 2024.
 
+\bibitem{ref36}
+U.~of~Colorado, L.~for Atmospheric, and S.~Physics, ``Basilisk,'' 2024.
+\newblock Accedido el: 17 de septiembre de 2024.
+
 \bibitem{ref21}
 A.~Chaves, ``On the coupling of orbit and attitude determination of satellite
-  formations from atmospheric drag,'' pp.~29--31, 2020.
+  formations from atmospheric drag,'' 2020.
 
 \bibitem{ref26}
 J.~Sellers, {\em Understanding Space: An Introduction to Astronautics}.
 \newblock Space technology series, McGraw-Hill, 2000.
 
 \bibitem{ref28}
-T.~Kuwahara, ``«introduction to cubesat attitude control system,'' 2021.
+T.~Kuwahara, ``Introduction to cubesat attitude control system,'' 2021.
+\newblock Accedido el: 17 de septiembre de 2024.
+
+\bibitem{ref29}
+R.~Tedrake, ``Linear quadratic regulators,'' 2024.
+\newblock Accedido el: 17 de septiembre de 2024.
+
+\bibitem{ref30}
+D.~Kirk, {\em Optimal Control Theory: An Introduction}.
+\newblock Dover Books on Electrical Engineering Series, Dover Publications,
+  2004.
+
+\bibitem{ref31}
+P.~Virtanen, R.~Gommers, T.~E. Oliphant, M.~Haberland, T.~Reddy, D.~Cournapeau,
+  E.~Burovski, P.~Peterson, W.~Weckesser, J.~Bright, S.~J. van~der Walt,
+  M.~Brett, J.~Wilson, K.~J. Millman, N.~Mayorov, A.~R.~J. Nelson, E.~Jones,
+  R.~Kern, E.~Larson, C.~J. Carey, {\.I}.~Polat, Y.~Feng, E.~W. Moore,
+  J.~VanderPlas, D.~Laxalde, J.~Perktold, R.~Cimrman, I.~Henriksen, E.~A.
+  Quintero, C.~R. Harris, A.~M. Archibald, A.~H. Ribeiro, F.~Pedregosa, P.~van
+  Mulbregt, and S.~. Contributors, ``{{SciPy} 1.0: Fundamental Algorithms for
+  Scientific Computing in Python},'' {\em Nature Methods}, vol.~17,
+  pp.~261--272, 2020.
+
+\bibitem{ref32}
+M.~L. Bynum, G.~A. Hackebeil, W.~E. Hart, C.~D. Laird, B.~L. Nicholson, J.~D.
+  Siirola, J.-P. Watson, and D.~L. Woodruff, {\em Pyomo--optimization modeling
+  in python}, vol.~67.
+\newblock Springer Science \& Business Media, third~ed., 2021.
+
+\bibitem{ref33}
+W.~E. Hart, J.-P. Watson, and D.~L. Woodruff, ``Pyomo: modeling and solving
+  mathematical programs in python,'' {\em Mathematical Programming
+  Computation}, vol.~3, no.~3, pp.~219--260, 2011.
+
+\bibitem{ref34}
+Ansys, ``Systems tool kit,'' 2024.
+\newblock Accedido el: 17 de septiembre de 2024.
+
+\bibitem{ref35}
+Valispace, ``Valispace,'' 2024.
+\newblock Accedido el: 17 de septiembre de 2024.
+
+\bibitem{ref37}
+D.~Vallado and P.~Crawford, ``Sgp4 orbit determination,'' 08 2008.
+
+\bibitem{ref38}
+a.i solutions, ``Freeflyer software,'' 2023.
+\newblock Accedido el: 17 de septiembre de 2024.
+
+\bibitem{ref39}
+P.~Alken, E.~Thébault, C.~D. Beggan, H.~Amit, J.~Aubert, J.~Baerenzung, T.~N.
+  Bondar, W.~J. Brown, S.~Califf, A.~Chambodut, A.~Chulliat, G.~A. Cox, C.~C.
+  Finlay, A.~Fournier, N.~Gillet, A.~Grayver, M.~D. Hammer, M.~Holschneider,
+  L.~Huder, G.~Hulot, T.~Jager, C.~Kloss, M.~Korte, W.~Kuang, A.~Kuvshinov,
+  B.~Langlais, J.-M. Léger, V.~Lesur, P.~W. Livermore, F.~J. Lowes,
+  S.~Macmillan, W.~Magnes, M.~Mandea, S.~Marsal, J.~Matzka, M.~C. Metman,
+  T.~Minami, A.~Morschhauser, J.~E. Mound, M.~Nair, S.~Nakano, N.~Olsen, F.~J.
+  Pavón-Carrasco, V.~G. Petrov, G.~Ropp, M.~Rother, T.~J. Sabaka, S.~Sanchez,
+  D.~Saturnino, N.~R. Schnepf, X.~Shen, C.~Stolle, A.~Tangborn,
+  L.~Tøffner-Clausen, H.~Toh, J.~M. Torta, J.~Varner, F.~Vervelidou,
+  P.~Vigneron, I.~Wardinski, J.~Wicht, A.~Woods, Y.~Yang, Z.~Zeren, and
+  B.~Zhou, ``International geomagnetic reference field: the thirteenth
+  generation,'' {\em Earth, Planets and Space}, vol.~73, p.~49, 12 2021.
+
+\bibitem{ref40}
+N.~C. for Enviromental~Information, ``International geomagnetic reference field
+  (igrf),'' 2021.
+\newblock Accedido el: 18 de septiembre de 2024.
+
+\bibitem{ref42}
+J.~Stewart, {\em Calculus: Early Transcendentals}.
+\newblock Cengage Learning, 8~ed., 2015.
+
+\bibitem{ref41}
+R.~Bauer, ``Attitude dynamics model of a cubesat with reaction wheels for an
+  extended kalman filter,'' in {\em Progress in Canadian Mechanical
+  Engineering. Volume 4}, University of Prince Edward Island. Robertson
+  Library, 6 2021.
+
+\bibitem{ref43}
+A.~Bacciotti, ``Stability and control of linear systems,'' 2019.
+
+\bibitem{ref44}
+P.~Baranwal, K.~Batta, and T.~Kaushik, ``Comparative study of classical and
+  fuzzy pid attitude control system with extended kalman filter feedback for
+  nanosatellites,'' 10 2018.
+
+\bibitem{ref45}
+NASA, ``State of the art of small spacecraft technology,'' 2023.
 
 \end{thebibliography}
