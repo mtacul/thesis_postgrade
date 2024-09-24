@@ -417,7 +417,7 @@ def suite_sim(sigma_ss, sigma_b,lim,type_act,S_A_both):
     psd_RPY_1 = np.array([psd_bandwidth_1_R,psd_bandwidth_1_P,psd_bandwidth_1_Y])
     norm_psd_RPY_1 = np.linalg.norm(psd_RPY_1)
     
-    print("la norma de la densidad espectro potencia es:",norm_psd_RPY_1,"[W/Hz]")
+    # print("la norma de la densidad espectro potencia es:",norm_psd_RPY_1,"[W/Hz]")
     
     #%% Calculo del tiempo de asentamiento
 
@@ -548,7 +548,7 @@ def suite_sim(sigma_ss, sigma_b,lim,type_act,S_A_both):
     # normas exactitud de apuntamiento
     ti_1 = np.array([time_R_1[0],time_P_1[0],time_Y_1[0]])
     norm_time = np.linalg.norm(ti_1)
-    print("la norma del tiempo de asentamiento es:",norm_time,"[s]")
+    # print("la norma del tiempo de asentamiento es:",norm_time,"[s]")
     time_norm_1 = np.array([np.linalg.norm(ti_1),t_aux[-1]])
     data_norm_1= norms_RPY_1[int(time_norm_1[0]/2):int(time_norm_1[1]/2)]
 
@@ -556,7 +556,7 @@ def suite_sim(sigma_ss, sigma_b,lim,type_act,S_A_both):
     sigma_norm_1 = np.std(data_norm_1)
     accuracy_norm_1 = 3*sigma_norm_1
     accuracy_norms = np.array([accuracy_norm_1])
-    print("la norma de la exactitud de apuntamiento es:",accuracy_norms,"[°]")
+    # print("la norma de la exactitud de apuntamiento es:",accuracy_norms,"[°]")
 
     #%% Graficas
     

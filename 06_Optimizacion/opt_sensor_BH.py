@@ -18,7 +18,7 @@ def save_to_txt(x, acc, psd, time, pot_b, masa_b, vol_b, pot_ss, masa_ss, vol_ss
         f.write(f"pot_ss: {pot_ss}, masa_ss: {masa_ss}, vol_ss: {vol_ss}\n")
         f.write(f"pot_act: {pot_act}, masa_act: {masa_act}, vol_act: {vol_act}\n")
         f.write(f"------------------------\n")
-        
+
 # Definir la función objetivo con dos argumentos
 def objective(x, *args):
     # Desempaquetar los argumentos adicionales
@@ -46,8 +46,8 @@ def objective(x, *args):
     # Invocar la simulación según type_act
     acc, psd, time,pot_b, masa_b, vol_b,pot_ss, masa_ss, vol_ss, pot_act, masa_act, vol_act = suite_sim(std_sensor_sol, std_magnetometros, lim, type_act, S_A_both)
     
-    # Guardar los resultados en un archivo .txt
-    save_to_txt(x, acc, psd, time, pot_b, masa_b, vol_b, pot_ss, masa_ss, vol_ss, pot_act, masa_act, vol_act)
+    # # Guardar los resultados en un archivo .txt
+    # save_to_txt(x, acc, psd, time, pot_b, masa_b, vol_b, pot_ss, masa_ss, vol_ss, pot_act, masa_act, vol_act)
 
     # Seleccionar el valor a retornar según type_rend
     if type_rend == 'acc':
@@ -68,15 +68,20 @@ def objective(x, *args):
     
 # Definir valores de type_act, S_A_both, type_rend y Pesos P_i
 type_act = 0  # 0: magnetorquer, 1: rueda de reacción
-S_A_both = 2  # 0: solo sensor, 1: solo actuador, 2: ambos
-type_rend = 'acc_time'  # Puede ser 'acc', 'psd', 'time', 'acc_time', 'acc_psd', 'psd_time' y 'all'
+S_A_both = 0  # 0: solo sensor, 1: solo actuador, 2: ambos
+type_rend = 'acc'  # Puede ser 'acc', 'psd', 'time', 'acc_time', 'acc_psd', 'psd_time' y 'all'
 
 P_i = [1,1,1,   #Pesos: 0,1,2 -> acc,psd,time
        1,1,0,   #Pesos: 3,4,5 -> pot, masa y vol magnetometro
        1,1,0,   #Pesos: 6,7,8 -> pot, masa y vol sensor de sol
        1,1,1]   #Pesos: 9,10,11 -> pot, masa y vol actuador
 
+argss=(type_act, S_A_both, type_rend,P_i)
 
+x = [5.0e-01, 1.5e-09]
+
+f = objective(x,*argss)
+#%%
 # Definir límites para las variables
 if S_A_both == 0:
     bnds = ((0.01, 1.67), (0.012e-9, 3e-9))  # Para std_sensor_sol y std_magnetometros
