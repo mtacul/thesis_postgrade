@@ -1,0 +1,55 @@
+\section{Cambios en los sistemas de referencia}
+
+\label{ap:Z3}
+
+De cuaternión a ángulos de Euler:
+
+\[
+\text{Roll} = \arctan \left( \frac{2(q_3 q_0 + q_1 q_2)}{1 - 2(q_0^2 + q_1^2)} \right)
+\]
+
+\[
+\text{Pitch} =
+\begin{cases} 
+	\arcsin(1.0), & \text{si } 2(q_3 q_1 - q_2 q_0) > 1.0 \\
+	\arcsin(-1.0), & \text{si } 2(q_3 q_1 - q_2 q_0) < -1.0 \\
+	\arcsin(2(q_3 q_1 - q_2 q_0)), & \text{en otro caso}
+\end{cases}
+\]
+
+\[
+\text{Yaw} = \arctan \left( \frac{2(q_3 q_2 + q_0 q_1)}{1 - 2(q_1^2 + q_2^2)} \right)
+\]
+
+De cuaterniones a DCM y viceversa:
+
+\[
+\text{DCM} = \begin{bmatrix}
+	q_3^2 + q_0^2 - q_2^2 - q_1^2 & 2(q_0 q_1 + q_2 q_3) & 2(q_0 q_2 - q_1 q_3) \\
+	2(q_0 q_1 - q_2 q_3) & q_3^2 - q_0^2 + q_1^2 - q_2^2 & 2(q_1 q_2 + q_0 q_3) \\
+	2(q_0 q_2 + q_1 q_3) & 2(q_1 q_2 - q_0 q_3) & q_3^2 - q_0^2 - q_1^2 + q_2^2
+\end{bmatrix}
+= \begin{bmatrix}
+	C_{11} & C_{12} & C_{13} \\
+	C_{21} & C_{22} & C_{23} \\
+	C_{31} & C_{32} & C_{33}
+\end{bmatrix}
+\]
+
+\[
+q_0^2 = \frac{1}{4}(1 + C_{11} - C_{22} - C_{33})
+\]
+
+\[
+q_1^2 = \frac{1}{4}(1 - C_{11} + C_{22} - C_{33})
+\]
+
+\[
+q_2^2 = \frac{1}{4}(1 - C_{11} - C_{22} + C_{33})
+\]
+
+\[
+q_3^2 = \frac{1}{4}(1 + C_{11} + C_{22} + C_{33})
+\]
+
+

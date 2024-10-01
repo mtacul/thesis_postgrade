@@ -1,11 +1,12 @@
-\contentsline {table}{\numberline {2.1}{\ignorespaces Sensores utilizados en CubeSat \cite {ref6}.}}{17}{}%
-\contentsline {table}{\numberline {2.2}{\ignorespaces Descripción de las triadas de referencia y de observación.}}{18}{}%
-\contentsline {table}{\numberline {2.3}{\ignorespaces Actuadores utilizados en CubeSat \cite {ref6}.}}{22}{}%
-\contentsline {table}{\numberline {5.1}{\ignorespaces Parámetros del sistema}}{42}{}%
-\contentsline {table}{\numberline {5.2}{\ignorespaces Componentes clasificados por nivel de rendimiento}}{43}{}%
-\contentsline {table}{\numberline {5.3}{\ignorespaces Rendimiento y costo para rueda de reaccion y magnetorquer en mismas condiciones}}{44}{}%
-\contentsline {table}{\numberline {5.4}{\ignorespaces Rendimiento y costo para controlador PD y LQR en mismas condiciones}}{45}{}%
-\contentsline {table}{\numberline {5.5}{\ignorespaces Rendimiento y costo para niveles de sensor con nivel 2 de magnetorquer y LQR}}{46}{}%
-\contentsline {table}{\numberline {5.6}{\ignorespaces Rendimiento y costo para niveles de sensor con nivel 2 de rueda de reacción y LQR}}{47}{}%
-\contentsline {table}{\numberline {5.7}{\ignorespaces Rendimiento y costo para niveles de magnetorquer con nivel 2 de sensor y LQR}}{48}{}%
-\contentsline {table}{\numberline {5.8}{\ignorespaces Rendimiento y costo para niveles de rueda de reacción con nivel 2 de sensor y LQR}}{49}{}%
+\contentsline {table}{\numberline {2.1}{\ignorespaces Sensores utilizados en CubeSat \cite {ref6}.}}{18}{}%
+\contentsline {table}{\numberline {2.2}{\ignorespaces Descripción de las triadas de referencia y de observación.}}{19}{}%
+\contentsline {table}{\numberline {2.3}{\ignorespaces Actuadores utilizados en CubeSat \cite {ref6}.}}{23}{}%
+\contentsline {table}{\numberline {3.1}{\ignorespaces Comparativa de software/simuladores para CubeSats.}}{33}{}%
+\contentsline {table}{\numberline {5.1}{\ignorespaces Parámetros del sistema}}{49}{}%
+\contentsline {table}{\numberline {5.2}{\ignorespaces Componentes clasificados por nivel de rendimiento}}{50}{}%
+\contentsline {table}{\numberline {5.3}{\ignorespaces Rendimiento y costo para rueda de reaccion y magnetorquer en mismas condiciones.}}{52}{}%
+\contentsline {table}{\numberline {5.4}{\ignorespaces Rendimiento y costo para controlador PD y LQR en mismas condiciones.}}{53}{}%
+\contentsline {table}{\numberline {5.5}{\ignorespaces Rendimiento y costo para niveles de sensor con nivel 2 de magnetorquer y LQR.}}{54}{}%
+\contentsline {table}{\numberline {5.6}{\ignorespaces Rendimiento y costo para niveles de sensor con nivel 2 de rueda de reacción y LQR.}}{55}{}%
+\contentsline {table}{\numberline {5.7}{\ignorespaces Rendimiento y costo para niveles de magnetorquer con nivel 2 de sensor y LQR.}}{57}{}%
+\contentsline {table}{\numberline {5.8}{\ignorespaces Rendimiento y costo para niveles de rueda de reacción con nivel 2 de sensor y LQR.}}{58}{}%

@@ -1,0 +1,189 @@
+\section{Control lineal Magnetorquer}
+\label{ap:Z5}
+
+Primero se plantean las ecuaciones de la cinemática del cuaternión utilizando la componente escalar \( q_3 \) como dependiente de las componentes vectoriales, sabiendo que la norma del cuaternión es siempre igual a 1. Esto deja la siguiente expresión:
+
+\[
+q_3 = \sqrt{1 - (q_0)^2 - (q_1)^2 - (q_2)^2}
+\]
+
+Con ello, se obtiene el f(x), sabiendo que en las tres primeras ecuaciones las tres componentes de la velocidad angular están entre los marcos de referencia de control (del cuerpo) y orbital (RPY o requerido), mientras que las tres últimas tienen la velocidad angular entre los marcos de referencia de control e inercial (ECI).
+
+\begin{equation}
+	\dot{q}_0 = \frac{1}{2} \left( \omega_{2\_co} q_1 - \omega_{1\_co} q_2 + \omega_{0\_co} \sqrt{1 - (q_0)^2 - (q_1)^2 - (q_2)^2} \right)
+\end{equation}
+
+\begin{equation}
+	\dot{q}_1 = \frac{1}{2} \left( -\omega_{2\_co} q_0 + \omega_{0\_co} q_2 + \omega_{1\_co} \sqrt{1 - (q_0)^2 - (q_1)^2 - (q_2)^2} \right)
+\end{equation}
+
+\begin{equation}
+	\dot{q}_2 = \frac{1}{2} \left( \omega_{1\_co} q_0 - \omega_{0\_co} q_1 + \omega_{2\_co} \sqrt{1 - (q_0)^2 - (q_1)^2 - (q_2)^2} \right)
+\end{equation}
+
+\begin{equation}
+	\dot{\omega}_{0,ci} I_x = \omega_{1,ci} \omega_{2,ci} (I_y - I_z) + \tau_{x,ctrl} + \tau_{x,pert} \\
+\end{equation}
+
+\begin{equation}
+	\dot{\omega}_{1,ci} I_y = \omega_{0,ci} \omega_{2,ci} (I_x - I_z) + \tau_{y,ctrl} + \tau_{y,pert}
+\end{equation}
+
+\begin{equation}
+	\dot{\omega}_{2,ci} I_z = \omega_{0,ci} \omega_{1,ci} (I_x - I_y) + \tau_{z,ctrl} + \tau_{z,pert}
+\end{equation}
+
+
+Primero, se debe conocer que los torques de perturbación en el espacio, $\tau_{pert}$, están representados en el peor caso para cada uno en el Anexo B, mientras que el torque de control ejercido por el magnetorquer se expresa de la siguiente manera \cite{ref14}:
+
+\begin{equation}
+	\tau_{ctrl} = \frac{\vec{m} \times \vec{b}}{\|\vec{b}\|} \times \vec{b}
+\end{equation}
+
+Donde $\vec{b}$ son las fuerzas magnéticas en el marco de referencia del cuerpo, y $\vec{m}$ es el momento dipolar del magnetorquer. Esta ecuación se descompone en sus tres componentes como se muestra a continuación:
+
+\[
+	\tau_{x,ctrl} = \left( \frac{b_x m_z - b_z m_x}{\|\vec{b}\|} \right) b_z - \left( \frac{b_y m_x - b_x m_y}{\|\vec{b}\|} \right) b_y
+\]
+
+\[
+	\tau_{y,ctrl} = -\left( \frac{b_z m_y - b_y m_z}{\|\vec{b}\|} \right) b_z + \left( \frac{b_y m_x - b_x m_y}{\|\vec{b}\|} \right) b_x
+\]
+
+\[
+	\tau_{z,ctrl} = \left( \frac{b_z m_y - b_y m_z}{\|\vec{b}\|} \right) b_y - \left( \frac{b_x m_z - b_z m_x}{\|\vec{b}\|} \right) b_x
+\]
+
+Por último, antes de linealizar el sistema según las variables de estado $x = [q_0, q_1, q_2, \omega_{0_{co}}, \omega_{1_{co}}, \omega_{2_{co}}]$ y las variables de control $u = [m_x, m_y, m_z]$, todas las ecuaciones deben estar en el mismo sistema de referencia, por lo que se debe aplicar un reemplazo en las ecuaciones para que estén en el sistema de referencia de control vs órbita. Para ello, se implementa el siguiente cambio de variable propuesto por Torczynski \cite{ref14}, sabiendo que $\omega_{0_o}$ es el "orbital period" correspondiente a la velocidad angular en el marco de referencia orbital:
+
+\[
+\begin{bmatrix}
+	\omega_{0_{ci}} \\
+	\omega_{1_{ci}} \\
+	\omega_{2_{ci}}
+\end{bmatrix}
+=
+\begin{bmatrix}
+	\omega_{0_{co}} \\
+	\omega_{1_{co}} \\
+	\omega_{2_{co}}
+\end{bmatrix}
++
+\begin{bmatrix}
+	q_3^2 + q_0^2 - q_1^2 - q_2^2 & 2(q_0 q_1 + q_2 q_3) & 2(q_0 q_2 - q_1 q_3) \\
+	2(q_0 q_1 - q_2 q_3) & q_3^2 - q_0^2 + q_1^2 - q_2^2 & 2(q_1 q_2 + q_0 q_3) \\
+	2(q_0 q_2 + q_1 q_3) & 2(q_1 q_2 - q_0 q_3) & q_3^2 - q_0^2 - q_1^2 + q_2^2
+\end{bmatrix}
+\cdot
+\begin{bmatrix}
+	\omega_{0_o} \\
+	0 \\
+	0
+\end{bmatrix}
+\]
+
+Al implementar dicho cambio de variable, las ecuaciones de la conservación del momento angular quedan representadas de la siguiente manera:
+
+\[
+\dot{\omega}_{0_{co}} = \left( \omega_{1_{co}} + \omega_{0_o} \left[ 2\left( q_0 q_1 - q_2 \sqrt{1 - q_0^2 - q_1^2 - q_2^2} \right) \right] \right) \cdot
+\]
+\[
+ \left( \omega_{2_{co}} + \omega_{0_o} \left[ 2\left( q_0 q_2 + q_1 \sqrt{1 - q_0^2 - q_1^2 - q_2^2} \right) \right] \right) \cdot \frac{(I_y - I_z)}{I_x} - \omega_{0_o} I_x \left[ -4q_1 \dot{q}_1 - 4q_2 \dot{q}_2 \right] + \frac{\tau_{x_{ctrl}}}{I_x} + \frac{\tau_{x_{pert}}}{I_x}
+\]
+
+\[
+\dot{\omega}_{1_{co}} = \left( \omega_{0_{co}} + \omega_{0_o} \left[ 1 - 2q_1^2 - 2q_2^2 \right] \right) \cdot \left( \omega_{2_{co}} + \omega_{0_o} \left[ 2\left( q_0 q_2 + q_1 \sqrt{1 - q_0^2 - q_1^2 - q_2^2} \right) \right] \right) \cdot \frac{(I_x - I_z)}{I_y}
+\]
+\[
+- \omega_{0_o} I_y \left[ 2\left( \dot{q}_0 q_1 + q_0 \dot{q}_1 - \dot{q}_2 \sqrt{1 - q_0^2 - q_1^2 - q_2^2} + q_2 \frac{(q_0 \dot{q}_0 + q_1 \dot{q}_1 + q_2 \dot{q}_2)}{\sqrt{1 - q_0^2 - q_1^2 - q_2^2}} \right) \right] + \frac{\tau_{y_{ctrl}}}{I_y} + \frac{\tau_{y_{pert}}}{I_y}
+\]
+
+\[
+\dot{\omega}_{2,co} = \left( \omega_{0,co} + \omega_{0,o} \left[ 1 - 2q_1^2 - 2q_2^2 \right] \right) \cdot \left( \omega_{1,co} + \omega_{0,o} \left[ 2 \left( q_0 q_1 - q_2 \sqrt{1 - q_0^2 - q_1^2 - q_2^2} \right) \right] \right) \cdot \frac{(I_x - I_y)}{I_z} 
+\]
+\[
+- \omega_{0,o} \frac{I_z}{I_z} \left[ 2 \left( \dot{q}_0 q_2 + q_0 \dot{q}_2 + \dot{q}_1 \sqrt{1 - q_0^2 - q_1^2 - q_2^2} - q_1 \frac{(q_0 \dot{q}_0 + q_1 \dot{q}_1 + q_2 \dot{q}_2)}{\sqrt{1 - q_0^2 - q_1^2 - q_2^2}} \right) \right] 
++ \frac{\tau_{z,ctrl}}{I_z} + \frac{\tau_{z,pert}}{I_z}
+\]
+
+Con esta representación, se obtiene nuevamente el jacobiano A que será utilizado tanto para el lazo cerrado del EKF, como para el control lineal mostrado en esta sección, la cual se debe evaluar en el punto de equilibrio para generar la matriz A de la seccion 4.4.2.
+
+\[
+A_{11} = -0.5q_0 \frac{\omega_0}{q_3}; \quad A_{12} = 0.5\omega_{2}-0.5q_1 \frac{\omega_0}{q_3}; \quad A_{13} = -0.5\omega_{1}-0.5q_2 \frac{\omega_0}{q_3}
+\]
+
+\[
+A_{14} = 0.5q_3; \quad A_{15} = -0.5q_2; \quad A_{16} = 0.5q_{1}
+\]
+
+\[
+A_{21} = 0.5\omega_{2}-0.5q_0 \frac{\omega_1}{q_3}; \quad A_{22} = -0.5q_1 \frac{\omega_1}{q_3}; \quad A_{23} = 0.5\omega_{0}-0.5q_2 \frac{\omega_1}{q_3}
+\]
+
+\[
+A_{24} = 0.5q_2; \quad A_{25} = 0.5q_3; \quad A_{26} = -0.5q_{0}
+\]
+
+\[
+A_{31} =  0.5\omega_{1}-0.5q_0 \frac{\omega_2}{q_3}; \quad A_{32} = -0.5\omega_{0}-0.5q_1 \frac{\omega_2}{q_3}; \quad A_{33} = -0.5q_2 \frac{\omega_2}{q_3}
+\]
+
+\[
+A_{34} = -0.5q_1; \quad A_{35} = 0.5q_0; \quad A_{36} = 0.5q_{3}
+\]
+
+\[
+A_{41} = 6 \cdot \omega_{0,o}^2 \cdot (I_x - I_y); \quad 
+A_{42} = A_{43} = A_{44} = 0
+\]
+
+\[
+A_{45} = \left( \omega_2 + \omega_{0,o} \left( 2q_0 q_2 - 2q_1 q_3 \right) \right) \cdot \frac{(I_y - I_z)}{I_x} - \omega_{0,o} I_x \left( -2q_1 q_3 + 2q_2 q_1 \right)
+\]
+
+\[
+A_{46} = \left( \omega_1 + \omega_{0,o} \left( 2q_0 q_1 - 2q_2 q_3 \right) \right) \cdot \frac{(I_y - I_z)}{I_x} - \omega_{0,o} I_x \left( 2q_1 q_0 - 2q_2 q_3 \right)
+\]
+
+\[
+A_{51} = A_{53} = 0; \quad A_{52} = 6 \cdot \omega_{0,o}^2 \cdot (I_z - I_y)
+\]
+
+\[
+A_{54} = \left( \omega_2 + \omega_{0,o} \left( 2q_0 q_2 + 2q_1 q_3 \right) \right) \cdot \frac{(I_x - I_z)}{I_y} - \omega_{0,o} I_y \left( q_3 q_1 + q_2 q_0 - q_1 q_3 + \frac{q_2 q_0 q_3 + q_2 q_1 q_2 + q_2 q_2 q_1}{q_3} \right)
+\]
+
+\[
+A_{55} = -\omega_{0,o} I_y \left( -q_2 q_1 + q_3 q_0 - q_0 q_3 + \frac{-q_2 q_0 q_2 + q_2 q_1 q_3 + q_2 q_2 q_0}{q_3} \right)
+\]
+
+\[
+A_{56} = \left( \omega_0 + \omega_{0,o} \left( 1 - 2q_1^2 - 2q_2^2 \right) \right) \cdot \frac{(I_x - I_z)}{I_y} - \omega_{0,o} I_y \left( q_1 q_1 + q_0 q_0 - q_3 q_3 + \frac{q_2 q_0 q_1 - q_2 q_1 q_0 + q_2 q_2 q_3}{q_3} \right)
+\]
+
+\[
+A_{61} = A_{62} = A_{63} = 0
+\]
+
+\[
+A_{64} = \left( \omega_1 + \omega_{0,o} \left( 2q_0 q_1 - 2q_2 q_3 \right) \right) \cdot \frac{(I_x - I_y)}{I_z} - \omega_{0,o} I_z \left( q_3 q_2 - q_1 q_0 + q_2 q_3 - \frac{q_1 q_0 q_3 + q_1 q_1 q_2 - q_1 q_2 q_1}{q_3} \right)
+\]
+
+\[
+A_{65} = \left( \omega_0 + \omega_{0,o} \left( 1 - 2q_1^2 - 2q_2^2 \right) \right) \cdot \frac{(I_x - I_y)}{I_z} - \omega_{0,o} I_z \left( -q_2 q_2 - q_0 q_0 + q_3 q_3 - \frac{q_1 q_0 q_2 + q_1 q_1 q_3 - q_1 q_2 q_0}{q_3} \right)
+\]
+
+\[
+A_{66} = -\omega_{0,o} I_z \left( -q_1 q_2 + q_3 q_0 - q_0 q_3 - \frac{q_1 q_0 q_1 - q_1 q_1 q_0 + q_1 q_2 q_3}{q_3} \right)
+\]
+
+\[
+A = \begin{bmatrix}
+	A_{11} & A_{12} & A_{13} & A_{14} & A_{15} & A_{16} \\
+	A_{21} & A_{22} & A_{23} & A_{24} & A_{25} & A_{26} \\
+	A_{31} & A_{32} & A_{33} & A_{34} & A_{35} & A_{36} \\
+	A_{41} & A_{42} & A_{43} & A_{44} & A_{45} & A_{46} \\
+	A_{51} & A_{52} & A_{53} & A_{54} & A_{55} & A_{56} \\
+	A_{61} & A_{62} & A_{63} & A_{64} & A_{65} & A_{66}
+\end{bmatrix}
+\]

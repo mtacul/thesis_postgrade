@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.9.16)  23 SEP 2024 19:34
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.9.16)  30 SEP 2024 03:23
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1176,7 +1176,10 @@ Package: float 2001/11/08 v1.3d Float enhancements (AL)
 (./C4-Diseno_de_la_suite_de_simulacion.aux)
 (./C5-Verificacion_de_la_suite_de_simulacion.aux)
 (./C6-Aplicacion_y_validacion_de_optimizacion_en_Python.aux)
-(./C7-Conclusiones.aux) (./Z1-Planos.aux) (./Z2-Codigo.aux))
+(./C7-Conclusiones.aux) (./Z1-CartaGantt.aux) (./Z2-Torques.aux)
+(./Z3-Conversion.aux) (./Z4-EKF.aux) (./Z5-Magnetorquer.aux)
+(./Z6-RuedaReaccion.aux) (./Z7-Componentes.aux) (./Z8-MoP.aux) (./Z9-Codigo.aux
+))
 \openout1 = `Formato-MT-Latex.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 73.
@@ -1196,8 +1199,7 @@ LaTeX Font Info:    ... okay on input line 73.
 LaTeX Font Info:    Checking defaults for LGR/cmr/m/n on input line 73.
 LaTeX Font Info:    Trying to load font information for LGR+cmr on input line 7
 3.
-
-(c:/texlive/2024/texmf-dist/tex/latex/cbfonts-fd/lgrcmr.fd
+ (c:/texlive/2024/texmf-dist/tex/latex/cbfonts-fd/lgrcmr.fd
 File: lgrcmr.fd 2017/07/29 v1.2 Greek European Computer Regular
 )
 LaTeX Font Info:    ... okay on input line 73.
@@ -1332,26 +1334,28 @@ ng>]
 
 
 [6] (./Formato-MT-Latex.lof
-Overfull \hbox (3.20715pt too wide) in paragraph at lines 14--14
+Overfull \hbox (3.20715pt too wide) in paragraph at lines 22--22
  [][] []\OT1/cmr/m/n/12 Componentes de las fuerzas magn^^Seticas re-specto a EC
 I que afectan al SUCHAI- 
  []
-
-)
-\tf@lof=\write5
-\openout5 = `Formato-MT-Latex.lof'.
 
 
 
 [1
 
-] (./Formato-MT-Latex.lot)
+])
+\tf@lof=\write5
+\openout5 = `Formato-MT-Latex.lof'.
+
+
+
+[2] (./Formato-MT-Latex.lot)
 \tf@lot=\write6
 \openout6 = `Formato-MT-Latex.lot'.
 
 
 
-[2
+[3
 
 ]
 
@@ -1362,7 +1366,7 @@ m}]. Rerun may be required (or you may have forgotten to use commands like \gls
 \openout2 = `C1-Introduccion.aux'.
 
 (./C1-Introduccion.tex
-<Nanosats_years_2024-05-31_large.png, id=39, 963.6pt x 542.025pt>
+<Nanosats_years_2024-05-31_large.png, id=42, 963.6pt x 542.025pt>
 File: Nanosats_years_2024-05-31_large.png Graphic file (type png)
 <use Nanosats_years_2024-05-31_large.png>
 Package pdftex.def Info: Nanosats_years_2024-05-31_large.png  used on input lin
@@ -1370,11 +1374,11 @@ e 8.
 (pdftex.def)             Requested size: 486.25761pt x 273.51782pt.
 
 
-[3
+[4
 
 
  <./Nanosats_years_2024-05-31_large.png (PNG copy)>]
-<diagrama memoria1234.pdf, id=44, 466.6252pt x 241.84843pt>
+<diagrama memoria1234.pdf, id=47, 466.6252pt x 241.84843pt>
 File: diagrama memoria1234.pdf Graphic file (type pdf)
 <use diagrama memoria1234.pdf>
 Package pdftex.def Info: diagrama memoria1234.pdf  used on input line 36.
@@ -1385,82 +1389,80 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 
 
 
-[4]
+[5]
 
-[5 <./diagrama memoria1234.pdf>]
-<bloque02.pdf, id=60, 456.1958pt x 217.07813pt>
+[6 <./diagrama memoria1234.pdf>]
+<bloque02.pdf, id=63, 456.1958pt x 217.07813pt>
 File: bloque02.pdf Graphic file (type pdf)
 <use bloque02.pdf>
-Package pdftex.def Info: bloque02.pdf  used on input line 56.
+Package pdftex.def Info: bloque02.pdf  used on input line 55.
 (pdftex.def)             Requested size: 437.62888pt x 208.24356pt.
 
 
-[6 <./bloque02.pdf>]
+[7 <./bloque02.pdf>]
 
-[7])
+[8])
 
-[8]
+[9]
 \openout2 = `C2-Marco_Teorico.aux'.
 
  (./C2-Marco_Teorico.tex
-<body.pdf, id=80, 158.83827pt x 231.121pt>
+<body.pdf, id=83, 158.83827pt x 231.121pt>
 File: body.pdf Graphic file (type pdf)
 <use body.pdf>
 Package pdftex.def Info: body.pdf  used on input line 12.
 (pdftex.def)             Requested size: 136.15154pt x 198.12186pt.
-<ECI.png, id=81, 599.23875pt x 309.40594pt>
+<ECI.png, id=84, 599.23875pt x 309.40594pt>
 File: ECI.png Graphic file (type png)
 <use ECI.png>
 Package pdftex.def Info: ECI.png  used on input line 21.
 (pdftex.def)             Requested size: 389.00757pt x 200.86125pt.
 
 
-[9
+[10
 
 
 
  <./body.pdf>]
-<RPY.pdf, id=99, 340.87982pt x 168.70404pt>
+<RPY.pdf, id=102, 340.87982pt x 168.70404pt>
 File: RPY.pdf Graphic file (type pdf)
 <use RPY.pdf>
 Package pdftex.def Info: RPY.pdf  used on input line 35.
 (pdftex.def)             Requested size: 291.75752pt x 144.39275pt.
 
 
-[10 <./ECI.png> <./RPY.pdf>]
-<keplerianos.png, id=113, 836.12375pt x 753.81625pt>
+[11 <./ECI.png> <./RPY.pdf>]
+<keplerianos.png, id=116, 836.12375pt x 753.81625pt>
 File: keplerianos.png Graphic file (type png)
 <use keplerianos.png>
 Package pdftex.def Info: keplerianos.png  used on input line 67.
 (pdftex.def)             Requested size: 218.81444pt x 197.27586pt.
 
 
-[11 <./keplerianos.png>]
+[12 <./keplerianos.png>]
 
-[12]
-<DCM.png, id=122, 495.65175pt x 389.0535pt>
+[13]
+<DCM.png, id=126, 495.65175pt x 389.0535pt>
 File: DCM.png Graphic file (type png)
 <use DCM.png>
 Package pdftex.def Info: DCM.png  used on input line 115.
 (pdftex.def)             Requested size: 218.81444pt x 171.75395pt.
-<axis_angle.pdf, id=123, 145.90816pt x 145.92926pt>
+<axis_angle.pdf, id=127, 145.90816pt x 145.92926pt>
 File: axis_angle.pdf Graphic file (type pdf)
 <use axis_angle.pdf>
 Package pdftex.def Info: axis_angle.pdf  used on input line 124.
 (pdftex.def)             Requested size: 145.87875pt x 145.89993pt.
 
 
-[13 <./DCM.png>]
-<euler_angles.png, id=129, 525.162pt x 475.7775pt>
+[14 <./DCM.png>]
+<euler_angles.png, id=132, 525.162pt x 475.7775pt>
 File: euler_angles.png Graphic file (type png)
 <use euler_angles.png>
 Package pdftex.def Info: euler_angles.png  used on input line 133.
 (pdftex.def)             Requested size: 291.75752pt x 264.32098pt.
 
 
-[14 <./axis_angle.pdf> <./euler_angles.png>]
-
-[15]
+[15 <./axis_angle.pdf> <./euler_angles.png>]
 
 [16]
 
@@ -1472,11 +1474,13 @@ Package pdftex.def Info: euler_angles.png  used on input line 133.
 
 [20]
 
+[21]
+
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 
 
-[21]
+[22]
 Overfull \hbox (15.64366pt too wide) in paragraph at lines 430--431
 []\OT1/cmr/m/n/12 El sis-tema es con-tro-lable y ob-serv-able si la ma-triz de 
 con-tro-la-bil-i-dad $[] = [\OML/cmm/m/it/12 B; AB; A[]B; [] ; A[]B\OT1/cmr/m/n
@@ -1485,28 +1489,101 @@ con-tro-la-bil-i-dad $[] = [\OML/cmm/m/it/12 B; AB; A[]B; [] ; A[]B\OT1/cmr/m/n
 
 
 
-[22]
-
-[23])
+[23]
 
 [24]
+Overfull \hbox (10.58398pt too wide) in paragraph at lines 493--494
+\OT1/cmr/m/n/12 lin-eal, pero las re-stric-ciones in-volu-cran ma-tri-ces semid
+efinidas pos-i-ti-vas. Un prob-lema semidefinido
+ []
+
+
+
+[25])
+
+[26]
 \openout2 = `C3-Estado_del_Arte.aux'.
 
  (./C3-Estado_del_Arte.tex
+<Cubesat_Toolbox.png, id=206, 1103.92426pt x 648.021pt>
+File: Cubesat_Toolbox.png Graphic file (type png)
+<use Cubesat_Toolbox.png>
+Package pdftex.def Info: Cubesat_Toolbox.png  used on input line 14.
+(pdftex.def)             Requested size: 364.6932pt x 214.07501pt.
+<Cubesat_Toolbox_2.png, id=207, 1103.322pt x 649.2255pt>
+File: Cubesat_Toolbox_2.png Graphic file (type png)
+<use Cubesat_Toolbox_2.png>
+Package pdftex.def Info: Cubesat_Toolbox_2.png  used on input line 21.
+(pdftex.def)             Requested size: 364.6932pt x 214.5918pt.
 
-[25
+
+[27
 
 
 
-]
-Overfull \hbox (4.8484pt too wide) in paragraph at lines 28--29
+ <./Cubesat_Toolbox.png>]
+Overfull \hbox (9.58308pt too wide) in paragraph at lines 36--37
+[]\OT1/cmr/m/n/12 Es rel-e-vante ya que es ca-paz de mod-e-lar un sat^^Selite m
+e-di-ante su dise~no 3D, mostrando gr^^Saficamente
+ []
+
+
+
+[28 <./Cubesat_Toolbox_2.png>]
+<STK.png, id=216, 416.757pt x 394.47375pt>
+File: STK.png Graphic file (type png)
+<use STK.png>
+Package pdftex.def Info: STK.png  used on input line 40.
+(pdftex.def)             Requested size: 194.50008pt x 184.10254pt.
+<blockset_1.png, id=217, 578.16pt x 267.24844pt>
+File: blockset_1.png Graphic file (type png)
+<use blockset_1.png>
+Package pdftex.def Info: blockset_1.png  used on input line 53.
+(pdftex.def)             Requested size: 340.37885pt x 157.33675pt.
+
+
+[29 <./STK.png> <./Blockset_1.png>]
+<blockset_2.png, id=223, 671.50874pt x 256.70906pt>
+File: blockset_2.png Graphic file (type png)
+<use blockset_2.png>
+Package pdftex.def Info: blockset_2.png  used on input line 62.
+(pdftex.def)             Requested size: 437.62888pt x 167.30153pt.
+<blockset_3.png, id=224, 648.92438pt x 305.64188pt>
+File: blockset_3.png Graphic file (type png)
+<use blockset_3.png>
+Package pdftex.def Info: blockset_3.png  used on input line 71.
+(pdftex.def)             Requested size: 291.75752pt x 137.4163pt.
+
+
+[30 <./Blockset_2.png> <./Blockset_3.png>]
+<blockset_4.png, id=230, 685.8122pt x 401.24907pt>
+File: blockset_4.png Graphic file (type png)
+<use blockset_4.png>
+Package pdftex.def Info: blockset_4.png  used on input line 80.
+(pdftex.def)             Requested size: 291.75752pt x 170.70308pt.
+<blockset_5.png, id=231, 405.01312pt x 323.70938pt>
+File: blockset_5.png Graphic file (type png)
+<use blockset_5.png>
+Package pdftex.def Info: blockset_5.png  used on input line 87.
+(pdftex.def)             Requested size: 364.6932pt x 291.48886pt.
+
+
+[31 <./Blockset_4.png> <./Blockset_5.png>]
+Overfull \hbox (4.8484pt too wide) in paragraph at lines 103--104
 []\OT1/cmr/m/n/12 Una de las prin-ci-pales ven-ta-jas de Basilisk es su ca-paci
 -dad para sim-u-lar sis-temas multi-plataforma
  []
 
+
+
+[32]
+Overfull \hbox (6.0225pt too wide) in paragraph at lines 117--134
+ [][] 
+ []
+
 )
 
-[26]
+[33]
 \openout2 = `C4-Diseno_de_la_suite_de_simulacion.aux'.
 
  (./C4-Diseno_de_la_suite_de_simulacion.tex
@@ -1517,25 +1594,25 @@ Overfull \hbox (10.64238pt too wide) in paragraph at lines 8--9
 
 
 
-[27
+[34
 
 
 
 ]
-<bloques_generico.pdf, id=210, 520.68546pt x 389.80276pt>
+<bloques_generico.pdf, id=248, 520.68546pt x 389.80276pt>
 File: bloques_generico.pdf Graphic file (type pdf)
 <use bloques_generico.pdf>
 Package pdftex.def Info: bloques_generico.pdf  used on input line 24.
 (pdftex.def)             Requested size: 316.06447pt x 236.62544pt.
 
 
-[28 <./bloques_generico.pdf>]
-<pos.pdf, id=238, 722.7pt x 433.62pt>
+[35 <./bloques_generico.pdf>]
+<pos.pdf, id=276, 722.7pt x 433.62pt>
 File: pos.pdf Graphic file (type pdf)
 <use pos.pdf>
 Package pdftex.def Info: pos.pdf  used on input line 47.
 (pdftex.def)             Requested size: 330.65161pt x 198.38913pt.
-<vel.pdf, id=239, 722.7pt x 433.62pt>
+<vel.pdf, id=277, 722.7pt x 433.62pt>
 File: vel.pdf Graphic file (type pdf)
 <use vel.pdf>
 Package pdftex.def Info: vel.pdf  used on input line 53.
@@ -1546,18 +1623,18 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 
 
 
-[29]
+[36]
 
-[30 <./pos.pdf> <./vel.pdf>]
-<ss.pdf, id=307, 722.7pt x 433.62pt>
+[37 <./pos.pdf> <./vel.pdf>]
+<ss.pdf, id=346, 722.7pt x 433.62pt>
 File: ss.pdf Graphic file (type pdf)
 <use ss.pdf>
 Package pdftex.def Info: ss.pdf  used on input line 109.
 (pdftex.def)             Requested size: 316.06447pt x 189.6355pt.
 
 
-[31 <./ss.pdf>]
-<bb.pdf, id=344, 722.7pt x 433.62pt>
+[38 <./ss.pdf>]
+<bb.pdf, id=382, 722.7pt x 433.62pt>
 File: bb.pdf Graphic file (type pdf)
 <use bb.pdf>
 Package pdftex.def Info: bb.pdf  used on input line 156.
@@ -1568,106 +1645,122 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 
 
 
-[32]
+[39]
 
-[33 <./bb.pdf>]
+[40 <./bb.pdf>]
 
-[34]
+[41]
 
-[35]
+[42]
 
-[36]
+[43]
 
-[37]
+[44]
 
-[38]
-<suite.pdf, id=401, 520.68546pt x 438.17244pt>
+[45]
+<suite.pdf, id=439, 520.68546pt x 438.17244pt>
 File: suite.pdf Graphic file (type pdf)
 <use suite.pdf>
 Package pdftex.def Info: suite.pdf  used on input line 433.
 (pdftex.def)             Requested size: 437.62888pt x 368.29634pt.
 )
 
-[39]
+[46]
 
-[40 <./suite.pdf>]
+[47 <./suite.pdf>]
 \openout2 = `C5-Verificacion_de_la_suite_de_simulacion.aux'.
 
  (./C5-Verificacion_de_la_suite_de_simulacion.tex
 
-[41
+[48
 
 
 
 ]
 
-[42]
-Overfull \hbox (3.9862pt too wide) in paragraph at lines 70--94
+[49]
+Overfull \hbox (3.9862pt too wide) in paragraph at lines 75--99
  [][] 
  []
 
 
-Overfull \hbox (10.20529pt too wide) in paragraph at lines 101--102
+Overfull \hbox (10.20529pt too wide) in paragraph at lines 106--107
 \OT1/cmr/m/n/12 En esta secci^^Son se pre-sen-tar^^San an^^Salisis re-specto a 
 los re-sul-ta-dos obtenidos uti-lizando los par^^Sametros
  []
 
-<MT_RW_nivel2.pdf, id=429, 939.51pt x 578.16pt>
+
+
+[50]
+<MT_RW_nivel2.pdf, id=472, 939.51pt x 578.16pt>
 File: MT_RW_nivel2.pdf Graphic file (type pdf)
 <use MT_RW_nivel2.pdf>
-Package pdftex.def Info: MT_RW_nivel2.pdf  used on input line 109.
+Package pdftex.def Info: MT_RW_nivel2.pdf  used on input line 118.
 (pdftex.def)             Requested size: 471.67047pt x 290.25261pt.
 
 
-[43]
-<PD_LQR_nivel2.pdf, id=434, 939.51pt x 578.16pt>
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+
+[51 <./MT_RW_nivel2.pdf>]
+<PD_LQR_nivel2.pdf, id=518, 939.51pt x 578.16pt>
 File: PD_LQR_nivel2.pdf Graphic file (type pdf)
 <use PD_LQR_nivel2.pdf>
-Package pdftex.def Info: PD_LQR_nivel2.pdf  used on input line 138.
+Package pdftex.def Info: PD_LQR_nivel2.pdf  used on input line 154.
 (pdftex.def)             Requested size: 471.67047pt x 290.25261pt.
 
 
-[44 <./MT_RW_nivel2.pdf>]
-<MT_LQR_sensores.pdf, id=482, 1228.59pt x 578.16pt>
+[52 <./PD_LQR_nivel2.pdf>]
+<MT_LQR_sensores.pdf, id=566, 1228.59pt x 578.16pt>
 File: MT_LQR_sensores.pdf Graphic file (type pdf)
 <use MT_LQR_sensores.pdf>
-Package pdftex.def Info: MT_LQR_sensores.pdf  used on input line 166.
+Package pdftex.def Info: MT_LQR_sensores.pdf  used on input line 189.
 (pdftex.def)             Requested size: 471.67047pt x 221.9615pt.
 
 
-[45 <./PD_LQR_nivel2.pdf>]
-<RW_LQR_sensores.pdf, id=529, 1228.59pt x 578.16pt>
+[53]
+<RW_LQR_sensores.pdf, id=570, 1228.59pt x 578.16pt>
 File: RW_LQR_sensores.pdf Graphic file (type pdf)
 <use RW_LQR_sensores.pdf>
-Package pdftex.def Info: RW_LQR_sensores.pdf  used on input line 195.
+Package pdftex.def Info: RW_LQR_sensores.pdf  used on input line 223.
 (pdftex.def)             Requested size: 471.67047pt x 221.9615pt.
 
 
-[46 <./MT_LQR_sensores.pdf>]
-<MT_LQR_actuadores.pdf, id=577, 1228.59pt x 578.16pt>
+[54 <./MT_LQR_sensores.pdf>]
+
+[55 <./RW_LQR_sensores.pdf>]
+<MT_LQR_actuadores.pdf, id=664, 1228.59pt x 578.16pt>
 File: MT_LQR_actuadores.pdf Graphic file (type pdf)
 <use MT_LQR_actuadores.pdf>
-Package pdftex.def Info: MT_LQR_actuadores.pdf  used on input line 227.
+Package pdftex.def Info: MT_LQR_actuadores.pdf  used on input line 263.
 (pdftex.def)             Requested size: 471.67047pt x 221.9615pt.
 
 
-[47 <./RW_LQR_sensores.pdf>]
-<RW_LQR_actuadores.pdf, id=623, 1228.59pt x 578.16pt>
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+
+
+[56 <./MT_LQR_actuadores.pdf>]
+<RW_LQR_actuadores.pdf, id=712, 1228.59pt x 578.16pt>
 File: RW_LQR_actuadores.pdf Graphic file (type pdf)
 <use RW_LQR_actuadores.pdf>
-Package pdftex.def Info: RW_LQR_actuadores.pdf  used on input line 256.
+Package pdftex.def Info: RW_LQR_actuadores.pdf  used on input line 299.
 (pdftex.def)             Requested size: 471.67047pt x 221.9615pt.
 
 
-[48 <./MT_LQR_actuadores.pdf>])
+LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-[49 <./RW_LQR_actuadores.pdf>]
+
+
+[57 <./RW_LQR_actuadores.pdf>])
+
+[58]
 \openout2 = `C6-Aplicacion_y_validacion_de_optimizacion_en_Python.aux'.
 
+ (./C6-Aplicacion_y_validacion_de_optimizacion_en_Python.tex)
 
-(./C6-Aplicacion_y_validacion_de_optimizacion_en_Python.tex)
-
-[50
+[59
 
 
 
@@ -1676,32 +1769,159 @@ Package pdftex.def Info: RW_LQR_actuadores.pdf  used on input line 256.
 
  (./C7-Conclusiones.tex)
 
-[51
+[60
 
 
 
 ] (./Formato-MT-Latex.bbl
 
-[52
+[61
 
 
 ]
 
-[53])
+[62])
 
-[54]
-\openout2 = `Z1-Planos.aux'.
+[63]
+\openout2 = `Z1-CartaGantt.aux'.
 
- (./Z1-Planos.tex)
+ (./Z1-CartaGantt.tex)
 
-[55
+[64
 
 ]
-\openout2 = `Z2-Codigo.aux'.
+\openout2 = `Z2-Torques.aux'.
 
- (./Z2-Codigo.tex)
+ (./Z2-Torques.tex
 
-[56
+[65
+
+
+
+]
+
+LaTeX Warning: Citation `8' on page 66 undefined on input line 52.
+
+)
+
+[66]
+\openout2 = `Z3-Conversion.aux'.
+
+ (./Z3-Conversion.tex)
+
+[67
+
+
+
+]
+\openout2 = `Z4-EKF.aux'.
+
+ (./Z4-EKF.tex
+Overfull \hbox (2.78821pt too wide) in paragraph at lines 1--1
+|[]\OT1/cmr/bx/n/17.28 Procedimiento a seguir para el uso del fil-tro de Kalman
+| 
+ []
+
+
+
+[68
+
+
+
+]
+
+[69])
+
+[70]
+\openout2 = `Z5-Magnetorquer.aux'.
+
+ (./Z5-Magnetorquer.tex
+
+[71
+
+
+
+]
+Overfull \hbox (6.87274pt too wide) in paragraph at lines 57--58
+[]\OT1/cmr/m/n/12 Por ^^Sultimo, antes de lin-ealizar el sis-tema seg^^Sun las 
+vari-ables de es-tado $\OML/cmm/m/it/12 x \OT1/cmr/m/n/12 = [\OML/cmm/m/it/12 q
+[]; q[]; q[]; ![]; ![]; ![]\OT1/cmr/m/n/12 ]$
+ []
+
+
+Overfull \hbox (0.2418pt too wide) detected at line 92
+[] \OMS/cmsy/m/n/12 ^^A [] ^^@ \OML/cmm/m/it/12 ![]I[] [] \OT1/cmr/m/n/12 + [] 
++ []
+ []
+
+
+Overfull \hbox (1.93242pt too wide) detected at line 103
+[] \OT1/cmr/m/n/12 = [] \OMS/cmsy/m/n/12 ^^A [] ^^A []
+ []
+
+
+
+[72]
+Overfull \hbox (10.80687pt too wide) detected at line 154
+\OML/cmm/m/it/12 A[] \OT1/cmr/m/n/12 = [] \OMS/cmsy/m/n/12 ^^A [] ^^@ \OML/cmm/
+m/it/12 ![]I[] []
+ []
+
+
+Overfull \hbox (16.40173pt too wide) detected at line 162
+\OML/cmm/m/it/12 A[] \OT1/cmr/m/n/12 = [] \OMS/cmsy/m/n/12 ^^A [] ^^@ \OML/cmm/
+m/it/12 ![]I[] []
+ []
+
+
+Overfull \hbox (11.39056pt too wide) detected at line 170
+\OML/cmm/m/it/12 A[] \OT1/cmr/m/n/12 = [] \OMS/cmsy/m/n/12 ^^A [] ^^@ \OML/cmm/
+m/it/12 ![]I[] []
+ []
+
+
+Overfull \hbox (25.92966pt too wide) detected at line 174
+\OML/cmm/m/it/12 A[] \OT1/cmr/m/n/12 = [] \OMS/cmsy/m/n/12 ^^A [] ^^@ \OML/cmm/
+m/it/12 ![]I[] []
+ []
+
+
+
+[73])
+
+[74]
+\openout2 = `Z6-RuedaReaccion.aux'.
+
+ (./Z6-RuedaReaccion.tex)
+
+[75
+
+
+
+]
+\openout2 = `Z7-Componentes.aux'.
+
+ (./Z7-Componentes.tex)
+
+[76
+
+
+
+]
+\openout2 = `Z8-MoP.aux'.
+
+ (./Z8-MoP.tex)
+
+[77
+
+
+
+]
+\openout2 = `Z9-Codigo.aux'.
+
+ (./Z9-Codigo.tex)
+
+[78
 
 
 
@@ -1713,17 +1933,24 @@ enddocument/afterlastpage: lastpage setting LastPage.
 (./C4-Diseno_de_la_suite_de_simulacion.aux)
 (./C5-Verificacion_de_la_suite_de_simulacion.aux)
 (./C6-Aplicacion_y_validacion_de_optimizacion_en_Python.aux)
-(./C7-Conclusiones.aux) (./Z1-Planos.aux) (./Z2-Codigo.aux))
+(./C7-Conclusiones.aux) (./Z1-CartaGantt.aux) (./Z2-Torques.aux)
+(./Z3-Conversion.aux) (./Z4-EKF.aux) (./Z5-Magnetorquer.aux)
+(./Z6-RuedaReaccion.aux) (./Z7-Componentes.aux) (./Z8-MoP.aux) (./Z9-Codigo.aux
+))
  ***********
 LaTeX2e <2024-06-01> patch level 2
 L3 programming layer <2024-08-30>
  ***********
+
+
+LaTeX Warning: There were undefined references.
+
  ) 
 Here is how much of TeX's memory you used:
- 23212 strings out of 473578
- 445121 string characters out of 5732242
- 945902 words of memory out of 5000000
- 45560 multiletter control sequences out of 15000+600000
+ 23470 strings out of 473578
+ 451399 string characters out of 5732242
+ 955298 words of memory out of 5000000
+ 45769 multiletter control sequences out of 15000+600000
  567955 words of font info for 69 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  94i,17n,93p,2400b,616s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -1745,10 +1972,10 @@ ti12.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
 <c:/texlive/2024/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb><c:/texliv
 e/2024/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb><c:/texlive/2024/tex
 mf-dist/fonts/type1/public/cm-super/sfrm1200.pfb>
-Output written on Formato-MT-Latex.pdf (62 pages, 4082885 bytes).
+Output written on Formato-MT-Latex.pdf (84 pages, 7352231 bytes).
 PDF statistics:
- 826 PDF objects out of 1000 (max. 8388607)
- 331 compressed objects within 4 object streams
+ 912 PDF objects out of 1000 (max. 8388607)
+ 379 compressed objects within 4 object streams
  0 named destinations out of 1000 (max. 500000)
- 133 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 173 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -4,66 +4,32 @@ Created on Mon Sep 23 19:44:40 2024
 
 @author: nachi
 """
-from Suite_LQR import suite_sim
 import matplotlib.pyplot as plt
-import pandas as pd
+import os
+from tkinter import Tk
 
-       
-# Definir la función objetivo con dos argumentos
-def objective(x, *args):
-    # Desempaquetar los argumentos adicionales
-    type_act, S_A_both, type_rend,P_i = args  
-    
-    # Determinar los valores de std_sensor_sol, std_magnetometros y lim según S_A_both
-    if S_A_both == 0:
-        std_sensor_sol, std_magnetometros = x
-        P_i[9] = 0
-        P_i[10] = 0 
-        P_i[11] = 0
-        if type_act == 0:
-            lim = 5
-        elif type_act == 1:
-            lim = 0.1255
-    elif S_A_both == 1:
-        lim = x
-        std_sensor_sol, std_magnetometros = 0.68, 1e-9  # Valores fijos o iniciales
-        for i in range(3, 9):
-            P_i[i] = 0
-        
-    elif S_A_both == 2:
-        std_sensor_sol, std_magnetometros, lim = x
+# 1. Crear la carpeta "SLSQP" si no existe y cambiar el directorio a ella
+carpeta = "SLSQP"
+# carpeta = "Nelder-Mead"
+# carpeta = "TNC"
+# carpeta = "Powell"
+# carpeta = "L-BGFS-B"
 
-    # Invocar la simulación según type_act
-    acc, psd, time,pot_b, masa_b, vol_b,pot_ss, masa_ss, vol_ss, pot_act, masa_act, vol_act = suite_sim(std_sensor_sol, std_magnetometros, lim, type_act, S_A_both)
-    
-    # Seleccionar el valor a retornar según type_rend
-    if type_rend == 'acc':
-        return P_i[0]*acc**2 + P_i[3]*pot_b**2 + P_i[4]*masa_b**2 + P_i[5]*vol_b**2 +  P_i[6]*pot_ss**2 + P_i[7]*masa_ss**2 + P_i[8]*vol_ss**2 + P_i[9]*pot_act**2 + P_i[10]*masa_act**2 + P_i[11]*vol_act**2 
-    elif type_rend == 'psd':
-        return P_i[1]*psd**2 + P_i[3]*pot_b**2 + P_i[4]*masa_b**2 + P_i[5]*vol_b**2 +  P_i[6]*pot_ss**2 + P_i[7]*masa_ss**2 + P_i[8]*vol_ss**2 + P_i[9]*pot_act**2 + P_i[10]*masa_act**2 + P_i[11]*vol_act**2
-    elif type_rend == 'time':
-        return P_i[2]*time**2 + P_i[3]*pot_b**2 + P_i[4]*masa_b**2 + P_i[5]*vol_b**2 +  P_i[6]*pot_ss**2 + P_i[7]*masa_ss**2 + P_i[8]*vol_ss**2 + P_i[9]*pot_act**2 + P_i[10]*masa_act**2 + P_i[11]*vol_act**2
-    elif type_rend =='acc_time':
-        return P_i[0]*acc**2 + P_i[2]*time**2 + P_i[3]*pot_b**2 + P_i[4]*masa_b**2 + P_i[5]*vol_b**2 +  P_i[6]*pot_ss**2 + P_i[7]*masa_ss**2 + P_i[8]*vol_ss**2 + P_i[9]*pot_act**2 + P_i[10]*masa_act**2 + P_i[11]*vol_act**2
-    elif type_rend =='acc_psd':
-        return P_i[0]*acc**2 + P_i[1]*psd**2 + P_i[3]*pot_b**2 + P_i[4]*masa_b**2 + P_i[5]*vol_b**2 +  P_i[6]*pot_ss**2 + P_i[7]*masa_ss**2 + P_i[8]*vol_ss**2 + P_i[9]*pot_act**2 + P_i[10]*masa_act**2 + P_i[11]*vol_act**2
-    elif type_rend =='psd_time':
-        return P_i[1]*psd**2 + P_i[2]*time**2 + P_i[3]*pot_b**2 + P_i[4]*masa_b**2 + P_i[5]*vol_b**2 +  P_i[6]*pot_ss**2 + P_i[7]*masa_ss**2 + P_i[8]*vol_ss**2 + P_i[9]*pot_act**2 + P_i[10]*masa_act**2 + P_i[11]*vol_act**2
-    elif type_rend =='all':
-        return P_i[0]*acc**2 + P_i[1]*psd**2 + P_i[2]*time**2 + P_i[3]*pot_b**2 + P_i[4]*masa_b**2 + P_i[5]*vol_b**2 +  P_i[6]*pot_ss**2 + P_i[7]*masa_ss**2 + P_i[8]*vol_ss**2 + P_i[9]*pot_act**2 + P_i[10]*masa_act**2 + P_i[11]*vol_act**2
+if not os.path.exists(carpeta):
+    os.makedirs(carpeta)
+os.chdir(carpeta)
 
-    
+# 2. Usar tkinter para abrir un cuadro de diálogo y seleccionar un archivo
+# Ocultar la ventna de tkinter
+root = Tk()
+root.withdraw()
+
+
 # Definir valores de type_act, S_A_both, type_rend y Pesos P_i
 type_act = 1  # 0: magnetorquer, 1: rueda de reacción
 S_A_both = 0  # 0: solo sensor, 1: solo actuador, 2: ambos
 type_rend = 'acc'  # Puede ser 'acc', 'psd', 'time', 'acc_time', 'acc_psd', 'psd_time' y 'all'
 
-P_i = [1,1,1,   #Pesos: 0,1,2 -> acc,psd,time
-       1,1,0,   #Pesos: 3,4,5 -> pot, masa y vol magnetometro
-       1,1,0,   #Pesos: 6,7,8 -> pot, masa y vol sensor de sol
-       1,1,1]   #Pesos: 9,10,11 -> pot, masa y vol actuador
-
-argss=(type_act, S_A_both, type_rend,P_i)
 
 # Valores iniciales para las desviaciones estándar o lim según el caso
 if S_A_both == 0:
@@ -157,24 +123,22 @@ lineas = arch.split('\n')  # Divide 'arch' en una lista de líneas
 
 # Crear una lista para almacenar los valores de 'x'
 valores_x = []
-
-# Iterar sobre las líneas con un salto de 7 líneas
-for i in range(0, len(lineas), 7):
+f_costs = []
+# Iterar sobre las líneas con un salto de 8 líneas
+for i in range(0, len(lineas), 8):
     linea = lineas[i]
-    # Suponiendo que los valores de 'x' están separados por espacios, los extraemos
     valores_x.append(linea.split())  # Divide la línea en elementos individuales
 
-# 'valores_x' ahora tiene todas las líneas con los valores de 'x'
-# print(valores_x)
 
+# Iterar sobre las líneas con un salto de 8 líneas
+for i in range(6, len(lineas), 8):
+    linea_f = lineas[i]
+    f_costs.append(linea_f.split())  # Divide la línea en elementos individuales
 
 valores_numericos_por_sublista = []  # Lista que contendrá sublistas de números
 
-# Recorremos cada sublista en 'valores_x'
 for sublista in valores_x:
     sublista_numeros = []  # Sublista para almacenar los valores numéricos de esta iteración
-    # print(sublista)
-    
     for valor in sublista:
         # Limpiamos los corchetes u otros caracteres que no queremos
         valor = valor.replace('[', '').replace(']', '')  # Eliminamos corchetes si es necesario
@@ -190,58 +154,34 @@ for sublista in valores_x:
     # Añadimos la sublista con los números a la lista general
     valores_numericos_por_sublista.append(sublista_numeros)
 
-# # Mostramos la lista general con las sublistas de números
-# print(valores_numericos_por_sublista)
 
-f_costs = []
+valores_f = []
 
-for i in range(0,len(valores_numericos_por_sublista)-1):
-    if S_A_both == 1:
-        f_cost = objective(valores_numericos_por_sublista[i][0], *argss)
-        f_costs.append(f_cost)
-    else:
-        f_cost = objective(valores_numericos_por_sublista[i], *argss)
-        f_costs.append(f_cost)    
+for sublista in f_costs:
+    sublista_numeros = []  # Sublista para almacenar los valores numéricos de esta iteración
+    for valor in sublista:
+        # Limpiamos los corchetes u otros caracteres que no queremos
+        valor = valor.replace('[', '').replace(']', '')  # Eliminamos corchetes si es necesario
+        
+        # Intentamos convertir cada valor a float
+        try:
+            num = float(valor)  # Si se puede convertir, lo guardamos en la sublista de números
+            sublista_numeros.append(num)
+        except ValueError:
+            # Si hay un error (es decir, no se puede convertir a float), lo ignoramos
+            pass
+    
+    # Añadimos la sublista con los números a la lista general
+    valores_f.append(sublista_numeros)
+
 iteraciones = list(range(0,len(valores_numericos_por_sublista)-1))
 
-
 #%%
-
-# Nombre del archivo basado en las opciones seleccionadas
-nombre_archivo = f"f_cost_typeact{type_act}_saboth{S_A_both}_typerend{type_rend}.csv"
-
-# Crear un diccionario con los datos
-datos = {
-    'f_costo': f_costs
-}
-
-# Crear un DataFrame de pandas a partir del diccionario
-df_resultados = pd.DataFrame(datos)
-
-# Guardar el DataFrame en un archivo CSV
-df_resultados.to_csv(nombre_archivo, index=False)
-
-#%%
-
-type_act = 0  # 0: magnetorquer
-S_A_both = 1  # 0: solo sensor 2: ambos
-type_rend = 'acc'  # Puede ser 'acc'
-
-archivo_csv = f"f_cost_typeact{type_act}_saboth{S_A_both}_typerend{type_rend}.csv"
-
-# Leer el archivo CSV en un DataFrame de pandas
-df = pd.read_csv(archivo_csv)
-
-# Convertir el DataFrame a un array de NumPy
-array_datos = df.to_numpy()
-
-f_costs = array_datos[:, 0]
-iteraciones = list(range(0,len(f_costs)))
 
 fig0, ax = plt.subplots(figsize=(15,5))  # Crea un solo set de ejes
 
 # Graficar los tres conjuntos de datos en la misma gráfica
-ax.scatter(iteraciones, f_costs, label='its_minimize')
+ax.scatter(iteraciones, valores_f, label='its_minimize')
 
 # Configurar etiquetas, leyenda y grid
 ax.set_xlabel('iteraciones [-]', fontsize=18)

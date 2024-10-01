@@ -47,7 +47,6 @@ Además, en \cite{ref19} se presentan herramientas y plantillas disponibles en e
 También existen herramientas como Valispace, cuyo propósito es principalmente el análisis de budgets de ingeniería. Un ejemplo común de su uso se describe en \cite{ref20}. Este tipo de software ofrece una visión integral del análisis de satélites, abarcando costos temporales, monetarios y de potencia, al utilizar funciones que integran los requisitos de los subsistemas involucrados.
 
 Finalmente, existe un entorno de simulacion gratuito de la universidad de Colorado para sistemas de naves espaciales. Esta es una herramienta muy utilizada en la investigación académica y en proyectos relacionados con la simulación de dinámicas y control de vehículos espaciales de alta dificultad de uso, al combinar distintos topicos y lenguajes de programación en su arquitectura \cite{ref36}.
-%falta mencionar el software de Elias (gratuito pero dificil de utilizar para el usuario)
 
 Teniendo esto en cuenta, el simulador propuesto se perfila como una herramienta valiosa para el análisis del ADCS de un CubeSat. Al proporcionar la información adecuada del satélite,su órbita y el análisis especifico requerido, el simulador permitirá obtener tanto el rendimiento como el costo asociado al apuntamiento. Además, contribuirá al desarrollo tecnológico de CubeSats de manera simple y eficiente, utilizando componentes basados en CubeSats comerciales en la actualidad, todo dentro de un entorno de programación de libre acceso como Python. Asimismo, el simulador será capaz de ofrecer las características del ADCS necesarias para alcanzar un rendimiento o costo específico, según los parámetros definidos por el usuario. Un resumen de lo que se busca una vez implementado la suite de simulacion de la Figura~\ref{fig:bloques01}, se representa en la Figura~\ref{fig:bloques02}.
 
@@ -62,7 +61,7 @@ Teniendo esto en cuenta, el simulador propuesto se perfila como una herramienta 
 Se postula que el diseño e implementación de una suite de simulación que modele el ambiente espacial y el ADCS, en conjunto con un algoritmo capaz de optimizar los parámetros de rendimiento y los SE envelopes, mejorará la eficacia operativa de las misiones CubeSat al seleccionar el subconjunto óptimo de componentes físicos necesarios.
 
 \subsection{Objetivos}
-\textit{\underline{Objetivo General:}} Diseñar e implementar una suite de simulación que modele el ambiente espacial y el ADCS de un CubeSat comercial de observación terrestre en órbitas bajas, capaz de optimizar los MoP de apuntamiento en función de los SE envelopes de los componentes físicos.
+\textit{\underline{Objetivo General:}} Diseñar e implementar una suite de simulación que modele el ambiente espacial y el sistema de determinación y control de actitud (ADCS) de un CubeSat comercial en órbitas bajas de observación terrestre, capaz de optimizar el rendimiento (mediante los MoP de apuntamiento) y/o el costo (considerando los SE envelopes) definidos por el usuario, con el fin de seleccionar los componentes físicos del ADCS necesarios para la misión.
 
 \textit{\underline{Objetivos Especificos:}}
 
@@ -92,4 +91,4 @@ OE5: Realizar una revisión de optimizadores no lineales convexos disponibles en
 
 OE6: Verificar la suite de simulación utilizando datos empíricos del SUCHAI-3. Se compararán los resultados de la simulación con los parámetros reales de rendimiento de los componentes físicos y se evaluará la proximidad de los resultados obtenidos por la suite de optimización con los datos reales, determinando el conjunto óptimo de sensores y actuadores.
                                                                      \subsection{Carta Gantt}                                                                                                                                                                                                               
-El proyecto sigue una estructura definida contenida en la carta Gantt mostrada en el Anexo A.
+El proyecto sigue una estructura definida contenida en la carta Gantt mostrada en el Anexo \ref{ap:Z1}.

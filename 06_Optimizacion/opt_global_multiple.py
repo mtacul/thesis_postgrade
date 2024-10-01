@@ -106,7 +106,6 @@ def objective(x, *args):
         funi = P_i[0]*acc**2 + P_i[1]*psd**2 + P_i[2]*time**2 + P_i[3]*pot_b**2 + P_i[4]*masa_b**2 + P_i[5]*vol_b**2 +  P_i[6]*pot_ss**2 + P_i[7]*masa_ss**2 + P_i[8]*vol_ss**2 + P_i[9]*pot_act**2 + P_i[10]*masa_act**2 + P_i[11]*vol_act**2
         # Guardar los resultados en un archivo .txt
         save_to_txt(x, acc, psd, time, pot_b, masa_b, vol_b, pot_ss, masa_ss, vol_ss, pot_act, masa_act, vol_act,P_i,funi,filename)
-        print(funi)
         return funi          
 
 #%%
@@ -116,8 +115,8 @@ type_act_values = [0, 1]  # Por ejemplo: magnetorquer(0) o rueda de reacción(1)
 # type_act_values = [0]  
 S_A_both_values = [0, 1, 2]  # Diferentes combinaciones de sensor y actuador 0:sensor, 1:actuador, 2: ambos
 # S_A_both_values = [2]  
-type_rend_values = ['acc', 'time', 'acc_time', 'acc_psd', 'psd_time','all']  # Diferentes tipos de rendimiento
-# type_rend_values = ['acc_psd','psd_time','all'] 
+# type_rend_values = ['acc', 'time', 'acc_time', 'acc_psd', 'psd_time','all']  # Diferentes tipos de rendimiento
+type_rend_values = ['acc','acc_time'] 
 # type_rend_values = ['all'] 
 
 # hacer 'psd' por separado
@@ -127,6 +126,7 @@ P_i = [1,1,1,   #Pesos: 0,1,2 -> acc,psd,time
        1,1,0,   #Pesos: 3,4,5 -> pot, masa y vol magnetometro
        1,1,0,   #Pesos: 6,7,8 -> pot, masa y vol sensor de sol
        1,1,0]   #Pesos: 9,10,11 -> pot, masa y vol actuador
+
 results = []
 functions = []
 # Bucle para probar diferentes configuraciones
@@ -158,10 +158,11 @@ for type_act in type_act_values:
 
 
             # Ejecutar la optimización
-            result = minimize(objective, initial_guess, args=(type_act, S_A_both, type_rend, P_i, filename), method='L-BFGS-B', bounds=bnds)
+            result = minimize(objective, initial_guess, args=(type_act, S_A_both, type_rend, P_i, filename), method='TNC', bounds=bnds)
             save_res_txt(result.x, result.fun, file_result, filename)
             # Imprimir resultados
             print(f"Optimización completada para type_act={type_act}, S_A_both={S_A_both}, type_rend={type_rend}")
             print(f"x óptimo: {result.x}")
             print(f"Valor mínimo de la función objetivo: {result.fun}\n")
 
+#Newton-CG y dogleg requieren jacobiano, CG y BFGS tiran error

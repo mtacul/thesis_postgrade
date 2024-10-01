@@ -1,0 +1,156 @@
+\section{Procedimiento a seguir para el uso del filtro de Kalman}
+
+\label{ap:Z4}
+
+En la sección 4 se introduce el filtro de Kalman Semiextendido para estimar la orientación del satélite utilizando como condición inicial un cuaternión cualquiera cercano al punto de equilibrio. Para inicializar el filtro de kalman, se debe conocer que el vector estado consiste en la parte vectorial del cuaternión y los componentes de la velocidad angular, sabiendo que la parte escalar del cuaternión es dependiente de las demás.
+
+\[
+q_3 = \sqrt{1 - q_0^2 - q_1^2 - q_2^2}
+\]
+
+Esto se hace con el objetivo de que el sistema sea observable, ya que los cuaterniones al presentar 4 componentes, harian que el vector estado tenga 7 comoponentes en el modelo espacio-estado (EE) al considerar las velocidades angulares. Sin embargo, el rango de la matriz de observabilidad será de 6 al incluir las velocidades angulares, ya que los modelos orbitales están solo en tres dimensiones. El vector de estado se define como:
+
+\[
+x = \begin{bmatrix} q_0 \\ q_1 \\ q_2 \\ \omega_0 \\ \omega_1 \\ \omega_2 \end{bmatrix}
+\]
+
+Como se mostró en el marco teórico, la dinámica de actitud del satélite es no lineal. Las ecuaciones no lineales que representan la rotación del satélite se expresan en el sistema espacio-estado de la siguiente manera:
+
+\[
+\dot{x} = f(x, u, t) + w
+\]
+
+\[
+y = h(x, t) + v
+\]
+
+Donde:
+\begin{itemize}
+	\item $u$ es la entrada de control,
+	\item $w$ es el ruido del modelo,
+	\item $y$ es la salida,
+	\item $v$ es el ruido de salida,
+	\item $f$ es el modelo dinámico no lineal, y
+	\item $h$ es el modelo de medición.
+\end{itemize}
+
+Ahora, para el caso del filtro del kalman "Semiextendido" discreto, el sistema espacio estado queda descrito de la siguiente manera:
+
+\[
+\dot{x} = Ax_{k} + Bu_{k} + w
+\]
+
+\[
+y = h(t) + v
+\]
+
+Al obtener estas relaciones, queda denotado que la actualización del tiempo esta linealizada y evaluada en el punto de equilibrio, por lo que no es dependiente del vector estado y del tiempo. Por ello, para obtener el estado en un paso de tiempo superior, se debe conocer y utilizar la matriz de estado A y la matriz de control B. La parte que varía en cada paso de tiempo es el modelo de medición, ya que depende de las rotaciones estimada a la fuerza magnetica.
+
+Además, la matriz de covarianza para el ruido del proceso ($Q$) y la matriz de covarianza estimada a priori $P_{k+1}^{-}$ se obtienen con la siguiente relación:
+
+
+\[
+Q = \begin{bmatrix}
+	\sigma_\omega^2 \Delta t + \frac{1}{3} \sigma_\beta^2 \Delta t^3 \cdot I_{3 \times 3} & -\frac{1}{2} \sigma_\beta^2 \Delta t^2 \cdot I_{3 \times 3} \\
+	-\frac{1}{2} \sigma_\beta^2 \Delta t^2 \cdot I_{3 \times 3} & \sigma_\beta^2 \Delta t \cdot I_{3 \times 3}
+\end{bmatrix}
+\]
+
+\[
+P_{k+1}^{-} = A P_{k}^{+} A^{T} + Q
+\]
+
+Por otro lado, para la actualización de la medición, se utiliza la matriz de covarianza de ruido $R$ y la matriz de medición $H_{k}$, la cual varía en caso de cada actuador y se muestran a continuación:
+
+\[
+R = \begin{bmatrix}
+	\sigma_b^2 I_{3 \times 3} & 0_{3 \times 3} \\
+	0_{3 \times 3} & \sigma_s^2 I_{3 \times 3}
+\end{bmatrix}
+\]
+
+
+\[
+H_{(k,MT)} = \begin{bmatrix}
+	-2S(b^B) & 0_{3 \times 3} \\
+	-2S(s^B) & 0_{3 \times 3}
+\end{bmatrix}
+\]
+
+\[
+\alpha = \begin{bmatrix}
+	I_{(s0,x)} & 0 & 0 \\
+	0 & I_{(s1,y)} & 0 \\
+	0 & 0 & I_{(s2,z)}
+\end{bmatrix}
+\]
+
+\[
+H_{(k,RW)} = \begin{bmatrix}
+	-2S(b^B) & 0_{3 \times 3} & 0_{3 \times 3} \\
+	-2S(s^B) & 0_{3 \times 3} & 0_{3 \times 3} \\
+	0_{3 \times 3} & 0_{3 \times 3} & \alpha
+\end{bmatrix}
+\]
+
+Sabiendo que $\sigma_b^2$ y $\sigma_s^2$ son las desviaciones estandar del magnetometro y del sensor de sol, y $S(b^{B})$ y $S(s^{B})$ son la matriz antisimetrica del vector fuerza magnetica y sol en el marco de referencia del cuerpo respectivamente, definidas como:
+
+\[
+S(b^{B}) = \begin{bmatrix}
+	0 & -b_{z} & b_{y} \\
+	b_{z} & 0 & -b_{x} \\
+	-b_{y} & b_{x} & 0
+\end{bmatrix} \quad
+S(s^{B}) = \begin{bmatrix}
+	0 & -s_{z} & s_{y} \\
+	s_{z} & 0 & -s_{x} \\
+	-s_{y} & s_{x} & 0
+\end{bmatrix}
+\]
+
+Con estas matrices ya obtenidas, el siguiente paso es calcular la matriz de ganancia de kalman $K_k$. Esta matriz de ganancia sirve para la obtencion de la matriz de covarianza estimada a posteriori $P_{k}^{+}$ y minimizar el error residual $\delta x$.
+
+\[
+K_k = P_k^{-} H_k^T \left( H_k P_k^{-} H_k^T + R \right)^{-1}
+\]
+
+
+\[
+\delta x = 
+\begin{bmatrix}
+	\delta q \\
+	\delta \omega
+\end{bmatrix}
+=
+K_k \left( \begin{bmatrix}
+	b_k^B \\
+	s_k^B
+\end{bmatrix}
+- \begin{bmatrix}
+	\hat{b}_k^B \\
+	\hat{s}_k^B
+\end{bmatrix} \right)
+\]
+
+Siendo 	$b_k^B$, $s_k^B$ las mediciones de los componentes fisicos y $\hat{b}_k^B$, $\hat{s}_k^B$ las obtenciones de los vectores fuerza magnética y sol en el marco de referencia del cuerpo (obtenidos rotando el sistema de referencia con cuaterniones estimado).
+
+Para conocer los cuaterniones $q_{k}^{+}$ y velocidades angulares $\omega_{k}^{+}$ a posteriori se calculan con relaciones distintas. En el primer caso se utiliza la multiplicacion de cuaterniones entre el residual y el a priori (ver Ecuación \ref{eq:quat_ekf}), mientras que para el segundo caso se suma el residual con el valor a priori, como se muestra en la Ecuación \ref{eq:omega_ekf}.
+
+\begin{equation}
+	q_k^+ = \begin{bmatrix}
+		\delta q_k \\
+		\sqrt{1 - \delta q_k^T \cdot \delta q_k}
+	\end{bmatrix} \otimes q_k^-
+	\label{eq:quat_ekf}
+\end{equation}
+
+\begin{equation}
+	\omega_k^+ = \omega_k^- + \delta \omega_k
+	\label{eq:omega_ekf}
+\end{equation}
+
+Finalmente, para la obtención de la matriz de covarianza estimada a posteriori $P_{k}^{+}$, se utiliza la siguiente relación, la cual sera la matriz estimada a priori del siguiente paso de tiempo:
+
+\[
+P_k^+ = (I - K_k H_k) P_k^-
+\]

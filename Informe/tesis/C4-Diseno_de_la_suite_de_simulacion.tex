@@ -201,11 +201,11 @@ Ya obtenidos los vectores de referencia y de observación, se puede estimar la o
 
 \subsubsection{Conversión representación de rotación y EKF}
 
-Para la realizacion de la suite de simulación, se hace entrega de un cuaternión inicial tanto para el modelo que representa las mediciones llamada 'real' y otra condición inicial 'estimada' para cada paso del EKF. Además, para el análisis de resultados, se utilizan los ángulos de Euler para una mayor comprensión conceptual y física de los cambios de orientación ocurridos en el satélite. En el Anexo D se presentan dichas conversiones matemáticas.
+Para la realizacion de la suite de simulación, se hace entrega de un cuaternión inicial tanto para el modelo que representa las mediciones llamada 'real' y otra condición inicial 'estimada' para cada paso del EKF. Además, para el análisis de resultados, se utilizan los ángulos de Euler para una mayor comprensión conceptual y física de los cambios de orientación ocurridos en el satélite. En el Anexo \ref{ap:Z3} se presentan dichas conversiones matemáticas.
 
 Se utilizó el Filtro de Kalman Extendido (EKF) de forma recursiva para estimar la actitud del satélite, tomando como referencia inicial el estado estimado. Este filtro fue implementado para su uso tanto con los magnetorquers como con las ruedas de reacción, utilizando modelos dinámicos lineales discretos. En cada caso, se ajustaron las matrices de estado A y de control B, mientras que la matriz de salida C se construyó a partir de las mediciones simuladas del magnetómetro y el sensor solar.
 
-En cuanto a la matriz C, dado que depende de las mediciones del magnetómetro, las cuales varían con el tiempo, dicha matriz también cambia a lo largo de la simulación. Al intentar linealizar el control en la siguiente sección, las matrices A y B no varían con el tiempo, pero la matriz de salida sí, lo que dio origen al término "Semiextendido". Para más detalles sobre el diseño del filtro de Kalman "Semiextendido", se puede consultar el Anexo E??????.
+En cuanto a la matriz C, dado que depende de las mediciones del magnetómetro, las cuales varían con el tiempo, dicha matriz también cambia a lo largo de la simulación. Al intentar linealizar el control en la siguiente sección, las matrices A y B no varían con el tiempo, pero la matriz de salida sí, lo que dio origen al término "Semiextendido". Para más detalles sobre el diseño del filtro de Kalman "Semiextendido", se puede consultar el Anexo \ref{ap:Z4}.
 
 \subsubsection{Controladores y actuadores}
 
@@ -220,7 +220,7 @@ Esto implica calcular las derivadas parciales de las funciones de estado con res
 \]
 Es importante destacar que la linealización proporciona una descripción local del comportamiento del sistema alrededor del punto de equilibrio, y por lo tanto, la validez de este enfoque depende de la proximidad del estado actual del sistema al punto de equilibrio.
 
-Además, se optan por el magnetorquer\cite{ref14} y la rueda de reacción\cite{ref41} como actuadores, debido a la documentación encontrada sobre su utilización y su uso mayoritario en nanosatélites. Para conocer el álgebra y las consideraciones del diseño del control lineal a mayor detalle para cada actuador, se recomienda revisar el Anexo F?????????? y G?????????? respectivamente. 
+Además, se optan por el magnetorquer\cite{ref14} y la rueda de reacción\cite{ref41} como actuadores, debido a la documentación encontrada sobre su utilización y su uso mayoritario en nanosatélites. Para conocer el álgebra y las consideraciones del diseño del control lineal a mayor detalle para cada actuador, se recomienda revisar el Anexo \ref{ap:Z5} y \ref{ap:Z6} respectivamente. 
 
 \underline{Magnetorquer}
 
@@ -252,7 +252,7 @@ Los torques de control en sus tres componentes se representan en las Ecuaciones~
 
 Donde b son las fuerzas magnéticas en el marco de referencia del cuerpo y m es el momento dipolar del magnetorquer.
 
-Evaluando los valores deseados de $q_{\text{co}}$ y $\omega_{\text{co}}$ en las matrices $A$ y $B$ mencionadas en el Anexo F, se obtiene:
+Evaluando los valores deseados de $q_{\text{co}}$ y $\omega_{\text{co}}$ en las matrices $A$ y $B$ mencionadas en el Anexo \ref{ap:Z5}, se obtiene:
 
 \[
 	A = \begin{bmatrix}
@@ -321,7 +321,7 @@ q_{\text{co}} = [0, 0, 0, 1] \quad u = [0, 0, 0] \quad 	\omega_{\text{co}} = [0,
 
 Los torques de control son ejercidos por cada rueda de reacción de manera directa, siendo colocados en los tres ejes de referencia del marco de referencia del cuerpo del CubeSat por simplicidad. De esta manera, la rueda modelada en el eje x se representa mediante $\tau_{x, \text{rw}}$. Mismo caso para $\tau_{y, \text{rw}}$ y $\tau_{z, \text{rw}}$
 
-Como se observa para los puntos de equilibrio, en este caso son nueves estados que se reemplazan en la matriz de estado A y B obtenida en el Anexo G?????, generando como resultado las siguientes matrices simplificadas:
+Como se observa para los puntos de equilibrio, en este caso son nueves estados que se reemplazan en la matriz de estado A y B obtenida en el Anexo \ref{ap:Z6}, generando como resultado las siguientes matrices simplificadas:
 
 \[
 A_{11} = A_{13}

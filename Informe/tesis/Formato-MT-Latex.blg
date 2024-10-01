@@ -13,50 +13,64 @@ A level-1 auxiliary file: C5-Verificacion_de_la_suite_de_simulacion.aux
 A level-1 auxiliary file: C6-Aplicacion_y_validacion_de_optimizacion_en_Python.aux
 A level-1 auxiliary file: C7-Conclusiones.aux
 The style file: ieeetr.bst
-A level-1 auxiliary file: Z1-Planos.aux
-A level-1 auxiliary file: Z2-Codigo.aux
+A level-1 auxiliary file: Z1-CartaGantt.aux
+A level-1 auxiliary file: Z2-Torques.aux
+A level-1 auxiliary file: Z3-Conversion.aux
+A level-1 auxiliary file: Z4-EKF.aux
+A level-1 auxiliary file: Z5-Magnetorquer.aux
+A level-1 auxiliary file: Z6-RuedaReaccion.aux
+A level-1 auxiliary file: Z7-Componentes.aux
+A level-1 auxiliary file: Z8-MoP.aux
+A level-1 auxiliary file: Z9-Codigo.aux
 Database file #1: Referencias.bib
+You're missing a field name---line 447 of file Referencias.bib
+ :   booktitle = {Electronic Design Automation}, 
+ :                                               % Reemplaza esto con el título del libro
+I'm skipping whatever remains of this entry
+Warning--I didn't find a database entry for "8"
+Warning--empty publisher in ref46
+Warning--empty year in ref46
 Warning--empty booktitle in ref37
 Warning--empty booktitle in ref44
-You've used 45 entries,
+You've used 46 entries,
             1876 wiz_defined-function locations,
-            699 strings with 11020 characters,
-and the built_in function-call counts, 9411 in all, are:
-= -- 727
-> -- 672
+            710 strings with 11257 characters,
+and the built_in function-call counts, 9604 in all, are:
+= -- 738
+> -- 683
 < -- 0
-+ -- 247
-- -- 202
-* -- 659
-:= -- 1491
-add.period$ -- 67
-call.type$ -- 45
-change.case$ -- 39
++ -- 251
+- -- 205
+* -- 677
+:= -- 1519
+add.period$ -- 68
+call.type$ -- 46
+change.case$ -- 40
 chr.to.int$ -- 0
-cite$ -- 47
-duplicate$ -- 377
-empty$ -- 915
-format.name$ -- 202
-if$ -- 2208
+cite$ -- 50
+duplicate$ -- 389
+empty$ -- 940
+format.name$ -- 205
+if$ -- 2252
 int.to.chr$ -- 0
-int.to.str$ -- 45
-missing$ -- 31
-newline$ -- 162
-num.names$ -- 45
-pop$ -- 262
+int.to.str$ -- 46
+missing$ -- 32
+newline$ -- 165
+num.names$ -- 46
+pop$ -- 270
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 216
+skip$ -- 218
 stack$ -- 0
 substring$ -- 154
-swap$ -- 87
+swap$ -- 88
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
-warning$ -- 2
-while$ -- 59
-width$ -- 47
-write$ -- 402
-(There were 2 warnings)
+warning$ -- 4
+while$ -- 60
+width$ -- 48
+write$ -- 409
+(There was 1 error message)

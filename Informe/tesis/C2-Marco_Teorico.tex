@@ -228,7 +228,7 @@ Sabiendo que \( \boldsymbol{\omega} \) es el vector de velocidad angular instant
 \dot{\omega}_2 = \frac{\omega_0 \omega_1 (I_x - I_y)}{I_z} + \frac{\tau_z}{I_z}
 \]
 
-Los torques externos son los provocados por los actuadores y por perturbaciones externas en orbitas de baja altura. Las ultimas mencionadas generalmente se simplifican a relaciones para el peor de los casos analizados. Estas perturbaciones que afectan a la dinámica rotacional del satélite son cuatro y se discuten a fondo en el Anexo B.
+Los torques externos son los provocados por los actuadores y por perturbaciones externas en orbitas de baja altura. Las ultimas mencionadas generalmente se simplifican a relaciones para el peor de los casos analizados. Estas perturbaciones que afectan a la dinámica rotacional del satélite son cuatro y se discuten a fondo en el Anexo \ref{ap:Z2}.
 
 \subsection{Subsistema de determinación y control de actitud}
 
@@ -309,9 +309,9 @@ x_{k+1} = f_k(x_k, u_k) + w_k
 \[
 z_k = h_k(x_k) + v_k
 \]
-Donde $x_{k+1}$ es el estado actual del sistema, $x_k$ es el estado previo del sistema, $u_k$ es la entrada de control, $z_k$ es la medición del sistema, $f_k$ representa la dinámica no lineal del sistema y $h_k$ representa la medición no lineal. El ruido del proceso del estado se representa como $w_k$ y el ruido esperado de la medición es $v_k$. Las matrices Jacobianas $F$ y $H$ de $f_k$ y $h_k$ respectivamente se pueden encontrar tomando la derivada parcial de $f$ y $h$ con respecto a $x$:
+Donde $x_{k+1}$ es el estado actual del sistema, $x_k$ es el estado previo del sistema, $u_k$ es la entrada de control, $z_k$ es la medición del sistema, $f_k$ representa la dinámica no lineal del sistema y $h_k$ representa la medición no lineal. El ruido del proceso del estado se representa como $w_k$ y el ruido esperado de la medición es $v_k$. Las matrices Jacobianas $A$ y $H$ de $f_k$ y $h_k$ respectivamente se pueden encontrar tomando la derivada parcial de $f$ y $h$ con respecto a $x$:
 \[
-F(\hat{x}, t) = \left. \frac{\partial f}{\partial x} \right|_{\hat{x}} 
+A(\hat{x}, t) = \left. \frac{\partial f}{\partial x} \right|_{\hat{x}} 
 \]
 \[
 H(\hat{x}, t) = \left. \frac{\partial h}{\partial x} \right|_{\hat{x}} 
@@ -322,7 +322,7 @@ La estimación a priori y la matriz de error de covarianza pueden ser obtenidas 
 \hat{x}_k^- = f_k(\hat{x}_k)
 \]
 \[
-P_k^- = F_k P_{k-1} F_k^T + Q_k
+P_k^- = A_k P_{k-1} A_k^T + Q_k
 \]
 La matriz $Q_k$ representa la matriz de covarianza del ruido del modelo $w_k$. La ganancia de Kalman se calcula con la ecuación a continuación:
 \[
@@ -447,6 +447,65 @@ Una función objetivo en la optimización del control se define como una expresi
 
 Las funciones objetivo pueden ser formuladas como funciones cuadráticas o no cuadráticas, dependiendo del problema específico y los requisitos del sistema.
 
+\subsubsection{Clasificación de problemas de optimización}
+
+Los problemas de optimización pueden clasificarse en distintas categorías dependiendo de las características de la función objetivo y las restricciones. A continuación se listan y definen algunos de ellos \cite{ref46}:
+
+\textbf{Optimización Lineal (LP)}: Un problema de programación lineal busca minimizar o maximizar una función objetivo lineal sujeta a restricciones lineales. Tanto la función objetivo como las restricciones son expresadas como combinaciones lineales de variables.
+
+\begin{itemize}
+	\item Función objetivo: min $c^Tx$ o max $c^Tx$
+	\item Restricciones: Ax $\leq$ b (donde A es una matriz de coeficientes, x es el vector de variables, y b es un vector de valores límites)
+\end{itemize}
+	
+\textbf{Mixed Integer Linear Programming (MILP)}: En programación lineal entera mixta, algunas de las variables son continuas (pueden tomar cualquier valor real) y otras son enteras (solo pueden tomar valores enteros). Es una extensión de LP.
+
+\begin{itemize}
+	\item Función objetivo y restricciones son similares a LP, pero algunas variables $x_i$ deben ser enteras.
+\end{itemize}
+
+
+\textbf{Quadratic Programming (QP)}: La programación cuadrática es una extensión de la programación lineal donde la función objetivo es cuadrática (tiene términos de segundo orden), pero las restricciones siguen siendo lineales.
+
+\begin{itemize}
+	\item Función objetivo: min $x^TQx + c^Tx$ o max $x^TQx + c^Tx$
+	\item Restricciones: Ax $\leq$ b
+\end{itemize}
+
+
+\textbf{Mixed Integer Quadratic Programming (MIQP)}: La programación cuadrática entera mixta combina la programación cuadrática con variables enteras. Algunas de las variables pueden ser continuas, y otras deben ser enteras, como en MILP.
+
+\begin{itemize}
+	\item Función objetivo: cuadrática
+	\item Restricciones:lineales
+	\item Algunas variables deben ser enteras	
+\end{itemize}
+
+\textbf{Second-Order Cone Programming (SOCP)}: La programación de cono de segundo orden es una clase de problemas convexos donde la función objetivo es lineal, pero las restricciones incluyen desigualdades de tipo cónico, es decir, involucran normas Euclidianas o distancias cuadráticas.
+
+\begin{itemize}
+	\item Función objetivo: lineal
+	\item Restricciones: Involucran normas del tipo $\| A_i x + b_i \|_2^2 \leq c_i^T x + d_i$	
+\end{itemize}
+
+\textbf{Mixed Integer Second-Order Cone Programming (MISOCP)}: En la programación de cono de segundo orden entera mixta, algunas variables del problema SOCP deben ser enteras. Esto combina la complejidad de SOCP con la dificultad adicional de tener variables discretas.
+
+\textbf{Semidefinite Programming (SDP)}: En programación semidefinida, la función objetivo es lineal, pero las restricciones involucran matrices semidefinidas positivas. Un problema semidefinido involucra encontrar una matriz que minimice una función objetivo lineal bajo la condición de que la matriz sea semidefinida positiva.
+
+\begin{itemize}
+	\item Función objetivo: lineal en una matriz X
+	\item Restricciones: X$\geq$0 (la matriz X debe ser semidefinida positiva)
+\end{itemize}
+
+\textbf{General Nonlinear Programming (NLP)
+}: En la programación no lineal, tanto la función objetivo como las restricciones pueden ser no lineales. Este es un tipo de optimización más general y difícil de resolver, ya que puede haber múltiples óptimos locales y el problema puede no ser convexo.
+
+\begin{itemize}
+	\item Función objetivo: f(x) (no lineal)
+	\item Restricciones: g(x)$\leq$0 y 	h(x)=0 (no lineales)
+\end{itemize}
+
+
 \subsubsection{Optimizadores en Python}
 
 Para resolver problemas de optimización en el control, se utilizan diversas herramientas y optimizadores disponibles en Python. A continuación, se presentan dos:
@@ -454,10 +513,7 @@ Para resolver problemas de optimización en el control, se utilizan diversas her
 \begin{itemize}
 	\item Scipy.optimize.minimize \cite{ref31}: El módulo scipy.optimize.minimize proporciona una variedad de métodos para resolver problemas de optimización no lineales. Este optimizador permite la minimización de una función objetivo definida por el usuario, utilizando diferentes algoritmos de optimización. Este módulo es útil para problemas de optimización de funciones objetivo generales y permite la implementación de restricciones y condiciones específicas según el problema de control.
 	
-	\item Pyomo \cite{ref32,ref33}: pyomo es una biblioteca de Python para la modelización y solución de problemas de optimización matemática. A diferencia de scipy.optimize, pyomo permite definir problemas de optimización de manera más estructurada y flexible, especialmente para problemas complejos que involucran programación lineal, no lineal, entera y estocástica.
-	
-	Modelado Declarativo: Pyomo permite definir problemas de optimización mediante un enfoque declarativo, facilitando la expresión de restricciones y objetivos.
-	Resolución de Problemas: Soporta una amplia gama de solucionadores, desde optimizadores simples hasta solvers avanzados.
+	\item Pyomo \cite{ref32,ref33}: pyomo es una biblioteca de Python para la modelización y solución de problemas de optimización matemática. A diferencia de scipy.optimize, pyomo permite definir problemas de optimización de manera más estructurada y flexible, especialmente para problemas complejos que involucran programación lineal, no lineal, entera y estocástica. Pyomo permite definir problemas de optimización mediante un enfoque declarativo, facilitando la expresión de restricciones y objetivos. Además, soporta una amplia gama de solucionadores, desde optimizadores simples hasta solvers avanzados.
 	
 	
 \end{itemize}

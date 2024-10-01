@@ -1,0 +1,25 @@
+\section{Implementación de los resultados de los MoP de apuntamiento}
+
+\label{ap:Z8}
+
+
+Para mostrar el paso a paso de la cuantificación de los MoP de apuntamiento, se utilizará como ejemplo la simulación del SUCHAI-3 con los datos utilizados en el Capítulo 4, con los componentes físicos de nivel alto.
+
+\underline{Jitter}
+
+Para la cuantificación de este MoP de apuntamiento, en primera instancia se aplica el filtro pasa alto con una frecuencia tope de 10 Hz, mostrando solo las señales mayores a dicho valor. Con esto se observa la Figura 32, asentándose la señal siempre en el cero con el ruido de las vibraciones del sistema.
+
+
+Con esto, se obtienen las frecuencias y sus densidades espectro potencias aproximadas mediante la función welch de scipy.signal disponible en Python. Posteriormente, se selecciona un ancho de banda bajo, para obtener en dichos intervalos el PSD que representa el jitter del sistema. Esto se observa en los ángulos de Euler en las Figura 33, Figura 34 y Figura 35 para cada uno, presentado mayores valores a menores frecuencias. Se observa en el área pintada la integración dentro del ancho de banda realizada.
+
+\underline{Agilidad}
+
+Por otro lado, para la cuantificación de la agilidad, se utilizan los valores de los angulos de Euler reales obtenidos por el modelo. Esto se hace con el objetivo de conocer lo más preciso posible el tiempo de asentamiento con una banda del 5\% (entre -7 y 7 grados de los angulos de Euler) sin las perturbaciones causadas por el ruido de los sensores.
+
+En las Figura 36, Figura 37 y Figura 38 se muestran los ángulos de Euler Roll, Pitch y Yaw reales, en conjunto con una gráfica acercada en la zona de asentamiento, mostrando además los limites superior e inferior dadas por la banda de asentamiento. Una vez que la orientación del satélite está presente dentro de la banda de asentamiento, el tiempo inicial para el ingreso sin retirarse es el tiempo de asentamiento con el cual se cuantifica la agilidad
+
+\underline{Exactitud de apuntamiento}
+
+Finalmente, para la exactitud de apuntamiento en sus tres componentes se busca utilizar los valores de los ángulos de Euler estimados obtenidos después del tiempo de asentamiento. Posteriormente se calcula la desviacion estándar de todos los valores dentro de la banda de asentamiento, la cual se va acercando cada vez mas al equilibrio, con dispersiones debidas al ruido y mitigadas por el filtro de kalman
+
+

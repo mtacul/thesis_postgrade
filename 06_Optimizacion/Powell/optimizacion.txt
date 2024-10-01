@@ -1,0 +1,36 @@
+x resultados_typeact0_saboth0_typerendacc.txt: [3.23594611e-01 1.15331444e-09]
+f resultados_typeact0_saboth0_typerendacc.txt: 12.220252765957621
+------------------------
+x resultados_typeact0_saboth0_typerendacc_time.txt: [1.50928781e-01 1.15340658e-09]
+f resultados_typeact0_saboth0_typerendacc_time.txt: 10122646.143300239
+------------------------
+x resultados_typeact0_saboth1_typerendacc.txt: [1.77388729]
+f resultados_typeact0_saboth1_typerendacc.txt: 12.367126316904475
+------------------------
+x resultados_typeact0_saboth1_typerendacc_time.txt: [10.98867782]
+f resultados_typeact0_saboth1_typerendacc_time.txt: 3766675.5219103107
+------------------------
+x resultados_typeact0_saboth2_typerendacc.txt: [3.33920975e-01 1.15331444e-09 1.62543876e+00]
+f resultados_typeact0_saboth2_typerendacc.txt: 11.711355786457641
+------------------------
+x resultados_typeact0_saboth2_typerendacc_time.txt: [2.10820457e-01 1.15328666e-09 1.04797727e+01]
+f resultados_typeact0_saboth2_typerendacc_time.txt: 3761140.308015783
+------------------------
+x resultados_typeact1_saboth0_typerendacc.txt: [3.27996324e-01 1.15331444e-09]
+f resultados_typeact1_saboth0_typerendacc.txt: 3.5773700747532655
+------------------------
+x resultados_typeact1_saboth0_typerendacc_time.txt: [3.72048138e-01 1.15331444e-09]
+f resultados_typeact1_saboth0_typerendacc_time.txt: 4843.639722367756
+------------------------
+x resultados_typeact1_saboth1_typerendacc.txt: [0.00913562]
+f resultados_typeact1_saboth1_typerendacc.txt: 21.082494802726252
+------------------------
+x resultados_typeact1_saboth1_typerendacc_time.txt: [0.23074096]
+f resultados_typeact1_saboth1_typerendacc_time.txt: 2255.7480341137966
+------------------------
+x resultados_typeact1_saboth2_typerendacc.txt: [4.01640030e-01 1.15626734e-09 8.26312180e-03]
+f resultados_typeact1_saboth2_typerendacc.txt: 20.911731795048812
+------------------------
+x resultados_typeact1_saboth2_typerendacc_time.txt: [3.24936968e-01 1.15329332e-09 2.30762607e-01]
+f resultados_typeact1_saboth2_typerendacc_time.txt: 2254.869709145993
+------------------------

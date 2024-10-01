@@ -1,0 +1,36 @@
+x resultados_typeact0_saboth0_typerendacc.txt: [4.51010721e-01 1.35108257e-09]
+f resultados_typeact0_saboth0_typerendacc.txt: 12.51167446631083
+------------------------
+x resultados_typeact0_saboth0_typerendacc_time.txt: [1.00008851e-02 1.20000000e-11]
+f resultados_typeact0_saboth0_typerendacc_time.txt: 10139863.358587371
+------------------------
+x resultados_typeact0_saboth1_typerendacc.txt: [0.9993689]
+f resultados_typeact0_saboth1_typerendacc.txt: 13.503139740969525
+------------------------
+x resultados_typeact0_saboth1_typerendacc_time.txt: [0.99999985]
+f resultados_typeact0_saboth1_typerendacc_time.txt: 10169717.536360305
+------------------------
+x resultados_typeact0_saboth2_typerendacc.txt: [6.80634581e-01 1.00439718e-09 1.13839562e+00]
+f resultados_typeact0_saboth2_typerendacc.txt: 13.678869052108137
+------------------------
+x resultados_typeact0_saboth2_typerendacc_time.txt: [6.79999840e-01 9.99999764e-10 9.99999831e-01]
+f resultados_typeact0_saboth2_typerendacc_time.txt: 10169718.040880952
+------------------------
+x resultados_typeact1_saboth0_typerendacc.txt: [4.08412174e-01 1.51608000e-09]
+f resultados_typeact1_saboth0_typerendacc.txt: 3.7219405898814597
+------------------------
+x resultados_typeact1_saboth0_typerendacc_time.txt: [4.07762967e-01 1.51608000e-09]
+f resultados_typeact1_saboth0_typerendacc_time.txt: 4843.720103326582
+------------------------
+x resultados_typeact1_saboth1_typerendacc.txt: [0.10001603]
+f resultados_typeact1_saboth1_typerendacc.txt: 70.32262528589526
+------------------------
+x resultados_typeact1_saboth1_typerendacc_time.txt: [0.23462579]
+f resultados_typeact1_saboth1_typerendacc_time.txt: 2257.1450715158267
+------------------------
+x resultados_typeact1_saboth2_typerendacc.txt: [6.8e-01 1.0e-09 1.0e-01]
+f resultados_typeact1_saboth2_typerendacc.txt: 70.81878719086737
+------------------------
+x resultados_typeact1_saboth2_typerendacc_time.txt: [6.8e-01 1.0e-09 1.0e-01]
+f resultados_typeact1_saboth2_typerendacc_time.txt: 4910.818787190869
+------------------------
