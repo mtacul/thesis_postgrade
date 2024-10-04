@@ -82,8 +82,8 @@ for carpeta in carpetas:
     root.withdraw()  # Ocultar la ventana de tkinter
 
     # Combinaciones
-    type_act_values = [1]  # Por ejemplo: magnetorquer(0) o rueda de reacción(1)
-    S_A_both_values = [2]  # Diferentes combinaciones de sensor y actuador 0: sensor, 1: actuador, 2: ambos
+    type_act_values = [0]  # Por ejemplo: magnetorquer(0) o rueda de reacción(1)
+    S_A_both_values = [1]  # Diferentes combinaciones de sensor y actuador 0: sensor, 1: actuador, 2: ambos
     type_rend_values = ['acc_time']
 
     # Verificar si el archivo "optimizacion.txt" existe en la carpeta

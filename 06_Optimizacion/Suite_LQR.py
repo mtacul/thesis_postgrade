@@ -380,11 +380,13 @@ def suite_sim(sigma_ss, sigma_b,lim,type_act,S_A_both):
     Roll_high_pass_1 = functions_06.high_pass_filter(Roll_1, 10, len(t))
     Pitch_high_pass_1 = functions_06.high_pass_filter(Pitch_1, 10, len(t))
     Yaw_high_pass_1 = functions_06.high_pass_filter(Yaw_1, 10, len(t))
+    norm_high_pass_1 = functions_06.high_pass_filter(norms_RPY_1, 10, len(t))
     
     frequencies_R_1, psd_R_1 = welch(Roll_high_pass_1, len(t), nperseg=1024)
     frequencies_P_1, psd_P_1 = welch(Pitch_high_pass_1, len(t), nperseg=1024)
     frequencies_Y_1, psd_Y_1 = welch(Yaw_high_pass_1, len(t), nperseg=1024)
-    
+    frequencies_norm_1, psd_norm_1 = welch(norm_high_pass_1, len(t), nperseg=1024)
+
     # psd_R_R_1 =[]
     # psd_P_R_1 =[]
     # psd_Y_R_1 =[]
@@ -414,16 +416,19 @@ def suite_sim(sigma_ss, sigma_b,lim,type_act,S_A_both):
     indices_bandwidth_1_Y = np.where((frequencies_Y_1 >= bandwidth_1[0]) & (frequencies_Y_1 <= bandwidth_1[1]))
     psd_bandwidth_1_Y = np.trapz(psd_Y_1[indices_bandwidth_1_Y], frequencies_Y_1[indices_bandwidth_1_Y])
     
-    psd_RPY_1 = np.array([psd_bandwidth_1_R,psd_bandwidth_1_P,psd_bandwidth_1_Y])
-    norm_psd_RPY_1 = np.linalg.norm(psd_RPY_1)
+    indices_bandwidth_1_norm = np.where((frequencies_norm_1 >= bandwidth_1[0]) & (frequencies_norm_1 <= bandwidth_1[1]))
+    psd_norm = np.trapz(psd_norm_1[indices_bandwidth_1_norm], frequencies_norm_1[indices_bandwidth_1_norm])
+    
+    # psd_RPY_1 = np.array([psd_bandwidth_1_R,psd_bandwidth_1_P,psd_bandwidth_1_Y])
+    # norm_psd_RPY_1 = np.linalg.norm(psd_RPY_1)
     
     # print("la norma de la densidad espectro potencia es:",norm_psd_RPY_1,"[W/Hz]")
     
     #%% Calculo del tiempo de asentamiento
 
-    settling_band_R = 7
-    settling_band_P = 7
-    settling_band_Y = 7
+    settling_band_R = 2.5
+    settling_band_P = 2.5
+    settling_band_Y = 2.5
 
     settling_error_sup_R = np.full(len(t_aux),settling_band_R)
     settling_error_inf_R = np.full(len(t_aux),-settling_band_R)
@@ -544,18 +549,30 @@ def suite_sim(sigma_ss, sigma_b,lim,type_act,S_A_both):
     accuracy_Y_1 = 3*sigma_Y_1
 
     accuracy_RPY_1 = np.array([accuracy_R_1,accuracy_P_1,accuracy_Y_1])
-    
+    print(accuracy_RPY_1)
     # normas exactitud de apuntamiento
     ti_1 = np.array([time_R_1[0],time_P_1[0],time_Y_1[0]])
-    norm_time = np.linalg.norm(ti_1)
+    if ti_1[0] >= ti_1[1] and ti_1[0]>=ti_1[2]:
+        time_cost = ti_1[0]
+    elif ti_1[0]<=ti_1[1] and ti_1[1]>=ti_1[2]:
+        time_cost = ti_1[1]
+    elif ti_1[2]>=ti_1[0] and ti_1[2]>=ti_1[1]:
+        time_cost = ti_1[2]
+    
+    if type_act == 0:
+        time_cost = time_cost/14876
+    if type_act == 1:
+        time_cost = time_cost/1000
+    # norm_time = np.linalg.norm(ti_1)
     # print("la norma del tiempo de asentamiento es:",norm_time,"[s]")
-    time_norm_1 = np.array([np.linalg.norm(ti_1),t_aux[-1]])
-    data_norm_1= norms_RPY_1[int(time_norm_1[0]/2):int(time_norm_1[1]/2)]
+    # time_norm_1 = np.array([np.linalg.norm(ti_1),t[-1]])
+    # data_norm_1= norms_RPY_1[int(time_norm_1[0]/2):int(time_norm_1[1]/2)]
 
     # Calcular media y desviación estándar
-    sigma_norm_1 = np.std(data_norm_1)
-    accuracy_norm_1 = 3*sigma_norm_1
-    accuracy_norms = np.array([accuracy_norm_1])
+    # sigma_norm_1 = np.std(data_norm_1)
+    # accuracy_norm_1 = 3*sigma_norm_1
+    # accuracy_norms = np.array([accuracy_norm_1])
+    accuracy_cost = np.mean(accuracy_RPY_1)
     # print("la norma de la exactitud de apuntamiento es:",accuracy_norms,"[°]")
 
     #%% Graficas
@@ -617,30 +634,63 @@ def suite_sim(sigma_ss, sigma_b,lim,type_act,S_A_both):
     # Show the plot (optional)
     plt.show()
     
+    
+    # fig0, axes0 = plt.subplots(nrows=3, ncols=1, figsize=(13, 8))
+
+    # axes0[0].plot(t, Roll_low_pass_1, label= {'magnetorquer'})
+    # axes0[0].set_xlabel('Tiempo [s]')
+    # axes0[0].set_ylabel('Roll [°]')
+    # axes0[0].legend()
+    # axes0[0].grid()
+    # axes0[0].set_xlim(0, 30000)  # Ajusta los límites en el eje Y
+
+    # axes0[1].plot(t, Pitch_low_pass_1, label={'magnetorquer'},color='orange')
+    # axes0[1].set_xlabel('Tiempo [s]')
+    # axes0[1].set_ylabel('Pitch [°]')
+    # axes0[1].legend()
+    # axes0[1].grid()
+    # axes0[1].set_xlim(0, 30000) # Ajusta los límites en el eje Y
+    # # axes0[1].set_ylim(-20, -5)  # Ajusta los límites en el eje Y
+    
+    # axes0[2].plot(t, Yaw_low_pass_1, label={'magnetorquer'},color='green')
+    # axes0[2].set_xlabel('Tiempo [s]')
+    # axes0[2].set_ylabel('Yaw [°]')
+    # axes0[2].legend()
+    # axes0[2].grid()
+    # axes0[2].set_xlim(0, 30000)  # Ajusta los límites en el eje Y
+
+    # plt.tight_layout()
+    
+    # # Save the plot as an SVG file
+    # # plt.savefig('plot.svg', format='svg')
+
+    # # Show the plot (optional)
+    # plt.show()
+    
     #%% Funciones de costo
     
     #Magnetometros
-    pot_b = 4.04e-6*(sigma_b)**(-0.48)
-    masa_b = 6.5e-3*(sigma_b)**(-0.11)
+    pot_b = 4.04e-6*(sigma_b)**(-0.48) 
+    masa_b = 6.5e-3*(sigma_b)**(-0.11) 
     vol_b = sigma_b + 69.1
     
     #Sensores de sol
-    pot_ss = 3.45e-2*(sigma_ss)**(-0.66)
-    masa_ss = 5.43e-3*(sigma_ss)**(-0.89)
+    pot_ss = 3.45e-2*(sigma_ss)**(-0.66) 
+    masa_ss = 5.43e-3*(sigma_ss)**(-0.89) 
     vol_ss = 1.86e1*(sigma_ss)**(-0.22)
     
     if type_act == 0:
         #Magnetorquers
-        pot_act = 6.27e-1*(lim)**(0.34)
-        masa_act = 9.58e-2*(lim)**(0.68)
+        pot_act = 6.27e-1*(lim)**(0.34) / 2.658
+        masa_act = 9.58e-2*(lim)**(0.68) / 1.722
         vol_act = 1.99e2*(lim)**(0.18)
     elif type_act == 1:
         #Ruedas de reaccion
-        pot_act = 1.75e1*(lim)**(0.35)
-        masa_act = 6.15e0*(lim)**(0.45)
+        pot_act = 1.75e1*(lim)**(0.35) / 10.77 #maximo 10.77
+        masa_act = 6.15e0*(lim)**(0.45) /3.296 #maximo 3.296
         vol_act = 3.68e3*(lim)**(0.39)
             
     #%% Guardar en un archivo
 
-    return accuracy_norms, norm_psd_RPY_1, norm_time, pot_b, masa_b, vol_b,pot_ss, masa_ss, vol_ss, pot_act, masa_act, vol_act
+    return accuracy_cost, psd_norm, time_cost, pot_b, masa_b, vol_b,pot_ss, masa_ss, vol_ss, pot_act, masa_act, vol_act
 

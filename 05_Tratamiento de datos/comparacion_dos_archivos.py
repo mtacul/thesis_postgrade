@@ -532,9 +532,6 @@ norm_psd_RPY_2 = np.linalg.norm(psd_RPY_2)
 norm_settling_time_1 = np.linalg.norm(np.array([time_R_1[0],time_P_1[0],time_Y_1[0]]))
 norm_settling_time_2 = np.linalg.norm(np.array([time_R_2[0],time_P_2[0],time_Y_2[0]]))
 
-# normas de exactitud de apuntamiento
-norm_accuracy_1 = np.linalg.norm(accuracy_RPY_1)
-norm_accuracy_2 = np.linalg.norm(accuracy_RPY_2)
 
 # Crear el DataFrame
 resumen_1 = {

@@ -36,9 +36,9 @@ def objective(x, *args):
     # Determinar los valores de std_sensor_sol, std_magnetometros y lim según S_A_both
     if S_A_both == 0:
         std_sensor_sol, std_magnetometros = x
-        P_i = [1,1,1,
-               1,1,0, 
-               1,1,0,   
+        P_i = [P_i[0],P_i[1],P_i[2],
+               P_i[3],P_i[4],0, 
+               P_i[6],P_i[7],0,   
                0,0,0]
         lim = args[5]
         
@@ -47,17 +47,14 @@ def objective(x, *args):
         std_sensor_sol = args[5]
         std_magnetometros = args[6]  # Valores fijos o iniciales
         
-        P_i = [1,1,1,
+        P_i = [P_i[0],P_i[1],P_i[2],
                0,0,0, 
                0,0,0,   
-               1,1,0]
+               P_i[9],P_i[10],0]
         
     elif S_A_both == 2:
         std_sensor_sol, std_magnetometros, lim = x
-        P_i = [1,1,1,
-               1,1,0, 
-               1,1,0,   
-               1,1,0]
+        P_i = P_i
     # Invocar la simulación según type_act
     acc, psd, time,pot_b, masa_b, vol_b,pot_ss, masa_ss, vol_ss, pot_act, masa_act, vol_act = suite_sim(std_sensor_sol, std_magnetometros, lim, type_act, S_A_both)
     
@@ -65,6 +62,8 @@ def objective(x, *args):
     # Seleccionar el valor a retornar según type_rend
     if type_rend == 'acc':   
         funi = P_i[0]*acc**2 + P_i[3]*pot_b**2 + P_i[4]*masa_b**2 + P_i[5]*vol_b**2 +  P_i[6]*pot_ss**2 + P_i[7]*masa_ss**2 + P_i[8]*vol_ss**2 + P_i[9]*pot_act**2 + P_i[10]*masa_act**2 + P_i[11]*vol_act**2 
+        print(acc)
+        # print(time)
         # Guardar los resultados en un archivo .txt
         save_to_txt(x, acc, psd, time, pot_b, masa_b, vol_b, pot_ss, masa_ss, vol_ss, pot_act, masa_act, vol_act,P_i,funi,filename)
         return funi
@@ -76,6 +75,7 @@ def objective(x, *args):
         return funi
       
     elif type_rend == 'time':
+        print(time)
         funi = P_i[2]*time**2 + P_i[3]*pot_b**2 + P_i[4]*masa_b**2 + P_i[5]*vol_b**2 +  P_i[6]*pot_ss**2 + P_i[7]*masa_ss**2 + P_i[8]*vol_ss**2 + P_i[9]*pot_act**2 + P_i[10]*masa_act**2 + P_i[11]*vol_act**2
         # Guardar los resultados en un archivo .txt
         save_to_txt(x, acc, psd, time, pot_b, masa_b, vol_b, pot_ss, masa_ss, vol_ss, pot_act, masa_act, vol_act,P_i,funi,filename)
@@ -109,17 +109,25 @@ def objective(x, *args):
 file_result = "optimizacion.txt"
    
 # Definir valores de type_act, S_A_both, type_rend y Pesos P_i
-type_act = 1  # 0: magnetorquer, 1: rueda de reacción
+type_act = 0  # 0: magnetorquer, 1: rueda de reacción
 S_A_both = 0  # 0: solo sensor, 1: solo actuador, 2: ambos
 type_rend = 'acc'  # Puede ser 'acc', 'psd', 'time', 'acc_time', 'acc_psd', 'psd_time' y 'all'
 
 P_i = [1,1,1,   #Pesos: 0,1,2 -> acc,psd,time
-       1,1,0,   #Pesos: 3,4,5 -> pot, masa y vol magnetometro
-       1,1,0,   #Pesos: 6,7,8 -> pot, masa y vol sensor de sol
-       1,1,1]   #Pesos: 9,10,11 -> pot, masa y vol actuador
+       0,0,0,   #Pesos: 3,4,5 -> pot, masa y vol magnetometro
+       0,0,0,   #Pesos: 6,7,8 -> pot, masa y vol sensor de sol
+       0,0,0]   #Pesos: 9,10,11 -> pot, masa y vol actuador
 
 filename = f"resultados_typeact{type_act}_saboth{S_A_both}_typerend{type_rend}.txt"
+# x = [0.01,0.012e-9]
+# x = 0.25
+# lim = 5
+# std_ss,std_magn = [0.01,0.012e-9]
 
+# argss = (type_act, S_A_both, type_rend, P_i, filename,lim)
+# argss = (type_act, S_A_both, type_rend, P_i, filename,std_ss,std_magn)
+
+# f = objective(x,*argss)
 
 # Definir límites y condiciones iniciales según los valores actuales
 if S_A_both == 0:
@@ -134,7 +142,7 @@ if S_A_both == 0:
     # Definición de argumentos para la optimización
     argss = (type_act, S_A_both, type_rend, P_i, filename, lim)  
     # Ejecución de la optimización
-    result = minimize(objective, initial_guess, args=argss, method='SLSQP', bounds=bnds)
+    result = minimize(objective, initial_guess, args=argss, method='Powell', bounds=bnds)
     # Ejecutar la optimización
     save_res_txt(result.x, result.fun, file_result, filename)
 elif S_A_both == 1:
@@ -150,7 +158,7 @@ elif S_A_both == 1:
     # Definición de argumentos para la optimización
     argss = (type_act, S_A_both, type_rend, P_i, filename, std_sensor_sol, std_magnetometros) 
     # Ejecución de la optimización
-    result = minimize(objective, initial_guess, args=argss, method='SLSQP', bounds=bnds)
+    result = minimize(objective, initial_guess, args=argss, method='Powell', bounds=bnds)
     # Ejecutar la optimización
     save_res_txt(result.x, result.fun, file_result, filename)
     
@@ -163,7 +171,7 @@ elif S_A_both == 2:
         bnds = ((0.01, 1.67), (0.012e-9, 3e-9), (0.001, 0.25))  # Para std_sensor_sol, std_magnetometros y lim
         initial_guess = [0.5, 1.5e-9, 0.1]  # std_sensor_sol, std_magnetometros y lim
     # Ejecución de la optimización
-    result = minimize(objective, initial_guess, args=(type_act, S_A_both, type_rend, P_i, filename), method='SLSQP', bounds=bnds)
+    result = minimize(objective, initial_guess, args=(type_act, S_A_both, type_rend, P_i, filename), method='Powell', bounds=bnds)
     # Ejecutar la optimización
     save_res_txt(result.x, result.fun, file_result, filename)
 

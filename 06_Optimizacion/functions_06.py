@@ -141,7 +141,7 @@ def A_B(I_x,I_y,I_z,w0_O,w0,w1,w2,deltat,h,b_orbit,b_body, s_body):
     D = np.zeros((6, 3))  # Assuming D has the same number of rows as A and the same number of columns as B
 
     # Create the continuous state-space model
-    sys_continuous = ctrl.StateSpace(A, B, C, D)
+    sys_continuous = ctrl.ss(A, B, C, D)
 
     # Discretize the system
     sys_discrete = ctrl.c2d(sys_continuous, h, method='zoh')

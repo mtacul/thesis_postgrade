@@ -116,7 +116,7 @@ type_act_values = [0, 1]  # Por ejemplo: magnetorquer(0) o rueda de reacción(1)
 S_A_both_values = [0, 1, 2]  # Diferentes combinaciones de sensor y actuador 0:sensor, 1:actuador, 2: ambos
 # S_A_both_values = [2]  
 # type_rend_values = ['acc', 'time', 'acc_time', 'acc_psd', 'psd_time','all']  # Diferentes tipos de rendimiento
-type_rend_values = ['acc','acc_time'] 
+type_rend_values = ['acc','acc_time','all'] 
 # type_rend_values = ['all'] 
 
 # hacer 'psd' por separado
@@ -150,15 +150,15 @@ for type_act in type_act_values:
             elif S_A_both == 2:
                 if type_act == 0:
                     bnds = ((0.01, 1.67), (0.012e-9, 3e-9), (0.29, 70))  # Para std_sensor_sol, std_magnetometros y lim
-                    initial_guess = [0.68, 1e-9, 1]  # std_sensor_sol, std_magnetometros y lim
+                    initial_guess = [0.5, 1.5e-9, 1]  # std_sensor_sol, std_magnetometros y lim
 
                 elif type_act == 1:
                     bnds = ((0.01, 1.67), (0.012e-9, 3e-9), (0.001, 0.25))  # Para std_sensor_sol, std_magnetometros y lim
-                    initial_guess = [0.68, 1e-9, 0.1]  # std_sensor_sol, std_magnetometros y lim
+                    initial_guess = [0.5, 1.5e-9, 0.1]  # std_sensor_sol, std_magnetometros y lim
 
 
             # Ejecutar la optimización
-            result = minimize(objective, initial_guess, args=(type_act, S_A_both, type_rend, P_i, filename), method='TNC', bounds=bnds)
+            result = minimize(objective, initial_guess, args=(type_act, S_A_both, type_rend, P_i, filename), method='L-BFGS-B', bounds=bnds)
             save_res_txt(result.x, result.fun, file_result, filename)
             # Imprimir resultados
             print(f"Optimización completada para type_act={type_act}, S_A_both={S_A_both}, type_rend={type_rend}")
