@@ -9,11 +9,11 @@ import os
 from tkinter import Tk
 
 # 1. Crear la carpeta "SLSQP" si no existe y cambiar el directorio a ella
-carpeta = "SLSQP"
+# carpeta = "SLSQP"
 # carpeta = "Nelder-Mead"
 # carpeta = "TNC"
 # carpeta = "Powell"
-# carpeta = "L-BGFS-B"
+carpeta = "L-BFGS-B"
 
 if not os.path.exists(carpeta):
     os.makedirs(carpeta)
@@ -190,7 +190,7 @@ ax.legend(fontsize=18)
 ax.grid()
 
 # # Ajustar límites del eje X
-# ax.set_ylim(60000, 80000)
+ax.set_ylim(0, 10)
 
 # Ajustar el tamaño de las etiquetas de los ticks
 ax.tick_params(axis='both', which='major', labelsize=18)

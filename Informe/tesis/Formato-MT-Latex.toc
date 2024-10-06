@@ -60,6 +60,11 @@
 \contentsline {section}{Anexo \numberline {D}Procedimiento a seguir para el uso del filtro de Kalman}{68}{}%
 \contentsline {section}{Anexo \numberline {E}Control lineal Magnetorquer}{71}{}%
 \contentsline {section}{Anexo \numberline {F}Control lineal Rueda de reacción}{75}{}%
-\contentsline {section}{Anexo \numberline {G}Sensores y actuadores utilizados}{76}{}%
-\contentsline {section}{Anexo \numberline {H}Implementación de los resultados de los MoP de apuntamiento}{77}{}%
-\contentsline {section}{Anexo \numberline {I}Código en Python}{78}{}%
+\contentsline {section}{Anexo \numberline {G}Componentes utilizados para Capitulo 5}{76}{}%
+\contentsline {subsection}{\numberline {G.1}Giroscopios}{76}{}%
+\contentsline {subsection}{\numberline {G.2}Magnetometros}{76}{}%
+\contentsline {subsection}{\numberline {G.3}Sensores de sol}{77}{}%
+\contentsline {subsection}{\numberline {G.4}Ruedas de reacción}{78}{}%
+\contentsline {subsection}{\numberline {G.5}Magnetorquers}{78}{}%
+\contentsline {section}{Anexo \numberline {H}Implementación de los resultados de los MoP de apuntamiento}{80}{}%
+\contentsline {section}{Anexo \numberline {I}Código en Python}{81}{}%
