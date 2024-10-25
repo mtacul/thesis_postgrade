@@ -1,0 +1,12 @@
+x resultados_typeact0_saboth0_typerendacc_typesolverL-BFGS-B.txt: [3.96497101e-01 3.00000000e-09]
+f resultados_typeact0_saboth0_typerendacc_typesolverL-BFGS-B.txt: 3.475352547533468
+type_solver: L-BFGS-B
+------------------------
+x resultados_typeact0_saboth0_typerendacc_typesolverPowell.txt: [4.03102182e-01 1.15256661e-09]
+f resultados_typeact0_saboth0_typerendacc_typesolverPowell.txt: 3.4798282410273846
+type_solver: Powell
+------------------------
+x resultados_typeact0_saboth0_typerendacc_typesolverNelder-Mead.txt: [3.95860131e-01 2.32570809e-09]
+f resultados_typeact0_saboth0_typerendacc_typesolverNelder-Mead.txt: 3.4748471857400416
+type_solver: Nelder-Mead
+------------------------

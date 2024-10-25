@@ -66,9 +66,18 @@ import pandas as pd
 from tkinter import Tk
 import matplotlib.pyplot as plt
 
+# optimizacion -> condiciones iniciales [0.5, 1.5e-9]
+# optimizacion_2 -> condiciones iniciales [0.8, 0.5e-9]
+# optimizacion_3 -> condiciones iniciales [1.6e+00 3.0e-09 5.0e-01]
+# optimizacion_4 -> condiciones iniciales [5.0e-02 1.5e-11 4.0e+01]
+
+# Establecer el directorio de trabajo inicial
+directorio_inicial = r"D:\tesis_magister\thesis_git\thesis_postgrade\06_Optimizacion"
+os.chdir(directorio_inicial)
+
 # Lista de carpetas
 # carpetas = ["SLSQP", "Nelder-Mead", "TNC", "Powell", "L-BFGS-B"]
-carpetas = ["SLSQP", "Nelder-Mead", "TNC", "Powell"]
+carpetas = ["L-BFGS-B_2", "Nelder-Mead_2",  "Powell_2"]
 valores_f =  []
 solver = []
 # 1. Recorrer todas las carpetas, crearlas si no existen y cambiar al directorio de cada una
@@ -76,6 +85,7 @@ for carpeta in carpetas:
     if not os.path.exists(carpeta):
         os.makedirs(carpeta)
     os.chdir(carpeta)
+    print(f"Directorio actual: {os.getcwd()}")
 
     # 2. Usar tkinter para abrir un cuadro de diálogo y seleccionar un archivo
     root = Tk()
@@ -83,16 +93,16 @@ for carpeta in carpetas:
 
     # Combinaciones
     type_act_values = [0]  # Por ejemplo: magnetorquer(0) o rueda de reacción(1)
-    S_A_both_values = [1]  # Diferentes combinaciones de sensor y actuador 0: sensor, 1: actuador, 2: ambos
-    type_rend_values = ['acc_time']
+    S_A_both_values = [0]  # Diferentes combinaciones de sensor y actuador 0: sensor, 1: actuador, 2: ambos
+    type_rend_values = ['acc']
 
     # Verificar si el archivo "optimizacion.txt" existe en la carpeta
-    if not os.path.exists('optimizacion.txt'):
-        print(f"El archivo 'optimizacion.txt' no se encontró en la carpeta {carpeta}")
+    if not os.path.exists('optimizacion_4.txt'):
+        print(f"El archivo 'optimizacion_4.txt' no se encontró en la carpeta {carpeta}")
         os.chdir('..')  # Volver al directorio anterior
         continue
 
-    with open('optimizacion.txt') as mi_archivo:
+    with open('optimizacion_4.txt') as mi_archivo:
         arch = mi_archivo.read()
 
     line = f'resultados_typeact{type_act_values[0]}_saboth{S_A_both_values[0]}_typerend{type_rend_values[0]}.txt:'
@@ -128,14 +138,23 @@ for carpeta in carpetas:
 
 iteraciones = list(range(0,len(f_costs)))
 
-fig0, ax = plt.subplots(figsize=(15,5))  # Crea un solo set de ejes
+fig0, ax = plt.subplots(figsize=(15,7))  # Crea un solo set de ejes
 
 # Graficar los tres conjuntos de datos en la misma gráfica
 ax.scatter(solver, valores_f, label= line)
 
 # Configurar etiquetas, leyenda y grid
 ax.set_xlabel('solver minimize', fontsize=18)
-ax.set_ylabel('funcion objetivo', fontsize=18)
+ax.set_ylabel('función objetivo', fontsize=18)
+# ax.set_title('cond_iniciales [0.5, 1.5e-9]',fontsize=18)
+# ax.set_title('cond_iniciales [0.8, 0.5e-9]',fontsize=18)
+# ax.set_title('cond_iniciales [1.6, 3.0e-09]',fontsize=18)
+ax.set_title('cond_iniciales [0.05, 1.5e-11]',fontsize=18)
+# ax.set_title('cond_iniciales [0.5, 1.5e-9, 1]',fontsize=18)
+# ax.set_title('cond_iniciales [0.8, 0.5e-9, 1]',fontsize=18)
+# ax.set_title('cond_iniciales [1.6, 3.0e-09, 0.5]',fontsize=18)
+# ax.set_title('cond_iniciales [0.05, 1.5e-11, 40]',fontsize=18)
+
 ax.legend(fontsize=18)
 ax.grid()
 
@@ -148,7 +167,7 @@ ax.tick_params(axis='both', which='major', labelsize=18)
 plt.tight_layout()
 
 # Guardar la gráfica como archivo SVG
-# plt.savefig('norm2.svg', format='svg')
+plt.savefig('potencia_RW.pdf', format='pdf')
 
 # Mostrar la gráfica
 plt.show()

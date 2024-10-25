@@ -5,7 +5,7 @@
 
 \textit{Gradiente de gravedad}: La órbita alrededor de la Tierra es posible gracias a la caída libre, que consiste en que la fuerza gravitacional hace caer al satélite constantemente sobre él. Sin embargo, debido a la velocidad horizontal que presenta la nave espacial en órbita, se mueve lo suficientemente rápido como para que su trayectoria curva coincida con la curvatura de la Tierra.
 
-Si bien esta es la perturbación clave para que funcionen la orbitas en los satélites, también presenta consecuencias negativas para estos. Una de ellas es que la variación en el campo gravitacional de la Tierra a lo largo del CubeSat puede generar un gradiente gravitacional, causando un torque que se debe considerar al momento de analizar la dinámica de actitud del satélite. La ecuación que representa el torque se puede representar de la siguiente manera según \cite{ref5}:
+Si bien esta es la perturbación clave para que funcionen la orbitas en los satélites, también presenta consecuencias negativas para estos. Una de ellas es que la variación en el campo gravitacional de la Tierra a lo largo del CubeSat puede generar un gradiente gravitacional, causando un torque que se debe considerar al momento de analizar la dinámica de actitud del satélite. La ecuación que representa el torque se puede representar de la siguiente manera según \cite{ref5}, donde se utilizan los \gls{I} del satélite en cada uno de sus ejes:
 
 \[
 T_g = \frac{3\mu}{2\|R\|^3} \left( \frac{R}{\|R\|} \times \left[ \begin{matrix} 
@@ -24,7 +24,7 @@ Donde:
 	\item $T_g$: Es el torque de gravedad máximo.
 	\item $\mu$: Es la constante de gravedad de la Tierra ($3.988 \times 10^{14}$ $[\text{m}^3/\text{s}^2]$).
 	\item $R$: Posición de la órbita desde el centro de la Tierra.
-	\item $I_x$, $I_y$, $I_z$: Momentos de inercia en los ejes $x$, $y$, $z$ respectivamente $[\text{kg} \cdot \text{m}^2]$.
+	\item $\gls{I}_x$, $\gls{I}_y$, $\gls{I}_z$: Momentos de inercia en los ejes $x$, $y$, $z$ respectivamente $[\text{kg} \cdot \text{m}^2]$.
 \end{itemize}
 
 \textit{Torque debido al arrastre atmosférico}: La fuerza de arrastre en órbitas bajas genera torques externos que pueden afectar la dinámica de actitud. Esta tiene una ecuación que se representa a continuación \cite{ref5}:
@@ -49,7 +49,7 @@ Donde:
 \end{itemize}
 
 
-\textit{Presión debido a la radiación solar \cite{8}}: Esta depende en gran medida del tipo de superficie que está siendo iluminada. Una superficie puede ser transparente, absorbente o reflectante, pero la mayoría de las superficies son una combinación de las tres. Los reflectores se clasifican como difusos o especulares. En general, los conjuntos solares son absorbentes y el cuerpo de la nave espacial es un reflector. El peor caso de par de torsión debido a la radiación solar es:
+\textit{Presión debido a la radiación solar \cite{ref5}}: Esta depende en gran medida del tipo de superficie que está siendo iluminada. Una superficie puede ser transparente, absorbente o reflectante, pero la mayoría de las superficies son una combinación de las tres. Los reflectores se clasifican como difusos o especulares. En general, los conjuntos solares son absorbentes y el cuerpo de la nave espacial es un reflector. El peor caso de par de torsión debido a la radiación solar es:
 
 \[
 T_{sp} = F(c_{ps} - \text{cg})

@@ -54,6 +54,28 @@ def rotacion_v(q, b_i, sigma):
     
     return B_magn
 
+# Funciones para imposicion de ruido en magnetometro
+def simulate_magnetometer_reading_pyomo(B_eci, ruido):
+    # np.random.seed(42)  # Puedes cambiar el número 42 a cualquier otro número entero
+
+        
+    # Simular la medición del magnetómetro con ruido
+    measurement = B_eci +ruido
+
+
+    return measurement
+
+# Rotacion utilizando cuaterniones
+def rotacion_v_pyomo(q, b_i, sigma):
+    
+    B_quat = [b_i[0],b_i[1],b_i[2],0]
+    inv_q_b = inv_q(q)
+    B_body = quat_mult(quat_mult(q,B_quat),inv_q_b)
+    B_body_n = np.array([B_body[0],B_body[1],B_body[2]])
+    B_magn = simulate_magnetometer_reading_pyomo(B_body_n, sigma)
+    
+    return B_magn
+
 # Funcion para generar realismo del giroscopio
 def simulate_gyros_reading(w,ruido,bias):
     # np.random.seed(42)  # Puedes cambiar el número 42 a cualquier otro número entero
@@ -338,6 +360,45 @@ def kalman_lineal(A, B, C, x, u, b_orbit,b_real, s_orbit,s_real, P_ki, sigma_b, 
     
     return q_posteriori, w_posteriori, P_ki,K_k, ws_posteriori
 
+def kalman_lineal_pyomo(A, B, C, x, u, b_orbit,b_real, s_orbit,s_real, P_ki, sigma_b, sigma_s,deltat,hh,h,I_s0_x,I_s1_y,I_s2_z,sigma_bb,sigma_ss):
+    
+    H_k = C
+    [x_priori,q3s_rot] = mod_lineal_disc(x, u, deltat, hh, A, B) #para disc
+    
+    q_priori = np.hstack((x_priori[0:3], q3s_rot))
+    w_priori = x_priori[3:6]
+    ws_priori = x_priori[6:9]
+    
+    Q_ki = Q_k(5e-3, 3e-4,deltat)
+    
+    P_k_priori = P_k_prior(A,P_ki,Q_ki)
+    R = R_k(sigma_bb, sigma_ss)
+    K_k = k_kalman(R,P_k_priori,H_k)
+    
+    b_est = rotacion_v_pyomo(q_priori, b_orbit,sigma_b)
+    s_est = rotacion_v_pyomo(q_priori, s_orbit,sigma_s)
+    h_est = np.array([x_priori[6]/I_s0_x-x_priori[3], x_priori[7]/I_s1_y-x_priori[4], x_priori[8]/I_s2_z-x_priori[5]])
+
+    z_sensor = np.hstack((b_real[0],b_real[1],b_real[2], s_real[0], s_real[1], s_real[2],h[0],h[1],h[2]))
+    z_modelo = np.hstack((b_est[0],b_est[1],b_est[2], s_est[0], s_est[1], s_est[2],h_est[0],h_est[1],h_est[2]))
+    y= z_sensor - z_modelo
+    
+    delta_x = np.dot(K_k,y)
+    delta_q_3 = delta_x[0:3]
+    delta_w = delta_x[3:6]
+    delta_ws = delta_x[6:9]
+    q3_delta =  np.sqrt(1-delta_q_3[0]**2-delta_q_3[1]**2-delta_q_3[2]**2)
+    delta_q = np.hstack((delta_q_3, q3_delta))
+    delta_qn = delta_q / np.linalg.norm(delta_q)
+
+    q_posteriori = quat_mult(delta_qn,q_priori)
+    # print("q posteriori multi:",q_posteriori,"\n")
+    w_posteriori = w_priori + delta_w
+    ws_posteriori = ws_priori + delta_ws
+    
+    P_ki = P_posteriori(K_k, H_k, P_k_priori,R)
+    
+    return q_posteriori, w_posteriori, P_ki,K_k, ws_posteriori
 #%%
 
 def quaternion_to_euler(q):

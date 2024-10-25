@@ -1,0 +1,12 @@
+x resultados_typeact0_saboth0_typerendacc.txt: [4.02577685e-01 1.15331444e-09]
+f resultados_typeact0_saboth0_typerendacc.txt: 3.4797182998144707
+------------------------
+x resultados_typeact0_saboth0_typerendall.txt: [3.71739171e-01 1.15331444e-09]
+f resultados_typeact0_saboth0_typerendall.txt: 4.039478346604307
+------------------------
+x resultados_typeact0_saboth2_typerendacc.txt: [4.02954846e-01 1.15331444e-09 3.98901861e+00]
+f resultados_typeact0_saboth2_typerendacc.txt: 3.6660833917604565
+------------------------
+x resultados_typeact0_saboth2_typerendall.txt: [3.70368328e-01 1.15331444e-09 3.69484532e+00]
+f resultados_typeact0_saboth2_typerendall.txt: 4.21612223017891
+------------------------

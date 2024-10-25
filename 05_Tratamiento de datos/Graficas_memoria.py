@@ -14,6 +14,7 @@ import numpy as np
 import scipy.stats as stats
 
 #%%
+directorio_inicial = r"D:\tesis_magister\thesis_git\thesis_postgrade\05_Tratamiento de datos"
 
 # Definir la lista de archivos CSV disponibles
 archivos_disponibles = [
@@ -140,9 +141,9 @@ print("\n")
 
 #%% Encontrar el tiempo de asentamiento en segundos de cada angulo de Euler
 
-settling_band_R = 5
-settling_band_P = 5
-settling_band_Y = 5
+settling_band_R = 2.5
+settling_band_P = 2.5
+settling_band_Y = 2.5
 
 settling_error_sup_R = np.full(len(t_aux),settling_band_R)
 settling_error_inf_R = np.full(len(t_aux),-settling_band_R)
@@ -249,17 +250,18 @@ lim_sup_R = media_R + 3 * sigma_R
 vals_confianza_R = np.sum((data_R >= lim_inf_R) & (data_R <= lim_sup_R))
 porc_confianza_R = (vals_confianza_R / len(data_R)) * 100
 
-# # Generar valores para la campana de Gauss
-# x_R = np.linspace(media_R - 4*sigma_R, media_R + 4*sigma_R, len(data_R))
-# y_R = stats.norm.pdf(x_R, media_R, sigma_R)
-# # Crear el histograma de los datos
-# plt.hist(data_R, bins=30, density=True, alpha=0.6, color='g')
-# # Graficar la campana de Gauss
-# plt.plot(x_R, y_R, 'k', linewidth=2)
-# plt.title("Distribución Normal del Roll obtenido")
-# plt.xlabel("Valor del Roll [°]")
-# plt.ylabel("Densidad de probabilidad")
-# plt.show()
+# Generar valores para la campana de Gauss
+x_R = np.linspace(media_R - 4*sigma_R, media_R + 4*sigma_R, len(data_R))
+y_R = stats.norm.pdf(x_R, media_R, sigma_R)
+# Crear el histograma de los datos
+plt.hist(data_R, bins=30, density=True, alpha=0.6, color='g')
+# Graficar la campana de Gauss
+plt.plot(x_R, y_R, 'k', linewidth=2)
+plt.title("Distribución Normal del Roll obtenido")
+plt.xlabel("Valor del Roll [°]")
+plt.ylabel("Densidad de probabilidad")
+plt.savefig('Roll_DNormal.pdf', format='pdf')
+plt.show()
 
 accuracy_R = 3*sigma_R
 
@@ -283,8 +285,9 @@ plt.hist(data_P, bins=30, density=True, alpha=0.6, color='g')
 # Graficar la campana de Gauss
 plt.plot(x_P, y_P, 'k', linewidth=2)
 plt.title("Distribución Normal del Roll obtenido")
-plt.xlabel("Valor del Roll [°]")
+plt.xlabel("Valor del Pitch [°]")
 plt.ylabel("Densidad de probabilidad")
+plt.savefig('Pitch_DNormal.pdf', format='pdf')
 plt.show()
 
 accuracy_P = 3*sigma_P
@@ -309,8 +312,9 @@ plt.hist(data_Y, bins=30, density=True, alpha=0.6, color='g')
 # Graficar la campana de Gauss
 plt.plot(x_Y, y_Y, 'k', linewidth=2)
 plt.title("Distribución Normal del Roll obtenido")
-plt.xlabel("Valor del Roll [°]")
+plt.xlabel("Valor del Yaw [°]")
 plt.ylabel("Densidad de probabilidad")
+plt.savefig('Yaw_DNormal.pdf', format='pdf')
 plt.show()
 
 accuracy_Y = 3*sigma_Y
@@ -398,18 +402,19 @@ plt.tight_layout()
 plt.show()
 
 
-# plt.figure(figsize=(12, 6))
-# plt.plot(t_aux, Roll_high_pass, label='Roll')
-# plt.plot(t_aux, Pitch_high_pass, label='Pitch')
-# plt.plot(t_aux, Yaw_high_pass, label='Yaw')
-# plt.xlabel('Tiempo[s]')
-# plt.ylabel('Ángulos de Euler [°]')
-# plt.legend()
-# plt.title('Filtros pasa alto')
-# # plt.xlim(0.8e7,1.7e7)
-# # plt.ylim(-0.002,0.002)
-# plt.grid()
-# plt.show()
+plt.figure(figsize=(12, 6))
+plt.plot(t_aux, Roll_high_pass, label='Roll')
+plt.plot(t_aux, Pitch_high_pass, label='Pitch')
+plt.plot(t_aux, Yaw_high_pass, label='Yaw')
+plt.xlabel('Tiempo[s]')
+plt.ylabel('Ángulos de Euler [°]')
+plt.legend()
+plt.title('Filtros pasa alto')
+""" plt.xlim(0.8e7,1.7e7)
+plt.ylim(-0.002,0.002) """
+plt.grid()
+plt.savefig('RPY_highpass.pdf', format='pdf')
+plt.show()
 
 fig0, axes0 = plt.subplots(nrows=2, ncols=1, figsize=(7, 7))
 
@@ -428,9 +433,9 @@ axes0[1].set_ylabel('Ángulos de Euler [°]')
 axes0[1].legend()
 # axes0[1].set_title('Filtros pasa bajo')
 axes0[1].grid()
-axes0[1].set_ylim(-10,10)  # Ajusta los límites en el eje Y
 
 plt.tight_layout()
+plt.savefig('time_roll.pdf', format='pdf')
 plt.show()
 
 fig0, axes0 = plt.subplots(nrows=2, ncols=1, figsize=(7, 7))
@@ -450,9 +455,9 @@ axes0[1].set_ylabel('Ángulos de Euler [°]')
 axes0[1].legend()
 # axes0[1].set_title('Filtros pasa bajo')
 axes0[1].grid()
-axes0[1].set_ylim(-10,10)  # Ajusta los límites en el eje Y
 
 plt.tight_layout()
+plt.savefig('time_pitch.pdf', format='pdf')
 plt.show()
 
 fig0, axes0 = plt.subplots(nrows=2, ncols=1, figsize=(7, 7))
@@ -472,41 +477,44 @@ axes0[1].set_ylabel('Ángulos de Euler [°]')
 axes0[1].legend()
 # axes0[1].set_title('Filtros pasa bajo')
 axes0[1].grid()
-axes0[1].set_ylim(-10,10)  # Ajusta los límites en el eje Y
 
 plt.tight_layout()
+plt.savefig('time_yaw.pdf', format='pdf')
 plt.show()
 
-# plt.figure(figsize=(10, 6))
-# plt.semilogy(frequencies_R, psd_R_R, label='PSD Roll')
-# plt.fill_between(frequencies_R[indices_bandwidth_1_R], psd_R_R[indices_bandwidth_1_R], alpha=0.3, label='Ancho de banda 1')
-# plt.title('Densidad Espectral de Potencia con Anchos de Banda Específicos en Roll')
-# plt.xlabel('Frecuencia (Hz)')
-# plt.ylabel('Densidad Espectral de Potencia')
-# plt.legend()
-# plt.grid(True)
-# plt.show()
+plt.figure(figsize=(10, 6))
+plt.semilogy(frequencies_R, psd_R_R, label='PSD Roll')
+plt.fill_between(frequencies_R[indices_bandwidth_1_R], psd_R_R[indices_bandwidth_1_R], alpha=0.3, label='Ancho de banda 1')
+plt.title('Densidad Espectral de Potencia con Anchos de Banda Específicos en Roll')
+plt.xlabel('Frecuencia (Hz)')
+plt.ylabel('Densidad Espectral de Potencia')
+plt.legend()
+plt.grid(True)
+plt.savefig('psd_roll.pdf', format='pdf')
+plt.show()
 
-# plt.figure(figsize=(10, 6))
-# plt.semilogy(frequencies_P, psd_P_R, label='PSD Pitch')
-# plt.fill_between(frequencies_P[indices_bandwidth_1_P], psd_P_R[indices_bandwidth_1_P], alpha=0.3, label='Ancho de banda 1')
-# plt.title('Densidad Espectral de Potencia con Anchos de Banda Específicos en Pitch')
-# plt.xlabel('Frecuencia (Hz)')
-# plt.ylabel('Densidad Espectral de Potencia')
-# plt.legend()
-# plt.grid(True)
-# plt.show()
+plt.figure(figsize=(10, 6))
+plt.semilogy(frequencies_P, psd_P_R, label='PSD Pitch')
+plt.fill_between(frequencies_P[indices_bandwidth_1_P], psd_P_R[indices_bandwidth_1_P], alpha=0.3, label='Ancho de banda 1')
+plt.title('Densidad Espectral de Potencia con Anchos de Banda Específicos en Pitch')
+plt.xlabel('Frecuencia (Hz)')
+plt.ylabel('Densidad Espectral de Potencia')
+plt.legend()
+plt.grid(True)
+plt.savefig('psd_pitch.pdf', format='pdf')
+plt.show()
 
 
-# plt.figure(figsize=(10, 6))
-# plt.semilogy(frequencies_Y, psd_Y_R, label='PSD Yaw')
-# plt.fill_between(frequencies_Y[indices_bandwidth_1_Y], psd_Y_R[indices_bandwidth_1_Y], alpha=0.3, label='Ancho de banda 1')
-# plt.title('Densidad Espectral de Potencia con Anchos de Banda Específicos en Yaw')
-# plt.xlabel('Frecuencia (Hz)')
-# plt.ylabel('Densidad Espectral de Potencia')
-# plt.legend()
-# plt.grid(True)
-# plt.show()
+plt.figure(figsize=(10, 6))
+plt.semilogy(frequencies_Y, psd_Y_R, label='PSD Yaw')
+plt.fill_between(frequencies_Y[indices_bandwidth_1_Y], psd_Y_R[indices_bandwidth_1_Y], alpha=0.3, label='Ancho de banda 1')
+plt.title('Densidad Espectral de Potencia con Anchos de Banda Específicos en Yaw')
+plt.xlabel('Frecuencia (Hz)')
+plt.ylabel('Densidad Espectral de Potencia')
+plt.legend()
+plt.grid(True)
+plt.savefig('psd_yaw.pdf', format='pdf')
+plt.show()
 
 [MSE_cuat, MSE_omega]  = functions_05.cuat_MSE_NL(q0_real, q1_real, q2_real, q3_real, w0_real, w1_real, w2_real, q0_est, q1_est, q2_est, q3_est, w0_est, w1_est, w2_est)   
 [RPY_all_est,RPY_all_id,mse_roll,mse_pitch,mse_yaw] = functions_05.RPY_MSE(t_aux, q0_est, q1_est, q2_est, q3_est, q0_real, q1_real, q2_real, q3_real)   

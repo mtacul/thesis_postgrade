@@ -1,22 +1,25 @@
-\contentsline {table}{\numberline {2.1}{\ignorespaces Sensores utilizados en CubeSat \cite {ref6}.}}{18}{}%
-\contentsline {table}{\numberline {2.2}{\ignorespaces Descripción de las triadas de referencia y de observación.}}{19}{}%
-\contentsline {table}{\numberline {2.3}{\ignorespaces Actuadores utilizados en CubeSat \cite {ref6}.}}{23}{}%
-\contentsline {table}{\numberline {3.1}{\ignorespaces Comparativa de software/simuladores para CubeSats.}}{33}{}%
-\contentsline {table}{\numberline {5.1}{\ignorespaces Parámetros del sistema}}{49}{}%
-\contentsline {table}{\numberline {5.2}{\ignorespaces Componentes clasificados por nivel de rendimiento}}{50}{}%
-\contentsline {table}{\numberline {5.3}{\ignorespaces Rendimiento y costo para rueda de reaccion y magnetorquer en mismas condiciones.}}{52}{}%
-\contentsline {table}{\numberline {5.4}{\ignorespaces Rendimiento y costo para controlador PD y LQR en mismas condiciones.}}{53}{}%
-\contentsline {table}{\numberline {5.5}{\ignorespaces Rendimiento y costo para niveles de sensor con nivel 2 de magnetorquer y LQR.}}{54}{}%
-\contentsline {table}{\numberline {5.6}{\ignorespaces Rendimiento y costo para niveles de sensor con nivel 2 de rueda de reacción y LQR.}}{55}{}%
-\contentsline {table}{\numberline {5.7}{\ignorespaces Rendimiento y costo para niveles de magnetorquer con nivel 2 de sensor y LQR.}}{57}{}%
-\contentsline {table}{\numberline {5.8}{\ignorespaces Rendimiento y costo para niveles de rueda de reacción con nivel 2 de sensor y LQR.}}{58}{}%
-\contentsline {table}{\numberline {G.1}{\ignorespaces Tabla de giroscopios con sus respectivas características de costo.}}{76}{}%
-\contentsline {table}{\numberline {G.2}{\ignorespaces Tabla de giroscopios con sus respectivas características de performance.}}{76}{}%
-\contentsline {table}{\numberline {G.3}{\ignorespaces Tabla de magnetómetros con sus respectivas características de costo.}}{76}{}%
-\contentsline {table}{\numberline {G.4}{\ignorespaces Tabla de magnetómetros con sus respectivas características de performance.}}{77}{}%
-\contentsline {table}{\numberline {G.5}{\ignorespaces Tabla de sensores de sol con sus respectivas características de costo.}}{77}{}%
-\contentsline {table}{\numberline {G.6}{\ignorespaces Tabla de sensores de sol con sus respectivas características de performance.}}{77}{}%
-\contentsline {table}{\numberline {G.7}{\ignorespaces Tabla de ruedas de reacción con sus respectivas características de costo.}}{78}{}%
-\contentsline {table}{\numberline {G.8}{\ignorespaces Tabla de ruedas de reacción con sus respectivas características de performance.}}{78}{}%
-\contentsline {table}{\numberline {G.9}{\ignorespaces Tabla de magnetorquers con sus respectivas características de costo.}}{78}{}%
-\contentsline {table}{\numberline {G.10}{\ignorespaces Tabla de magnetorquers con sus respectivas características de performance.}}{79}{}%
+\contentsline {table}{\numberline {1.1}{\ignorespaces Cronograma de hitos y avances}}{11}{}%
+\contentsline {table}{\numberline {2.1}{\ignorespaces Sensores utilizados en CubeSat \cite {ref6}.}}{20}{}%
+\contentsline {table}{\numberline {2.2}{\ignorespaces Descripción de las triadas de referencia y de observación.}}{21}{}%
+\contentsline {table}{\numberline {2.3}{\ignorespaces Actuadores utilizados en CubeSat \cite {ref6}.}}{24}{}%
+\contentsline {table}{\numberline {3.1}{\ignorespaces Comparativa de software/simuladores para CubeSats.}}{35}{}%
+\contentsline {table}{\numberline {5.1}{\ignorespaces Parámetros del sistema}}{52}{}%
+\contentsline {table}{\numberline {5.2}{\ignorespaces Componentes clasificados por nivel de rendimiento}}{52}{}%
+\contentsline {table}{\numberline {5.3}{\ignorespaces Rendimiento y costo para rueda de reaccion y magnetorquer en mismas condiciones.}}{54}{}%
+\contentsline {table}{\numberline {5.4}{\ignorespaces Rendimiento y costo para controlador PD y LQR en mismas condiciones.}}{55}{}%
+\contentsline {table}{\numberline {5.5}{\ignorespaces Rendimiento y costo para niveles de sensor con nivel 2 de magnetorquer y LQR.}}{56}{}%
+\contentsline {table}{\numberline {5.6}{\ignorespaces Rendimiento y costo para niveles de sensor con nivel 2 de rueda de reacción y LQR.}}{57}{}%
+\contentsline {table}{\numberline {5.7}{\ignorespaces Rendimiento y costo para niveles de magnetorquer con nivel 2 de sensor y LQR.}}{59}{}%
+\contentsline {table}{\numberline {5.8}{\ignorespaces Rendimiento y costo para niveles de rueda de reacción con nivel 2 de sensor y LQR.}}{60}{}%
+\contentsline {table}{\numberline {6.1}{\ignorespaces Funciones de costo en base a rendimiento.}}{61}{}%
+\contentsline {table}{\numberline {6.2}{\ignorespaces Funciones de costo en base a costo.}}{62}{}%
+\contentsline {table}{\numberline {G.1}{\ignorespaces Tabla de giroscopios con sus respectivas características de costo.}}{90}{}%
+\contentsline {table}{\numberline {G.2}{\ignorespaces Tabla de giroscopios con sus respectivas características de performance.}}{90}{}%
+\contentsline {table}{\numberline {G.3}{\ignorespaces Tabla de magnetómetros con sus respectivas características de costo.}}{90}{}%
+\contentsline {table}{\numberline {G.4}{\ignorespaces Tabla de magnetómetros con sus respectivas características de performance.}}{91}{}%
+\contentsline {table}{\numberline {G.5}{\ignorespaces Tabla de sensores de sol con sus respectivas características de costo.}}{91}{}%
+\contentsline {table}{\numberline {G.6}{\ignorespaces Tabla de sensores de sol con sus respectivas características de performance.}}{91}{}%
+\contentsline {table}{\numberline {G.7}{\ignorespaces Tabla de ruedas de reacción con sus respectivas características de costo.}}{92}{}%
+\contentsline {table}{\numberline {G.8}{\ignorespaces Tabla de ruedas de reacción con sus respectivas características de performance.}}{92}{}%
+\contentsline {table}{\numberline {G.9}{\ignorespaces Tabla de magnetorquers con sus respectivas características de costo.}}{92}{}%
+\contentsline {table}{\numberline {G.10}{\ignorespaces Tabla de magnetorquers con sus respectivas características de performance.}}{93}{}%

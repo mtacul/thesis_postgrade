@@ -36,7 +36,7 @@ q_real = np.array([0.0789,0.0941,0.0789,0.9893])
 
 deltat = 2
 # limite =  5762*69
-limite =  5762*4
+limite =  5762
 hh =0.01
 bi_orbit = [Bx_orbit[0],By_orbit[0],Bz_orbit[0]]
 b_body_i = functions_06_rw.rotacion_v(q_real, bi_orbit, 0)
@@ -75,48 +75,70 @@ B_prom = np.vstack((B_concanate[0:3],B_concanate[3:6],B_concanate[6:9],B_concana
 
 C = np.eye(6)
 D = np.zeros((6, 3))
-sys_ss = ctrl.ss(A_discrete, B_prom, C, D)
+sys_ss = ctrl.ss(A, B, C, D)
 sys_tf = ctrl.ss2tf(sys_ss)
+
+# #%%
+
+# # Obtener el número de filas y columnas del sistema de funciones de transferencia
+# num_outputs = 6
+# num_inputs = 3
+
+# # Recorrer cada función de transferencia en el sistema
+# for i in range(num_outputs):  # Para cada salida
+#     for j in range(num_inputs):  # Para cada entrada
+#         sys_tf_ij = sys_tf[i, j]
+        
+#         # Definir el tiempo de simulación
+#         t_impulse = np.linspace(0, 5762*3, 10000)  # 100 segundos, 1000 puntos
+
+#         # Obtener la respuesta a un impulso
+#         t_out, y_out = ctrl.impulse_response(sys_tf_ij, T=t_impulse)
+
+#         # Graficar la respuesta a un impulso
+#         plt.figure()
+#         plt.plot(t_out, y_out)
+#         plt.title(f'Respuesta a un Impulso de sys_tf[{i}, {j}]')
+#         plt.xlabel('Tiempo [s]')
+#         plt.ylabel('Amplitud')
+#         plt.ylim(-1,1)
+#         plt.grid(True)
+#         plt.show()
 
 #%%
 
-# Obtener el número de filas y columnas del sistema de funciones de transferencia
+# Supongamos que sys_tf es tu matriz de funciones de transferencia
+
 num_outputs = 6
 num_inputs = 3
+
+# Definir el tiempo de simulación
+t_impulse = np.linspace(0, 5762*3, 10000*3)  # Tiempo de simulación
+
+# Crear un grid de 6x3 para las subgráficas
+fig, axs = plt.subplots(num_outputs, num_inputs, figsize=(15, 10))
+fig.suptitle('Respuestas a un Impulso del Sistema')
 
 # Recorrer cada función de transferencia en el sistema
 for i in range(num_outputs):  # Para cada salida
     for j in range(num_inputs):  # Para cada entrada
         sys_tf_ij = sys_tf[i, j]
         
-        # Definir el tiempo de simulación
-        t_impulse = np.linspace(0, 100, 1000)  # 100 segundos, 1000 puntos
-
         # Obtener la respuesta a un impulso
         t_out, y_out = ctrl.impulse_response(sys_tf_ij, T=t_impulse)
 
-        # Graficar la respuesta a un impulso
-        plt.figure()
-        plt.plot(t_out, y_out)
-        plt.title(f'Respuesta a un Impulso de sys_tf[{i}, {j}]')
-        plt.xlabel('Tiempo [s]')
-        plt.ylabel('Amplitud')
-        plt.grid(True)
-        plt.show()
-# # Definir el sistema de la función de transferencia que quieres analizar
-# sys_tf_00 = sys_tf[0, 2]
+        # Seleccionar la subgráfica correspondiente
+        ax = axs[i, j]
 
-# # Definir el tiempo de simulación
-# t_impulse = np.linspace(0, 100, 1000)  # 10 segundos, 1000 puntos
+        # Graficar en la subgráfica correspondiente
+        ax.plot(t_out, y_out)
+        ax.set_title(f'sys_tf[{i}, {j}]')
+        ax.set_xlabel('Tiempo [s]')
+        ax.set_ylabel('Amplitud')
+        ax.set_ylim(-1, 1)
+        ax.grid(True)
 
-# # Obtener la respuesta a un impulso
-# t_out, y_out = ctrl.impulse_response(sys_tf_00, T=t_impulse)
-
-# # Graficar la respuesta a un impulso
-# plt.figure()
-# plt.plot(t_out, y_out)
-# plt.title(f'Respuesta a un Impulso de sys_tf{sys_tf_00}')
-# plt.xlabel('Tiempo [s]')
-# plt.ylabel('Amplitud')
-# plt.grid(True)
-# plt.show()
+# Ajustar el espaciado entre las subgráficas
+plt.tight_layout()
+plt.subplots_adjust(top=0.9)  # Dejar espacio para el título principal
+plt.show()

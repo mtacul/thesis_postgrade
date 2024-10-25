@@ -1,36 +1,54 @@
-x resultados_typeact0_saboth0_typerendacc.txt: [3.23594611e-01 1.15331444e-09]
-f resultados_typeact0_saboth0_typerendacc.txt: 12.220252765957621
+x resultados_typeact0_saboth0_typerendacc.txt: [4.45844625e-01 1.15331444e-09]
+f resultados_typeact0_saboth0_typerendacc.txt: 4.358785930644854
 ------------------------
-x resultados_typeact0_saboth0_typerendacc_time.txt: [1.50928781e-01 1.15340658e-09]
-f resultados_typeact0_saboth0_typerendacc_time.txt: 10122646.143300239
+x resultados_typeact0_saboth0_typerendacc_time.txt: [4.44904885e-01 1.15331444e-09]
+f resultados_typeact0_saboth0_typerendacc_time.txt: 4.4328235570406855
 ------------------------
-x resultados_typeact0_saboth1_typerendacc.txt: [1.77388729]
-f resultados_typeact0_saboth1_typerendacc.txt: 12.367126316904475
+x resultados_typeact0_saboth0_typerendall.txt: [4.20906777e-01 1.15331444e-09]
+f resultados_typeact0_saboth0_typerendall.txt: 4.845114677513954
 ------------------------
-x resultados_typeact0_saboth1_typerendacc_time.txt: [10.98867782]
-f resultados_typeact0_saboth1_typerendacc_time.txt: 3766675.5219103107
+x resultados_typeact0_saboth1_typerendacc.txt: [4.82428184]
+f resultados_typeact0_saboth1_typerendacc.txt: 3.6479784076708373
 ------------------------
-x resultados_typeact0_saboth2_typerendacc.txt: [3.33920975e-01 1.15331444e-09 1.62543876e+00]
-f resultados_typeact0_saboth2_typerendacc.txt: 11.711355786457641
+x resultados_typeact0_saboth1_typerendacc_time.txt: [4.84177307]
+f resultados_typeact0_saboth1_typerendacc_time.txt: 3.6906860318023935
 ------------------------
-x resultados_typeact0_saboth2_typerendacc_time.txt: [2.10820457e-01 1.15328666e-09 1.04797727e+01]
-f resultados_typeact0_saboth2_typerendacc_time.txt: 3761140.308015783
+x resultados_typeact0_saboth1_typerendall.txt: [4.8047346]
+f resultados_typeact0_saboth1_typerendall.txt: 4.4381907805515
 ------------------------
-x resultados_typeact1_saboth0_typerendacc.txt: [3.27996324e-01 1.15331444e-09]
-f resultados_typeact1_saboth0_typerendacc.txt: 3.5773700747532655
+x resultados_typeact0_saboth2_typerendacc.txt: [4.04562446e-01 1.15245561e-09 4.57946390e+00]
+f resultados_typeact0_saboth2_typerendacc.txt: 3.66685081797581
 ------------------------
-x resultados_typeact1_saboth0_typerendacc_time.txt: [3.72048138e-01 1.15331444e-09]
-f resultados_typeact1_saboth0_typerendacc_time.txt: 4843.639722367756
+x resultados_typeact0_saboth2_typerendacc_time.txt: [3.99355251e-01 1.14191537e-09 4.02965205e+00]
+f resultados_typeact0_saboth2_typerendacc_time.txt: 3.7094734704865235
 ------------------------
-x resultados_typeact1_saboth1_typerendacc.txt: [0.00913562]
-f resultados_typeact1_saboth1_typerendacc.txt: 21.082494802726252
+x resultados_typeact0_saboth2_typerendall.txt: [3.74691754e-01 1.16441920e-09 3.59974373e+00]
+f resultados_typeact0_saboth2_typerendall.txt: 4.2157433303410325
 ------------------------
-x resultados_typeact1_saboth1_typerendacc_time.txt: [0.23074096]
-f resultados_typeact1_saboth1_typerendacc_time.txt: 2255.7480341137966
+x resultados_typeact1_saboth0_typerendacc.txt: [4.14550504e-01 1.15331444e-09]
+f resultados_typeact1_saboth0_typerendacc.txt: 2.0709293233710104
 ------------------------
-x resultados_typeact1_saboth2_typerendacc.txt: [4.01640030e-01 1.15626734e-09 8.26312180e-03]
-f resultados_typeact1_saboth2_typerendacc.txt: 20.911731795048812
+x resultados_typeact1_saboth0_typerendacc_time.txt: [4.14550504e-01 1.15331444e-09]
+f resultados_typeact1_saboth0_typerendacc_time.txt: 2.1093453233710004
 ------------------------
-x resultados_typeact1_saboth2_typerendacc_time.txt: [3.24936968e-01 1.15329332e-09 2.30762607e-01]
-f resultados_typeact1_saboth2_typerendacc_time.txt: 2254.869709145993
+x resultados_typeact1_saboth0_typerendall.txt: [4.02983676e-01 1.15331444e-09]
+f resultados_typeact1_saboth0_typerendall.txt: 2.1530790941294784
+------------------------
+x resultados_typeact1_saboth1_typerendacc.txt: [0.03722642]
+f resultados_typeact1_saboth1_typerendacc.txt: 2.4492397236382515
+------------------------
+x resultados_typeact1_saboth1_typerendacc_time.txt: [0.05971426]
+f resultados_typeact1_saboth1_typerendacc_time.txt: 2.74396295039602
+------------------------
+x resultados_typeact1_saboth1_typerendall.txt: [0.05974255]
+f resultados_typeact1_saboth1_typerendall.txt: 2.9148118363816566
+------------------------
+x resultados_typeact1_saboth2_typerendacc.txt: [4.06668596e-01 1.15331444e-09 3.20985300e-02]
+f resultados_typeact1_saboth2_typerendacc.txt: 2.4821844843236933
+------------------------
+x resultados_typeact1_saboth2_typerendacc_time.txt: [4.11655312e-01 1.15331444e-09 5.75819385e-02]
+f resultados_typeact1_saboth2_typerendacc_time.txt: 2.819203787085099
+------------------------
+x resultados_typeact1_saboth2_typerendall.txt: [3.99592198e-01 1.15331444e-09 5.97233712e-02]
+f resultados_typeact1_saboth2_typerendall.txt: 2.8934064923952265
 ------------------------

@@ -2,6 +2,225 @@
 
 \label{ap:Z6}
 
+Primero se plantean las ecuaciones de la cinemática del cuaternión utilizando la componente escalar \( q_3 \) como dependiente de las componentes vectoriales, sabiendo que la norma del cuaternión es siempre igual a 1. Esto deja la siguiente expresión:
+
+\[
+q_3 = \sqrt{1 - (q_0)^2 - (q_1)^2 - (q_2)^2}
+\]
+
+Con ello, se obtiene el f(x), sabiendo que en las tres primeras ecuaciones las tres componentes de la velocidad angular están entre los marcos de referencia de control (del cuerpo) y orbital (RPY o requerido), las tres siguientes tienen la velocidad angular del CubeSat entre los marcos de referencia del cuerpo e inercial (ECI) y finalmente se presentan las ecuaciones de la velocidad angular de cada rueda de reacción alineada a un eje del marco de referencia del cuerpo.
+
+\begin{equation}
+	\dot{q}_0 = \frac{1}{2} \left( \omega_{2\_co} q_1 - \omega_{1\_co} q_2 + \omega_{0\_co} \sqrt{1 - (q_0)^2 - (q_1)^2 - (q_2)^2} \right)
+\end{equation}
+
+\begin{equation}
+	\dot{q}_1 = \frac{1}{2} \left( -\omega_{2\_co} q_0 + \omega_{0\_co} q_2 + \omega_{1\_co} \sqrt{1 - (q_0)^2 - (q_1)^2 - (q_2)^2} \right)
+\end{equation}
+
+\begin{equation}
+	\dot{q}_2 = \frac{1}{2} \left( \omega_{1\_co} q_0 - \omega_{0\_co} q_1 + \omega_{2\_co} \sqrt{1 - (q_0)^2 - (q_1)^2 - (q_2)^2} \right)
+\end{equation}
+
+\begin{equation}
+	\dot{\omega}_{0,ci} (J_x - I_{s0}) = \omega_{1,ci} \omega_{2,ci} (J_y - J_z) + \omega_{1s,ci} \omega_{2,ci} I_{s1} - \omega_{1,ci} \omega_{2s,ci} I_{s2} - \tau_{x,ctrl} - \tau_{x,pert} \\
+\end{equation}
+
+\begin{equation}
+	\dot{\omega}_{1,ci} (J_y - I_{s1}) = \omega_{0,ci} \omega_{2,ci} (J_x - J_z) + \omega_{0s,ci} \omega_{2,ci} I_{s0} - \omega_{0,ci} \omega_{2s,ci} I_{s2} - \tau_{y,ctrl} - \tau_{y,pert}
+\end{equation}
+
+\begin{equation}
+	\dot{\omega}_{2,ci} (J_z - I_{s2}) = \omega_{0,ci} \omega_{1,ci} (J_x - J_y) + \omega_{0s,ci} \omega_{1,ci} I_{s0} - \omega_{0,ci} \omega_{1s,ci} I_{s1} - \tau_{z,ctrl} - \tau_{z,pert}
+\end{equation}
+
+\begin{equation}
+	\dot{\omega}_{0s,ci} I_{s0} = -I_{s0} \dot{\omega}_{0,ci} + \tau_{s0,ctrl} + \tau_{s0,pert}
+\end{equation}
+
+\begin{equation}
+	\dot{\omega}_{1s,ci} I_{s1} = -I_{s1} \dot{\omega}_{1,ci} + \tau_{s1,ctrl} + \tau_{s1,pert}
+\end{equation}
+
+\begin{equation}
+	\dot{\omega}_{2s,ci} I_{s2} = -I_{s2} \dot{\omega}_{2,ci} + \tau_{s2,ctrl} + \tau_{s2,pert}
+\end{equation}
 
 
+En el caso de las ruedas de reacción, los torques de control son ejercidos directamente por cada una de ellas. Esto se expresa matemáticamente como $\tau_{ctrl} = \tau_{s}$, lo que significa que los torques de control sobre el CubeSat son equivalentes a los torques generados por las ruedas de reacción. Para simplificar este análisis, se omitirán los torques de perturbación en las ruedas de reacción, y para el satélite solo se considerará el gradiente gravitacional como fuente de perturbación externa.
 
+Además, debido a la presencia de varios cuerpos rígidos dentro del satélite, como las ruedas de reacción, se debe tener en cuenta el segundo momento de inercia total en cada eje del CubeSat. Las ecuaciones correspondientes, que aplican el teorema de los ejes paralelos utilizando el marco de referencia del cuerpo, se presentan a continuación.
+\[
+J_x = I_x + (I_{s1} + m_1 b_1^2) + (I_{s2} + m_2 b_2^2) + I_{s0}
+\]
+
+\[
+J_y = I_y + (I_{s0} + m_0 b_0^2) + (I_{s2} + m_2 b_2^2) + I_{s1}
+\]
+
+\[
+J_z = I_z + (I_{s0} + m_0 b_0^2) + (I_{s1} + m_1 b_1^2) + I_{s2}
+\]
+
+Por último, antes de linealizar el sistema según las variables de estado $x = [q_0, q_1, q_2, \omega_{0_{co}}, \omega_{1_{co}},\\ \omega_{2_{co}}, \omega_{0s_{co}}, \omega_{1s_{co}}, \omega_{2s_{co}}]$ y las variables de control $u = [\tau_{sx}, \tau_{sy}, \tau_{sz}]$, todas las ecuaciones deben estar en el mismo sistema de referencia, por lo que se debe aplicar un reemplazo en las ecuaciones para que estén en el sistema de referencia de control vs órbita. Para ello, se implementa el siguiente cambio de variable propuesto por Torczynski \cite{ref14}, sabiendo que $\omega_{0_o}$ es el "orbital period" correspondiente a la velocidad angular de la órbita:
+
+\[
+\begin{bmatrix}
+	\omega_{0_{ci}} \\
+	\omega_{1_{ci}} \\
+	\omega_{2_{ci}}
+\end{bmatrix}
+=
+\begin{bmatrix}
+	\omega_{0_{co}} \\
+	\omega_{1_{co}} \\
+	\omega_{2_{co}}
+\end{bmatrix}
++
+\begin{bmatrix}
+	q_3^2 + q_0^2 - q_1^2 - q_2^2 & 2(q_0 q_1 + q_2 q_3) & 2(q_0 q_2 - q_1 q_3) \\
+	2(q_0 q_1 - q_2 q_3) & q_3^2 - q_0^2 + q_1^2 - q_2^2 & 2(q_1 q_2 + q_0 q_3) \\
+	2(q_0 q_2 + q_1 q_3) & 2(q_1 q_2 - q_0 q_3) & q_3^2 - q_0^2 - q_1^2 + q_2^2
+\end{bmatrix}
+\cdot
+\begin{bmatrix}
+	\omega_{0_o} \\
+	0 \\
+	0
+\end{bmatrix}
+\]
+
+Al implementar dicho cambio de variable, las ecuaciones de la conservación del momentum angular para el satélite y las ruedas de reacción quedan representadas de la siguiente manera:
+
+\[
+\dot{\omega}_{0_{co}} = -\omega_{0_{o}} \left( -4 q_1 \dot{q_1} - 4 q_2 \dot{q_2} \right) 
+\]
+\[
++ \frac{1}{J_x - I_{s0}} \left[ \left( \omega_{1_{co}} + \omega_{0_{o}} \left[ 2(q_0 q_1 - q_2 q_3) \right] \right) 
+\left( \omega_{2_{co}} + \omega_{0_{o}} \left[ 2(q_0 q_2 + q_1 q_3) \right] \right) (J_z - J_y) \right.
+\]
+\[
+\left. - \left( \omega_{1_{co}} + \omega_{0_{o}} \left[ 2(q_0 q_1 - q_2 q_3) \right] \right) (\omega_{s2} I_{s2}) 
++ \left( \omega_{2_{co}} + \omega_{0_{o}} \left[ 2(q_0 q_2 + q_1 q_3) \right] \right) (\omega_{s1} I_{s1}) \right]
+\]
+
+
+\[
+\dot{\omega}_{1_{co}} = -2\omega_{0_{o}} \left(\dot{q_0} q_1 +  q_0 \dot{q_1} - \dot{q_2} q_3 -  q_2 \dot{q_3} \right) 
+\]
+\[
++ \frac{1}{J_y - I_{s1}} \left[ \left( \omega_{0_{co}} + \omega_{0_{o}} \left[1-2q_1^2-2q_2^2 \right] \right) 
+\left( \omega_{2_{co}} + \omega_{0_{o}} \left[ 2(q_0 q_2 + q_1 q_3) \right] \right) (J_z - J_x) \right.
+\]
+\[
+\left. - \left( \omega_{0_{co}} + \omega_{0_{o}} \left[ 1-2q_1^2-2q_2^2 \right] \right) (\omega_{s2} I_{s2}) + \left( \omega_{2_{co}} + \omega_{0_{o}} \left[ 2(q_0 q_2 + q_1 q_3) \right] \right) (\omega_{s0} I_{s0}) \right]
+\]
+
+
+\[
+\dot{\omega}_{2_{co}} = -2\omega_{0_{o}} \left(\dot{q_0} q_2 +  q_0 \dot{q_2} + \dot{q_1} q_3 +  q_1 \dot{q_3} \right) 
+\]
+\[
++ \frac{1}{J_z - I_{s2}} \left[ \left( \omega_{0_{co}} + \omega_{0_{o}} \left[1-2q_1^2-2q_2^2 \right] \right) 
+\left( \omega_{1_{co}} + \omega_{0_{o}} \left[ 2(q_0 q_1 - q_2 q_3) \right] \right) (J_y - J_x) \right.
+\]
+\[
+\left. - \left( \omega_{0_{co}} + \omega_{0_{o}} \left[ 1-2q_1^2-2q_2^2 \right] \right) (\omega_{s2} I_{s2}) 
++ \left( \omega_{1_{co}} + \omega_{0_{o}} \left[ 2(q_0 q_1 - q_2 q_3) \right] \right) (\omega_{s1} I_{s1}) \right]
+\]
+
+\[
+	\dot{\omega}_{0s,co} = -\dot{\omega}_{0,co} + \frac{\tau_{s0,ctrl}}{I_{s0}}
+\]
+
+\[
+	\dot{\omega}_{1s,co} = -\dot{\omega}_{1,co} + \frac{\tau_{s1,ctrl}}{I_{s1}}
+\]
+
+\[
+	\dot{\omega}_{2s,co} = -\dot{\omega}_{2,co} + \frac{\tau_{s2,ctrl}}{I_{s2}}
+\]
+
+A partir de esta representación, se obtiene la matriz A, que será utilizada tanto para el lazo cerrado del \gls{EKF} como para el control lineal descrito en esta sección. La matriz A se obtiene al derivar todas las funciones con respecto a los estados y evaluarlas en el punto de equilibrio. Asimismo, se obtiene la matriz B, que corresponde a las derivadas de las funciones con respecto a los torques de control de las ruedas de reacción, evaluadas cuando la acción de control es nula.
+
+
+\[
+A_{11} = A_{13}
+\begin{bmatrix}
+	0 & 0 & 0 \\
+	0 & 0 & 0 \\
+	0 & 0 & 0 \\
+\end{bmatrix} \quad
+A_{12} = 
+\begin{bmatrix}
+	0.5 & 0 & 0 \\
+	0 & 0.5 & 0 \\
+	0 & 0 & 0.5 \\
+\end{bmatrix}
+\]
+
+\[
+A_{21} = 
+\begin{bmatrix}
+	6 \omega_{0,o}^2 \left[I_z - I_y\right]  & 0 & 0 \\
+	0 & 6 \omega_{0,o}^2 \left[I_z - I_x\right] + \frac{2 \omega_{0,o}^2 \left(J_x - J_z\right)}{J_y - I_{s1}}
+	& 0 \\
+	0 & 0 &  -\frac{2 \omega_{0,o}^2 \left(J_x - J_y\right)}{J_z - I_{s2}}
+	\\
+\end{bmatrix}
+\]
+
+\[
+A_{31} = 
+\begin{bmatrix}
+	6 \omega_{0,o}^2 \left[I_z - I_y\right]  & 0 & 0 \\
+	0 & 6 \omega_{0,o}^2 \left[I_z - I_x\right] - \frac{2 \omega_{0,o}^2 \left(J_x - J_z\right)}{J_y - I_{s1}}
+	& 0 \\
+	0 & 0 &  \frac{2 \omega_{0,o}^2 \left(J_x - J_y\right)}{J_z - I_{s2}}
+	\\
+\end{bmatrix}
+\]
+
+\[
+A_{22} = -A_{32} = 
+\begin{bmatrix}
+	0  & 0 & 0 \\
+	0  & 0 & \frac{\omega_{0,o} \left(J_x - J_z\right)}{J_y - I_{s1}} + \omega_{0,o} \\
+	0 & \frac{\omega_{0,o} \left(J_x - J_y\right)}{J_z - I_{s2}} - \omega_{0,o} & 0	\\
+\end{bmatrix}
+\]
+
+\[
+A_{23} = -A_{33} = 
+\begin{bmatrix}
+	0 & 0 & 0 \\
+	0 & 0 & -\frac{\omega_{0,o} I_{s2}}{J_y - I_{s1}}
+	\\
+	0 & -\frac{\omega_{0,o} I_{s1}}{J_z - I_{s2}}
+	& 0 \\
+\end{bmatrix}
+\]
+
+\[
+A =
+\begin{bmatrix}
+	A_{11} & A_{12} & A_{13} \\
+	A_{21} & A_{22} & A_{23} \\
+	A_{31} & A_{32} & A_{33}
+\end{bmatrix}
+\]
+
+\[
+B =
+\begin{bmatrix}
+	0 & 0 & 0 \\
+	0 & 0 & 0 \\
+	0 & 0 & 0 \\
+	\frac{1}{J_{x}-I_{s0}} & 0 & 0 \\
+	0 & \frac{1}{J_{y}-I_{s1}} & 0 \\
+	0 & 0 & \frac{1}{J_{z}-I_{s2}} \\
+	\frac{1}{I_{s0}} - \frac{1}{J_{x}-I_{s0}} & 0 & 0 \\
+	0 & \frac{1}{I_{s1}} - \frac{1}{J_{y}-I_{s1}} & 0 \\
+	0 & 0 & \frac{1}{I_{s2}} - \frac{1}{J_{z}-I_{s2}} \\
+\end{bmatrix}
+\]

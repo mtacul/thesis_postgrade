@@ -9,105 +9,106 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 
-# Datos proporcionados
-sigmas_b = np.array([0.012e-9,  #MAG-3 (AAC Clyde Space)
-                     0.012e-9,  #TFM100G2 (Billingsley Aerospace & Defense)
-                     0.035e-9,  #TFM65-VQS (Billingsley Aerospace & Defense)
-                     0.1e-9,    #MAG-3_2 (AAC Clyde Space)
-                     0.150e-9,  #Spacemag-Lite (Bartington Instruments)
-                     1.18e-9,   #MM200 (AAC Clyde Space),
-                     3e-9,      #DTFM100S (Billingsley Aerospace & Defense)
-                     ])   
+# # Datos proporcionados
+# sigmas_b = np.array([0.012e-9,  #MAG-3 (AAC Clyde Space)
+#                      0.012e-9,  #TFM100G2 (Billingsley Aerospace & Defense)
+#                      0.035e-9,  #TFM65-VQS (Billingsley Aerospace & Defense)
+#                      0.1e-9,    #MAG-3_2 (AAC Clyde Space)
+#                      0.150e-9,  #Spacemag-Lite (Bartington Instruments)
+#                      1.18e-9,   #MM200 (AAC Clyde Space),
+#                      3e-9,      #DTFM100S (Billingsley Aerospace & Defense)
+#                      ])   
 
-potencias_b = np.array([0.735, #W MAG-3 (AAC Clyde Space)
-                    0.6125,    #TFM100G2 (Billingsley Aerospace & Defense)
-                    0.504,     #TFM65-VQS (Billingsley Aerospace & Defense)
-                    0.15,      #W MAG-3_2 (AAC Clyde Space)
-                    0.175,     #Spacemag-Lite (Bartington Instruments)
-                    0.1,       #MM200 (AAC Clyde Space)
-                    0.11,      #DTFM100S (Billingsley Aerospace & Defense)
-                    ])
+# potencias_b = np.array([0.735, #W MAG-3 (AAC Clyde Space)
+#                     0.6125,    #TFM100G2 (Billingsley Aerospace & Defense)
+#                     0.504,     #TFM65-VQS (Billingsley Aerospace & Defense)
+#                     0.15,      #W MAG-3_2 (AAC Clyde Space)
+#                     0.175,     #Spacemag-Lite (Bartington Instruments)
+#                     0.1,       #MM200 (AAC Clyde Space)
+#                     0.11,      #DTFM100S (Billingsley Aerospace & Defense)
+#                     ])
 
-masas_b = np.array([0.1,       #MAG-3 (AAC Clyde Space)
-                    0.1,       #TFM100G2 (Billingsley Aerospace & Defense)
-                    0.117,     #TFM65-VQS (Billingsley Aerospace & Defense)
-                    0.1  ,     # MAG-3_2 (AAC Clyde Space)
-                    0.062,     #Spacemag-Lite (Bartington Instruments)
-                    0.012,     #MM200 (AAC Clyde Space)
-                    0.1        #DTFM100S (Billingsley Aerospace & Defense)
-                    ])
+# masas_b = np.array([0.1,       #MAG-3 (AAC Clyde Space)
+#                     0.1,       #TFM100G2 (Billingsley Aerospace & Defense)
+#                     0.117,     #TFM65-VQS (Billingsley Aerospace & Defense)
+#                     0.1  ,     # MAG-3_2 (AAC Clyde Space)
+#                     0.062,     #Spacemag-Lite (Bartington Instruments)
+#                     0.012,     #MM200 (AAC Clyde Space)
+#                     0.1        #DTFM100S (Billingsley Aerospace & Defense)
+#                     ])
 
-vol_b = np.array([3.51*3.23*8.26,
-                  3.51* 3.23* 8.26,
-                  3.51*3.23 *8.26,
-                  3.51*3.23 *8.26,
-                  2*2*2,
-                  3.3 * 2.0 *1.13,
-                  8.26 *3.51 * 3.23          
-    ])
+# vol_b = np.array([3.51*3.23*8.26,
+#                   3.51* 3.23* 8.26,
+#                   3.51*3.23 *8.26,
+#                   3.51*3.23 *8.26,
+#                   2*2*2,
+#                   3.3 * 2.0 *1.13,
+#                   8.26 *3.51 * 3.23          
+#     ])
 
-precio_b = np.array([0,
-                    0, 
-                    0,
-                    0,
-                    0,
-                    0,
-                    0,
-                    0
-                    ])
+# precio_b = np.array([0,
+#                     0, 
+#                     0,
+#                     0,
+#                     0,
+#                     0,
+#                     0,
+#                     0
+#                     ])
 
-# Función potencial: y = a * x^b
-def func_potencial(x, a, b):
-    return a * x**b
+# # Función potencial: y = a * x^b
+# def func_potencial(x, a, b):
+#     return a * x**b
 
-# Función logarítmica: y = a * log(x) + b
-def func_log(x, a, b):
-    return a * np.log(x) + b
+# # Función logarítmica: y = a * log(x) + b
+# def func_log(x, a, b):
+#     return a * np.log(x) + b
 
-def func_lin(x,a,b):
-    return a*x + b
+# def func_lin(x,a,b):
+#     return a*x + b
 
-# Ajuste Potencial
-params_pot, _ = curve_fit(func_potencial, sigmas_b, potencias_b)
-a_pot, b_pot = params_pot
+# # Ajuste Potencial
+# params_pot, _ = curve_fit(func_potencial, sigmas_b, potencias_b)
+# a_pot, b_pot = params_pot
 
-params_mass, _ = curve_fit(func_potencial, sigmas_b, masas_b)
-a_mass, b_mass = params_mass
+# params_mass, _ = curve_fit(func_potencial, sigmas_b, masas_b)
+# a_mass, b_mass = params_mass
 
-# params_vol, _ = curve_fit(func_potencial, sigmas_b, vol_b)
-params_vol, _ = curve_fit(func_lin, sigmas_b, vol_b)
-a_vol, b_vol = params_vol
+# # params_vol, _ = curve_fit(func_potencial, sigmas_b, vol_b)
+# params_vol, _ = curve_fit(func_lin, sigmas_b, vol_b)
+# a_vol, b_vol = params_vol
 
-# Crear valores de x para la curva ajustada
-x_fit = np.linspace(min(sigmas_b), max(sigmas_b), 100)
+# # Crear valores de x para la curva ajustada
+# x_fit = np.linspace(min(sigmas_b), max(sigmas_b), 100)
 
-# Calcular los valores ajustados
-y_potencial = func_potencial(x_fit, a_pot, b_pot)
-y_mass = func_potencial(x_fit, a_mass, b_mass)
-# y_vol = func_potencial(x_fit, a_vol, b_vol)
-y_vol = func_lin(x_fit, a_vol, b_vol)
+# # Calcular los valores ajustados
+# y_potencial = func_potencial(x_fit, a_pot, b_pot)
+# y_mass = func_potencial(x_fit, a_mass, b_mass)
+# # y_vol = func_potencial(x_fit, a_vol, b_vol)
+# y_vol = func_lin(x_fit, a_vol, b_vol)
 
-# Graficar los datos originales
-plt.scatter(sigmas_b, potencias_b, label='Datos originales potencia')
-plt.plot(x_fit, y_potencial, label=f'Ajuste Potencial: $y = {a_pot:.2e} x^{{{b_pot:.2f}}}$', color='green')
-plt.xlabel('Sigmas_b (T)')
-plt.ylabel('Potencias_b (W)')
-plt.legend()
+# # Graficar los datos originales
+# plt.scatter(sigmas_b, potencias_b, label='Datos originales potencia')
+# plt.plot(x_fit, y_potencial, label=f'Ajuste Potencial: $y = {a_pot:.2e} x^{{{b_pot:.2f}}}$', color='green')
+# plt.xlabel('Sigmas_b (T)')
+# plt.ylabel('Potencias_b (W)')
+# plt.legend()
+# plt.savefig('potencia_magn.pdf', format='pdf')
+# plt.show()
 
-plt.show()
-plt.scatter(sigmas_b, masas_b, label='Datos originales masa')
-plt.plot(x_fit, y_mass, label=f'Ajuste Potencial: $y = {a_mass:.2e} x^{{{b_mass:.2f}}}$', color='green')
-plt.xlabel('Sigmas_b (T)')
-plt.ylabel('Masas_b (kg)')
-plt.legend()
-plt.show()
+# plt.scatter(sigmas_b, masas_b, label='Datos originales masa')
+# plt.plot(x_fit, y_mass, label=f'Ajuste Potencial: $y = {a_mass:.2e} x^{{{b_mass:.2f}}}$', color='green')
+# plt.xlabel('Sigmas_b (T)')
+# plt.ylabel('Masas_b (kg)')
+# plt.legend()
+# plt.show()
 
-plt.scatter(sigmas_b, vol_b, label='Datos originales volumen')
-plt.plot(x_fit, y_vol, label=f'Ajuste Potencial: $y = {a_vol}x+{{{b_vol:.2e}}}$', color='green')
-plt.xlabel('Sigmas_b (T)')
-plt.ylabel('Vol_b (cm3)')
-plt.legend()
-plt.show()
+# plt.scatter(sigmas_b, vol_b, label='Datos originales volumen')
+# plt.plot(x_fit, y_vol, label=f'Ajuste Potencial: $y = {a_vol}x+{{{b_vol:.2e}}}$', color='green')
+# plt.xlabel('Sigmas_b (T)')
+# plt.ylabel('Vol_b (cm3)')
+# plt.legend()
+# plt.show()
 
 # Graficar ajuste Potencial
 # plt.plot(x_fit, y_potencial, label=f'Ajuste Potencial: $y = {a_pot:.2e} x^{{{b_pot:.2f}}}$', color='green')
@@ -214,6 +215,8 @@ plt.plot(x_fit, y_potencial, label=f'Ajuste Potencial: $y = {a_pot:.2e} x^{{{b_p
 plt.xlabel('Sigmas_ss (°)')
 plt.ylabel('Potencias_ss (W)')
 plt.legend()
+plt.savefig('potencia_ss.pdf', format='pdf')
+plt.show()
 
 plt.show()
 plt.scatter(sigmas_ss, masas_ss, label='Datos originales masa')
@@ -221,6 +224,7 @@ plt.plot(x_fit, y_mass, label=f'Ajuste Potencial: $y = {a_mass:.2e} x^{{{b_mass:
 plt.xlabel('Sigmas_ss (°)')
 plt.ylabel('Masas_ss (kg)')
 plt.legend()
+plt.savefig('masa_ss.pdf', format='pdf')
 plt.show()
 
 plt.scatter(sigmas_ss, vol_ss, label='Datos originales volumen')
@@ -318,13 +322,15 @@ plt.plot(x_fit, y_potencial, label=f'Ajuste Potencial: $y = {a_pot:.2e} x^{{{b_p
 plt.xlabel('lim_MT (Am2)')
 plt.ylabel('Potencias_MT (W)')
 plt.legend()
-
+plt.savefig('potencia_MT.pdf', format='pdf')
 plt.show()
+
 plt.scatter(lim_MT, masas_MT, label='Datos originales masa')
 plt.plot(x_fit, y_mass, label=f'Ajuste Potencial: $y = {a_mass:.2e} x^{{{b_mass:.2f}}}$', color='green')
 plt.xlabel('lim_MT (Am2)')
 plt.ylabel('Masas_MT (kg)')
 plt.legend()
+plt.savefig('masa_MT.pdf', format='pdf')
 plt.show()
 
 plt.scatter(lim_MT, vol_MT, label='Datos originales volumen')
@@ -426,13 +432,15 @@ plt.plot(x_fit, y_potencial, label=f'Ajuste Potencial: $y = {a_pot:.2e} x^{{{b_p
 plt.xlabel('lim_RW (Nm)')
 plt.ylabel('Potencias_RW (W)')
 plt.legend()
-
+plt.savefig('potencia_RW.pdf', format='pdf')
 plt.show()
+
 plt.scatter(lim_RW, masas_RW, label='Datos originales masa')
 plt.plot(x_fit, y_mass, label=f'Ajuste Potencial: $y = {a_mass:.2e} x^{{{b_mass:.2f}}}$', color='green')
 plt.xlabel('lim_RW (Nm)')
 plt.ylabel('Masas_RW (kg)')
 plt.legend()
+plt.savefig('masa_RW.pdf', format='pdf')
 plt.show()
 
 plt.scatter(lim_RW, vol_RW, label='Datos originales volumen')

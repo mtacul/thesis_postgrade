@@ -1,70 +1,76 @@
 \contentsline {section}{Lista de Figuras}{1}{}%
-\contentsline {section}{Lista de Tablas}{3}{}%
-\contentsline {section}{\numberline {1}Introducción}{4}{}%
-\contentsline {subsection}{\numberline {1.1}Contexto}{4}{}%
-\contentsline {subsection}{\numberline {1.2}Hipótesis}{7}{}%
-\contentsline {subsection}{\numberline {1.3}Objetivos}{7}{}%
-\contentsline {subsection}{\numberline {1.4}Metodología}{8}{}%
-\contentsline {subsection}{\numberline {1.5}Carta Gantt}{9}{}%
-\contentsline {section}{\numberline {2}Marco Teórico}{10}{}%
-\contentsline {subsection}{\numberline {2.1}Sistemas de referencia}{10}{}%
-\contentsline {subsection}{\numberline {2.2}Dinámica orbital}{11}{}%
-\contentsline {subsubsection}{\numberline {2.2.1}Parámetros orbitales}{12}{}%
-\contentsline {subsubsection}{\numberline {2.2.2}Perturbaciones presentes en LEO}{13}{}%
-\contentsline {subsection}{\numberline {2.3}Cinemática y dinámica de actitud}{14}{}%
-\contentsline {subsubsection}{\numberline {2.3.1}Actitud de un satélite y sus representaciones}{14}{}%
-\contentsline {subsubsection}{\numberline {2.3.2}Cuaterniones y cinemática de cuaterniones}{16}{}%
-\contentsline {subsubsection}{\numberline {2.3.3}Dinámica de actitud}{17}{}%
-\contentsline {subsection}{\numberline {2.4}Subsistema de determinación y control de actitud}{17}{}%
-\contentsline {subsubsection}{\numberline {2.4.1}Navigation (Sensores)}{18}{}%
-\contentsline {subsubsection}{\numberline {2.4.2}Guidance (Algoritmos)}{18}{}%
-\contentsline {subsubsection}{\numberline {2.4.3}Control (Controladores y actuadores)}{21}{}%
-\contentsline {subsection}{\numberline {2.5}System Engineering Envelopes}{22}{}%
-\contentsline {subsection}{\numberline {2.6}Controlabilidad y observabilidad de un sistema de control}{23}{}%
-\contentsline {subsection}{\numberline {2.7}Optimización en control}{24}{}%
-\contentsline {subsubsection}{\numberline {2.7.1}Funciones objetivos}{24}{}%
-\contentsline {subsubsection}{\numberline {2.7.2}Clasificación de problemas de optimización}{24}{}%
-\contentsline {subsubsection}{\numberline {2.7.3}Optimizadores en Python}{26}{}%
-\contentsline {section}{\numberline {3}Estado del Arte}{27}{}%
-\contentsline {subsection}{\numberline {3.1}Spacecraft Control Toolbox}{27}{}%
-\contentsline {subsection}{\numberline {3.2}Ansys Systems Tool Kit (STK)}{28}{}%
-\contentsline {subsection}{\numberline {3.3}Aerospace Blockset}{29}{}%
-\contentsline {subsection}{\numberline {3.4}Valispace}{32}{}%
-\contentsline {subsection}{\numberline {3.5}Basilisk}{32}{}%
-\contentsline {subsection}{\numberline {3.6}Resumen de los simuladores disponibles}{33}{}%
-\contentsline {section}{\numberline {4}Diseño de la suite de simulación}{34}{}%
-\contentsline {subsection}{\numberline {4.1}Marco general del simulador}{34}{}%
-\contentsline {subsection}{\numberline {4.2}Propagador orbital}{35}{}%
-\contentsline {subsection}{\numberline {4.3}Modelos orbitales y sistemas de referencia}{36}{}%
-\contentsline {subsubsection}{\numberline {4.3.1}Vector sol}{36}{}%
-\contentsline {subsubsection}{\numberline {4.3.2}Fuerzas geomagnéticas de la Tierra}{38}{}%
-\contentsline {subsubsection}{\numberline {4.3.3}Cambios en los sistemas de referencia y vectores de observación}{40}{}%
-\contentsline {subsection}{\numberline {4.4}Algoritmos de estimación y control satelital}{41}{}%
-\contentsline {subsubsection}{\numberline {4.4.1}Conversión representación de rotación y EKF}{41}{}%
-\contentsline {subsubsection}{\numberline {4.4.2}Controladores y actuadores}{41}{}%
-\contentsline {subsection}{\numberline {4.5}Suite de simulación completa}{45}{}%
-\contentsline {section}{\numberline {5}Verificación de la suite de simulación}{48}{}%
-\contentsline {subsection}{\numberline {5.1}Cuantificación de los MoP de apuntamiento}{48}{}%
-\contentsline {subsection}{\numberline {5.2}Condiciones y parámetros de simulación}{49}{}%
-\contentsline {subsection}{\numberline {5.3}Resultados suite de simulación}{50}{}%
-\contentsline {subsubsection}{\numberline {5.3.1}Resultados tipos de actuadores}{50}{}%
-\contentsline {subsubsection}{\numberline {5.3.2}Resultados de los controladores}{51}{}%
-\contentsline {subsubsection}{\numberline {5.3.3}Resultados niveles de sensores}{53}{}%
-\contentsline {subsubsection}{\numberline {5.3.4}Resultados niveles de actuadores}{55}{}%
-\contentsline {subsection}{\numberline {5.4}Resumen sobre análisis realizados}{58}{}%
-\contentsline {section}{\numberline {6}Aplicación y validacion de optimización en Python}{59}{}%
-\contentsline {section}{\numberline {7}Conclusiones}{60}{}%
-\contentsline {section}{Anexo \numberline {A}Carta Gantt}{64}{}%
-\contentsline {section}{Anexo \numberline {B}Torques externos debido a las perturbaciones}{65}{}%
-\contentsline {section}{Anexo \numberline {C}Cambios en los sistemas de referencia}{67}{}%
-\contentsline {section}{Anexo \numberline {D}Procedimiento a seguir para el uso del filtro de Kalman}{68}{}%
-\contentsline {section}{Anexo \numberline {E}Control lineal Magnetorquer}{71}{}%
-\contentsline {section}{Anexo \numberline {F}Control lineal Rueda de reacción}{75}{}%
-\contentsline {section}{Anexo \numberline {G}Componentes utilizados para Capitulo 5}{76}{}%
-\contentsline {subsection}{\numberline {G.1}Giroscopios}{76}{}%
-\contentsline {subsection}{\numberline {G.2}Magnetometros}{76}{}%
-\contentsline {subsection}{\numberline {G.3}Sensores de sol}{77}{}%
-\contentsline {subsection}{\numberline {G.4}Ruedas de reacción}{78}{}%
-\contentsline {subsection}{\numberline {G.5}Magnetorquers}{78}{}%
-\contentsline {section}{Anexo \numberline {H}Implementación de los resultados de los MoP de apuntamiento}{80}{}%
-\contentsline {section}{Anexo \numberline {I}Código en Python}{81}{}%
+\contentsline {section}{Lista de Tablas}{4}{}%
+\contentsline {section}{Nomenclatura}{5}{}%
+\contentsline {section}{\numberline {1}Introducción}{6}{}%
+\contentsline {subsection}{\numberline {1.1}Contexto}{6}{}%
+\contentsline {subsection}{\numberline {1.2}Hipótesis}{9}{}%
+\contentsline {subsection}{\numberline {1.3}Objetivos}{9}{}%
+\contentsline {subsection}{\numberline {1.4}Metodología}{10}{}%
+\contentsline {subsection}{\numberline {1.5}Carta Gantt}{11}{}%
+\contentsline {section}{\numberline {2}Marco Teórico}{12}{}%
+\contentsline {subsection}{\numberline {2.1}Sistemas de referencia}{12}{}%
+\contentsline {subsection}{\numberline {2.2}Dinámica orbital}{13}{}%
+\contentsline {subsubsection}{\numberline {2.2.1}Parámetros orbitales}{14}{}%
+\contentsline {subsubsection}{\numberline {2.2.2}Perturbaciones presentes en LEO}{15}{}%
+\contentsline {subsection}{\numberline {2.3}Cinemática y dinámica de actitud}{16}{}%
+\contentsline {subsubsection}{\numberline {2.3.1}Actitud de un satélite y sus representaciones}{16}{}%
+\contentsline {subsubsection}{\numberline {2.3.2}Cuaterniones y cinemática de cuaterniones}{18}{}%
+\contentsline {subsubsection}{\numberline {2.3.3}Dinámica de actitud}{19}{}%
+\contentsline {subsection}{\numberline {2.4}Subsistema de determinación y control de actitud}{19}{}%
+\contentsline {subsubsection}{\numberline {2.4.1}Navigation (Sensores)}{20}{}%
+\contentsline {subsubsection}{\numberline {2.4.2}Guidance (Algoritmos)}{20}{}%
+\contentsline {subsubsection}{\numberline {2.4.3}Control (Controladores y actuadores)}{23}{}%
+\contentsline {subsection}{\numberline {2.5}System Engineering Envelopes}{25}{}%
+\contentsline {subsection}{\numberline {2.6}Controlabilidad y observabilidad de un sistema de control}{25}{}%
+\contentsline {subsection}{\numberline {2.7}Optimización Matemática}{26}{}%
+\contentsline {subsubsection}{\numberline {2.7.1}Clasificación de problemas de optimización}{26}{}%
+\contentsline {subsubsection}{\numberline {2.7.2}Optimizadores en Python}{27}{}%
+\contentsline {section}{\numberline {3}Estado del Arte}{29}{}%
+\contentsline {subsection}{\numberline {3.1}Spacecraft Control Toolbox}{29}{}%
+\contentsline {subsection}{\numberline {3.2}Ansys Systems Tool Kit (STK)}{30}{}%
+\contentsline {subsection}{\numberline {3.3}Aerospace Blockset}{31}{}%
+\contentsline {subsection}{\numberline {3.4}Valispace}{34}{}%
+\contentsline {subsection}{\numberline {3.5}Basilisk}{34}{}%
+\contentsline {subsection}{\numberline {3.6}Resumen de los simuladores disponibles}{34}{}%
+\contentsline {section}{\numberline {4}Diseño de la suite de simulación}{36}{}%
+\contentsline {subsection}{\numberline {4.1}Marco general del simulador}{36}{}%
+\contentsline {subsection}{\numberline {4.2}Propagador orbital}{37}{}%
+\contentsline {subsection}{\numberline {4.3}Modelos orbitales y sistemas de referencia}{38}{}%
+\contentsline {subsubsection}{\numberline {4.3.1}Vector sol}{38}{}%
+\contentsline {subsubsection}{\numberline {4.3.2}Fuerzas geomagnéticas de la Tierra}{40}{}%
+\contentsline {subsubsection}{\numberline {4.3.3}Cambios en los sistemas de referencia y vectores de observación}{42}{}%
+\contentsline {subsection}{\numberline {4.4}Algoritmos de estimación y control satelital}{43}{}%
+\contentsline {subsubsection}{\numberline {4.4.1}Conversión representación de rotación y \gls {EKF}}{43}{}%
+\contentsline {subsubsection}{\numberline {4.4.2}Controladores y actuadores}{43}{}%
+\contentsline {subsection}{\numberline {4.5}Suite de simulación completa}{47}{}%
+\contentsline {section}{\numberline {5}Verificación de la suite de simulación}{50}{}%
+\contentsline {subsection}{\numberline {5.1}Cuantificación de los MoP de apuntamiento}{50}{}%
+\contentsline {subsection}{\numberline {5.2}Condiciones y parámetros de simulación}{51}{}%
+\contentsline {subsection}{\numberline {5.3}Resultados suite de simulación}{52}{}%
+\contentsline {subsubsection}{\numberline {5.3.1}Resultados tipos de actuadores}{52}{}%
+\contentsline {subsubsection}{\numberline {5.3.2}Resultados de los controladores}{53}{}%
+\contentsline {subsubsection}{\numberline {5.3.3}Resultados niveles de sensores}{55}{}%
+\contentsline {subsubsection}{\numberline {5.3.4}Resultados niveles de actuadores}{57}{}%
+\contentsline {subsection}{\numberline {5.4}Resumen sobre análisis realizados}{60}{}%
+\contentsline {section}{\numberline {6}Aplicación de optimización matemática en Python}{61}{}%
+\contentsline {subsection}{\numberline {6.1}Tipo de problema matemático}{61}{}%
+\contentsline {subsection}{\numberline {6.2}Pruebas de convexidad en scipy.optimize}{62}{}%
+\contentsline {subsubsection}{\numberline {6.2.1}Análisis caso de optimización simple.}{63}{}%
+\contentsline {subsubsection}{\numberline {6.2.2}Análisis caso de optimización complejo.}{65}{}%
+\contentsline {subsubsection}{\numberline {6.2.3}Análisis de Convexidad y Elección del Método de Optimización}{67}{}%
+\contentsline {section}{\numberline {7}Conclusiones}{70}{}%
+\contentsline {section}{Anexo \numberline {A}Carta Gantt}{75}{}%
+\contentsline {section}{Anexo \numberline {B}Torques externos debido a las perturbaciones}{77}{}%
+\contentsline {section}{Anexo \numberline {C}Cambios en los sistemas de referencia}{79}{}%
+\contentsline {section}{Anexo \numberline {D}Procedimiento a seguir para el uso del filtro de Kalman}{80}{}%
+\contentsline {section}{Anexo \numberline {E}Control lineal Magnetorquer}{83}{}%
+\contentsline {section}{Anexo \numberline {F}Control lineal Rueda de reacción}{86}{}%
+\contentsline {section}{Anexo \numberline {G}Componentes utilizados para Capitulo 5}{90}{}%
+\contentsline {subsection}{\numberline {G.1}Giroscopios}{90}{}%
+\contentsline {subsection}{\numberline {G.2}Magnetometros}{90}{}%
+\contentsline {subsection}{\numberline {G.3}Sensores de sol}{91}{}%
+\contentsline {subsection}{\numberline {G.4}Ruedas de reacción}{92}{}%
+\contentsline {subsection}{\numberline {G.5}Magnetorquers}{92}{}%
+\contentsline {section}{Anexo \numberline {H}Implementación de los resultados de los MoP de apuntamiento}{94}{}%
+\contentsline {section}{Anexo \numberline {I}Funciones de costo componentes ADCS}{101}{}%
+\contentsline {section}{Anexo \numberline {J}Código en Python}{104}{}%

@@ -1,29 +1,51 @@
-\contentsline {figure}{\numberline {1.1}{\ignorespaces Cantidad de nanosatélites lanzados a través de los años \cite {ref1}.}}{4}{}%
-\contentsline {figure}{\numberline {1.2}{\ignorespaces Representación gráfica de la relación entre aspectos de la misión respecto a costo y rendimiento (Elaboración propia).}}{6}{}%
-\contentsline {figure}{\numberline {1.3}{\ignorespaces Solución propuesta para la suite de simulación optimizada (Elaboración propia).}}{7}{}%
-\contentsline {figure}{\numberline {2.1}{\ignorespaces Marco de referencia del cuerpo (Elaboración propia).}}{10}{}%
-\contentsline {figure}{\numberline {2.2}{\ignorespaces Marco de referencia inercial ECI \cite {ref22}.}}{11}{}%
-\contentsline {figure}{\numberline {2.3}{\ignorespaces Marco de referencia inercial RPY \cite {ref23}.}}{11}{}%
-\contentsline {figure}{\numberline {2.4}{\ignorespaces Elementos keplerianos \cite {ref24}.}}{12}{}%
-\contentsline {figure}{\numberline {2.5}{\ignorespaces Representación gráfica de la primera fila de la matriz de cosenos directores \cite {ref27}.}}{14}{}%
-\contentsline {figure}{\numberline {2.6}{\ignorespaces Representación de un cambio de orientación en Euler axis/angle de x \cite {ref25}.}}{15}{}%
-\contentsline {figure}{\numberline {2.7}{\ignorespaces Secuencia clásica de Euler de tres rotaciones que transforman xyz en x’y’z’ \cite {ref22}.}}{15}{}%
-\contentsline {figure}{\numberline {3.1}{\ignorespaces Resumen de la dinámica orbital y de actitud del satélite en CubeSat Toolbox.}}{27}{}%
-\contentsline {figure}{\numberline {3.2}{\ignorespaces Ventana de control del simulador de un CubeSat en CubeSat Toolbox.}}{28}{}%
-\contentsline {figure}{\numberline {3.3}{\ignorespaces Imagen referencial de STK para simulación de un satélite.}}{29}{}%
-\contentsline {figure}{\numberline {3.4}{\ignorespaces Plantilla de Simulink para el diseño de un CubeSat.}}{29}{}%
-\contentsline {figure}{\numberline {3.5}{\ignorespaces Plantilla de Simulink para la modelación y simulación del CubeSat en base a la visualización en Simulink 3D.}}{30}{}%
-\contentsline {figure}{\numberline {3.6}{\ignorespaces Visualización del MBSE de CubeSat.}}{30}{}%
-\contentsline {figure}{\numberline {3.7}{\ignorespaces Perfil de CubeSat según los SE envelopes configurables.}}{31}{}%
-\contentsline {figure}{\numberline {3.8}{\ignorespaces Simulación de apuntamiento de la Tierra hacia la estación terrestre.}}{31}{}%
-\contentsline {figure}{\numberline {4.1}{\ignorespaces Esquema general de la base del simulador (Elaboración propia).}}{35}{}%
-\contentsline {figure}{\numberline {4.2}{\ignorespaces Propagación del SUCHAI-3 durante un día con fecha de inicio 01/11/23.}}{37}{}%
-\contentsline {figure}{\numberline {4.3}{\ignorespaces Vector sol en sus tres componentes simulados durante un año (Elaboración propia).}}{38}{}%
-\contentsline {figure}{\numberline {4.4}{\ignorespaces Componentes de las fuerzas magnéticas respecto a ECI que afectan al SUCHAI-3 con fecha inicial 01/11/2023 (Elaboración propia).}}{40}{}%
-\contentsline {figure}{\numberline {4.5}{\ignorespaces Diagrama de la suite de simulación completa (Elaboración propia).}}{47}{}%
-\contentsline {figure}{\numberline {5.1}{\ignorespaces Ángulos de Euler LVLH y body para dos actuadores distintos (Elaboración propia).}}{51}{}%
-\contentsline {figure}{\numberline {5.2}{\ignorespaces Ángulos de Euler LVLH y body para dos controladores distintos (Elaboración propia).}}{52}{}%
-\contentsline {figure}{\numberline {5.3}{\ignorespaces Ángulos de Euler LVLH y body para niveles de sensor distintos con magnetorquer (Elaboración propia).}}{54}{}%
-\contentsline {figure}{\numberline {5.4}{\ignorespaces Ángulos de Euler LVLH y body para niveles de sensor distintos con rueda de reacción (Elaboración propia).}}{55}{}%
-\contentsline {figure}{\numberline {5.5}{\ignorespaces Ángulos de Euler LVLH y body para niveles de magnetorquer distintos con sensores nivel 2 (Elaboración propia).}}{56}{}%
-\contentsline {figure}{\numberline {5.6}{\ignorespaces Ángulos de Euler LVLH y body para niveles de rueda de reacción distintos con sensores nivel 2 (Elaboración propia).}}{57}{}%
+\contentsline {figure}{\numberline {1.1}{\ignorespaces Cantidad de nanosatélites lanzados a través de los años \cite {ref1}.}}{6}{}%
+\contentsline {figure}{\numberline {1.2}{\ignorespaces Representación gráfica de la relación entre aspectos de la misión respecto a costo y rendimiento (Elaboración propia).}}{8}{}%
+\contentsline {figure}{\numberline {1.3}{\ignorespaces Solución propuesta para la suite de simulación optimizada (Elaboración propia).}}{9}{}%
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Marco de referencia del cuerpo (Elaboración propia).}}{12}{}%
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Marco de referencia inercial ECI \cite {ref22}.}}{13}{}%
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Marco de referencia inercial RPY \cite {ref23}.}}{13}{}%
+\contentsline {figure}{\numberline {2.4}{\ignorespaces Elementos keplerianos \cite {ref24}.}}{14}{}%
+\contentsline {figure}{\numberline {2.5}{\ignorespaces Representación gráfica de la primera fila de la matriz de cosenos directores \cite {ref27}.}}{16}{}%
+\contentsline {figure}{\numberline {2.6}{\ignorespaces Representación de un cambio de orientación en Euler axis/angle de x \cite {ref25}.}}{17}{}%
+\contentsline {figure}{\numberline {2.7}{\ignorespaces Secuencia clásica de Euler de tres rotaciones que transforman xyz en x’y’z’ \cite {ref22}.}}{17}{}%
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Resumen de la dinámica orbital y de actitud del satélite en CubeSat Toolbox.}}{29}{}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Ventana de control del simulador de un CubeSat en CubeSat Toolbox.}}{30}{}%
+\contentsline {figure}{\numberline {3.3}{\ignorespaces Imagen referencial de STK para simulación de un satélite.}}{31}{}%
+\contentsline {figure}{\numberline {3.4}{\ignorespaces Plantilla de Simulink para el diseño de un CubeSat.}}{31}{}%
+\contentsline {figure}{\numberline {3.5}{\ignorespaces Plantilla de Simulink para la modelación y simulación del CubeSat en base a la visualización en Simulink 3D.}}{32}{}%
+\contentsline {figure}{\numberline {3.6}{\ignorespaces Visualización del MBSE de CubeSat.}}{32}{}%
+\contentsline {figure}{\numberline {3.7}{\ignorespaces Perfil de CubeSat según los SE envelopes configurables.}}{33}{}%
+\contentsline {figure}{\numberline {3.8}{\ignorespaces Simulación de apuntamiento de la Tierra hacia la estación terrestre.}}{33}{}%
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Esquema general de la base del simulador (Elaboración propia).}}{37}{}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Propagación del SUCHAI-3 durante un día con fecha de inicio 01/11/23.}}{39}{}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Vector sol en sus tres componentes simulados durante un año (Elaboración propia).}}{40}{}%
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Componentes de las fuerzas magnéticas respecto a ECI que afectan al SUCHAI-3 con fecha inicial 01/11/2023 (Elaboración propia).}}{42}{}%
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Diagrama de la suite de simulación completa (Elaboración propia).}}{49}{}%
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Ángulos de Euler LVLH y body para dos actuadores distintos (Elaboración propia).}}{53}{}%
+\contentsline {figure}{\numberline {5.2}{\ignorespaces Ángulos de Euler LVLH y body para dos controladores distintos (Elaboración propia).}}{54}{}%
+\contentsline {figure}{\numberline {5.3}{\ignorespaces Ángulos de Euler LVLH y body para niveles de sensor distintos con magnetorquer (Elaboración propia).}}{56}{}%
+\contentsline {figure}{\numberline {5.4}{\ignorespaces Ángulos de Euler LVLH y body para niveles de sensor distintos con rueda de reacción (Elaboración propia).}}{57}{}%
+\contentsline {figure}{\numberline {5.5}{\ignorespaces Ángulos de Euler LVLH y body para niveles de magnetorquer distintos con sensores nivel 2 (Elaboración propia).}}{58}{}%
+\contentsline {figure}{\numberline {5.6}{\ignorespaces Ángulos de Euler LVLH y body para niveles de rueda de reacción distintos con sensores nivel 2 (Elaboración propia).}}{59}{}%
+\contentsline {figure}{\numberline {6.1}{\ignorespaces Datos de masa y potencia promedio de magnetometros y su ajuste potencial.}}{63}{}%
+\contentsline {figure}{\numberline {6.2}{\ignorespaces Grilla 20x20 caso número 1 de estudio de optimización.}}{64}{}%
+\contentsline {figure}{\numberline {6.3}{\ignorespaces Comparación de los resultados de la función objetivo simple con diferentes condiciones iniciales.}}{65}{}%
+\contentsline {figure}{\numberline {6.4}{\ignorespaces Comparación de los resultados de la función objetivo simple con condiciones iniciales extremas.}}{66}{}%
+\contentsline {figure}{\numberline {6.5}{\ignorespaces Grilla 20x20x6 caso número 2 de estudio de optimización.}}{67}{}%
+\contentsline {figure}{\numberline {6.6}{\ignorespaces Comparación de los resultados de la función objetivo compleja con diferentes condiciones iniciales.}}{68}{}%
+\contentsline {figure}{\numberline {6.7}{\ignorespaces Comparación de los resultados de la función objetivo compleja con condiciones iniciales extremas.}}{69}{}%
+\contentsline {figure}{\numberline {A.1}{\ignorespaces Carta Gantt parte 1.}}{75}{}%
+\contentsline {figure}{\numberline {A.2}{\ignorespaces Carta Gantt parte 2.}}{76}{}%
+\contentsline {figure}{\numberline {H.1}{\ignorespaces Filtro pasa alto de 10 Hz en la respuesta al sistema de sensores y actuadores de nivel alto.}}{94}{}%
+\contentsline {figure}{\numberline {H.2}{\ignorespaces Densidad espectro potencia en ancho de banda seleccionada para Roll.}}{95}{}%
+\contentsline {figure}{\numberline {H.3}{\ignorespaces Densidad espectro potencia en ancho de banda seleccionada para Pitch.}}{95}{}%
+\contentsline {figure}{\numberline {H.4}{\ignorespaces Densidad espectro potencia en ancho de banda seleccionada para Yaw.}}{96}{}%
+\contentsline {figure}{\numberline {H.5}{\ignorespaces Banda de asentamiento Roll en modelo dinámico.}}{97}{}%
+\contentsline {figure}{\numberline {H.6}{\ignorespaces Banda de asentamiento Pitch en modelo dinámico.}}{97}{}%
+\contentsline {figure}{\numberline {H.7}{\ignorespaces Banda de asentamiento Yaw en modelo dinámico.}}{98}{}%
+\contentsline {figure}{\numberline {H.8}{\ignorespaces Histograma de valores con distribución normal en Roll.}}{99}{}%
+\contentsline {figure}{\numberline {H.9}{\ignorespaces Histograma de valores con distribución normal en Pitch.}}{99}{}%
+\contentsline {figure}{\numberline {H.10}{\ignorespaces Histograma de valores con distribución normal en Yaw.}}{100}{}%
+\contentsline {figure}{\numberline {I.1}{\ignorespaces Datos de masa y potencia promedio de sensores de sol y su ajuste potencial.}}{101}{}%
+\contentsline {figure}{\numberline {I.2}{\ignorespaces Datos de masa y potencia promedio de magnetorquers y su ajuste potencial.}}{102}{}%
+\contentsline {figure}{\numberline {I.3}{\ignorespaces Datos de masa y potencia promedio de ruedas de reacción y su ajuste potencial.}}{103}{}%

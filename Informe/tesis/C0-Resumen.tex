@@ -1,5 +1,11 @@
-\section*{Resumen}
+\section*{Resumen Ejecutivo}
 
+Los CubeSats, nanosatélites de bajo costo, se emplean ampliamente en diversas aplicaciones espaciales como la observación terrestre, donde orientar con precisión su carga útil hacia la Tierra es fundamental. No obstante, el rendimiento y el costo de estos dispositivos están condicionados por las características de sus componentes. Este estudio enfrenta el desafío de identificar el conjunto óptimo de sensores y actuadores para un CubeSat, ajustándose a los requisitos específicos de cada misión.
 
+Con este propósito, se desarrolló una suite de simulación que modela la dinámica orbital y de actitud del CubeSat, integrando sensores y actuadores en el Subsistema de Determinación y Control de Actitud (ADCS), junto con algoritmos de estimación y control. Esto permitió construir una suite de optimización capaz de encontrar el equilibrio ideal entre costo y rendimiento, considerando las restricciones de los System Engineering (SE) Envelopes, como la masa y la potencia, y los Measures of Performance (MoP) definidos por el usuario.
+
+La suite fue evaluada a través del análisis de los MoP utilizando datos empíricos del CubeSat SUCHAI-3. Los resultados revelaron una relación directa entre el jitter y la precisión de apuntamiento en los sensores, así como entre la agilidad del sistema y el tiempo de asentamiento. También se comprobó que, aunque las ruedas de reacción ofrecen un rendimiento superior en términos de estabilidad y precisión comparadas con los magnetorquers, su implementación representa un costo significativamente mayor.
+
+Para la optimización, se probaron distintas herramientas, destacando el uso del solver Powell de scipy.optimize, por su capacidad para alcanzar mínimos cercanos al global en problemas no convexos sin requerir el cálculo de derivadas. Esto lo convierte en una opción eficiente y viable para esta suite. En el informe final se explorarán plataformas adicionales de optimización como Pyomo, con el fin de emplear solvers avanzados que puedan mejorar la precisión en la búsqueda de mínimos globales.
 
 

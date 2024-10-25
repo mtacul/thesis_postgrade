@@ -1,0 +1,6 @@
+x resultados_typeact0_saboth2_typerendall.txt: [3.51367076e-01 3.00000000e-09 4.76339113e-01]
+f resultados_typeact0_saboth2_typerendall.txt: 6.2275188993511446
+------------------------
+x resultados_typeact0_saboth0_typerendacc.txt: [3.96396484e-01 3.00000000e-09]
+f resultados_typeact0_saboth0_typerendacc.txt: 3.475304355349474
+------------------------

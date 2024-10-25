@@ -694,3 +694,6 @@ def suite_sim(sigma_ss, sigma_b,lim,type_act,S_A_both):
 
     return accuracy_cost, psd_norm, time_cost, pot_b, masa_b, vol_b,pot_ss, masa_ss, vol_ss, pot_act, masa_act, vol_act
 
+
+
+

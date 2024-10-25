@@ -1,6 +1,12 @@
 \section*{Abstract}
 
+CubeSats, low-cost nanosatellites, are widely used in various space applications such as Earth observation, where accurately pointing their payload toward Earth is essential. However, the performance and cost of these devices are constrained by the characteristics of their components. This study addresses the challenge of identifying the optimal set of sensors and actuators for a CubeSat, tailored to the specific requirements of each mission.
 
+To this end, a simulation suite was developed to model the CubeSat’s orbital and attitude dynamics, integrating sensors and actuators within the Attitude Determination and Control Subsystem (ADCS), along with estimation and control algorithms. This allowed for the creation of an optimization suite capable of finding the ideal balance between cost and performance, taking into account the constraints of System Engineering (SE) Envelopes, such as mass and power, and user-defined Measures of Performance (MoP).
+
+The suite was evaluated through MoP analysis using empirical data from the SUCHAI-3 CubeSat. The results revealed a direct relationship between jitter and pointing accuracy in sensors, as well as between system agility and settling time. It was also verified that, although reaction wheels offer superior performance in terms of stability and precision compared to magnetorquers, their implementation entails a significantly higher cost.
+
+For optimization, various tools were tested, highlighting the use of the Powell solver from scipy.optimize due to its ability to reach near-global minima in non-convex problems without requiring derivative calculations. This makes it an efficient and viable option for this suite. The final report will explore additional optimization platforms, such as Pyomo, to employ advanced solvers that can improve precision in searching for global minima.
 
 
 

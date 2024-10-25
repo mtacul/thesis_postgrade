@@ -1,0 +1,57 @@
+x resultados_typeact0_saboth0_typerendacc_typesolverL-BFGS-B.txt: [3.96500748e-01 3.00000000e-09]
+f resultados_typeact0_saboth0_typerendacc_typesolverL-BFGS-B.txt: 3.4753523229536047
+------------------------
+x resultados_typeact0_saboth0_typerendacc_typesolverPowell.txt: [4.02577685e-01 1.15331444e-09]
+f resultados_typeact0_saboth0_typerendacc_typesolverPowell.txt: 3.479718299814468
+------------------------
+x resultados_typeact0_saboth0_typerendacc_typesolverNelder-Mead.txt: [3.9687500e-01 1.9734375e-09]
+f resultados_typeact0_saboth0_typerendacc_typesolverNelder-Mead.txt: 3.4757828588866526
+------------------------
+x resultados_typeact0_saboth0_typerendacc_typesolverL-BFGS-B.txt: [3.96448835e-01 3.00000000e-09]
+f resultados_typeact0_saboth0_typerendacc_typesolverL-BFGS-B.txt: 3.475310933432996
+type_solver: L-BFGS-B
+------------------------
+x resultados_typeact0_saboth0_typerendall_typesolverL-BFGS-B.txt: [3.70948344e-01 3.00000000e-09]
+f resultados_typeact0_saboth0_typerendall_typesolverL-BFGS-B.txt: 4.035319991056951
+type_solver: L-BFGS-B
+------------------------
+x resultados_typeact0_saboth2_typerendacc_typesolverL-BFGS-B.txt: [5.04145104e-01 3.00000000e-09 7.34105093e-01]
+f resultados_typeact0_saboth2_typerendacc_typesolverL-BFGS-B.txt: 4.863086969599335
+type_solver: L-BFGS-B
+------------------------
+x resultados_typeact0_saboth2_typerendall_typesolverL-BFGS-B.txt: [5.23431209e-01 3.00000000e-09 7.46158867e-01]
+f resultados_typeact0_saboth2_typerendall_typesolverL-BFGS-B.txt: 5.417713621254778
+type_solver: L-BFGS-B
+------------------------
+x resultados_typeact0_saboth0_typerendacc_typesolverPowell.txt: [4.02577685e-01 1.15331444e-09]
+f resultados_typeact0_saboth0_typerendacc_typesolverPowell.txt: 3.4797182998144707
+type_solver: Powell
+------------------------
+x resultados_typeact0_saboth0_typerendall_typesolverPowell.txt: [3.71739171e-01 1.15331444e-09]
+f resultados_typeact0_saboth0_typerendall_typesolverPowell.txt: 4.039478346604307
+type_solver: Powell
+------------------------
+x resultados_typeact0_saboth2_typerendacc_typesolverPowell.txt: [4.02954846e-01 1.15331444e-09 3.98901861e+00]
+f resultados_typeact0_saboth2_typerendacc_typesolverPowell.txt: 3.6660833917604565
+type_solver: Powell
+------------------------
+x resultados_typeact0_saboth2_typerendall_typesolverPowell.txt: [3.70368328e-01 1.15331444e-09 3.69484532e+00]
+f resultados_typeact0_saboth2_typerendall_typesolverPowell.txt: 4.21612223017891
+type_solver: Powell
+------------------------
+x resultados_typeact0_saboth0_typerendacc_typesolverNelder-Mead.txt: [3.99344482e-01 1.08616676e-09]
+f resultados_typeact0_saboth0_typerendacc_typesolverNelder-Mead.txt: 3.4788965031098145
+type_solver: Nelder-Mead
+------------------------
+x resultados_typeact0_saboth0_typerendall_typesolverNelder-Mead.txt: [3.67889850e-01 7.55251138e-10]
+f resultados_typeact0_saboth0_typerendall_typesolverNelder-Mead.txt: 4.042368466013194
+type_solver: Nelder-Mead
+------------------------
+x resultados_typeact0_saboth2_typerendacc_typesolverNelder-Mead.txt: [4.04517567e-01 6.59949284e-10 9.22674953e-01]
+f resultados_typeact0_saboth2_typerendacc_typesolverNelder-Mead.txt: 4.389529805738732
+type_solver: Nelder-Mead
+------------------------
+x resultados_typeact0_saboth2_typerendall_typesolverNelder-Mead.txt: [3.94040276e-01 7.05438469e-10 9.18344733e-01]
+f resultados_typeact0_saboth2_typerendall_typesolverNelder-Mead.txt: 4.851775173599227
+type_solver: Nelder-Mead
+------------------------

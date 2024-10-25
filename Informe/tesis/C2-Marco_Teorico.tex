@@ -2,7 +2,7 @@
 
 \subsection{Sistemas de referencia}
 
-Para describir la dinámica orbital, de actitud y el diseño del ADCS, es necesario la definición de los marcos de referencia a utilizar. Su selección obedece a criterios descritos a continuación.
+Para describir la dinámica orbital, de actitud y el diseño del \gls{ADCS}, es necesario la definición de los marcos de referencia a utilizar. Su selección obedece a criterios descritos a continuación.
 
 \begin{itemize}
 	\item \textbf{Sistema de referencia body o del cuerpo \cite{ref21}}: La dinámica relativa de actitud se describe con respecto al marco de referencia del cuerpo en el CubeSat, desde la cual se realizan las mediciones, debido a que los sensores de actitud están fijados a su cuerpo. Para los marcos de referencia del cuerpo, el eje z apunta en la dirección del momento de inercia más alto, y los ejes x e y son paralelos a los vectores de área de las caras de la nave espacial, apuntando todos en las direcciones principales del satélite, como se observa gráficamente en la Figura~\ref{fig:body}.
@@ -14,7 +14,7 @@ Para describir la dinámica orbital, de actitud y el diseño del ADCS, es necesa
 		\label{fig:body}
 	\end{figure}
 	
-	\item \textbf{Sistema de referencia inercial \cite{ref21,ref22}}: El Sistema de referencia inercial utilizado es el Earth Centered Inertial (ECI) debido a la necesidad de obtener vectores respecto a un marco de referencia no rotativo (asumiendo problema de dos cuerpos entre la Tierra y el satélite). El eje X apunta en la dirección del equinoccio de primavera. El plano XY es el plano ecuatorial de la Tierra, y el eje Z coincide con el eje de rotación de la Tierra y apunta hacia el norte. Este sistema de referencia se puede apreciar en la Figura~\ref{fig:ECI}.
+	\item \textbf{Sistema de referencia inercial \cite{ref21,ref22}}: El Sistema de referencia inercial utilizado es el \gls{ECI} debido a la necesidad de obtener vectores respecto a un marco de referencia no rotativo (asumiendo problema de dos cuerpos entre la Tierra y el satélite). El eje X apunta en la dirección del equinoccio de primavera. El plano XY es el plano ecuatorial de la Tierra, y el eje Z coincide con el eje de rotación de la Tierra y apunta hacia el norte. Este sistema de referencia se puede apreciar en la Figura~\ref{fig:ECI}.
 	
 	\begin{figure}[H]
 		\centering    
@@ -23,7 +23,7 @@ Para describir la dinámica orbital, de actitud y el diseño del ADCS, es necesa
 		\label{fig:ECI}
 	\end{figure}
 	
-	\item \textbf{Sistema de referencia LVLH o Roll-Pitch-Yaw  \cite{ref23}}: Se define un sistema coordenado que mantiene su orientación relativa a la Tierra a medida que la nave espacial se mueve en su órbita. Estas coordenadas son conocidas como roll, pitch y yaw (RPY), \textit{Local Vertical Local Horizontal} (LVLH) u orbital como también será llamada en este trabajo y se ilustra en la Figura~\ref{fig:RPY}. En este sistema, el eje yaw se dirige hacia el nadir (es decir, hacia el centro de la Tierra), el eje pitch se dirige hacia la normal negativa de la órbita, y el eje roll es perpendicular a los otros dos, tal y como se muestra en la Ecuación~\ref{eq:RPY}. Se utilizará este Sistema de referencia para notar la posición ideal de la carga útil.
+	\item \textbf{Sistema de referencia LVLH o Roll-Pitch-Yaw  \cite{ref23}}: Se define un sistema coordenado que mantiene su orientación relativa a la Tierra a medida que la nave espacial se mueve en su órbita. Estas coordenadas son conocidas como roll, pitch y yaw (RPY), \gls{LVLH} u orbital como también será llamada en este trabajo y se ilustra en la Figura~\ref{fig:RPY}. En este sistema, el eje yaw se dirige hacia el nadir (es decir, hacia el centro de la Tierra), el eje pitch se dirige hacia la normal negativa de la órbita, y el eje roll es perpendicular a los otros dos, tal y como se muestra en la Ecuación~\ref{eq:RPY}. Se utilizará este Sistema de referencia para notar la posición ideal de la carga útil.
 	 \begin{equation}
 		\hat{R} = \hat{P} \times \hat{Y}
 		\label{eq:RPY}
@@ -53,7 +53,7 @@ Si la masa de un satélite se considera insignificante en comparación con la ma
 	\label{eq:Newton}
 \end{equation}
 
-Donde $\mathbf{r}$ es el vector posición entre el satélite y la Tierra y $GM_E$ es conocida como la constante de gravitacional de la Tierra y está dada por:
+Donde $\mathbf{r}$ es el vector posición entre el satélite y la Tierra y $GM_E$ es conocida como la \gls{mu} y está dada por:
 
 \begin{equation}
 	\mu = {GM_E} = 398600,4418  [\frac{{km}^3}{{s}^2}]
@@ -126,7 +126,7 @@ La actitud de un satélite se refiere a la orientación o posición que mantiene
 		\label{fig:axis_angle}
 	\end{figure}	
 	
-	\item \textbf{Euler angles}: Esta parametrización describe la orientación mediante tres ángulos, generalmente llamados phi ($\phi$), theta ($\theta$) y psi ($\psi$), que representan las rotaciones en torno a los ejes específicos (por ejemplo, X, Y y Z). Se presenta en la Figura~\ref{fig:euler_angles} las rotaciones realizadas por esta parametrización. 
+	\item \textbf{Euler angles}: Esta parametrización describe la orientación mediante tres ángulos, generalmente llamados \gls{phi}, \gls{theta} y \gls{psi}, que representan las rotaciones en torno a los ejes específicos (por ejemplo, X, Y y Z). Se presenta en la Figura~\ref{fig:euler_angles} las rotaciones realizadas por esta parametrización. 
 	
 	\begin{figure}[H]
 		\centering    
@@ -135,7 +135,7 @@ La actitud de un satélite se refiere a la orientación o posición que mantiene
 		\label{fig:euler_angles}
 	\end{figure}
 	
-	\item \textbf{Cuaternión}: Esta parametrización utiliza cuatro parámetros para representar la orientación, siendo tres de estas vectoriales y una escalar. Se discutirá más a fondo en la siguiente sección. 			
+	\item \textbf{\gls{q}}: Esta parametrización utiliza cuatro parámetros para representar la orientación, siendo tres de estas vectoriales y una escalar. Se discutirá más a fondo en la siguiente sección. 			
 \end{itemize}
 
 \subsubsection{Cuaterniones y cinemática de cuaterniones}
@@ -146,7 +146,7 @@ Por otro lado, la desventaja de la parametrización de la matriz de cosenos dire
 La cantidad mínima de elementos que se pueden utilizar para describir la actitud sin singularidades son cuatro. A partir del hecho de que cualquier rotación puede describirse utilizando un solo eje de rotación y un ángulo que describe la rotación alrededor de este eje, el cuaternión se define mediante 4 elementos, con una parte vectorial y una parte escalar como se muestra a continuación \cite{ref22}:
 
 \begin{equation}
-	\hat{q} = \begin{bmatrix}
+	q = \begin{bmatrix}
 		q_0 \\
 		q_1 \\
 		q_2 \\
@@ -166,7 +166,7 @@ La cantidad mínima de elementos que se pueden utilizar para describir la actitu
 La expresión \( \mathbf{q} \) es la parte vectorial \( \mathbf{q} = q_0 \hat{i} + q_1 \hat{j} + q_2 \hat{k} \), y \( q_3 \) es la parte escalar. La representación mostrada corresponde a un cuaternión pasivo, el cual se utiliza para rotar el sistema de coordenadas en sí (sin rotar el vector). Si se desea rotar el vector sin rotar el sistema de coordenadas, se utiliza un cuaternión activo, y se obtiene cambiando la componente escalar al inicio, tal y como se muestra en la siguiente expresión:
 
 \[
-\hat{q} = \begin{bmatrix}
+q = \begin{bmatrix}
 	q_3 \\
 	q_0 \\
 	q_1 \\
@@ -181,7 +181,7 @@ La expresión \( \mathbf{q} \) es la parte vectorial \( \mathbf{q} = q_0 \hat{i}
 Sabiendo esto, se puede definir la cinemática de la actitud del satélite utilizando cuaterniones mediante la Ecuación ~\ref{eq:cin_omega}, sabiendo que \( \omega_0 \), \( \omega_1 \) y \( \omega_2 \) son las velocidades angulares en el marco de referencia cuerpo del satélite:
 
 \begin{equation}
-	\frac{d\hat{q}}{dt} = \frac{1}{2}
+	\frac{dq}{dt} = \frac{1}{2}
 	\begin{bmatrix}
 		0 & -\omega_2 & \omega_1 & -\omega_0 \\
 		\omega_2 & 0 & -\omega_0 & -\omega_1 \\
@@ -195,7 +195,7 @@ Sabiendo esto, se puede definir la cinemática de la actitud del satélite utili
 Además, se tiene la multiplicación de cuaterniones, la cual será útil para representar las rotaciones entre los sistemas de referencia y aproximaciones discretas que utilizan esta operación, la cual se representa en la Ecuación~\ref{eq:quat_mult}:
 
 \begin{equation}
-	\hat{q} \cdot \hat{r} =
+	q \cdot r =
 	\begin{bmatrix}
 		q_3 r_0 + q_0 r_3 + q_1 r_2 - q_2 r_1 \\
 		q_3 r_1 + q_1 r_3 + q_2 r_0 - q_0 r_2 \\
@@ -209,7 +209,7 @@ Si bien esta parametrización no tiene una representación física obvia, se pue
 
 \subsubsection{Dinámica de actitud}
 
-La ecuación que describe la variación del vector momento angular a través del tiempo para un torque aplicado en un marco de referencia del cuerpo representa la dinámica de actitud y se muestra en la Ecuación~\ref{eq:vect_dot} \cite{ref22}:
+La ecuación que describe la variación del vector \gls{h} a través del tiempo para un torque aplicado en un marco de referencia del cuerpo representa la dinámica de actitud y se muestra en la Ecuación~\ref{eq:vect_dot} \cite{ref22}:
 
 \begin{equation}
 	I \frac{d\boldsymbol{\omega}}{dt} = - \boldsymbol{\omega} \times I \boldsymbol{\omega} + \boldsymbol{\tau}
@@ -234,7 +234,7 @@ Los torques externos son los provocados por los actuadores y por perturbaciones 
 
 El subsistema de determinación y control de actitud de un CubeSat es el responsable de determinar su orientación en el espacio y controlarla respecto a un objetivo durante un periodo específico. También se requiere para sobrevivir en el entorno espacial, controlando el satélite en orientaciones tales que se genere energía apuntando las celdas fotovoltaicas hacia el sol.
 
-El proceso para poder describir el movimiento del satélite se describe en tres pasos o procesos los cuales son llamados Guidance, Navigation and Control (GNC). Cada uno se describe según los componentes del ADCS, como se muestra a continuación \cite{ref28}:
+El proceso para poder describir el movimiento del satélite se describe en tres pasos o procesos los cuales son llamados Guidance, Navigation and Control (GNC). Cada uno se describe según los componentes del \gls{ADCS}, como se muestra a continuación \cite{ref28}:
 
 \begin{itemize}
 	\item Navigation: Es el primer paso por seguir, y determina la actitud del satélite y la tasa de rotación mediante los sensores tanto inerciales como de medición externa. Responde a la pregunta: ¿Dónde está el satélite?
@@ -256,7 +256,7 @@ Para la determinación de actitud se utilizan componentes físicos llamados sens
 		Giroscopios & Los giroscopios miden la tasa de cambio de la orientación angular respecto al marco inercial del satélite [°/s]. Los giroscopios proporcionan información sobre los movimientos de rotación en los tres ejes (roll, pitch y yaw). \\ \hline
 		Sensores de sol & Los sensores solares se utilizan para estimar la dirección del Sol en el marco de referencia del cuerpo del satélite. \\ \hline
 		Magnetómetros & Los magnetómetros determinan el campo magnético de la Tierra, midiendo su dirección y su fuerza en [nT]. \\ \hline
-		GPS & Mediante el receptor GPS se obtiene la posición tridimensional (latitud, longitud y altitud) con alta precisión. Esto permite al CubeSat conocer su ubicación en la órbita terrestre. \\ \hline
+		\gls{GPS} & Mediante el receptor \gls{GPS} se obtiene la posición tridimensional (latitud, longitud y altitud) con alta precisión. Esto permite al CubeSat conocer su ubicación en la órbita terrestre. \\ \hline
 		Star Tracker & Un Star Tracker o contador de estrellas es un sistema de sensores cuya función principal es determinar con exactitud la actitud del CubeSat utilizando las estrellas circundantes como referencia. \\ \hline
 	\end{tabular}
 	\label{tab:sensores}
@@ -268,7 +268,7 @@ En esta sección se proporciona una descripción de los diferentes métodos de d
 
 \textbf{\underline{Enfoque determinista de la determinación de actitud}}
 
-Para la determinación inicial de la actitud, se requiere un enfoque determinista. Existen varios algoritmos deterministas diferentes para la determinación de la actitud, describiendo algunos a continuación:
+Existen varios algoritmos deterministas diferentes para la determinación de la actitud, describiendo algunos a continuación:
 
 \textbf{TRIAD method}: La solución Tri-axial Attitude Determination (TRIAD) requiere dos conjuntos de vectores: un vector de observación de cada uno de los dos sensores ubicados en el satélite ($\mathbf{V_1}$ y $\mathbf{V_2}$), y un vector de referencia para cada observación en términos de su dirección de referencia inercial ($\mathbf{W_1}$ y $\mathbf{W_2}$). Con estos vectores se crean triadas de referencia ($\mathbf{M_{ref}}$) y de observación ($\mathbf{M_{obs}}$) descritas en la Tabla~\ref{tab:triad}.
 
@@ -292,7 +292,7 @@ A = M_{obs} (M_{ref})^T
 
 Esta matriz representa la rotación desde el marco de referencia del cuerpo del satélite al marco de referencia inercial fijo a la Tierra. Una vez que se conoce esta matriz, la actitud del satélite se puede expresar en términos del marco de referencia inercial fijo a la Tierra. Cuando se utiliza el método TRIAD, el sensor más exacto debe elegirse siempre como $V_1$ con su correspondiente vector de referencia $W_1$.
 
-Por otro lado, existen algoritmos que ofrecen un mínimo error sin la necesidad de elegir el sensor más exacto como el $V_1$. Para ello, buscan resolver la ecuación de Wahba, la cual minimiza el error de determinación de actitud al asignarle pesos a los vectores de referencia y de observación. Estos métodos son el q-method y el QUEST \cite{ref15}, los cuales no se utilizarán durante este trabajo, ya que como se muestra en Vélez \cite{ref15}, el q-method presenta mayores errores en la determinación de actitud respecto a los otros algoritmos, mientras que QUEST en las mismas simulaciones tiene una calidad similar al TRIAD, con mayor costo computacional y una mayor dificultad de implementación.
+Por otro lado, existen algoritmos que ofrecen un mínimo error sin la necesidad de elegir el sensor más exacto como el $V_1$. Para ello, buscan resolver la ecuación de Wahba, la cual minimiza el error de determinación de actitud al asignarle pesos a los vectores de referencia y de observación. Estos métodos son el q-method y el QUEST \cite{ref15}.
 
 \textbf{\underline{Enfoque recursivo de la estimación de actitud}}
 
@@ -300,7 +300,7 @@ Aunque se necesita un método determinista para la adquisición inicial de la ac
 
 Los Filtros de Kalman se utilizan para estimar los estados futuros de un sistema dinámico lineal afectado por ruido. El algoritmo consta de dos fases: la fase de predicción y la fase de actualización. Durante la fase de predicción, el filtro utiliza ecuaciones dinámicas del sistema preprogramadas para calcular la estimación a priori de la nueva actitud del satélite. Durante la fase de actualización, el filtro utiliza las lecturas actuales del sensor para determinar la estimación a posteriori de la actitud actual del satélite y calcular el error de estimación a partir de la predicción de la actitud.
 
-Dado que el Filtro de Kalman tiene un proceso de dos pasos, utiliza un paso de tiempo discreto, k. La naturaleza discreta del Filtro de Kalman funciona bien para el CubeSat, ya que el paso de tiempo k puede configurarse fácilmente como el intervalo de tiempo entre las mediciones de los sensores. Sin embargo, el sistema dinámico del satélite al no ser lineal (dependiente del tiempo) se necesita utilizar el Filtro de Kalman Extendido (EKF). La naturaleza discreta del EKF compensa la dependencia del tiempo en el modelo del satélite. Las demás no linealidades en las ecuaciones dinámicas se abordan a través de matrices Jacobianas, que están compuestas por las derivadas parciales de primer orden de las ecuaciones dinámicas del sistema. Estas matrices Jacobianas permiten al EKF linealizar el sistema no lineal en la estimación actual y se deben calcular nuevas matrices para cada paso de tiempo.
+Dado que el Filtro de Kalman tiene un proceso de dos pasos, utiliza un paso de tiempo discreto, k. La naturaleza discreta del Filtro de Kalman funciona bien para el CubeSat, ya que el paso de tiempo k puede configurarse fácilmente como el intervalo de tiempo entre las mediciones de los sensores. Sin embargo, el sistema dinámico del satélite al no ser lineal (dependiente del tiempo) se necesita utilizar el \gls{EKF}. La naturaleza discreta del \gls{EKF} compensa la dependencia del tiempo en el modelo del satélite. Las demás no linealidades en las ecuaciones dinámicas se abordan a través de matrices Jacobianas, que están compuestas por las derivadas parciales de primer orden de las ecuaciones dinámicas del sistema. Estas matrices Jacobianas permiten al \gls{EKF} linealizar el sistema no lineal en la estimación actual y se deben calcular nuevas matrices para cada paso de tiempo.
 
 El modelo dinámico no lineal y las mediciones se definen de la siguiente manera:
 \[
@@ -342,7 +342,7 @@ Para el control del satélite, se requiere la orden del controlador para generar
 
 \textbf{\underline{Controladores}}
 
-\textbf{Controlador Proporcional-Derivativo (PD) y Proporcional-Integrativo-Derivativo (PID) \cite{ref23}}: Es un tipo de controlador ampliamente utilizado en automatización y control de procesos para regular sistemas dinámicos y mantener una variable de proceso en un valor deseado o setpoint. A continuación, se explicará cada uno de los componentes y cómo funcionan juntos para controlar el sistema:
+\textbf{Controlador \gls{PD} y \gls{PID} \cite{ref23}}: Es un tipo de controlador ampliamente utilizado en automatización y control de procesos para regular sistemas dinámicos y mantener una variable de proceso en un valor deseado o setpoint. A continuación, se explicará cada uno de los componentes y cómo funcionan juntos para controlar el sistema:
 
 \begin{itemize}
 	\item \textbf{Componente Proporcional (P):} El término proporcional es la parte principal del controlador PID. Su función es proporcionar una respuesta inmediata a las desviaciones actuales entre la variable controlada y el valor deseado (error). La salida del término proporcional (P) es directamente proporcional al error actual, por lo que cuanto mayor sea el error, mayor será la corrección aplicada.
@@ -358,7 +358,7 @@ U = k_p P + k_i I + k_d D
 \]
 Siendo $k_p$, $k_i$ y $k_d$ constantes de ajuste de ganancias proporcional, integral y derivativo, respectivamente, determinando la magnitud de la contribución de cada término de control en general.
 
-\textbf{Controlador Linear Quadratic Regulator (LQR) \cite{ref29}}: Este es un método de control óptimo utilizado en sistemas dinámicos lineales y de tiempo continuo. Su objetivo es encontrar la ley de control lineal que minimiza una función de costo cuadrática, teniendo en cuenta tanto el estado del sistema como la entrada de control. Para su uso, se debe modelar el sistema según la ecuación a continuación, donde \( \mathbf{x} \) es el vector de estado, \( \mathbf{u} \) es el vector de entrada de control, \( \mathbf{A} \) es la matriz de estado y \( \mathbf{B} \) es la matriz de entrada:
+\textbf{Controlador \gls{LQR} \cite{ref29}}: Este es un método de control óptimo utilizado en sistemas dinámicos lineales y de tiempo continuo. Su objetivo es encontrar la ley de control lineal que minimiza una función de costo cuadrática, teniendo en cuenta tanto el estado del sistema como la entrada de control. Para su uso, se debe modelar el sistema según la ecuación a continuación, donde \( \mathbf{x} \) es el vector de estado, \( \mathbf{u} \) es el vector de entrada de control, \( \mathbf{A} \) es la matriz de estado y \( \mathbf{B} \) es la matriz de entrada:
 
 \[
 \dot{\mathbf{x}} = \mathbf{A} \mathbf{x} + \mathbf{B} \mathbf{u}
@@ -367,16 +367,19 @@ Siendo $k_p$, $k_i$ y $k_d$ constantes de ajuste de ganancias proporcional, inte
 Posteriormente, se requiere el uso de una función de costo cuadrática que debe ser minimizada. La función de costo típicamente incluye términos que penalizan el error del estado y el esfuerzo de control, ponderados por matrices de ponderación \( \mathbf{Q} \) y \( \mathbf{R} \), respectivamente. La función de costo se expresa como:
 
 \[
-J = \int_{0}^{\infty} \left( \mathbf{x}^T \mathbf{Q} \mathbf{x} + \mathbf{u}^T \mathbf{R} \mathbf{u} \right) \, dt
+J = \int_{0}^{\infty} \left( \mathbf{x}^T \mathbf{Q} \mathbf{x} + \mathbf{u}^T \mathbf{R} \mathbf{u} \right) \, dt = \sum_{k=0}^{\infty} \left( \mathbf{x}_k^T \mathbf{Q} \mathbf{x}_k + \mathbf{u}_k^T \mathbf{R} \mathbf{u}_k \right)
 \]
 
-El objetivo es encontrar \( \mathbf{u} = -\mathbf{K} \mathbf{x} \) que minimiza la función de costo, siendo \( \mathbf{K} \) la ganancia del controlador. Esta matriz \( \mathbf{K} \) se obtiene al resolver la ecuación de Riccati expuesta a continuación, donde \( \mathbf{P} \) es la matriz simétrica definida positiva asociada con la solución de la ecuación de Riccati:
+El objetivo es encontrar \( \mathbf{u} = -\mathbf{K} \mathbf{x} \) que minimiza la función de costo, siendo \( \mathbf{K} \) la ganancia del controlador. Esta matriz \( \mathbf{K} \) se obtiene al resolver la ecuación de Riccati expuesta a continuación, donde \( \mathbf{P} \) es la matriz simétrica definida positiva asociada con la solución de la ecuación de Riccati continua o discreta:
 
 \[
 \mathbf{A}^T \mathbf{P} + \mathbf{P} \mathbf{A} - \mathbf{B} \mathbf{R}^{-1} \mathbf{B}^T \mathbf{P} + \mathbf{Q} = 0
 \]
+\[
+\mathbf{A}^T \mathbf{P} \mathbf{A} - (\mathbf{A}^T \mathbf{P} \mathbf{B})(\mathbf{R} + \mathbf{B}^T \mathbf{P} \mathbf{B})^{-1}(\mathbf{B}^T \mathbf{P} \mathbf{A}) + \mathbf{Q} - \mathbf{P} = 0
+\]
 
-Ya encontrada la matriz \( \mathbf{P} \), la ley de control óptimo se obtiene como \( \mathbf{u} = -\mathbf{K} \mathbf{x} \) con \( \mathbf{K} = \mathbf{R}^{-1} \mathbf{B}^T \mathbf{P} \). Esta ley se implementa en el sistema dinámico para estabilizarlo y minimizar la función de costo a lo largo del tiempo. El controlador LQR es particularmente eficaz para sistemas lineales y proporciona un enfoque sistemático para el diseño de controladores óptimos.
+Ya encontrada la matriz \( \mathbf{P} \), la ley de control óptimo se obtiene como \( \mathbf{u} = -\mathbf{K} \mathbf{x} \) con \( \mathbf{K} = \mathbf{R}^{-1} \mathbf{B}^T \mathbf{P} \) en el caso continuo y \( \mathbf{K} = (\mathbf{R}+ \mathbf{B}^T \mathbf{P} \mathbf{B})^{-1}(\mathbf{B}^T\mathbf{P}\mathbf{A}) \) en el caso discreto. Esta ley se implementa en el sistema dinámico para estabilizarlo y minimizar la función de costo a lo largo del tiempo. El controlador LQR es particularmente eficaz para sistemas lineales y proporciona un enfoque sistemático para el diseño de controladores óptimos.
 
 \textbf{\underline{Actuadores}}
 
@@ -389,7 +392,7 @@ Los actuadores son los que generan el torque necesario para el control del saté
 		\hline
 		\textbf{Actuadores} & \textbf{Descripción} \\ \hline
 		Magnetorquer & Los magnetorquers son dispositivos de control de actitud construidos utilizando bobinas electromagnéticas, que generan un torque a través de interacciones entre el campo magnético ambiental y dipolos magnéticos generados por este actuador. \\ \hline
-		Rueda de reacción & Una rueda de reacción es un motor acoplado a un disco de alta inercia que gira a gran velocidad a lo largo de un eje fijo del satélite. Este funciona aplicando un torque \( T \) en el disco, provocando un aumento en su momento angular \( h \). Por conservación de momento angular (al haber ausencia de fuerzas externas) se genera un torque de igual magnitud, pero en sentido contrario, que es aplicado en el CubeSat. \\ \hline
+		Rueda de reacción & Una rueda de reacción es un motor acoplado a un disco de alta inercia que gira a gran velocidad a lo largo de un eje fijo del satélite. Este funciona aplicando un torque \( T \) en el disco, provocando un aumento en su Momento Angular (\gls{h}). Por conservación de \gls{h} y al haber ausencia de fuerzas externas se genera un torque de igual magnitud, pero en sentido contrario, que es aplicado en el CubeSat. \\ \hline
 	\end{tabular}
 	\label{tab:actuadores}
 \end{table}
@@ -405,7 +408,7 @@ Los Systems Engineering Envelopes son restricciones técnicas y operativas aplic
 	\item Tamaño: ¿Cuánto volumen ocupa el componente a utilizar?
 \end{itemize}
 
-En el contexto de este trabajo, se buscará cuantificar el costo respecto a precio, potencia, masa y tamaño, al utilizar distintos tipos de componentes del ADCS. Con esto se verá si en una misión de observación terrestre, cuál será el costo con el que se apuntó la carga útil hacia un lugar en específico de la Tierra.
+En el contexto de este trabajo, se buscará cuantificar el costo respecto a precio, potencia, masa y tamaño, al utilizar distintos tipos de componentes del \gls{ADCS}. Con esto se verá si en una misión de observación terrestre, cuál será el costo con el que se apuntó la carga útil hacia un lugar en específico de la Tierra.
 
 \subsection{Controlabilidad y observabilidad de un sistema de control}
 
@@ -429,27 +432,38 @@ Donde:
 
 El sistema es controlable y observable si la matriz de controlabilidad $\text{Co} = [B, AB, A^2B, \ldots, A^{n-1}B]$ y la matriz de observabilidad $\text{Ob} = [C, CA, CA^2, \ldots, CA^{n-1}]$ tienen un rango total, es decir, el rango es igual al número de estados del modelo de espacio de estados.
 
-Es relevante tener en cuenta estos conceptos, ya que, para utilizar algunos algoritmos de estimación de actitud, es necesario que el sistema sea observable, como es el caso del EKF. Mismo caso para el uso de controladores, que dependen de si el sistema logra ser controlable para accionar el torque necesario para el sistema satelital.
+Es relevante tener en cuenta estos conceptos, ya que, para utilizar algunos algoritmos de estimación de actitud, es necesario que el sistema sea observable, como es el caso del \gls{EKF}. Mismo caso para el uso de controladores, que dependen de si el sistema logra ser controlable para accionar el torque necesario para el sistema satelital.
 
-\subsection{Optimización en control}
+\subsection{Optimización Matemática}
 
-La optimización en el control es un enfoque fundamental para mejorar el desempeño y la eficiencia de los sistemas dinámicos. Se basa en encontrar la mejor ley de control que minimice o maximice una función objetivo, la cual suele estar relacionada con el rendimiento del sistema, el costo de operación o la estabilidad. En este contexto, la función objetivo representa un criterio cuantitativo que se desea optimizar, y puede involucrar diversos aspectos como el error en la respuesta del sistema, el esfuerzo de control o el consumo de recursos \cite{ref30}.
+La optimización matemática es una rama de las matemáticas aplicadas que se enfoca en encontrar el mejor resultado o solución de un conjunto de posibles soluciones, en base a maximizar o minimizar una función objetivo, y que está generalmente sujeto a restricciones.\cite{ref30}.El problema en general se puede expresar como:
 
-\subsubsection{Funciones objetivos}
+\[
+\min \text{ o } \max \ f(x);
+\]
+\[
+\text{Sujeto a } X = \{ X \mid g_i(x) \leq b_i, \ i=1, \dots, m \}
+\]
 
-Una función objetivo en la optimización del control se define como una expresión matemática que evalúa el desempeño del sistema en función de una o más variables de control. Generalmente, estas funciones están formuladas para minimizar o maximizar ciertos criterios \cite{ref30}:
+Donde:
+\[
+X = (x_1, \dots, x_n) \text{ son variables de optimización}
+\]
+\[
+F: R^n \to R \text{ es la función objetivo}
+\]
+\[
+g_i: R^n \to R \text{ y } b_i \in R \text{ forman las restricciones para valores válidos de } x
+\]
 
-\begin{itemize}
-	\item Minimización del Error: En muchos casos, el objetivo es minimizar el error entre la salida deseada y la salida real del sistema. Esto se puede expresar como una función de costo cuadrática que penaliza las desviaciones de la trayectoria deseada.
-	\item Minimización del Esfuerzo de Control: En otros casos, el objetivo es minimizar el esfuerzo o el costo asociado con las entradas de control. Esto es crucial para reducir el consumo de energía o prolongar la vida útil de los actuadores.
-	\item Optimización de la Estabilidad: Algunos métodos de optimización buscan mejorar la estabilidad del sistema al reducir las oscilaciones y garantizar una respuesta controlada ante perturbaciones.
-\end{itemize}
-
-Las funciones objetivo pueden ser formuladas como funciones cuadráticas o no cuadráticas, dependiendo del problema específico y los requisitos del sistema.
 
 \subsubsection{Clasificación de problemas de optimización}
 
 Los problemas de optimización pueden clasificarse en distintas categorías dependiendo de las características de la función objetivo y las restricciones. A continuación se listan y definen algunos de ellos \cite{ref46}:
+
+\textbf{Optimizacion Convexa y no Convexa}:  Un problema es convexo si la función objetivo y las restricciones forman un conjunto convexo, lo que asegura que cualquier mínimo local es también el mínimo global. Por otro lado, los problemas no convexos no cumplen con la propiedad de convexidad, lo que significa que pueden existir múltiples mínimos locales. La optimización no convexa es más compleja y suele requerir métodos numéricos avanzados.
+
+Luego, se clasifican en base a la linealidad del problema, donde se encuentran las siguientes opciones: 
 
 \textbf{Optimización Lineal (LP)}: Un problema de programación lineal busca minimizar o maximizar una función objetivo lineal sujeta a restricciones lineales. Tanto la función objetivo como las restricciones son expresadas como combinaciones lineales de variables.
 
@@ -505,15 +519,14 @@ Los problemas de optimización pueden clasificarse en distintas categorías depe
 	\item Restricciones: g(x)$\leq$0 y 	h(x)=0 (no lineales)
 \end{itemize}
 
-
 \subsubsection{Optimizadores en Python}
 
 Para resolver problemas de optimización en el control, se utilizan diversas herramientas y optimizadores disponibles en Python. A continuación, se presentan dos:
 
 \begin{itemize}
-	\item Scipy.optimize.minimize \cite{ref31}: El módulo scipy.optimize.minimize proporciona una variedad de métodos para resolver problemas de optimización no lineales. Este optimizador permite la minimización de una función objetivo definida por el usuario, utilizando diferentes algoritmos de optimización. Este módulo es útil para problemas de optimización de funciones objetivo generales y permite la implementación de restricciones y condiciones específicas según el problema de control.
+	\item Scipy.optimize.minimize \cite{ref31}: El módulo scipy.optimize.minimize proporciona una variedad de métodos para resolver problemas de optimización. Este optimizador permite la minimización de una función objetivo definida por el usuario, utilizando diferentes algoritmos de optimización, para así encontrar el mínimo local del problema a analizar. Este módulo es útil para problemas de optimización de funciones objetivo tanto lineales como no lineales y permite la implementación de restricciones y condiciones específicas según el problema.
 	
-	\item Pyomo \cite{ref32,ref33}: pyomo es una biblioteca de Python para la modelización y solución de problemas de optimización matemática. A diferencia de scipy.optimize, pyomo permite definir problemas de optimización de manera más estructurada y flexible, especialmente para problemas complejos que involucran programación lineal, no lineal, entera y estocástica. Pyomo permite definir problemas de optimización mediante un enfoque declarativo, facilitando la expresión de restricciones y objetivos. Además, soporta una amplia gama de solucionadores, desde optimizadores simples hasta solvers avanzados.
+	\item Pyomo \cite{ref32,ref33}: Pyomo es una biblioteca de Python para la modelización y solución de problemas de optimización matemática. A diferencia de scipy.optimize, pyomo permite definir problemas de optimización de manera más estructurada y flexible, especialmente para problemas complejos que involucran programación lineal, no lineal, entera y estocástica. Pyomo permite definir problemas de optimización mediante un enfoque declarativo, facilitando la expresión de restricciones y objetivos. Además, soporta una amplia gama de solucionadores, desde optimizadores simples hasta solvers avanzados.
 	
 	
 \end{itemize}
