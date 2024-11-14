@@ -10,6 +10,18 @@ import math
 from scipy.optimize import minimize
 from sigfig import round
 from scipy.signal import butter, lfilter
+import random
+
+def normal_random(mu, sigma):
+    # Generar dos números aleatorios uniformes entre 0 y 1
+    u1 = random.random()
+    u2 = random.random()
+    
+    # Aplicar la transformación de Box-Muller
+    z0 = math.sqrt(-2 * math.log(u1)) * math.cos(2 * math.pi * u2)
+    # Ajustar el valor con la media y la desviación estándar deseada
+    return mu + z0 * sigma
+
 
 # inversa de un cuaternion
 def inv_q(q):
@@ -35,9 +47,9 @@ def simulate_magnetometer_reading(B_eci, ruido):
 
     # Simular el ruido gaussiano
     # print('Hola')
-    # print(type(ruido))
+    # print(ruido)
     noise = np.random.normal(0, ruido, 1)
-        
+    # print(noise)
     # Simular la medición del magnetómetro con ruido
     measurement = B_eci + noise
 
@@ -56,9 +68,10 @@ def rotacion_v(q, b_i, sigma):
     return B_magn
 
 # Funciones para imposicion de ruido en magnetometro
-def simulate_magnetometer_reading_pyomo(B_eci, ruido):
+def simulate_magnetometer_reading_pyomo(B_eci, sigma):
     # np.random.seed(42)  # Puedes cambiar el número 42 a cualquier otro número entero
 
+    ruido = normal_random(0,sigma)
         
     # Simular la medición del magnetómetro con ruido
     measurement = B_eci +ruido
@@ -220,9 +233,9 @@ def mod_lineal_cont(x,u,deltat,h,A,B):
 #%% Modelo lineal discreto
 
 def mod_lineal_disc(x,u,deltat, h,A_discrete,B_discrete):
-        
-    for i in range(int(1/h)):
-        x_k_1 = np.dot(A_discrete,x) + np.dot(B_discrete,u)
+    x_new = x
+    for i in range(int(deltat/h)):
+        x_k_1 = np.dot(A_discrete,x_new) + np.dot(B_discrete,u)
         q_rot = x_k_1[0:3]
         w_new = x_k_1[3:6]
     
@@ -383,8 +396,8 @@ def quaternion_to_euler(q):
 
 def torquer(u_PD_NL,lim):
     # Número de cifras significativas
-    sig = 2
-    u_PD_NL = np.array([round(x, sigfigs=sig) for x in u_PD_NL])
+    # sig = 2
+    # u_PD_NL = np.array([round(x, sigfigs=sig) for x in u_PD_NL])
 
     if u_PD_NL[0]>lim: 
         u_PD_NL[0] = lim

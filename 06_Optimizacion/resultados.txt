@@ -1,0 +1,2 @@
+Valor óptimo de x: [0.6, 2e-09, 5]
+Valor de la función objetivo: 3.7633774768582207

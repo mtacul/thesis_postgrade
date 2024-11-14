@@ -199,9 +199,9 @@ def rk4_step_PD(dynamics, x, A, B, u, h):
 
 
 def mod_lineal_cont(x,u,deltat,h,A,B):
-    
+    x_new = x
     for j in range(int(deltat/h)):
-        q_rot,w_new,ws_new = rk4_step_PD(dynamics, x, A, B, u, h)
+        q_rot,w_new,ws_new = rk4_step_PD(dynamics, x_new, A, B, u, h)
         if  1-q_rot[0]**2-q_rot[1]**2-q_rot[2]**2 < 0:
             q_rot = q_rot / np.linalg.norm(q_rot)
             x_new = np.hstack((np.transpose(q_rot), np.transpose(w_new),np.transpose(ws_new)))
@@ -216,9 +216,9 @@ def mod_lineal_cont(x,u,deltat,h,A,B):
 #%% Modelo lineal discreto
 
 def mod_lineal_disc(x,u,deltat, h,A_discrete,B_discrete):
-        
-    for i in range(int(1/h)):
-        x_k_1 = np.dot(A_discrete,x) + np.dot(B_discrete,u)
+    x_new = x
+    for i in range(int(deltat/h)):
+        x_k_1 = np.dot(A_discrete,x_new) + np.dot(B_discrete,u)
         q_rot = x_k_1[0:3]
         w_new = x_k_1[3:6]
         ws_new = x_k_1[6:9]

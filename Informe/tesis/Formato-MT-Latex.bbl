@@ -2,7 +2,7 @@
 
 \bibitem{ref1}
 nanosats.eu, ``Nanosats database,'' 2024.
-\newblock Accedido el: 16 de septiembre de 2024.
+\newblock https://www.nanosats.eu/.
 
 \bibitem{ref22}
 H.~Curtis, {\em Orbital Mechanics for Engineering Students}.
@@ -14,10 +14,11 @@ J.~Wertz, {\em Spacecraft Attitude Determination and Control}, vol.~73.
 
 \bibitem{ref24}
 AcademiaLab, ``Elementos orbitales.''
-\newblock Accedido el: 17 de septiembre de 2024.
+\newblock https://academia-lab.com/enciclopedia/elementos-orbitales/.
 
 \bibitem{ref27}
 H.~Schaub and J.~L. Junkins, ``Analytical mechanics of space systems,'' 2003.
+\newblock https://api.semanticscholar.org/CorpusID:118562512.
 
 \bibitem{ref25}
 F.~L. Markley and J.~L. Crassidis, {\em Fundamentals of Spacecraft Attitude
@@ -31,15 +32,13 @@ M.~Tacul, ``Identificación y caracterización de índices de performance en el
 
 \bibitem{ref2}
 SatCatalog, ``Cubesat launch costs,'' 2022.
-\newblock Accedido el: 16 de septiembre de 2024.
 
 \bibitem{ref3}
 nanosats.eu, ``Cubesat costs,'' 2024.
-\newblock Accedido el: 16 de septiembre de 2024.
+\newblock https://www.nanosats.eu/tables.
 
 \bibitem{ref4}
 D.~Odonohue, ``Optical satellites,'' 2024.
-\newblock Accedido el: 16 de septiembre de 2024.
 
 \bibitem{ref5}
 J.~Wertz and W.~Larson, {\em Space mission analysis and design}.
@@ -52,6 +51,7 @@ J.~P. Mason, M.~Baumgart, B.~Rogler, C.~Downs, M.~Williams, T.~N. Woods,
   first flight of the blue canyon technologies xact 3-axis attitude
   determination and control system,'' {\em Journal of Small Satellite
   Missions}, vol.~10, no.~3, pp.~651--662, 2017.
+\newblock https://www.researchgate.net/publication/317672613.
 
 \bibitem{ref8}
 S.-G. Kim and J.-S. Chae, ``Attitude control system performance estimation for
@@ -91,6 +91,7 @@ D.~Torczynski, R.~Amini, and P.~Massioni, ``Magnetorquer based attitude control
 \bibitem{ref15}
 D.~M. Vélez, E.~I. Dawson, and N.~E. Nassiff, ``Attitude determination and
   control subsystem design for a cubesat,'' 2012.
+\newblock https://digitalcommons.wpi.edu/mqp-all/3322.
 
 \bibitem{ref16}
 A.~Annenkova, S.~Biktimirov, K.~Latyshev, A.~Mahfouz, P.~Mukhachev, and
@@ -104,19 +105,20 @@ A.~Rassõlkin, T.~Vaimann, P.~Org, A.~Leibak, R.~Gordon, and E.~Priidel, ``Adcs
 
 \bibitem{ref18}
 P.~S. System, ``Spacecraft control toolbox,'' 2017.
-\newblock Accedido el: 16 de septiembre de 2024.
+\newblock http://support.psatellite.com//sct/index.php.
 
 \bibitem{ref19}
 Mathworks, ``Model and simulate cubesats,'' 2023.
-\newblock Accedido el: 16 de septiembre de 2024.
+\newblock
+  https://la.mathworks.com/help/aeroblks/model-and-simulate-cubesats.html.
 
 \bibitem{ref20}
 Valispace, ``Fan tutorials.''
-\newblock Accedido el: 16 de septiembre de 2024.
+\newblock https://docs.valispace.com/vhd/fan-tutorials.
 
 \bibitem{ref36}
 U.~of~Colorado, L.~for Atmospheric, and S.~Physics, ``Basilisk,'' 2024.
-\newblock Accedido el: 17 de septiembre de 2024.
+\newblock https://hanspeterschaub.info/basilisk/index.html.
 
 \bibitem{ref21}
 A.~Chaves, ``On the coupling of orbit and attitude determination of satellite
@@ -128,11 +130,10 @@ J.~Sellers, {\em Understanding Space: An Introduction to Astronautics}.
 
 \bibitem{ref28}
 T.~Kuwahara, ``Introduction to cubesat attitude control system,'' 2021.
-\newblock Accedido el: 17 de septiembre de 2024.
 
 \bibitem{ref29}
 R.~Tedrake, ``Linear quadratic regulators,'' 2024.
-\newblock Accedido el: 17 de septiembre de 2024.
+\newblock https://underactuated.mit.edu/lqr.html.
 
 \bibitem{ref30}
 D.~Kirk, {\em Optimal Control Theory: An Introduction}.
@@ -167,18 +168,16 @@ W.~E. Hart, J.-P. Watson, and D.~L. Woodruff, ``Pyomo: modeling and solving
 
 \bibitem{ref34}
 Ansys, ``Systems tool kit,'' 2024.
-\newblock Accedido el: 17 de septiembre de 2024.
 
 \bibitem{ref35}
 Valispace, ``Valispace,'' 2024.
-\newblock Accedido el: 17 de septiembre de 2024.
+\newblock https://www.valispace.com/.
 
 \bibitem{ref37}
 D.~Vallado and P.~Crawford, ``Sgp4 orbit determination,'' 08 2008.
 
 \bibitem{ref38}
 a.i solutions, ``Freeflyer software,'' 2023.
-\newblock Accedido el: 17 de septiembre de 2024.
 
 \bibitem{ref39}
 P.~Alken, E.~Thébault, C.~D. Beggan, H.~Amit, J.~Aubert, J.~Baerenzung, T.~N.
@@ -198,7 +197,6 @@ P.~Alken, E.~Thébault, C.~D. Beggan, H.~Amit, J.~Aubert, J.~Baerenzung, T.~N.
 \bibitem{ref40}
 N.~C. for Enviromental~Information, ``International geomagnetic reference field
   (igrf),'' 2021.
-\newblock Accedido el: 18 de septiembre de 2024.
 
 \bibitem{ref42}
 J.~Stewart, {\em Calculus: Early Transcendentals}.
@@ -220,5 +218,68 @@ P.~Baranwal, K.~Batta, and T.~Kaushik, ``Comparative study of classical and
 
 \bibitem{ref45}
 NASA, ``State of the art of small spacecraft technology,'' 2023.
+
+\bibitem{ref47}
+S.~S. Systems, ``Giroscopio crh03 – 200,'' 2024.
+\newblock https://siliconsensing.com/product/crh03.
+
+\bibitem{ref48}
+S.~S. Systems, ``Giroscopio crh03 – 10,'' 2024.
+\newblock https://siliconsensing.com/product/crh03.
+
+\bibitem{ref49}
+N.~System, ``Giroscopio nsgy-001,'' 2024.
+\newblock https://satsearch.co/products/newspace-systems-nsgy-001-stellar-gyro.
+
+\bibitem{ref50}
+A.~C. Space, ``Magnetómetro mm200-1,'' 2024.
+\newblock
+  https://www.aac-clyde.space/what-we-do/space-products-components/adcs/mm200.
+
+\bibitem{ref51}
+A.~C. Space, ``Magnetómetro mag-3-2,'' 2024.
+\newblock
+  https://www.aac-clyde.space/what-we-do/space-products-components/adcs/mag-3.
+
+\bibitem{ref52}
+A.~C. Space, ``Magnetómetro mag-3,'' 2024.
+\newblock
+  https://www.aac-clyde.space/what-we-do/space-products-components/adcs/mag-3.
+
+\bibitem{ref53}
+S.~Micro, ``Sensor sol css-01, css-02,'' 2024.
+\newblock https://www.satcatalog.com/component/css-01-02/.
+
+\bibitem{ref54}
+S.~Micro, ``Sensor sol mss-01,'' 2024.
+\newblock https://www.satcatalog.com/component/mss-01-02/.
+
+\bibitem{ref55}
+B.~Space, ``Sensor sol fss,'' 2024.
+\newblock https://satsearch.co/products/bradford-fine-sun-sensor.
+
+\bibitem{ref56}
+Z.~Technik, ``Magnetorquer mt0.5-1,'' 2024.
+\newblock https://www.satcatalog.com/component/mt05-1-po/.
+
+\bibitem{ref57}
+N.~systems, ``Magnetorquer nctr-m012,'' 2024.
+\newblock https://www.satcatalog.com/component/nctr-m012/.
+
+\bibitem{ref58}
+Z.~Technik, ``Magnetorquer mt15-1,'' 2024.
+\newblock https://www.satcatalog.com/component/mt15-1/.
+
+\bibitem{ref59}
+B.~C. Technologies, ``Rueda de reacción rwp500,'' 2024.
+\newblock https://www.satcatalog.com/component/rwp500/.
+
+\bibitem{ref60}
+B.~C. Technologies, ``Rueda de reacción rw1,'' 2024.
+\newblock https://www.satcatalog.com/component/rw1/.
+
+\bibitem{ref61}
+B.~C. Technologies, ``Rueda de reacción rw4,'' 2024.
+\newblock https://www.satcatalog.com/component/rw4/.
 
 \end{thebibliography}

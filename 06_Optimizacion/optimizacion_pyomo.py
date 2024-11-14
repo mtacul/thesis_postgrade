@@ -29,18 +29,15 @@ def save_res_txt(filename, model):
         f.write(f"Valor de la función objetivo: {model.objective.expr()}\n")
 
 def objective_rule(model):
-    ruido_magnetometro = model.std_magnetometros
-    ruido_sensor_sol = model.std_sensor_sol  # Obtiene el valor actual de la variable
-    lim = model.lim
     # Llamar a la simulación con los valores de las variables
     if model.S_A_both == 0:
-        acc, psd, time, pot_b, masa_b, vol_b, pot_ss, masa_ss, vol_ss, pot_act, masa_act, vol_act = suite_sim_pyomo(model,ruido_magnetometro,ruido_sensor_sol,lim)
+        acc, psd, time, pot_b, masa_b, vol_b, pot_ss, masa_ss, vol_ss, pot_act, masa_act, vol_act = suite_sim_pyomo(model)
         # acc, psd, time, pot_b, masa_b, vol_b, pot_ss, masa_ss, vol_ss, pot_act, masa_act, vol_act = suite_sim_pyomo(model)
     elif model.S_A_both == 1:
-        acc, psd, time, pot_b, masa_b, vol_b, pot_ss, masa_ss, vol_ss, pot_act, masa_act, vol_act = suite_sim_pyomo(model,ruido_magnetometro,ruido_sensor_sol,lim)
+        acc, psd, time, pot_b, masa_b, vol_b, pot_ss, masa_ss, vol_ss, pot_act, masa_act, vol_act = suite_sim_pyomo(model)
         # acc, psd, time, pot_b, masa_b, vol_b, pot_ss, masa_ss, vol_ss, pot_act, masa_act, vol_act = suite_sim_pyomo(model)
     elif model.S_A_both == 2:
-        acc, psd, time, pot_b, masa_b, vol_b, pot_ss, masa_ss, vol_ss, pot_act, masa_act, vol_act = suite_sim_pyomo(model,ruido_magnetometro,ruido_sensor_sol,lim)
+        acc, psd, time, pot_b, masa_b, vol_b, pot_ss, masa_ss, vol_ss, pot_act, masa_act, vol_act = suite_sim_pyomo(model)
         # acc, psd, time, pot_b, masa_b, vol_b, pot_ss, masa_ss, vol_ss, pot_act, masa_act, vol_act = suite_sim_pyomo(model)
 
     # Selección de tipo de rendimiento
@@ -102,8 +99,8 @@ model.indices_P_i = pyo.Set(initialize=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
 
 # Definir las variables de decisión según tu problema
 if S_A_both == 0:
-    model.std_sensor_sol = pyo.Var(within=pyo.NonNegativeReals, bounds=(0.01, 1.67), initialize=0.2)
-    model.std_magnetometros = pyo.Var(within=pyo.NonNegativeReals, bounds=(0.012e-9, 3e-9), initialize=1.5e-9)
+    model.std_sensor_sol = pyo.Var(within=pyo.NonNegativeReals, bounds=(0.01, 1.67), initialize=0.6)
+    model.std_magnetometros = pyo.Var(within=pyo.NonNegativeReals, bounds=(0.012e-9, 3e-9), initialize=2e-9)
     if type_act == 0:
         model.lim = pyo.Param(initialize=5, mutable=False)
     if type_act == 1:
@@ -160,6 +157,7 @@ model.objective = pyo.Objective(rule=objective_rule, sense=pyo.minimize)
 solver = pyo.SolverFactory('baron', executable='C:\\baron\\baron.exe')
 # solver.options['NLPSubSolver'] = 'IPOPT'
 result = solver.solve(model, tee=True)
-
+print(result)
+# print(result.fun)
 # Guardar resultados
 save_res_txt("resultados.txt", model)

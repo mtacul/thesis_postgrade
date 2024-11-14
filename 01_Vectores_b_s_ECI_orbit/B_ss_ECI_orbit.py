@@ -16,7 +16,7 @@ from scipy.spatial.transform import Rotation
 # archivo_csv = "vectores_5.76_x5_k.csv"
 # archivo_csv = "vectores_10.2k.csv"
 # archivo_csv = "vectores_5.76k.csv"
-archivo_csv = "vectores_400k.csv"
+archivo_csv = "vectores_400k_1s.csv"
 
 # Leer el archivo CSV en un DataFrame de pandas
 df = pd.read_csv(archivo_csv)
@@ -229,7 +229,7 @@ plt.show()
 #%% Guardar vectores orbit en un .csv
 
 # Nombre del archivo
-archivo_c = "Vectores_orbit_ECI.csv"
+archivo_c = "Vectores_orbit_ECI_1s.csv"
 
 # Abrir el archivo en modo escritura
 with open(archivo_c, 'w') as f:

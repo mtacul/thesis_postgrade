@@ -78,7 +78,7 @@ else:
     #%% Propagacion SGP4 y obtencion de vectores magneticos y sol en ECI a traves del tiempo
     
     # Inicializa el tiempo actual un segundo despues del inicio
-    deltat = 2
+    deltat = 1
     current_time = start_time+ timedelta(seconds=deltat)
     current_time_gps = start_time_gps + timedelta(seconds=deltat)
     
@@ -339,7 +339,7 @@ else:
     #%% Guardar datos en un archivo csv
     
     # Nombre del archivo
-    archivo = "vectores_400k.csv"
+    archivo = "vectores_400k_1s.csv"
 
     # Abrir el archivo en modo escritura
     with open(archivo, 'w') as f:

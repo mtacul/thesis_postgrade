@@ -12,10 +12,11 @@ import matplotlib.pyplot as plt
 from scipy.linalg import solve_discrete_are
 from scipy.signal import welch
 import pyomo.environ as pyo
+import random
 
 # %% Cargar datos del .csv obtenido
 
-def suite_sim_pyomo(model,ruido_b,ruido_ss,lim):
+def suite_sim_pyomo(model):
     
     archivo_csv = "Vectores_orbit_ECI.csv"
     
@@ -87,12 +88,20 @@ def suite_sim_pyomo(model,ruido_b,ruido_ss,lim):
         
     #%% Caracteristicas del sensor
 
-    # ruido_ss = np.sin(ruido_ss*np.pi/180)
-    ruido_ss = pyo.Expression(expr=pyo.sin(ruido_ss * 3.1415 / 180))
+    # Definir las expresiones de ruido usando las variables de Pyomo
+    model.ruido_ss = pyo.Expression(expr=model.std_sensor_sol * np.pi / 180)
+    model.ruido_b = pyo.Expression(expr=model.std_magnetometros)
+    # ruido_ss = pyo.Expression(expr=pyo.sin(ruido_ss * 3.1415 / 180))
     # model.std_sensor_sol = pyo.Expression(expr=pyo.sin(model.std_sensor_sol * 3.1415 / 180))
     ruido_w = 0
     bias_w = 0
+    # ruido_b = model.std_magnetometros.value
+    # print(ruido_b)
+    # print(ruido_ss)
     
+    # Si necesitas los valores en una parte del código (ej. simulaciones):
+    ruido_ss_val = model.ruido_ss.expr()
+    ruido_b_val = model.ruido_b.expr()
     #%% Caracteristicas del actuador
 
     # lim = 1.19
@@ -129,10 +138,13 @@ def suite_sim_pyomo(model,ruido_b,ruido_ss,lim):
         x_real = np.hstack((np.transpose(q_real[:3]), np.transpose(w_gyros)))
         
         bi_orbit = [Bx_orbit[0],By_orbit[0],Bz_orbit[0]]
-        b_body_i = functions_06.rotacion_v(q_real, bi_orbit, ruido_b)
-        
+        # b_body_i = functions_06.rotacion_v(q_real, bi_orbit, ruido_b_val)
+        b_body_i = functions_06.rotacion_v(q_real, bi_orbit, model.ruido_b)
+
         si_orbit = [vx_sun_orbit[0],vy_sun_orbit[0],vz_sun_orbit[0]]
-        s_body_i = functions_06.rotacion_v(q_real, si_orbit, ruido_ss)
+        # s_body_i = functions_06.rotacion_v(q_real, si_orbit, ruido_ss_val)
+        s_body_i = functions_06.rotacion_v(q_real, si_orbit, model.ruido_ss)
+
         hh =0.01
         
     elif model.type_act == 1:
@@ -172,12 +184,11 @@ def suite_sim_pyomo(model,ruido_b,ruido_ss,lim):
         h_real = np.array([x_real[6]/I_s0_x-x_real[3], x_real[7]/I_s1_y-x_real[4], x_real[8]/I_s2_z-x_real[5]])
 
         bi_orbit = [Bx_orbit[0],By_orbit[0],Bz_orbit[0]]
-        # b_body_i = functions_06_rw.rotacion_v_pyomo(q_real, bi_orbit, ruido_b)
-        b_body_i = functions_06_rw.rotacion_v(q_real, bi_orbit, ruido_b)
-
+        # b_body_i = functions_06_rw.rotacion_v_pyomo(q_real, bi_orbit, ruido_b_val)
+        b_body_i = functions_06_rw.rotacion_v_pyomo(q_real, bi_orbit, model.ruido_b)
         si_orbit = [vx_sun_orbit[0],vy_sun_orbit[0],vz_sun_orbit[0]]
-        # s_body_i = functions_06_rw.rotacion_v_pyomo(q_real, si_orbit, ruido_ss)
-        s_body_i = functions_06_rw.rotacion_v(q_real, si_orbit, ruido_ss)
+        # s_body_i = functions_06_rw.rotacion_v_pyomo(q_real, si_orbit, ruido_ss_val)
+        s_body_i = functions_06_rw.rotacion_v_pyomo(q_real, si_orbit, model.ruido_ss)
 
         hh =0.01
         [A,B,C,A_discrete,B_discrete,C_discrete] = functions_06_rw.A_B(I_x,I_y,I_z,w0_O,0,0,0 , I_s0_x, I_s1_y, I_s2_z, 0,0,0, J_x, J_y, J_z, deltat, hh, bi_orbit,b_body_i, s_body_i)
@@ -247,18 +258,21 @@ def suite_sim_pyomo(model,ruido_b,ruido_ss,lim):
         K = np.linalg.inv(B_discrete.T @ P @ B_discrete + R) @ (B_discrete.T @ P @ A_discrete)
     
     #%% Simulacion dinamica de actitud
-    
+    limm = model.lim.value
+
     if model.type_act == 0:
         diagonal_values = np.array([0.5**2, 0.5**2, 0.5**2, 0.1**2, 0.1**2, 0.1**2])
         P_ki = np.diag(diagonal_values)
-        np.random.seed(42)
+        # np.random.seed(42)
+        random.seed(42)
+
         for i in range(len(t)-1):
             # print(t[i+1])
             q_est = np.array([q0_est[-1], q1_est[-1], q2_est[-1], q3_est[-1]])
             w_est = np.array([w0_est[-1], w1_est[-1], w2_est[-1]])
             x_est = np.hstack((np.transpose(q_est[:3]), np.transpose(w_est)))
             u_est = np.dot(-K,x_est)
-            u_est = functions_06.torquer(u_est,lim)
+            u_est = functions_06.torquer(u_est,limm)
         
             [xx_new_d, qq3_new_d] = functions_06.mod_lineal_disc(
                 x_real, u_est, deltat, hh, A_discrete,B_prom)
@@ -276,15 +290,18 @@ def suite_sim_pyomo(model,ruido_b,ruido_ss,lim):
             q_real = np.array([q0_real[-1], q1_real[-1], q2_real[-1], q3_real[-1]])
         
             b_orbit = [Bx_orbit[i+1],By_orbit[i+1],Bz_orbit[i+1]]
-            b_body_med = functions_06.rotacion_v(q_real, b_orbit,ruido_b)
-            
+            # b_body_med = functions_06.rotacion_v(q_real, b_orbit,ruido_b_val)
+            b_body_med = functions_06.rotacion_v_pyomo(q_real, b_orbit,model.ruido_b)
+
             s_orbit = [vx_sun_orbit[i+1],vy_sun_orbit[i+1],vz_sun_orbit[i+1]]
-            s_body_med = functions_06.rotacion_v(q_real, s_orbit,ruido_ss)
+            # s_body_med = functions_06.rotacion_v(q_real, s_orbit,ruido_ss_val)
+            s_body_med = functions_06.rotacion_v_pyomo(q_real, s_orbit,model.ruido_ss)
         
             [A,B,C,A_discrete,B_discrete,C_discrete] = functions_06.A_B(I_x, I_y, I_z, w0_O, 0, 0, 0, deltat, hh,b_orbit, b_body_med, s_body_med)
             
-            [q_posteriori, w_posteriori, P_k_pos,K_k] = functions_06.kalman_lineal(A_discrete, B_prom,C_discrete, x_est, u_est, b_orbit,b_body_med, s_orbit,s_body_med, P_ki, ruido_b,ruido_ss, deltat,hh,ruido_b,ruido_ss)
-        
+            [q_posteriori, w_posteriori, P_k_pos,K_k] = functions_06.kalman_lineal(A_discrete, B_prom,C_discrete, x_est, u_est, b_orbit,b_body_med, s_orbit,s_body_med, P_ki, ruido_b_val,ruido_ss_val, deltat,hh,ruido_b_val,ruido_ss_val)
+            # [q_posteriori, w_posteriori, P_k_pos,K_k] = functions_06.kalman_lineal(A_discrete, B_prom,C_discrete, x_est, u_est, b_orbit,b_body_med, s_orbit,s_body_med, P_ki, model.ruido_b, model.ruido_ss, deltat,hh,model.ruido_b,model.ruido_ss)
+
             q0_est.append(q_posteriori[0])
             q1_est.append(q_posteriori[1])
             q2_est.append(q_posteriori[2])
@@ -298,7 +315,9 @@ def suite_sim_pyomo(model,ruido_b,ruido_ss,lim):
     elif model.type_act == 1:
         diagonal_values = np.array([0.5**2, 0.5**2, 0.5**2, 0.1**2, 0.1**2, 0.1**2,0.01**2,0.01**2,0.01**2])
         P_ki = np.diag(diagonal_values)
-        np.random.seed(42)
+        # np.random.seed(42)
+        random.seed(42)
+
         for i in range(len(t)-1):
             # print(t[i+1])
             q_est = np.array([q0_est[-1], q1_est[-1], q2_est[-1], q3_est[-1]])
@@ -307,8 +326,7 @@ def suite_sim_pyomo(model,ruido_b,ruido_ss,lim):
         
             x_est = np.hstack((np.transpose(q_est[:3]), np.transpose(w_est), np.transpose(ws_est)))
             u_est = np.dot(-K,x_est)
-        
-            u_est = functions_06_rw.torquer(u_est,lim)
+            u_est = functions_06_rw.torquer(u_est,model.lim)
         
             [xx_new_d, qq3_new_d] = functions_06_rw.mod_lineal_disc(
                 x_real, u_est, deltat, hh, A_discrete,B_discrete)
@@ -330,15 +348,18 @@ def suite_sim_pyomo(model,ruido_b,ruido_ss,lim):
             h_real = np.array([x_real[6]/I_s0_x-x_real[3], x_real[7]/I_s1_y-x_real[4], x_real[8]/I_s2_z-x_real[5]])
         
             b_orbit = [Bx_orbit[i+1],By_orbit[i+1],Bz_orbit[i+1]]
-            b_body_med = functions_06.rotacion_v(q_real, b_orbit,ruido_b)
-            
+            # b_body_med = functions_06.rotacion_v(q_real, b_orbit,ruido_b_val)
+            b_body_med = functions_06.rotacion_v_pyomo(q_real, b_orbit,model.ruido_b)
+
             s_orbit = [vx_sun_orbit[i],vy_sun_orbit[i],vz_sun_orbit[i]]
-            s_body_med = functions_06.rotacion_v(q_real, s_orbit,ruido_ss)
-        
+            # s_body_med = functions_06.rotacion_v(q_real, s_orbit,ruido_ss_val)
+            s_body_med = functions_06.rotacion_v_pyomo(q_real, s_orbit,model.ruido_ss)
+
             [A,B,C,A_discrete,B_discrete,C_discrete] = functions_06_rw.A_B(I_x,I_y,I_z,w0_O, 0,0,0, I_s0_x, I_s1_y, I_s2_z,0,0,0, J_x, J_y, J_z,  deltat, hh,b_orbit, b_body_med, s_body_med)
             
-            [q_posteriori, w_posteriori, P_k_pos,K_k, ws_posteriori] = functions_06_rw.kalman_lineal(A_discrete, B_discrete,C_discrete, x_est, u_est, b_orbit,b_body_med, s_orbit, s_body_med, P_ki,ruido_b, ruido_ss, deltat,hh,h_real,I_s0_x, I_s1_y, I_s2_z, ruido_b,ruido_ss)
-            
+            [q_posteriori, w_posteriori, P_k_pos,K_k, ws_posteriori] = functions_06_rw.kalman_lineal(A_discrete, B_discrete,C_discrete, x_est, u_est, b_orbit,b_body_med, s_orbit, s_body_med, P_ki,ruido_b_val, ruido_ss_val, deltat,hh,h_real,I_s0_x, I_s1_y, I_s2_z, ruido_b_val,ruido_ss_val)
+            # [q_posteriori, w_posteriori, P_k_pos,K_k, ws_posteriori] = functions_06_rw.kalman_lineal(A_discrete, B_discrete,C_discrete, x_est, u_est, b_orbit,b_body_med, s_orbit, s_body_med, P_ki,model.ruido_b, model.ruido_ss, deltat,hh,h_real,I_s0_x, I_s1_y, I_s2_z, model.ruido_b,model.ruido_ss)
+
             q0_est.append(q_posteriori[0])
             q1_est.append(q_posteriori[1])
             q2_est.append(q_posteriori[2])
@@ -350,7 +371,7 @@ def suite_sim_pyomo(model,ruido_b,ruido_ss,lim):
             w1s_est.append(ws_posteriori[1])
             w2s_est.append(ws_posteriori[2])
             P_ki = P_k_pos
-        
+    # print(q0_est) 
     [MSE_cuat, MSE_omega]  = functions_06.cuat_MSE_NL(q0_real, q1_real, q2_real, q3_real, w0_real, w1_real, w2_real, q0_est, q1_est, q2_est, q3_est, w0_est, w1_est, w2_est)   
     [RPY_all_est,RPY_all_id,mse_roll,mse_pitch,mse_yaw] = functions_06.RPY_MSE(t, q0_est, q1_est, q2_est, q3_est, q0_real, q1_real, q2_real, q3_real)   
           
@@ -360,6 +381,7 @@ def suite_sim_pyomo(model,ruido_b,ruido_ss,lim):
     Pitch_low_pass_1 = RPY_all_id[:,1]
     Yaw_low_pass_1 = RPY_all_id[:,2]
     Roll_1 = RPY_all_est[:,0]
+    # print(Roll_1)
     Pitch_1 = RPY_all_est[:,1]
     Yaw_1 = RPY_all_est[:,2]
     RPY_1 = np.transpose(np.vstack((Roll_1,Pitch_1,Yaw_1)))
@@ -445,7 +467,7 @@ def suite_sim_pyomo(model,ruido_b,ruido_ss,lim):
     start_index_P_1 = None
     settling_time_indices_Y_1 = []
     start_index_Y_1 = None
-
+    
 
     for i in range(len(Roll_low_pass_1)):
         if Roll_low_pass_1[i] <= settling_error_sup_R[i] and Roll_low_pass_1[i] >= settling_error_inf_R[i]:
@@ -461,6 +483,7 @@ def suite_sim_pyomo(model,ruido_b,ruido_ss,lim):
 
     if settling_time_indices_R_1:
         settling_times_R_1 = []
+        print(settling_times_R_1)
         for start, end in settling_time_indices_R_1:
             settling_times_R_1.append((t_aux[start], t_aux[end]))
     else:
@@ -634,50 +657,40 @@ def suite_sim_pyomo(model,ruido_b,ruido_ss,lim):
     # Show the plot (optional)
     plt.show()
     
-    
-    # fig0, axes0 = plt.subplots(nrows=3, ncols=1, figsize=(13, 8))
 
-    # axes0[0].plot(t, Roll_low_pass_1, label= {'magnetorquer'})
-    # axes0[0].set_xlabel('Tiempo [s]')
-    # axes0[0].set_ylabel('Roll [°]')
-    # axes0[0].legend()
-    # axes0[0].grid()
-    # axes0[0].set_xlim(0, 30000)  # Ajusta los límites en el eje Y
-
-    # axes0[1].plot(t, Pitch_low_pass_1, label={'magnetorquer'},color='orange')
-    # axes0[1].set_xlabel('Tiempo [s]')
-    # axes0[1].set_ylabel('Pitch [°]')
-    # axes0[1].legend()
-    # axes0[1].grid()
-    # axes0[1].set_xlim(0, 30000) # Ajusta los límites en el eje Y
-    # # axes0[1].set_ylim(-20, -5)  # Ajusta los límites en el eje Y
-    
-    # axes0[2].plot(t, Yaw_low_pass_1, label={'magnetorquer'},color='green')
-    # axes0[2].set_xlabel('Tiempo [s]')
-    # axes0[2].set_ylabel('Yaw [°]')
-    # axes0[2].legend()
-    # axes0[2].grid()
-    # axes0[2].set_xlim(0, 30000)  # Ajusta los límites en el eje Y
-
-    # plt.tight_layout()
-    
-    # # Save the plot as an SVG file
-    # # plt.savefig('plot.svg', format='svg')
-
-    # # Show the plot (optional)
-    # plt.show()
     
     #%% Funciones de costo
     
+    #Magnetometros
+    pot_b = 4.04e-6*(model.ruido_b)**(-0.48) 
+    masa_b = 6.5e-3*(model.ruido_b)**(-0.11) 
+    vol_b = model.ruido_b + 69.1
+    
+    #Sensores de sol
+    pot_ss = 3.45e-2*(model.ruido_ss)**(-0.66) 
+    masa_ss = 5.43e-3*(model.ruido_ss)**(-0.89) 
+    vol_ss = 1.86e1*(model.ruido_ss)**(-0.22)
+    
+    if model.type_act == 0:
+        #Magnetorquers
+        pot_act = 6.27e-1*(model.lim)**(0.34) / 2.658
+        masa_act = 9.58e-2*(model.lim)**(0.68) / 1.722
+        vol_act = 1.99e2*(model.lim)**(0.18)
+    elif model.type_act == 1:
+        #Ruedas de reaccion
+        pot_act = 1.75e1*(model.lim)**(0.35) / 10.77 #maximo 10.77
+        masa_act = 6.15e0*(model.lim)**(0.45) /3.296 #maximo 3.296
+        vol_act = 3.68e3*(model.lim)**(0.39)
+    
     # #Magnetometros
-    # pot_b = 4.04e-6*(model.std_magnetometros)**(-0.48) 
-    # masa_b = 6.5e-3*(model.std_magnetometros)**(-0.11) 
-    # vol_b = model.std_magnetometros + 69.1
+    # pot_b = 4.04e-6*(ruido_b_val)**(-0.48) 
+    # masa_b = 6.5e-3*(ruido_b_val)**(-0.11) 
+    # vol_b = ruido_b_val + 69.1
     
     # #Sensores de sol
-    # pot_ss = 3.45e-2*(model.std_sensor_sol)**(-0.66) 
-    # masa_ss = 5.43e-3*(model.std_sensor_sol)**(-0.89) 
-    # vol_ss = 1.86e1*(model.std_sensor_sol)**(-0.22)
+    # pot_ss = 3.45e-2*(ruido_ss_val)**(-0.66) 
+    # masa_ss = 5.43e-3*(ruido_ss_val)**(-0.89) 
+    # vol_ss = 1.86e1*(ruido_ss_val)**(-0.22)
     
     # if model.type_act == 0:
     #     #Magnetorquers
@@ -688,28 +701,7 @@ def suite_sim_pyomo(model,ruido_b,ruido_ss,lim):
     #     #Ruedas de reaccion
     #     pot_act = 1.75e1*(model.lim)**(0.35) / 10.77 #maximo 10.77
     #     masa_act = 6.15e0*(model.lim)**(0.45) /3.296 #maximo 3.296
-    #     vol_act = 3.68e3*(model.lim)**(0.39)
-    
-    #Magnetometros
-    pot_b = 4.04e-6*(ruido_b)**(-0.48) 
-    masa_b = 6.5e-3*(ruido_b)**(-0.11) 
-    vol_b = ruido_b + 69.1
-    
-    #Sensores de sol
-    pot_ss = 3.45e-2*(ruido_ss)**(-0.66) 
-    masa_ss = 5.43e-3*(ruido_ss)**(-0.89) 
-    vol_ss = 1.86e1*(ruido_ss)**(-0.22)
-    
-    if model.type_act == 0:
-        #Magnetorquers
-        pot_act = 6.27e-1*(lim)**(0.34) / 2.658
-        masa_act = 9.58e-2*(lim)**(0.68) / 1.722
-        vol_act = 1.99e2*(lim)**(0.18)
-    elif model.type_act == 1:
-        #Ruedas de reaccion
-        pot_act = 1.75e1*(lim)**(0.35) / 10.77 #maximo 10.77
-        masa_act = 6.15e0*(lim)**(0.45) /3.296 #maximo 3.296
-        vol_act = 3.68e3*(lim)**(0.39)            
+    #     vol_act = 3.68e3*(model.lim)**(0.39)            
     #%% Guardar en un archivo
 
     return accuracy_cost, psd_norm, time_cost, pot_b, masa_b, vol_b,pot_ss, masa_ss, vol_ss, pot_act, masa_act, vol_act

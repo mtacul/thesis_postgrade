@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.9.16)  25 OCT 2024 19:28
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.9.16)  25 OCT 2024 22:50
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1766,17 +1766,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 17--22
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 
-Overfull \hbox (3.9862pt too wide) in paragraph at lines 74--98
- [][] 
- []
-
-
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 
 
 [51]
-Overfull \hbox (10.20529pt too wide) in paragraph at lines 105--106
+Overfull \hbox (10.20529pt too wide) in paragraph at lines 104--105
 \OT1/cmr/m/n/12 En esta secci^^Son se pre-sen-tar^^San an^^Salisis re-specto a 
 los re-sul-ta-dos obtenidos uti-lizando los par^^Sametros
  []
@@ -1787,7 +1782,7 @@ los re-sul-ta-dos obtenidos uti-lizando los par^^Sametros
 <MT_RW_nivel2.pdf, id=481, 939.51pt x 578.16pt>
 File: MT_RW_nivel2.pdf Graphic file (type pdf)
 <use MT_RW_nivel2.pdf>
-Package pdftex.def Info: MT_RW_nivel2.pdf  used on input line 117.
+Package pdftex.def Info: MT_RW_nivel2.pdf  used on input line 116.
 (pdftex.def)             Requested size: 471.67047pt x 290.25261pt.
 
 
@@ -1799,7 +1794,7 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 <PD_LQR_nivel2.pdf, id=527, 939.51pt x 578.16pt>
 File: PD_LQR_nivel2.pdf Graphic file (type pdf)
 <use PD_LQR_nivel2.pdf>
-Package pdftex.def Info: PD_LQR_nivel2.pdf  used on input line 153.
+Package pdftex.def Info: PD_LQR_nivel2.pdf  used on input line 152.
 (pdftex.def)             Requested size: 471.67047pt x 290.25261pt.
 
 
@@ -1807,7 +1802,7 @@ Package pdftex.def Info: PD_LQR_nivel2.pdf  used on input line 153.
 <MT_LQR_sensores.pdf, id=576, 1228.59pt x 578.16pt>
 File: MT_LQR_sensores.pdf Graphic file (type pdf)
 <use MT_LQR_sensores.pdf>
-Package pdftex.def Info: MT_LQR_sensores.pdf  used on input line 188.
+Package pdftex.def Info: MT_LQR_sensores.pdf  used on input line 187.
 (pdftex.def)             Requested size: 471.67047pt x 221.9615pt.
 
 
@@ -1815,7 +1810,7 @@ Package pdftex.def Info: MT_LQR_sensores.pdf  used on input line 188.
 <RW_LQR_sensores.pdf, id=580, 1228.59pt x 578.16pt>
 File: RW_LQR_sensores.pdf Graphic file (type pdf)
 <use RW_LQR_sensores.pdf>
-Package pdftex.def Info: RW_LQR_sensores.pdf  used on input line 222.
+Package pdftex.def Info: RW_LQR_sensores.pdf  used on input line 221.
 (pdftex.def)             Requested size: 471.67047pt x 221.9615pt.
 
 
@@ -1825,7 +1820,7 @@ Package pdftex.def Info: RW_LQR_sensores.pdf  used on input line 222.
 <MT_LQR_actuadores.pdf, id=673, 1228.59pt x 578.16pt>
 File: MT_LQR_actuadores.pdf Graphic file (type pdf)
 <use MT_LQR_actuadores.pdf>
-Package pdftex.def Info: MT_LQR_actuadores.pdf  used on input line 262.
+Package pdftex.def Info: MT_LQR_actuadores.pdf  used on input line 261.
 (pdftex.def)             Requested size: 471.67047pt x 221.9615pt.
 
 
@@ -1837,7 +1832,7 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 <RW_LQR_actuadores.pdf, id=721, 1228.59pt x 578.16pt>
 File: RW_LQR_actuadores.pdf Graphic file (type pdf)
 <use RW_LQR_actuadores.pdf>
-Package pdftex.def Info: RW_LQR_actuadores.pdf  used on input line 298.
+Package pdftex.def Info: RW_LQR_actuadores.pdf  used on input line 297.
 (pdftex.def)             Requested size: 471.67047pt x 221.9615pt.
 
 
@@ -1988,22 +1983,75 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 ]
 
 [71] (./Formato-MT-Latex.bbl
+Underfull \hbox (badness 2401) in paragraph at lines 20--22
+[]\OT1/cmr/m/n/12 H. Schaub and J. L. Junk-ins, ``An-a-lyt-i-cal me-chan-ics of
+ space sys-tems,'' 2003.
+ []
+
+
 
 [72
 
 
 ]
+Overfull \hbox (22.68619pt too wide) in paragraph at lines 107--109
+[]\OT1/cmr/m/n/12 P. S. Sys-tem, ``Space-craft con-trol tool-box,'' 2017.  http
+://support.psatellite.com//sct/index.php. 
+ []
 
-[73])
+
+Overfull \hbox (43.92763pt too wide) in paragraph at lines 111--114
+[]\OT1/cmr/m/n/12 Mathworks, ``Model and sim-u-late cube-sats,'' 2023.  https:/
+/la.mathworks.com/help/aeroblks/model-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 120--122
+[]\OT1/cmr/m/n/12 U. of Col-orado, L. for At-mo-spheric, and S. Physics, ``Basi
+lisk,'' 2024.
+ []
+
+
+
+[73]
 
 [74]
+Overfull \hbox (1.82806pt too wide) in paragraph at lines 262--264
+[]\OT1/cmr/m/n/12 Z. Tech-nik, ``Mag-ne-tor-quer mt0.5-1,'' 2024.  https://www.
+satcatalog.com/component/mt05-
+ []
+
+
+Overfull \hbox (11.48491pt too wide) in paragraph at lines 266--268
+[]\OT1/cmr/m/n/12 N. sys-tems, ``Mag-ne-tor-quer nctr-m012,'' 2024.  https://ww
+w.satcatalog.com/component/nctr-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 274--276
+[]\OT1/cmr/m/n/12 B. C. Tech-nolo-gies, ``Rueda de reacci^^Son rwp500,'' 2024.
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 278--280
+[]\OT1/cmr/m/n/12 B. C. Tech-nolo-gies, ``Rueda de reacci^^Son rw1,'' 2024.
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 282--284
+[]\OT1/cmr/m/n/12 B. C. Tech-nolo-gies, ``Rueda de reacci^^Son rw4,'' 2024.
+ []
+
+)
+
+[75]
 \openout2 = `Z1-CartaGantt.aux'.
 
  (./Z1-CartaGantt.tex
 
 pdfTeX warning: pdflatex.exe (file ./Carta-Gantt_Tesis_Matias Tacul_1.pdf): PDF
  inclusion: found PDF version <1.6>, but at most version <1.5> allowed
-<Carta-Gantt_Tesis_Matias Tacul_1.pdf, id=1374, 845.07718pt x 597.55246pt>
+<Carta-Gantt_Tesis_Matias Tacul_1.pdf, id=1377, 845.07718pt x 597.55246pt>
 File: Carta-Gantt_Tesis_Matias Tacul_1.pdf Graphic file (type pdf)
 <use Carta-Gantt_Tesis_Matias Tacul_1.pdf>
 Package pdftex.def Info: Carta-Gantt_Tesis_Matias Tacul_1.pdf  used on input li
@@ -2013,7 +2061,7 @@ ne 9.
 
 pdfTeX warning: pdflatex.exe (file ./Carta-Gantt_Tesis_Matias Tacul_2.pdf): PDF
  inclusion: found PDF version <1.6>, but at most version <1.5> allowed
-<Carta-Gantt_Tesis_Matias Tacul_2.pdf, id=1375, 845.07718pt x 597.55246pt>
+<Carta-Gantt_Tesis_Matias Tacul_2.pdf, id=1378, 845.07718pt x 597.55246pt>
 File: Carta-Gantt_Tesis_Matias Tacul_2.pdf Graphic file (type pdf)
 <use Carta-Gantt_Tesis_Matias Tacul_2.pdf>
 Package pdftex.def Info: Carta-Gantt_Tesis_Matias Tacul_2.pdf  used on input li
@@ -2021,27 +2069,27 @@ ne 18.
 (pdftex.def)             Requested size: 534.88634pt x 378.21979pt.
 
 
-[75
+[76
 
  <./Carta-Gantt_Tesis_Matias Tacul_1.pdf>])
 
-[76 <./Carta-Gantt_Tesis_Matias Tacul_2.pdf>]
+[77 <./Carta-Gantt_Tesis_Matias Tacul_2.pdf>]
 \openout2 = `Z2-Torques.aux'.
 
  (./Z2-Torques.tex
 
-[77
+[78
 
 
 
 ])
 
-[78]
+[79]
 \openout2 = `Z3-Conversion.aux'.
 
  (./Z3-Conversion.tex)
 
-[79
+[80
 
 
 
@@ -2056,20 +2104,20 @@ Overfull \hbox (2.78821pt too wide) in paragraph at lines 1--1
 
 
 
-[80
+[81
 
 
 
 ]
 
-[81])
+[82])
 
-[82]
+[83]
 \openout2 = `Z5-Magnetorquer.aux'.
 
  (./Z5-Magnetorquer.tex
 
-[83
+[84
 
 
 
@@ -2093,29 +2141,29 @@ Overfull \hbox (1.93242pt too wide) detected at line 103
 
 
 
-[84])
+[85])
 
-[85]
+[86]
 \openout2 = `Z6-RuedaReaccion.aux'.
 
  (./Z6-RuedaReaccion.tex
 
-[86
+[87
 
 
 
 ]
 
-[87]
+[88]
 
-[88])
+[89])
 
-[89]
+[90]
 \openout2 = `Z7-Componentes.aux'.
 
  (./Z7-Componentes.tex
 
-[90
+[91
 
 
 
@@ -2127,115 +2175,114 @@ LaTeX Warning: Command \o invalid in math mode on input line 88.
 LaTeX Warning: Command \o invalid in math mode on input line 90.
 
 
-
-[91]
-
-LaTeX Warning: Command \o invalid in math mode on input line 163.
+LaTeX Warning: Command \o invalid in math mode on input line 127.
 
 
-LaTeX Warning: Command \o invalid in math mode on input line 168.
+LaTeX Warning: Command \o invalid in math mode on input line 132.
 
-)
 
-[92]
+
+[92])
 
 [93]
+
+[94]
 \openout2 = `Z8-MoP.aux'.
 
  (./Z8-MoP.tex
-<RPY_highpass.pdf, id=1495, 867.24pt x 433.62pt>
+<RPY_highpass.pdf, id=1498, 867.24pt x 433.62pt>
 File: RPY_highpass.pdf Graphic file (type pdf)
 <use RPY_highpass.pdf>
 Package pdftex.def Info: RPY_highpass.pdf  used on input line 14.
 (pdftex.def)             Requested size: 437.62888pt x 218.81427pt.
-<psd_roll.pdf, id=1496, 722.7pt x 433.62pt>
+<psd_roll.pdf, id=1499, 722.7pt x 433.62pt>
 File: psd_roll.pdf Graphic file (type pdf)
 <use psd_roll.pdf>
 Package pdftex.def Info: psd_roll.pdf  used on input line 24.
 (pdftex.def)             Requested size: 389.00757pt x 233.40364pt.
 
 
-[94
+[95
 
 
 
  <./RPY_highpass.pdf>]
-<psd_pitch.pdf, id=1540, 722.7pt x 433.62pt>
+<psd_pitch.pdf, id=1543, 722.7pt x 433.62pt>
 File: psd_pitch.pdf Graphic file (type pdf)
 <use psd_pitch.pdf>
 Package pdftex.def Info: psd_pitch.pdf  used on input line 31.
 (pdftex.def)             Requested size: 389.00757pt x 233.40364pt.
-<psd_yaw.pdf, id=1541, 722.7pt x 433.62pt>
+<psd_yaw.pdf, id=1544, 722.7pt x 433.62pt>
 File: psd_yaw.pdf Graphic file (type pdf)
 <use psd_yaw.pdf>
 Package pdftex.def Info: psd_yaw.pdf  used on input line 38.
 (pdftex.def)             Requested size: 389.00757pt x 233.40364pt.
 
 
-[95 <./psd_roll.pdf> <./psd_pitch.pdf>]
-<time_roll.pdf, id=1630, 505.89pt x 505.89pt>
+[96 <./psd_roll.pdf> <./psd_pitch.pdf>]
+<time_roll.pdf, id=1634, 505.89pt x 505.89pt>
 File: time_roll.pdf Graphic file (type pdf)
 <use time_roll.pdf>
 Package pdftex.def Info: time_roll.pdf  used on input line 52.
 (pdftex.def)             Requested size: 291.75752pt x 291.76448pt.
 
 
-[96 <./psd_yaw.pdf>]
-<time_pitch.pdf, id=1679, 505.89pt x 505.89pt>
+[97 <./psd_yaw.pdf>]
+<time_pitch.pdf, id=1682, 505.89pt x 505.89pt>
 File: time_pitch.pdf Graphic file (type pdf)
 <use time_pitch.pdf>
 Package pdftex.def Info: time_pitch.pdf  used on input line 59.
 (pdftex.def)             Requested size: 291.75752pt x 291.76448pt.
-<time_yaw.pdf, id=1680, 505.89pt x 505.89pt>
+<time_yaw.pdf, id=1683, 505.89pt x 505.89pt>
 File: time_yaw.pdf Graphic file (type pdf)
 <use time_yaw.pdf>
 Package pdftex.def Info: time_yaw.pdf  used on input line 66.
 (pdftex.def)             Requested size: 291.75752pt x 291.76448pt.
 
 
-[97 <./time_roll.pdf> <./time_pitch.pdf>]
-<roll_DNormal.pdf, id=1759, 462.52798pt x 346.89601pt>
+[98 <./time_roll.pdf> <./time_pitch.pdf>]
+<roll_DNormal.pdf, id=1762, 462.52798pt x 346.89601pt>
 File: roll_DNormal.pdf Graphic file (type pdf)
 <use roll_DNormal.pdf>
 Package pdftex.def Info: roll_DNormal.pdf  used on input line 78.
 (pdftex.def)             Requested size: 316.06447pt x 237.06125pt.
 
 
-[98 <./time_yaw.pdf>]
-<pitch_DNormal.pdf, id=1802, 462.52798pt x 346.89601pt>
+[99 <./time_yaw.pdf>]
+<pitch_DNormal.pdf, id=1805, 462.52798pt x 346.89601pt>
 File: pitch_DNormal.pdf Graphic file (type pdf)
 <use pitch_DNormal.pdf>
 Package pdftex.def Info: pitch_DNormal.pdf  used on input line 85.
 (pdftex.def)             Requested size: 316.06447pt x 237.06125pt.
-<yaw_DNormal.pdf, id=1803, 462.52798pt x 346.89601pt>
+<yaw_DNormal.pdf, id=1806, 462.52798pt x 346.89601pt>
 File: yaw_DNormal.pdf Graphic file (type pdf)
 <use yaw_DNormal.pdf>
 Package pdftex.def Info: yaw_DNormal.pdf  used on input line 92.
 (pdftex.def)             Requested size: 316.06447pt x 237.06125pt.
 )
 
-[99 <./Roll_DNormal.pdf> <./Pitch_DNormal.pdf>]
+[100 <./Roll_DNormal.pdf> <./Pitch_DNormal.pdf>]
 
-[100 <./Yaw_DNormal.pdf>]
+[101 <./Yaw_DNormal.pdf>]
 \openout2 = `Z9-Funcionescosto.aux'.
 
  (./Z9-Funcionescosto.tex
-<potencia_ss.pdf, id=1930, 433.62pt x 289.08pt>
+<potencia_ss.pdf, id=1933, 433.62pt x 289.08pt>
 File: potencia_ss.pdf Graphic file (type pdf)
 <use potencia_ss.pdf>
 Package pdftex.def Info: potencia_ss.pdf  used on input line 8.
 (pdftex.def)             Requested size: 291.75752pt x 194.51627pt.
-<masa_ss.pdf, id=1931, 433.62pt x 289.08pt>
+<masa_ss.pdf, id=1934, 433.62pt x 289.08pt>
 File: masa_ss.pdf Graphic file (type pdf)
 <use masa_ss.pdf>
 Package pdftex.def Info: masa_ss.pdf  used on input line 14.
 (pdftex.def)             Requested size: 291.75752pt x 194.51627pt.
-<potencia_MT.pdf, id=1932, 433.62pt x 289.08pt>
+<potencia_MT.pdf, id=1935, 433.62pt x 289.08pt>
 File: potencia_MT.pdf Graphic file (type pdf)
 <use potencia_MT.pdf>
 Package pdftex.def Info: potencia_MT.pdf  used on input line 26.
 (pdftex.def)             Requested size: 291.75752pt x 194.51627pt.
-<masa_MT.pdf, id=1933, 433.62pt x 289.08pt>
+<masa_MT.pdf, id=1936, 433.62pt x 289.08pt>
 File: masa_MT.pdf Graphic file (type pdf)
 <use masa_MT.pdf>
 Package pdftex.def Info: masa_MT.pdf  used on input line 32.
@@ -2244,12 +2291,12 @@ Package pdftex.def Info: masa_MT.pdf  used on input line 32.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<potencia_RW.pdf, id=1934, 433.62pt x 289.08pt>
+<potencia_RW.pdf, id=1937, 433.62pt x 289.08pt>
 File: potencia_RW.pdf Graphic file (type pdf)
 <use potencia_RW.pdf>
 Package pdftex.def Info: potencia_RW.pdf  used on input line 44.
 (pdftex.def)             Requested size: 291.75752pt x 194.51627pt.
-<masa_RW.pdf, id=1935, 433.62pt x 289.08pt>
+<masa_RW.pdf, id=1938, 433.62pt x 289.08pt>
 File: masa_RW.pdf Graphic file (type pdf)
 <use masa_RW.pdf>
 Package pdftex.def Info: masa_RW.pdf  used on input line 50.
@@ -2259,20 +2306,20 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 
 )
 
-[101
+[102
 
 
 
  <./potencia_ss.pdf> <./masa_ss.pdf>]
 
-[102 <./potencia_MT.pdf> <./masa_MT.pdf>]
+[103 <./potencia_MT.pdf> <./masa_MT.pdf>]
 
-[103 <./potencia_RW.pdf> <./masa_RW.pdf>]
+[104 <./potencia_RW.pdf> <./masa_RW.pdf>]
 \openout2 = `Z10-Codigo.aux'.
 
  (./Z10-Codigo.tex)
 
-[104
+[105
 
 
 
@@ -2293,10 +2340,10 @@ L3 programming layer <2024-08-30>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 24677 strings out of 473578
- 472357 string characters out of 5732242
- 971826 words of memory out of 5000000
- 46967 multiletter control sequences out of 15000+600000
+ 24692 strings out of 473578
+ 472462 string characters out of 5732242
+ 971888 words of memory out of 5000000
+ 46982 multiletter control sequences out of 15000+600000
  569672 words of font info for 75 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  94i,17n,93p,2400b,982s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -2320,10 +2367,10 @@ ve/2024/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb><c:/texlive/2024/te
 xmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb><c:/texlive/2024/texmf-dist/f
 onts/type1/public/cm-super/sfrm1095.pfb><c:/texlive/2024/texmf-dist/fonts/type1
 /public/cm-super/sfrm1200.pfb>
-Output written on Formato-MT-Latex.pdf (111 pages, 8450395 bytes).
+Output written on Formato-MT-Latex.pdf (112 pages, 8451623 bytes).
 PDF statistics:
- 2350 PDF objects out of 2487 (max. 8388607)
- 634 compressed objects within 7 object streams
+ 2353 PDF objects out of 2487 (max. 8388607)
+ 636 compressed objects within 7 object streams
  0 named destinations out of 1000 (max. 500000)
  323 words of extra memory for PDF output out of 10000 (max. 10000000)
 

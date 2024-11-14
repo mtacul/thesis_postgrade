@@ -232,9 +232,9 @@ psd_RPY_2 = np.array([psd_bandwidth_2_R,psd_bandwidth_2_P,psd_bandwidth_2_Y])
 
 #%% Encontrar el tiempo de asentamiento en segundos de cada angulo de Euler
 
-settling_band_R = 5
-settling_band_P = 5
-settling_band_Y = 5
+settling_band_R = 2.5
+settling_band_P = 2.5
+settling_band_Y = 2.5
 
 settling_error_sup_R = np.full(len(t_aux),settling_band_R)
 settling_error_inf_R = np.full(len(t_aux),-settling_band_R)

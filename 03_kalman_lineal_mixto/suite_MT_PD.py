@@ -35,7 +35,7 @@ vsun_z = array_datos[:, 12]
 
 deltat = 2
 # limite =  5762*69
-limite =  5762*4
+limite =  5762*3
 t = np.arange(0, limite, deltat)
 
 #%% Parámetros geométricos y orbitales dados
@@ -137,14 +137,16 @@ b_body_i = functions_03.rotacion_v(q_real, bi_orbit, sigma_b)
 
 si_orbit = [vx_sun_orbit[0],vy_sun_orbit[0],vz_sun_orbit[0]]
 s_body_i = functions_03.rotacion_v(q_real, si_orbit, sigma_ss)
-hh =0.01
-
+hh = deltat
+hh_mod = 0.2
 
 #%% Obtencion de un B_prom representativo
 
 [A,B,C,A_discrete,B_discrete,C_discrete] = functions_03.A_B(I_x, I_y, I_z, w0_O, 0, 0, 0, deltat, hh, bi_orbit,b_body_i, s_body_i)
+[A_mod,B_mod,C_mod,A_discrete_mod,B_discrete_mod,C_discrete_mod] = functions_03.A_B(I_x, I_y, I_z, w0_O, 0, 0, 0, deltat, hh_mod, bi_orbit,b_body_i, s_body_i)
 
 B_matrices = [B_discrete]
+B_matrices_mod = [B_discrete_mod]
 
 for i in range(len(t[0:2882])-1):
 # for i in range(len(t)-1):
@@ -156,17 +158,24 @@ for i in range(len(t[0:2882])-1):
     b_orbit = [Bx_orbit[i+1],By_orbit[i+1],Bz_orbit[i+1]]
 
     [A,B,C,A_discrete,B_discrete,C_discrete] = functions_03.A_B(I_x, I_y, I_z, w0_O, 0, 0, 0, deltat, hh,b_orbit, np.zeros(3), np.zeros(3))
+    [A_mod,B_mod,C_mod,A_discrete_mod,B_discrete_mod,C_discrete_mod] = functions_03.A_B(I_x, I_y, I_z, w0_O, 0, 0, 0, deltat, hh_mod,b_orbit, np.zeros(3), np.zeros(3))
 
     B_matrices.append(B_discrete)
+    B_matrices_mod.append(B_discrete_mod)
 
 Bs_a = np.array(B_matrices)
+Bs_a_mod = np.array(B_matrices_mod)
 
-B_concanate = []    
+B_concanate = []  
+B_concanate_mod = []    
+  
 for ii in range(len(Bs_a[0,:,0])):
     for jj in range(len(Bs_a[0,0,:])):
         B_concanate.append(np.sum(Bs_a[:,ii,jj]) / len(Bs_a[:,ii,jj]))
+        B_concanate_mod.append(np.sum(Bs_a_mod[:,ii,jj]) / len(Bs_a_mod[:,ii,jj]))
 
 B_prom = np.vstack((B_concanate[0:3],B_concanate[3:6],B_concanate[6:9],B_concanate[9:12],B_concanate[12:15],B_concanate[15:18]))
+B_prom_mod = np.vstack((B_concanate_mod[0:3],B_concanate_mod[3:6],B_concanate_mod[6:9],B_concanate_mod[9:12],B_concanate_mod[12:15],B_concanate_mod[15:18]))
 
 #%% Control PD
 
@@ -214,7 +223,7 @@ for i in range(len(t)-1):
     u_est = functions_03.torquer(u_est,lim)
 
     [xx_new_d, qq3_new_d] = functions_03.mod_lineal_disc(
-        x_real, u_est, deltat, hh, A_discrete,B_prom)
+        x_real, u_est, deltat, hh_mod, A_discrete_mod,B_prom_mod)
     
     x_real = xx_new_d
     w_gyros = functions_03.simulate_gyros_reading(x_real[3:6],ruido_w,bias_w)

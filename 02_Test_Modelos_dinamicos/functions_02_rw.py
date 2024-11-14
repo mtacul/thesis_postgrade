@@ -181,9 +181,9 @@ def rk4_step_PD(dynamics, x, A, B, u, h):
 
 
 def mod_lineal_cont(x,u,deltat,h,A,B):
-    
+    x_new = x
     for j in range(int(deltat/h)):
-        q_rot,w_new,ws_new = rk4_step_PD(dynamics, x, A, B, u, h)
+        q_rot,w_new,ws_new = rk4_step_PD(dynamics, x_new, A, B, u, h)
         if  1-q_rot[0]**2-q_rot[1]**2-q_rot[2]**2 < 0:
             q_rot = q_rot / np.linalg.norm(q_rot)
             x_new = np.hstack((np.transpose(q_rot), np.transpose(w_new),np.transpose(ws_new)))
@@ -198,9 +198,9 @@ def mod_lineal_cont(x,u,deltat,h,A,B):
 #%% Modelo lineal discreto
 
 def mod_lineal_disc(x,u,deltat, h,A_discrete,B_discrete):
-        
-    for i in range(int(1/h)):
-        x_k_1 = np.dot(A_discrete,x) + np.dot(B_discrete,u)
+    x_new = x
+    for i in range(int(deltat/h)):
+        x_k_1 = np.dot(A_discrete,x_new) + np.dot(B_discrete,u)
         q_rot = x_k_1[0:3]
         w_new = x_k_1[3:6]
         ws_new = x_k_1[6:9]
@@ -409,14 +409,14 @@ def mod_nolineal(x,u,deltat,h, I_x,I_y,I_z,w0_O, I_s0, I_s1, I_s2, J_x, J_y, J_z
     tau_x_per = 0
     tau_y_per = 0
     tau_z_per = 0
-
+    x_new = x
     for j in range(int(deltat/h)):
-        t, q0, q1, q2, q3, w0, w1, w2, w_s0, w_s1, w_s2 = deltat, x[0], x[1], x[2], q3s_rot, x[3], x[4], x[5], x[6], x[7], x[8]
+        t, q0, q1, q2, q3, w0, w1, w2, w_s0, w_s1, w_s2 = deltat, x_new[0], x_new[1], x_new[2], q3s_rot, x_new[3], x_new[4], x_new[5], x_new[6], x_new[7], x_new[8]
         q_rot, w_new,ws_new = rk4_EKF_step(t, q0, q1, q2,q3, w0, w1, w2,w_s0,w_s1,w_s2, h,tau_x_ctrl,tau_x_per,tau_y_ctrl,tau_y_per,tau_z_ctrl,tau_z_per,I_x,I_y,I_z,w0_O, I_s0, I_s1, I_s2, J_x, J_y, J_z)
-    
-    q_rot_trunc = q_rot[0:3]
-    x_new = np.hstack((np.transpose(q_rot_trunc), np.transpose(w_new), np.transpose(ws_new)))
-    
+        q_rot_trunc = q_rot[0:3]
+        x_new = np.hstack((np.transpose(q_rot_trunc), np.transpose(w_new), np.transpose(ws_new)))
+        
+
     return x_new, q_rot[3]
 
 #%% Mean Square Error para cuaterniones y velocidad angular

@@ -10,3 +10,12 @@ x resultados_typeact0_saboth0_typerendacc_typesolverNelder-Mead.txt: [3.95860131
 f resultados_typeact0_saboth0_typerendacc_typesolverNelder-Mead.txt: 3.4748471857400416
 type_solver: Nelder-Mead
 ------------------------
+x resultados_typeact0_saboth0_typerendacc.txt: [5.00000000e-01 1.37177727e-09]
+f resultados_typeact0_saboth0_typerendacc.txt: 3.569340807442577
+------------------------
+x resultados_typeact0_saboth0_typerendacc.txt: [5.00000000e-01 1.50000123e-09]
+f resultados_typeact0_saboth0_typerendacc.txt: 3.5712572398802336
+------------------------
+x resultados_typeact0_saboth0_typerendacc.txt: [3.93891130e-01 2.82935165e-09]
+f resultados_typeact0_saboth0_typerendacc.txt: 3.4753753167984267
+------------------------

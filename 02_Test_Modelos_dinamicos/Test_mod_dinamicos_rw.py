@@ -84,7 +84,7 @@ w0 = 0
 w1 = 0
 w2 = 0
 
-hh =0.01
+hh =0.02
 
 #%% Simulación de los modelos dinámico lineales y no lineales
 
@@ -153,8 +153,8 @@ for i in range(len(t)-1):
     bb_body_nl = functions_02_rw.rotacion_v(qq_nl, bb_orbit, 0)
     ss_body_nl = functions_02_rw.rotacion_v(qq_nl, ss_orbit, 0)
     
-    [A,B,C,A_discrete,B_discrete,C_discrete] = functions_02_rw.A_B(I_x,I_y,I_z,w0_O, w0,w1,w2, I_s0_x, I_s1_y, I_s2_z, 0,0,0, J_x, J_y, J_z, deltat, hh,bb_orbit, bb_body, ss_body)
-    [A_disc,B_disc,C_disc,A_discrete_disc,B_discrete_disc,C_discrete_disc] = functions_02_rw.A_B(I_x,I_y,I_z,w0_O, w0,w1,w2, I_s0_x, I_s1_y, I_s2_z, 0,0,0, J_x, J_y, J_z, deltat, hh,bb_orbit, bb_body_disc, ss_body_disc)
+    [A,B,C,A_discrete,B_discrete,C_discrete] = functions_02_rw.A_B(I_x,I_y,I_z,w0_O, 0,0,0, I_s0_x, I_s1_y, I_s2_z, 0,0,0, J_x, J_y, J_z, deltat, hh,bb_orbit, bb_body, ss_body)
+    [A_disc,B_disc,C_disc,A_discrete_disc,B_discrete_disc,C_discrete_disc] = functions_02_rw.A_B(I_x,I_y,I_z,w0_O, 0,0,0, I_s0_x, I_s1_y, I_s2_z, 0,0,0, J_x, J_y, J_z, deltat, hh,bb_orbit, bb_body_disc, ss_body_disc)
 
     [xx_new, qq3_new] = functions_02_rw.mod_lineal_cont(xx,uu,deltat,hh,A,B)
     [xx_new_d, qq3_new_d] = functions_02_rw.mod_lineal_disc(xx_disc,uu_disc,deltat,hh,A_discrete_disc,B_discrete_disc)

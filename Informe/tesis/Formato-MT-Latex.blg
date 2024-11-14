@@ -10,8 +10,8 @@ A level-1 auxiliary file: C2-Marco_Teorico.aux
 A level-1 auxiliary file: C3-Estado_del_Arte.aux
 A level-1 auxiliary file: C4-Diseno_de_la_suite_de_simulacion.aux
 A level-1 auxiliary file: C5-Verificacion_de_la_suite_de_simulacion.aux
-A level-1 auxiliary file: C6-Aplicacion_y_validacion_de_optimizacion_en_Python.aux
-A level-1 auxiliary file: C7-Conclusiones.aux
+A level-1 auxiliary file: C6-Aplicacion_de_optimizacion_en_Python.aux
+A level-1 auxiliary file: C8-Conclusiones.aux
 The style file: ieeetr.bst
 A level-1 auxiliary file: Z1-CartaGantt.aux
 A level-1 auxiliary file: Z2-Torques.aux
@@ -21,47 +21,49 @@ A level-1 auxiliary file: Z5-Magnetorquer.aux
 A level-1 auxiliary file: Z6-RuedaReaccion.aux
 A level-1 auxiliary file: Z7-Componentes.aux
 A level-1 auxiliary file: Z8-MoP.aux
-A level-1 auxiliary file: Z9-Codigo.aux
+A level-1 auxiliary file: Z9-Funcionescosto.aux
+A level-1 auxiliary file: Z10-Codigo.aux
 Database file #1: Referencias.bib
-You're missing a field name---line 447 of file Referencias.bib
+Warning--I'm ignoring ref18's extra "note" field
+--line 173 of file Referencias.bib
+You're missing a field name---line 431 of file Referencias.bib
  :   booktitle = {Electronic Design Automation}, 
  :                                               % Reemplaza esto con el título del libro
 I'm skipping whatever remains of this entry
-Warning--I didn't find a database entry for "8"
 Warning--empty publisher in ref46
 Warning--empty year in ref46
 Warning--empty booktitle in ref37
 Warning--empty booktitle in ref44
-You've used 46 entries,
+You've used 61 entries,
             1876 wiz_defined-function locations,
-            710 strings with 11257 characters,
-and the built_in function-call counts, 9604 in all, are:
-= -- 738
-> -- 683
+            772 strings with 12908 characters,
+and the built_in function-call counts, 11551 in all, are:
+= -- 924
+> -- 743
 < -- 0
-+ -- 251
-- -- 205
-* -- 677
-:= -- 1519
-add.period$ -- 68
-call.type$ -- 46
-change.case$ -- 40
++ -- 281
+- -- 220
+* -- 737
+:= -- 1798
+add.period$ -- 95
+call.type$ -- 61
+change.case$ -- 55
 chr.to.int$ -- 0
-cite$ -- 50
-duplicate$ -- 389
-empty$ -- 940
-format.name$ -- 205
-if$ -- 2252
+cite$ -- 65
+duplicate$ -- 449
+empty$ -- 1210
+format.name$ -- 220
+if$ -- 2753
 int.to.chr$ -- 0
-int.to.str$ -- 46
+int.to.str$ -- 61
 missing$ -- 32
-newline$ -- 165
-num.names$ -- 46
-pop$ -- 270
+newline$ -- 222
+num.names$ -- 61
+pop$ -- 374
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 218
+skip$ -- 267
 stack$ -- 0
 substring$ -- 154
 swap$ -- 88
@@ -70,7 +72,7 @@ text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
 warning$ -- 4
-while$ -- 60
-width$ -- 48
-write$ -- 409
+while$ -- 75
+width$ -- 63
+write$ -- 538
 (There was 1 error message)

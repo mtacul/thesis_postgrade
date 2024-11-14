@@ -36,7 +36,7 @@ vsun_z = array_datos[:, 12]
 
 deltat = 2
 # limite =  5762*69
-limite =  5762*4
+limite =  5762*3
 t = np.arange(0, limite, deltat)
 
 #%% Parámetros geométricos y orbitales dados
@@ -46,6 +46,11 @@ w0_O = 0.00163
 I_x = 0.037
 I_y = 0.036
 I_z = 0.006
+
+# w0_O = 7.292115e-5 #rad/s
+# I_x = 1030.17 #kgm^2
+# I_y = 3015.65 #kgm^2
+# I_z = 3030.43 #kgm^2
 
 #%% Selección de nivel de sensor
 
@@ -110,7 +115,7 @@ lim = lim_tau_values[opcion_tau]
 # q= np.array([0,0.7071,0,0.7071])
 # q= np.array([0,0,0,1])
 q = np.array([0.0789,0.0941,0.0789,0.9893])
-w = np.array([0.0001, 0.0001, 0.0001])
+w = np.array([0.0001, 0.0001, 0.0001])*100
 # q_est = np.array([0.00985969, 0.70703804, 0.00985969, 0.70703804])
 # q_est= np.array([0.0120039,0.0116517,0.0160542,0.999731])
 q_est = np.array([0.0789,0.0941,0.0789,0.9893])
@@ -140,13 +145,16 @@ b_body_i = functions_03.rotacion_v(q_real, bi_orbit, 1e-6)
 
 si_orbit = [vx_sun_orbit[0],vy_sun_orbit[0],vz_sun_orbit[0]]
 s_body_i = functions_03.rotacion_v(q_real, si_orbit, 0.036)
-hh =0.01
-
+hh = deltat
+hh_mod = 0.2
 
 #%% Obtencion de un B_prom representativo
 
 [A,B,C,A_discrete,B_discrete,C_discrete] = functions_03.A_B(I_x, I_y, I_z, w0_O, 0, 0, 0, deltat, hh, bi_orbit,b_body_i, s_body_i)
+[A_mod,B_mod,C_mod,A_discrete_mod,B_discrete_mod,C_discrete_mod] = functions_03.A_B(I_x, I_y, I_z, w0_O, 0, 0, 0, deltat, hh_mod, bi_orbit,b_body_i, s_body_i)
+
 B_matrices = [B_discrete]
+B_matrices_mod = [B_discrete_mod]
 
 for i in range(len(t[0:2882])-1):
 # for i in range(len(t)-1):
@@ -158,26 +166,35 @@ for i in range(len(t[0:2882])-1):
     b_orbit = [Bx_orbit[i+1],By_orbit[i+1],Bz_orbit[i+1]]
 
     [A,B,C,A_discrete,B_discrete,C_discrete] = functions_03.A_B(I_x, I_y, I_z, w0_O, 0, 0, 0, deltat, hh,b_orbit, np.zeros(3), np.zeros(3))
+    [A_mod,B_mod,C_mod,A_discrete_mod,B_discrete_mod,C_discrete_mod] = functions_03.A_B(I_x, I_y, I_z, w0_O, 0, 0, 0, deltat, hh_mod,b_orbit, np.zeros(3), np.zeros(3))
 
     B_matrices.append(B_discrete)
-
+    B_matrices_mod.append(B_discrete_mod)
+    
 Bs_a = np.array(B_matrices)
+Bs_a_mod = np.array(B_matrices_mod)
 
-B_concanate = []    
+B_concanate = [] 
+B_concanate_mod = []    
+   
 for ii in range(len(Bs_a[0,:,0])):
     for jj in range(len(Bs_a[0,0,:])):
         B_concanate.append(np.sum(Bs_a[:,ii,jj]) / len(Bs_a[:,ii,jj]))
+        B_concanate_mod.append(np.sum(Bs_a_mod[:,ii,jj]) / len(Bs_a_mod[:,ii,jj]))
 
 B_prom = np.vstack((B_concanate[0:3],B_concanate[3:6],B_concanate[6:9],B_concanate[9:12],B_concanate[12:15],B_concanate[15:18]))
+B_prom_mod = np.vstack((B_concanate_mod[0:3],B_concanate_mod[3:6],B_concanate_mod[6:9],B_concanate_mod[9:12],B_concanate_mod[12:15],B_concanate_mod[15:18]))
 
 #%% Control LQR
 
-# Definir las matrices Q y R del coste del LQR
+## Definir las matrices Q y R del coste del LQR (antes del cagazo)
 # diag_Q = np.array([100, 1000000, 10000, 0.1, 0.1, 0.10, 0.01, 10, 10])*10000
+# diag_R = np.array([0.1,0.1,0.1])*100000 
+# 
+# diag_Q = np.array([100, 10, 100, 0.1, 0.1, 0.1])*1000000
 # diag_R = np.array([0.1,0.1,0.1])*100000
-diag_Q = np.array([100, 10, 100, 0.1, 0.1, 0.1])*1000000
-diag_R = np.array([0.1,0.1,0.1])*100000
-
+diag_Q = np.array([10, 10, 10, 1000, 1000, 1000])
+diag_R = np.array([0.1,0.1,0.1])*10
 Q = np.diag(diag_Q)
 R = np.diag(diag_R)
 
@@ -192,7 +209,7 @@ K = np.linalg.inv(B_prom.T @ P @ B_prom + R) @ (B_prom.T @ P @ A_discrete)
 diagonal_values = np.array([0.5**2, 0.5**2, 0.5**2, 0.1**2, 0.1**2, 0.1**2])
 P_ki = np.diag(diagonal_values)
 np.random.seed(42)
-
+us = []
 for i in range(len(t)-1):
     print(t[i+1])
     q_est = np.array([q0_est[-1], q1_est[-1], q2_est[-1], q3_est[-1]])
@@ -200,9 +217,9 @@ for i in range(len(t)-1):
     x_est = np.hstack((np.transpose(q_est[:3]), np.transpose(w_est)))
     u_est = np.dot(-K,x_est)
     u_est = functions_03.torquer(u_est,lim)
-
+    us.append(u_est)
     [xx_new_d, qq3_new_d] = functions_03.mod_lineal_disc(
-        x_real, u_est, deltat, hh, A_discrete,B_prom)
+        x_real, u_est, deltat, hh_mod, A_discrete_mod,B_prom_mod)
     
     x_real = xx_new_d
     w_gyros = functions_03.simulate_gyros_reading(x_real[3:6],ruido_w,bias_w)
@@ -354,6 +371,7 @@ axes0[0].set_ylabel('Roll [°]')
 axes0[0].legend()
 axes0[0].grid()
 axes0[0].set_xlim(0, 30000)  # Ajusta los límites en el eje Y
+axes0[0].set_ylim(-10, 10)  # Ajusta los límites en el eje Y
 
 axes0[1].plot(t, RPY_all_est[:,1], label={'magnetorquer'},color='orange')
 axes0[1].set_xlabel('Tiempo [s]')
@@ -361,7 +379,7 @@ axes0[1].set_ylabel('Pitch [°]')
 axes0[1].legend()
 axes0[1].grid()
 axes0[1].set_xlim(0, 30000) # Ajusta los límites en el eje Y
-# axes0[1].set_ylim(-20, -5)  # Ajusta los límites en el eje Y
+axes0[1].set_ylim(-10, 10)  # Ajusta los límites en el eje Y
 
 axes0[2].plot(t, RPY_all_est[:,2], label={'magnetorquer'},color='green')
 axes0[2].set_xlabel('Tiempo [s]')
@@ -369,6 +387,7 @@ axes0[2].set_ylabel('Yaw [°]')
 axes0[2].legend()
 axes0[2].grid()
 axes0[2].set_xlim(0, 30000)  # Ajusta los límites en el eje Y
+axes0[2].set_ylim(-10, 10)  # Ajusta los límites en el eje Y
 
 plt.tight_layout()
 

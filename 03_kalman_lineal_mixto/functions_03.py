@@ -88,7 +88,7 @@ def A_PD(I_x,I_y,I_z,w0_O, w0,w1,w2):
 def B_PD(I_x,I_y,I_z,B_magnet):
     b_norm = np.linalg.norm(B_magnet)
     B123 = np.zeros((3,3))
-    B4 = np.array([(-(B_magnet[2]**2)-B_magnet[1]**2)/(b_norm*I_x), B_magnet[1]*B_magnet[0]/(b_norm*I_x), B_magnet[2]*B_magnet[0]/(b_norm*I_x)])
+    B4 = np.array([((-B_magnet[2]**2)-B_magnet[1]**2)/(b_norm*I_x), B_magnet[1]*B_magnet[0]/(b_norm*I_x), B_magnet[2]*B_magnet[0]/(b_norm*I_x)])
     B5 = np.array([B_magnet[0]*B_magnet[1]/(b_norm*I_y), (-B_magnet[2]**2-B_magnet[0]**2)/(b_norm*I_y), B_magnet[2]*B_magnet[1]/(b_norm*I_y)])
     B6 = np.array([B_magnet[0]*B_magnet[2]/(b_norm*I_z), B_magnet[1]*B_magnet[2]/(b_norm*I_z), (-B_magnet[1]**2-B_magnet[0]**2)/(b_norm*I_z)])
     
@@ -182,9 +182,9 @@ def dynamics(A, x, B, u):
     return np.dot(A, x) + np.dot(B, u)
 
 def mod_lineal_cont(x,u,deltat,h,A,B):
-    
+    x_new = x    
     for j in range(int(deltat/h)):
-        q_rot,w_new = rk4_step_PD(dynamics, x, A, B, u, h)
+        q_rot,w_new = rk4_step_PD(dynamics, x_new, A, B, u, h)
         if  1-q_rot[0]**2-q_rot[1]**2-q_rot[2]**2 < 0:
             q_rot = q_rot / np.linalg.norm(q_rot)
             x_new = np.hstack((np.transpose(q_rot), np.transpose(w_new)))
@@ -198,9 +198,9 @@ def mod_lineal_cont(x,u,deltat,h,A,B):
 #%% Modelo lineal discreto
 
 def mod_lineal_disc(x,u,deltat, h,A_discrete,B_discrete):
-        
-    for i in range(int(1/h)):
-        x_k_1 = np.dot(A_discrete,x) + np.dot(B_discrete,u)
+    x_new = x      
+    for i in range(int(deltat/h)):
+        x_k_1 = np.dot(A_discrete,x_new) + np.dot(B_discrete,u)
         q_rot = x_k_1[0:3]
         w_new = x_k_1[3:6]
     

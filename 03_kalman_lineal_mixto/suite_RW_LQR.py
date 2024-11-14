@@ -36,7 +36,7 @@ vsun_z = array_datos[:, 12]
 
 deltat = 2
 # limite =  5762*69
-limite =  5762*4
+limite =  5762*3
 t = np.arange(0, limite, deltat)
 
 #%% Parámetros geométricos y orbitales dados
@@ -170,16 +170,21 @@ b_body_i = functions_03_rw.rotacion_v(q_real, bi_orbit, sigma_b)
 
 si_orbit = [vx_sun_orbit[0],vy_sun_orbit[0],vz_sun_orbit[0]]
 s_body_i = functions_03_rw.rotacion_v(q_real, si_orbit, sigma_ss)
-hh =0.01
+hh = deltat
+hh_mod = 0.2
 
 [A,B,C,A_discrete,B_discrete,C_discrete] = functions_03_rw.A_B(I_x,I_y,I_z,w0_O,0,0,0 , I_s0_x, I_s1_y, I_s2_z, 0,0,0, J_x, J_y, J_z, deltat, hh, bi_orbit,b_body_i, s_body_i)
+[A_mod,B_mod,C_mod,A_discrete_mod,B_discrete_mod,C_discrete_mod] = functions_03_rw.A_B(I_x,I_y,I_z,w0_O,0,0,0 , I_s0_x, I_s1_y, I_s2_z, 0,0,0, J_x, J_y, J_z, deltat, hh_mod, bi_orbit,b_body_i, s_body_i)
 
 #%% Control LQR
 
 # Definir las matrices Q y R del coste del LQR
-diag_Q = np.array([100, 1000000, 10000, 0.1, 0.1, 0.10, 0.01, 10, 10])*10000
-diag_R = np.array([0.1,0.1,0.1])*100000
-
+# diag_Q = np.array([100, 1000000, 10000, 0.1, 0.1, 0.10, 0.01, 10, 10])*10000
+# diag_R = np.array([0.1,0.1,0.1])*100000
+# diag_Q = np.array([100000, 100000, 1000000, 10000, 10000, 10000, 1000000, 1000000, 1000000])*1000
+# diag_R = np.array([0.1,10,0.1])*10
+diag_Q = np.array([10000, 1, 100, 100, 100, 100, 1000, 1000, 1000])
+diag_R = np.array([0.1,10,0.1])*10
 Q = np.diag(diag_Q)
 R = np.diag(diag_R)
 
@@ -209,7 +214,7 @@ for i in range(len(t)-1):
     us.append(u_est)
 
     [xx_new_d, qq3_new_d] = functions_03_rw.mod_lineal_disc(
-        x_real, u_est, deltat, hh, A_discrete,B_discrete)
+        x_real, u_est, deltat, hh_mod, A_discrete_mod,B_discrete_mod)
     
     x_real = xx_new_d
     w_gyros = functions_03_rw.simulate_gyros_reading(x_real[3:6],ruido_w,bias_w)

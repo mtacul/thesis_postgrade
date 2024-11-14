@@ -59,18 +59,18 @@
 \contentsline {subsubsection}{\numberline {6.2.2}Análisis caso de optimización complejo.}{65}{}%
 \contentsline {subsubsection}{\numberline {6.2.3}Análisis de Convexidad y Elección del Método de Optimización}{67}{}%
 \contentsline {section}{\numberline {7}Conclusiones}{70}{}%
-\contentsline {section}{Anexo \numberline {A}Carta Gantt}{75}{}%
-\contentsline {section}{Anexo \numberline {B}Torques externos debido a las perturbaciones}{77}{}%
-\contentsline {section}{Anexo \numberline {C}Cambios en los sistemas de referencia}{79}{}%
-\contentsline {section}{Anexo \numberline {D}Procedimiento a seguir para el uso del filtro de Kalman}{80}{}%
-\contentsline {section}{Anexo \numberline {E}Control lineal Magnetorquer}{83}{}%
-\contentsline {section}{Anexo \numberline {F}Control lineal Rueda de reacción}{86}{}%
-\contentsline {section}{Anexo \numberline {G}Componentes utilizados para Capitulo 5}{90}{}%
-\contentsline {subsection}{\numberline {G.1}Giroscopios}{90}{}%
-\contentsline {subsection}{\numberline {G.2}Magnetometros}{90}{}%
-\contentsline {subsection}{\numberline {G.3}Sensores de sol}{91}{}%
-\contentsline {subsection}{\numberline {G.4}Ruedas de reacción}{92}{}%
-\contentsline {subsection}{\numberline {G.5}Magnetorquers}{92}{}%
-\contentsline {section}{Anexo \numberline {H}Implementación de los resultados de los MoP de apuntamiento}{94}{}%
-\contentsline {section}{Anexo \numberline {I}Funciones de costo componentes ADCS}{101}{}%
-\contentsline {section}{Anexo \numberline {J}Código en Python}{104}{}%
+\contentsline {section}{Anexo \numberline {A}Carta Gantt}{76}{}%
+\contentsline {section}{Anexo \numberline {B}Torques externos debido a las perturbaciones}{78}{}%
+\contentsline {section}{Anexo \numberline {C}Cambios en los sistemas de referencia}{80}{}%
+\contentsline {section}{Anexo \numberline {D}Procedimiento a seguir para el uso del filtro de Kalman}{81}{}%
+\contentsline {section}{Anexo \numberline {E}Control lineal Magnetorquer}{84}{}%
+\contentsline {section}{Anexo \numberline {F}Control lineal Rueda de reacción}{87}{}%
+\contentsline {section}{Anexo \numberline {G}Componentes utilizados para Capitulo 5}{91}{}%
+\contentsline {subsection}{\numberline {G.1}Giroscopios}{91}{}%
+\contentsline {subsection}{\numberline {G.2}Magnetometros}{91}{}%
+\contentsline {subsection}{\numberline {G.3}Sensores de sol}{92}{}%
+\contentsline {subsection}{\numberline {G.4}Magnetorquers}{93}{}%
+\contentsline {subsection}{\numberline {G.5}Ruedas de reacción}{93}{}%
+\contentsline {section}{Anexo \numberline {H}Implementación de los resultados de los MoP de apuntamiento}{95}{}%
+\contentsline {section}{Anexo \numberline {I}Funciones de costo componentes ADCS}{102}{}%
+\contentsline {section}{Anexo \numberline {J}Código en Python}{105}{}%

@@ -34,18 +34,18 @@
 \contentsline {figure}{\numberline {6.5}{\ignorespaces Grilla 20x20x6 caso número 2 de estudio de optimización.}}{67}{}%
 \contentsline {figure}{\numberline {6.6}{\ignorespaces Comparación de los resultados de la función objetivo compleja con diferentes condiciones iniciales.}}{68}{}%
 \contentsline {figure}{\numberline {6.7}{\ignorespaces Comparación de los resultados de la función objetivo compleja con condiciones iniciales extremas.}}{69}{}%
-\contentsline {figure}{\numberline {A.1}{\ignorespaces Carta Gantt parte 1.}}{75}{}%
-\contentsline {figure}{\numberline {A.2}{\ignorespaces Carta Gantt parte 2.}}{76}{}%
-\contentsline {figure}{\numberline {H.1}{\ignorespaces Filtro pasa alto de 10 Hz en la respuesta al sistema de sensores y actuadores de nivel alto.}}{94}{}%
-\contentsline {figure}{\numberline {H.2}{\ignorespaces Densidad espectro potencia en ancho de banda seleccionada para Roll.}}{95}{}%
-\contentsline {figure}{\numberline {H.3}{\ignorespaces Densidad espectro potencia en ancho de banda seleccionada para Pitch.}}{95}{}%
-\contentsline {figure}{\numberline {H.4}{\ignorespaces Densidad espectro potencia en ancho de banda seleccionada para Yaw.}}{96}{}%
-\contentsline {figure}{\numberline {H.5}{\ignorespaces Banda de asentamiento Roll en modelo dinámico.}}{97}{}%
-\contentsline {figure}{\numberline {H.6}{\ignorespaces Banda de asentamiento Pitch en modelo dinámico.}}{97}{}%
-\contentsline {figure}{\numberline {H.7}{\ignorespaces Banda de asentamiento Yaw en modelo dinámico.}}{98}{}%
-\contentsline {figure}{\numberline {H.8}{\ignorespaces Histograma de valores con distribución normal en Roll.}}{99}{}%
-\contentsline {figure}{\numberline {H.9}{\ignorespaces Histograma de valores con distribución normal en Pitch.}}{99}{}%
-\contentsline {figure}{\numberline {H.10}{\ignorespaces Histograma de valores con distribución normal en Yaw.}}{100}{}%
-\contentsline {figure}{\numberline {I.1}{\ignorespaces Datos de masa y potencia promedio de sensores de sol y su ajuste potencial.}}{101}{}%
-\contentsline {figure}{\numberline {I.2}{\ignorespaces Datos de masa y potencia promedio de magnetorquers y su ajuste potencial.}}{102}{}%
-\contentsline {figure}{\numberline {I.3}{\ignorespaces Datos de masa y potencia promedio de ruedas de reacción y su ajuste potencial.}}{103}{}%
+\contentsline {figure}{\numberline {A.1}{\ignorespaces Carta Gantt parte 1.}}{76}{}%
+\contentsline {figure}{\numberline {A.2}{\ignorespaces Carta Gantt parte 2.}}{77}{}%
+\contentsline {figure}{\numberline {H.1}{\ignorespaces Filtro pasa alto de 10 Hz en la respuesta al sistema de sensores y actuadores de nivel alto.}}{95}{}%
+\contentsline {figure}{\numberline {H.2}{\ignorespaces Densidad espectro potencia en ancho de banda seleccionada para Roll.}}{96}{}%
+\contentsline {figure}{\numberline {H.3}{\ignorespaces Densidad espectro potencia en ancho de banda seleccionada para Pitch.}}{96}{}%
+\contentsline {figure}{\numberline {H.4}{\ignorespaces Densidad espectro potencia en ancho de banda seleccionada para Yaw.}}{97}{}%
+\contentsline {figure}{\numberline {H.5}{\ignorespaces Banda de asentamiento Roll en modelo dinámico.}}{98}{}%
+\contentsline {figure}{\numberline {H.6}{\ignorespaces Banda de asentamiento Pitch en modelo dinámico.}}{98}{}%
+\contentsline {figure}{\numberline {H.7}{\ignorespaces Banda de asentamiento Yaw en modelo dinámico.}}{99}{}%
+\contentsline {figure}{\numberline {H.8}{\ignorespaces Histograma de valores con distribución normal en Roll.}}{100}{}%
+\contentsline {figure}{\numberline {H.9}{\ignorespaces Histograma de valores con distribución normal en Pitch.}}{100}{}%
+\contentsline {figure}{\numberline {H.10}{\ignorespaces Histograma de valores con distribución normal en Yaw.}}{101}{}%
+\contentsline {figure}{\numberline {I.1}{\ignorespaces Datos de masa y potencia promedio de sensores de sol y su ajuste potencial.}}{102}{}%
+\contentsline {figure}{\numberline {I.2}{\ignorespaces Datos de masa y potencia promedio de magnetorquers y su ajuste potencial.}}{103}{}%
+\contentsline {figure}{\numberline {I.3}{\ignorespaces Datos de masa y potencia promedio de ruedas de reacción y su ajuste potencial.}}{104}{}%

@@ -44,15 +44,20 @@ b_body_i = functions_06_rw.rotacion_v(q_real, bi_orbit, 0)
 si_orbit = [vx_sun_orbit[0],vy_sun_orbit[0],vz_sun_orbit[0]]
 s_body_i = functions_06_rw.rotacion_v(q_real, si_orbit, 0)
 t = np.arange(0, limite, deltat)
-w0_O = 0.00163
+# w0_O = 0.00163
 
-I_x = 0.037
-I_y = 0.036
-I_z = 0.006
+# I_x = 0.037
+# I_y = 0.036
+# I_z = 0.006
 
+w0_O = 7.292115e-5 #rad/s
+I_x = 1030.17 #kgm^2
+I_y = 3015.65 #kgm^2
+I_z = 3030.43 #kgm^2
 
 [A,B,C,A_discrete,B_discrete,C_discrete] = functions_06.A_B(I_x, I_y, I_z, w0_O, 0, 0, 0, deltat, hh, bi_orbit,b_body_i, s_body_i)
-B_matrices = [B_discrete]
+# B_matrices = [B_discrete]
+B_matrices = [B]
 
 for i in range(len(t[0:2882])-1):
 
@@ -62,7 +67,8 @@ for i in range(len(t[0:2882])-1):
 
     [A,B,C,A_discrete,B_discrete,C_discrete] = functions_06.A_B(I_x, I_y, I_z, w0_O, 0, 0, 0, deltat, hh,b_orbit, np.zeros(3), np.zeros(3))
 
-    B_matrices.append(B_discrete)
+    # B_matrices.append(B_discrete)
+    B_matrices.append(B)
 
 Bs_a = np.array(B_matrices)
 
@@ -73,9 +79,10 @@ for ii in range(len(Bs_a[0,:,0])):
 
 B_prom = np.vstack((B_concanate[0:3],B_concanate[3:6],B_concanate[6:9],B_concanate[9:12],B_concanate[12:15],B_concanate[15:18]))
 
+# B_prom = np.zeros((6,3))
 C = np.eye(6)
 D = np.zeros((6, 3))
-sys_ss = ctrl.ss(A, B, C, D)
+sys_ss = ctrl.ss(A, B_prom, C, D)
 sys_tf = ctrl.ss2tf(sys_ss)
 
 # #%%
@@ -104,6 +111,9 @@ sys_tf = ctrl.ss2tf(sys_ss)
 #         plt.ylim(-1,1)
 #         plt.grid(True)
 #         plt.show()
+
+
+
 
 #%%
 
@@ -135,7 +145,76 @@ for i in range(num_outputs):  # Para cada salida
         ax.set_title(f'sys_tf[{i}, {j}]')
         ax.set_xlabel('Tiempo [s]')
         ax.set_ylabel('Amplitud')
-        ax.set_ylim(-1, 1)
+        # ax.set_ylim(-1, 1)
+        ax.grid(True)
+
+# Ajustar el espaciado entre las subgráficas
+plt.tight_layout()
+plt.subplots_adjust(top=0.9)  # Dejar espacio para el título principal
+plt.show()
+#%%
+
+w0 = 7.292115e-5 #rad/s
+Ix = 1030.17 #kgm^2
+Iy = 3015.65 #kgm^2
+Iz = 3030.43 #kgm^2
+
+Ixy = Ix - Iy
+Ixyz = Ix - Iy -Iz
+Iyz = Iy - Iz
+Ixz = Ix - Iz
+Iyx= Iy - Ix
+Iyxz = Iy -Ix - Iz
+Iyzx = Iy - Iz- Ix
+
+AA = np.array([
+    [0, 0,0, 1, 0, 0],
+    [0, 0, 0, 0, 1, 0],
+    [0, 0, 0, 0, 0, 1],
+    [(-4*Iyz*w0**2)/ Ix, 0, 0, 0, 0, (-Iyzx*w0)/Ix],
+    [0, (-3*Ixz*w0**2)/Iy, 0, 0, 0, 0],
+    [0, 0, (-Iyx*w0**2)/Iz, (Iyxz*w0**2)/Iz, 0, 0]])
+
+BB =  np.array([
+    [0, 0,0],
+    [0, 0, 0],
+    [0, 0, 0],
+    [1/ Ix, 0, 1],
+    [0, 1/Iy, 0],
+    [0, 0, 1/Iz]])
+    
+sys_ss = ctrl.ss(AA, BB, C, D)
+sys_tf = ctrl.ss2tf(sys_ss)
+
+# Supongamos que sys_tf es tu matriz de funciones de transferencia
+
+num_outputs = 6
+num_inputs = 3
+
+# Definir el tiempo de simulación
+t_impulse = np.linspace(0, 5762*3, 10000*3)  # Tiempo de simulación
+
+# Crear un grid de 6x3 para las subgráficas
+fig, axs = plt.subplots(num_outputs, num_inputs, figsize=(15, 10))
+fig.suptitle('Respuestas a un Impulso del Sistema')
+
+# Recorrer cada función de transferencia en el sistema
+for i in range(num_outputs):  # Para cada salida
+    for j in range(num_inputs):  # Para cada entrada
+        sys_tf_ij = sys_tf[i, j]
+        
+        # Obtener la respuesta a un impulso
+        t_out, y_out = ctrl.impulse_response(sys_tf_ij, T=t_impulse)
+
+        # Seleccionar la subgráfica correspondiente
+        ax = axs[i, j]
+
+        # Graficar en la subgráfica correspondiente
+        ax.plot(t_out, y_out)
+        ax.set_title(f'sys_tf[{i}, {j}]')
+        ax.set_xlabel('Tiempo [s]')
+        ax.set_ylabel('Amplitud')
+        # ax.set_ylim(-1, 1)
         ax.grid(True)
 
 # Ajustar el espaciado entre las subgráficas

@@ -35,7 +35,7 @@ vsun_y = array_datos[:, 11]
 vsun_z = array_datos[:, 12]
 
 deltat = 2	
-limite = 4002
+limite = 3002
 # limite = 72
 t = np.arange(0, limite, deltat)
 																																																				
@@ -60,7 +60,7 @@ w0 = 0
 w1 = 0
 w2 = 0
 
-hh =0.01
+hh = 0.02
 
 #%% Simulación de los modelos dinámico lineales y no lineales
 
@@ -94,17 +94,17 @@ for i in range(len(t)-1):
     qq = np.array([q0[-1],q1[-1],q2[-1],q3[-1]])
     ww = np.array([w0[-1],w1[-1],w2[-1]])
     xx = np.hstack((np.transpose(qq[:3]), np.transpose(ww)))
-    uu = np.array([15,15,15])
+    uu = np.array([0.15,0.15,0.15])
     
     qq_disc = np.array([q0_disc[-1],q1_disc[-1],q2_disc[-1],q3_disc[-1]])
     ww_disc = np.array([w0_disc[-1],w1_disc[-1],w2_disc[-1]])
     xx_disc = np.hstack((np.transpose(qq_disc[:3]), np.transpose(ww_disc)))
-    uu_disc = np.array([15,15,15])
+    uu_disc = np.array([0.15,0.15,0.15])
     
     qq_nl = np.array([q0_nl[-1],q1_nl[-1],q2_nl[-1],q3_nl[-1]])
     ww_nl = np.array([w0_nl[-1],w1_nl[-1],w2_nl[-1]])
     xx_nl = np.hstack((np.transpose(qq_nl[:3]), np.transpose(ww_nl)))
-    uu_nl = np.array([15,15,15])
+    uu_nl = np.array([0.15,0.15,0.15])
 
     bb_orbit = [Bx_orbit[i],By_orbit[i],Bz_orbit[i]]
     ss_orbit = [vx_sun_orbit[i],vy_sun_orbit[i],vz_sun_orbit[i]]
@@ -150,6 +150,83 @@ for i in range(len(t)-1):
     w2_nl.append(xx_new_nl[5])
     
 
+# # Parámetros del impulso
+# impulso_magnitud = np.array([500, 500, 500])  # Magnitud del impulso en cada eje 
+# inicio_impulso = 100 # Paso en el que empieza el impulso
+# duracion_impulso = 5  # Duración del impulso en cantidad de pasos
+
+# for i in range(len(t)-1):
+#     print(t[i])
+
+#     # Configuración del impulso
+#     if inicio_impulso <= i < inicio_impulso + duracion_impulso:
+#         uu = impulso_magnitud
+#         uu_disc = impulso_magnitud
+#         uu_nl = impulso_magnitud
+#     else:
+#         uu = np.array([0, 0, 0])  # No hay impulso fuera del rango especificado
+#         uu_disc = np.array([0, 0, 0])
+#         uu_nl = np.array([0, 0, 0])
+
+#     # Restante de tu simulación, con los valores de `uu`, `uu_disc` y `uu_nl` ya actualizados
+#     qq = np.array([q0[-1],q1[-1],q2[-1],q3[-1]])
+#     ww = np.array([w0[-1],w1[-1],w2[-1]])
+#     xx = np.hstack((np.transpose(qq[:3]), np.transpose(ww)))
+
+#     qq_disc = np.array([q0_disc[-1],q1_disc[-1],q2_disc[-1],q3_disc[-1]])
+#     ww_disc = np.array([w0_disc[-1],w1_disc[-1],w2_disc[-1]])
+#     xx_disc = np.hstack((np.transpose(qq_disc[:3]), np.transpose(ww_disc)))
+
+#     qq_nl = np.array([q0_nl[-1],q1_nl[-1],q2_nl[-1],q3_nl[-1]])
+#     ww_nl = np.array([w0_nl[-1],w1_nl[-1],w2_nl[-1]])
+#     xx_nl = np.hstack((np.transpose(qq_nl[:3]), np.transpose(ww_nl)))
+
+#     bb_orbit = [Bx_orbit[i],By_orbit[i],Bz_orbit[i]]
+#     ss_orbit = [vx_sun_orbit[i],vy_sun_orbit[i],vz_sun_orbit[i]]
+    
+#     bb_body = functions_02.rotacion_v(qq , bb_orbit, 0)
+#     ss_body = functions_02.rotacion_v(qq , ss_orbit, 0)
+    
+#     bb_body_disc = functions_02.rotacion_v(qq_disc , bb_orbit, 0)
+#     ss_body_disc = functions_02.rotacion_v(qq_disc , ss_orbit, 0)
+    
+#     bb_body_nl = functions_02.rotacion_v(qq_nl, bb_orbit, 0)
+#     ss_body_nl = functions_02.rotacion_v(qq_nl, ss_orbit, 0)
+    
+#     [A,B,C,A_discrete,B_discrete,C_discrete] = functions_02.A_B(I_x, I_y, I_z, w0_O, 0, 0, 0, deltat, hh, bb_orbit, bb_body, ss_body)
+#     [A_disc,B_disc,C_disc,A_discrete_disc,B_discrete_disc,C_discrete_disc] = functions_02.A_B(I_x, I_y, I_z, w0_O, 0, 0, 0, deltat, hh, bb_orbit, bb_body_disc, ss_body_disc)
+
+#     # B = np.zeros((6,3))    
+
+#     [xx_new, qq3_new] = functions_02.mod_lineal_cont(xx, uu, deltat, hh, A, B)
+#     [xx_new_disc, qq3_new_d] = functions_02.mod_lineal_disc(xx_disc, uu_disc, deltat, hh, A_discrete_disc, B_discrete_disc)
+#     [xx_new_nl, qq3_new_nl] = functions_02.mod_nolineal(xx_nl, uu_nl, deltat, bb_body_nl, hh, w0_O, I_x, I_y, I_z)
+    
+#     # Guardar resultados en listas
+#     q0.append(xx_new[0])
+#     q1.append(xx_new[1])
+#     q2.append(xx_new[2])
+#     q3.append(qq3_new)
+#     w0.append(xx_new[3])
+#     w1.append(xx_new[4])
+#     w2.append(xx_new[5])
+    
+#     q0_disc.append(xx_new_disc[0])
+#     q1_disc.append(xx_new_disc[1])
+#     q2_disc.append(xx_new_disc[2])
+#     q3_disc.append(qq3_new_d)
+#     w0_disc.append(xx_new_disc[3])
+#     w1_disc.append(xx_new_disc[4])
+#     w2_disc.append(xx_new_disc[5])
+        
+#     q0_nl.append(xx_new_nl[0])
+#     q1_nl.append(xx_new_nl[1])
+#     q2_nl.append(xx_new_nl[2])
+#     q3_nl.append(qq3_new_nl)
+#     w0_nl.append(xx_new_nl[3])
+#     w1_nl.append(xx_new_nl[4])
+#     w2_nl.append(xx_new_nl[5])
+
 
 #%% Gráficas de los cambios en los cuaterniones con accion de control constante
 
@@ -162,7 +239,7 @@ axes0[0].plot(t[0:len(q0)], q3[0:len(q0)], label='q3 lineal')
 axes0[0].set_xlabel('Tiempo [s]')
 axes0[0].set_ylabel('cuaternión [-]')
 axes0[0].legend()
-axes0[0].set_title('cuaterniones llevados a 0 lineales continuos MT')
+axes0[0].set_title('cuaterniones lineales continuos MT')
 axes0[0].grid()
 # axes0[0].set_xlim(0, 2)  # Ajusta los límites en el eje x
 
@@ -173,7 +250,7 @@ axes0[1].plot(t[0:len(q0)], q3_disc[0:len(q0)], label='q3 discreto lineal')
 axes0[1].set_xlabel('Tiempo [s]')
 axes0[1].set_ylabel('cuaternion [-]')
 axes0[1].legend()
-axes0[1].set_title('cuaterniones llevados a 0 lineales discretos MT')
+axes0[1].set_title('cuaterniones lineales discretos MT')
 axes0[1].grid()
 # axes0[1].set_xlim(0, 2)  # Ajusta los límites en el eje x
 
@@ -189,7 +266,7 @@ axes0[0].plot(t[0:len(q0_nl)], q3[0:len(q0_nl)], label='q3 lineal')
 axes0[0].set_xlabel('Tiempo [s]')
 axes0[0].set_ylabel('cuaternión [-]')
 axes0[0].legend()
-axes0[0].set_title('cuaterniones llevados a 0 lineales continuos MT')
+axes0[0].set_title('cuaterniones lineales continuos MT')
 axes0[0].grid()
 # axes0[0].set_xlim(0, 2)  # Ajusta los límites en el eje x
 
@@ -200,7 +277,32 @@ axes0[1].plot(t[0:len(q0_nl)], q3_nl[0:len(q0_nl)], label='q3 no lineal')
 axes0[1].set_xlabel('Tiempo [s]')
 axes0[1].set_ylabel('cuaternion [-]')
 axes0[1].legend()
-axes0[1].set_title('cuaterniones llevados a 0 no lineales continuos MT')
+axes0[1].set_title('cuaterniones no lineales continuos MT')
+axes0[1].grid()
+# axes0[1].set_xlim(0, 2)  # Ajusta los límites en el eje x
+
+plt.tight_layout()
+plt.show()
+
+fig0, axes0 = plt.subplots(nrows=1, ncols=2, figsize=(16, 4))
+
+axes0[0].plot(t[0:len(w0_nl)], w0[0:len(q0_nl)], label='w0 lineal')
+axes0[0].plot(t[0:len(w0_nl)], w1[0:len(q0_nl)], label='w1 lineal')
+axes0[0].plot(t[0:len(w0_nl)], w2[0:len(q0_nl)], label='w2 lineal')
+axes0[0].set_xlabel('Tiempo [s]')
+axes0[0].set_ylabel('velocidad angular [rad/s]')
+axes0[0].legend()
+axes0[0].set_title('velocidades angulares lineales continuos MT')
+axes0[0].grid()
+# axes0[0].set_xlim(0, 2)  # Ajusta los límites en el eje x
+
+axes0[1].plot(t[0:len(q0_nl)], w0_nl[0:len(q0_nl)], label='w0 no lineal')
+axes0[1].plot(t[0:len(q0_nl)], w1_nl[0:len(q0_nl)], label='w1 no lineal')
+axes0[1].plot(t[0:len(q0_nl)], w2_nl[0:len(q0_nl)], label='w2 no lineal')
+axes0[1].set_xlabel('Tiempo [s]')
+axes0[1].set_ylabel('velocidad angular [rad/s]')
+axes0[1].legend()
+axes0[1].set_title('velocidades angulares no lineales continuos MT')
 axes0[1].grid()
 # axes0[1].set_xlim(0, 2)  # Ajusta los límites en el eje x
 
