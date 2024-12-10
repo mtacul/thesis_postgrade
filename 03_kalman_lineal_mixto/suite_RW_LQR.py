@@ -9,6 +9,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from scipy.linalg import solve_discrete_are
+import control
 
 # %% Cargar datos del .csv obtenido
 
@@ -170,12 +171,14 @@ b_body_i = functions_03_rw.rotacion_v(q_real, bi_orbit, sigma_b)
 
 si_orbit = [vx_sun_orbit[0],vy_sun_orbit[0],vz_sun_orbit[0]]
 s_body_i = functions_03_rw.rotacion_v(q_real, si_orbit, sigma_ss)
+
+# _mod de modelo
 hh = deltat
 hh_mod = 0.2
 
-[A,B,C,A_discrete,B_discrete,C_discrete] = functions_03_rw.A_B(I_x,I_y,I_z,w0_O,0,0,0 , I_s0_x, I_s1_y, I_s2_z, 0,0,0, J_x, J_y, J_z, deltat, hh, bi_orbit,b_body_i, s_body_i)
-[A_mod,B_mod,C_mod,A_discrete_mod,B_discrete_mod,C_discrete_mod] = functions_03_rw.A_B(I_x,I_y,I_z,w0_O,0,0,0 , I_s0_x, I_s1_y, I_s2_z, 0,0,0, J_x, J_y, J_z, deltat, hh_mod, bi_orbit,b_body_i, s_body_i)
-
+[A,B,A_discrete,B_discrete] = functions_03_rw.A_B(I_x,I_y,I_z,w0_O,0,0,0 , I_s0_x, I_s1_y, I_s2_z, 0,0,0, J_x, J_y, J_z, deltat, hh, bi_orbit,b_body_i, s_body_i)
+[A_mod,B_mod,A_discrete_mod,B_discrete_mod] = functions_03_rw.A_B(I_x,I_y,I_z,w0_O,0,0,0 , I_s0_x, I_s1_y, I_s2_z, 0,0,0, J_x, J_y, J_z, deltat, hh_mod, bi_orbit,b_body_i, s_body_i)
+# asd
 #%% Control LQR
 
 # Definir las matrices Q y R del coste del LQR
@@ -183,16 +186,18 @@ hh_mod = 0.2
 # diag_R = np.array([0.1,0.1,0.1])*100000
 # diag_Q = np.array([100000, 100000, 1000000, 10000, 10000, 10000, 1000000, 1000000, 1000000])*1000
 # diag_R = np.array([0.1,10,0.1])*10
-diag_Q = np.array([10000, 1, 100, 100, 100, 100, 1000, 1000, 1000])
-diag_R = np.array([0.1,10,0.1])*10
+diag_Q = np.array([10, 10, 10, 0.1, 0.1, 0.1, 10, 10, 10, 10, 10, 10, 0.1, 0.1, 0.1])
+diag_R = np.array([diag_Q[6],diag_Q[7],diag_Q[8]])
 Q = np.diag(diag_Q)
 R = np.diag(diag_R)
 
 # Resolver la ecuación de Riccati
-P = solve_discrete_are(A_discrete, B_discrete, Q, R)
+# P = solve_discrete_are(A_discrete, B_discrete, Q, R)
 
 # Calcular la matriz de retroalimentación K
-K = np.linalg.inv(B_discrete.T @ P @ B_discrete + R) @ (B_discrete.T @ P @ A_discrete)
+# K = np.linalg.in1v(B_discrete.T @ P @ B_discrete + R) @ (B_discrete.T @ P @ A_discrete)
+K, P, eigenvalues = control.dlqr(A_discrete, B_discrete, Q, R)
+
 us = []
 
 #%% Simulacion dinamica de actitud
@@ -203,19 +208,25 @@ np.random.seed(42)
 
 for i in range(len(t)-1):
     print(t[i+1])
+    print(x_real)
+    print(np.dot(-K*10,x_real))
+    
     q_est = np.array([q0_est[-1], q1_est[-1], q2_est[-1], q3_est[-1]])
     w_est = np.array([w0_est[-1], w1_est[-1], w2_est[-1]])
     ws_est = np.array([w0s_est[-1], w1s_est[-1], w2s_est[-1]])
 
     x_est = np.hstack((np.transpose(q_est[:3]), np.transpose(w_est), np.transpose(ws_est)))
     u_est = np.dot(-K,x_est)
-
+    print(u_est)
     u_est = functions_03_rw.torquer(u_est,lim)
     us.append(u_est)
 
     [xx_new_d, qq3_new_d] = functions_03_rw.mod_lineal_disc(
         x_real, u_est, deltat, hh_mod, A_discrete_mod,B_discrete_mod)
     
+    print(u_est)
+    print(xx_new_d)
+    input()
     x_real = xx_new_d
     w_gyros = functions_03_rw.simulate_gyros_reading(x_real[3:6],ruido_w,bias_w)
     ws_real = x_real[6:9]
@@ -245,16 +256,28 @@ for i in range(len(t)-1):
     elif opcion == 1 or opcion == 2 or opcion == 3:
         [q_posteriori, w_posteriori, P_k_pos,K_k, ws_posteriori] = functions_03_rw.kalman_lineal(A_discrete, B_discrete,C_discrete, x_est, u_est, b_orbit,b_body_med, s_orbit, s_body_med, P_ki, sigma_b, sigma_ss, deltat,hh,h_real,I_s0_x, I_s1_y, I_s2_z, sigma_b, sigma_ss)
     
-    q0_est.append(q_posteriori[0])
-    q1_est.append(q_posteriori[1])
-    q2_est.append(q_posteriori[2])
-    q3_est.append(q_posteriori[3])
-    w0_est.append(w_posteriori[0])
-    w1_est.append(w_posteriori[1])
-    w2_est.append(w_posteriori[2])
-    w0s_est.append(ws_posteriori[0])
-    w1s_est.append(ws_posteriori[1])
-    w2s_est.append(ws_posteriori[2])
+    # q0_est.append(q_posteriori[0])
+    # q1_est.append(q_posteriori[1])
+    # q2_est.append(q_posteriori[2])
+    # q3_est.append(q_posteriori[3])
+    # w0_est.append(w_posteriori[0])
+    # w1_est.append(w_posteriori[1])
+    # w2_est.append(w_posteriori[2])
+    # w0s_est.append(ws_posteriori[0])
+    # w1s_est.append(ws_posteriori[1])
+    # w2s_est.append(ws_posteriori[2])
+    
+    q0_est.append(q0_real[-1])
+    q1_est.append(q1_real[-1])
+    q2_est.append(q2_real[-1])
+    q3_est.append(q3_real[-1])
+    w0_est.append(w0_real[-1])
+    w1_est.append(w1_real[-1])
+    w2_est.append(w2_real[-1])
+    w0s_est.append(w0s_real[-1])
+    w1s_est.append(w1s_real[-1])
+    w2s_est.append(w2s_real[-1])
+    
     P_ki = P_k_pos
     
 [MSE_cuat, MSE_omega]  = functions_03_rw.cuat_MSE_NL(q0_real, q1_real, q2_real, q3_real, w0_real, w1_real, w2_real, q0_est, q1_est, q2_est, q3_est, w0_est, w1_est, w2_est)   

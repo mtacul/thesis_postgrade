@@ -7,10 +7,14 @@ Created on Fri May 10 16:07:10 2024
 
 from skyfield.positionlib import Geocentric
 import numpy as np
-from datetime import datetime
 import math
 from scipy.signal import butter, lfilter
 import control as ctrl
+from datetime import datetime, timedelta
+from astropy.time import Time
+from astropy.coordinates import TEME, ITRS, GCRS, EarthLocation
+from astropy.coordinates import CartesianRepresentation
+from astropy import units as u
 
 def eci2lla(posicion, fecha):
     from skyfield.api import Distance, load, utc, wgs84
@@ -103,3 +107,67 @@ def quat_mult(dqk,qk_priori):
     dqk_n[3]*qk_priori[3] - dqk_n[0]*qk_priori[0] - dqk_n[1]*qk_priori[1] - dqk_n[2]*qk_priori[2]   # Componente escalar
     ])
     return result
+
+#%%
+
+# Función para transformar de TEME a ITRS
+def teme_to_itrs(position, velocity, timestamp):
+    # Convertimos la posición y velocidad a unidades de astropy
+    teme_position = CartesianRepresentation(position * u.km)
+    teme_velocity = CartesianRepresentation(velocity * (u.km / u.s))
+
+    # Tiempo en formato Astropy
+    astropy_time = Time(timestamp, scale='utc')
+
+    # Coordenadas TEME
+    pos_teme = TEME(teme_position, obstime=astropy_time)
+    vel_teme = TEME(teme_velocity, obstime=astropy_time)
+    
+    # Transformamos de TEME a ITRS
+    pos_itrs = pos_teme.transform_to(ITRS(obstime=astropy_time))
+    vel_itrs = vel_teme.transform_to(ITRS(obstime=astropy_time))
+    return pos_itrs, vel_itrs
+
+# Función para transformar de ITRS a GCRS
+def itrs_to_gcrs(itrs_coords, timestamp):
+    # Tiempo en formato Astropy
+    astropy_time = Time(timestamp, scale='utc')
+
+    # Transformamos de ITRS a GCRS
+    gcrs = itrs_coords.transform_to(GCRS(obstime=astropy_time))
+    return gcrs
+
+def NED_2_ECEF(lat,lon, B_NED):
+    # Convertir latitud y longitud a radianes
+    lat_rad = np.radians(lat)
+    lon_rad = np.radians(lon)
+    
+    # Matriz de rotación de NED a ECEF
+    ned_to_ecef = np.array([
+        [-np.sin(lat_rad) * np.cos(lon_rad), -np.sin(lon_rad), -np.cos(lat_rad) * np.cos(lon_rad)],
+        [-np.sin(lat_rad) * np.sin(lon_rad),  np.cos(lon_rad), -np.cos(lat_rad) * np.sin(lon_rad)],
+        [ np.cos(lat_rad),                   0,              -np.sin(lat_rad)]
+    ])
+    
+    # Transformar el vector de NED a ECEF
+    vector_ecef = ned_to_ecef @ B_NED
+    
+    return vector_ecef
+
+def ECEF_2_ECI(jd, ecef_vector):
+    # Calcular ángulo sidéreo en grados
+    theta_gst_deg = 280.46061837 + 360.98564736629 * (jd - 2451545.0)
+    theta_gst_deg = np.mod(theta_gst_deg, 360)  # Reducir a [0, 360]
+    theta_gst_rad = np.radians(theta_gst_deg)  # Convertir a radianes
+    
+    # Matriz de rotación ECEF a ECI
+    rotation_matrix = np.array([
+        [np.cos(theta_gst_rad), np.sin(theta_gst_rad), 0],
+        [-np.sin(theta_gst_rad), np.cos(theta_gst_rad), 0],
+        [0, 0, 1]
+    ])
+    
+    # Transformar el vector
+    eci_vector = rotation_matrix @ ecef_vector
+    
+    return eci_vector

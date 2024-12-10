@@ -16,7 +16,8 @@ from scipy.spatial.transform import Rotation
 # archivo_csv = "vectores_5.76_x5_k.csv"
 # archivo_csv = "vectores_10.2k.csv"
 # archivo_csv = "vectores_5.76k.csv"
-archivo_csv = "vectores_400k_1s.csv"
+# archivo_csv = "vectores_400k_1s.csv"
+archivo_csv = "vectores_400k.csv"
 
 # Leer el archivo CSV en un DataFrame de pandas
 df = pd.read_csv(archivo_csv)
@@ -120,7 +121,7 @@ axes0[0].set_ylabel('Fuerza magnetica [T]')
 axes0[0].legend()
 axes0[0].set_title('fuerza magnetica en ECI')
 axes0[0].grid()
-# axes0[0].set_ylim(-1, 1)  # Ajusta los límites en el eje Y
+axes0[0].set_xlim(0, 5500)  # Ajusta los límites en el eje Y
 
 axes0[1].plot(t_aux, position[:,0], label='posicion del satélite en x')
 axes0[1].plot(t_aux, position[:,1], label='posicion del satélite en y')
@@ -168,6 +169,7 @@ axes0[0].legend()
 axes0[0].set_title('fuerza magnetica en orbit')
 axes0[0].grid()
 # axes0[0].set_ylim(-1, 1)  # Ajusta los límites en el eje Y
+axes0[0].set_xlim(0, 5500)  # Ajusta los límites en el eje Y
 
 axes0[1].plot(t_aux, position[:,0], label='posicion del satélite en x')
 axes0[1].plot(t_aux, position[:,1], label='posicion del satélite en y')
@@ -229,7 +231,8 @@ plt.show()
 #%% Guardar vectores orbit en un .csv
 
 # Nombre del archivo
-archivo_c = "Vectores_orbit_ECI_1s.csv"
+# archivo_c = "Vectores_orbit_ECI_1s.csv"
+archivo_c = "Vectores_orbit_ECI.csv"
 
 # Abrir el archivo en modo escritura
 with open(archivo_c, 'w') as f:

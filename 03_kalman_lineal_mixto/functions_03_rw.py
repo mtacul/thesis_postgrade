@@ -69,15 +69,35 @@ def simulate_gyros_reading(w,ruido,bias):
 # estado en el punto de equilibrio x = [0,0,0,0,0,0] (tres primeros cuaterniones y
 # tres componentes de velocidad angular)
 def A_PD(I_x,I_y,I_z,w0_O, w0,w1,w2, I_s0_x, I_s1_y, I_s2_z, w_s0,w_s1,w_s2, J_x, J_y, J_z):
-    A1 = np.array([0, 0.5*w2, -0.5*w1, 0.5, 0,0,0,0,0])
-    A2 = np.array([-0.5*w2,0,0.5*w0,0,0.5,0,0,0,0])
-    A3 = np.array([0.5*w1,-0.5*w0,0,0,0,0.5,0,0,0])
-    A4 = np.array([6*w0_O**2*(I_z-I_y), 0, (2*w0_O*w_s2*I_s2_z) / (J_x-I_s0_x), 0, -w_s2*I_s2_z/(J_x-I_s0_x), w_s1*I_s1_y/(J_x-I_s0_x), 0,0,0])
-    A5 = np.array([0, 6*w0_O**2*(I_z-I_x) + 2*w0_O**2*(J_x-J_z) / (J_y-I_s1_y) + (2*w0_O*w_s0*I_s0_x) / (J_y-I_s1_y), 0, -w_s2*I_s2_z/(J_y-I_s1_y),0, w0_O + w0_O*(J_z-J_x)/(J_y-I_s1_y) + w_s0*I_s0_x/(J_y-I_s1_y),0,0,-w0_O*I_s2_z/(J_y-I_s1_y)])
-    A6 = np.array([0, 0, -2*w0_O**2*(J_x-J_y) / (J_z-I_s2_z) - (2*w0_O*w_s0*I_s0_x) / (J_z-I_s2_z), -w_s1*(J_x-J_y)/(J_z-I_s2_z) , -w0_O + w0_O*(J_x-J_y)/(J_z-I_s2_z) + w_s0*I_s0_x/(J_z-I_s2_z), 0,0,-w0_O*I_s1_y/(J_z-I_s2_z),0])
-    A7 = np.array([0,0,-2*w0_O*w_s2*I_s2_z/(J_x-I_s0_x),0,w_s2*I_s2_z/(J_x-I_s0_x),-w_s1*I_s1_y/(J_x-I_s0_x), 0,0,0])
-    A8 = np.array([0, -2*w0_O**2*(J_x-J_z) / (J_y-I_s1_y) - (2*w0_O*w_s0*I_s0_x) / (J_y-I_s1_y), 0, w_s2*I_s2_z/(J_y-I_s1_y),0, -w0_O - w0_O*(J_z-J_x)/(J_y-I_s1_y) - w_s0*I_s0_x/(J_y-I_s1_y),0,0,w0_O*I_s2_z/(J_y-I_s1_y)])
-    A9 = np.array([0, 0, 2*w0_O**2*(J_x-J_y) / (J_z-I_s2_z) + (2*w0_O*w_s0*I_s0_x) / (J_z-I_s2_z), w_s1*(J_x-J_y)/(J_z-I_s2_z) , w0_O - w0_O*(J_x-J_y)/(J_z-I_s2_z) - w_s0*I_s0_x/(J_z-I_s2_z), 0,0,w0_O*I_s1_y/(J_z-I_s2_z),0])
+    A1 = np.array([0, 0.5*w2, -0.5*w1, 
+                   0.5, 0,0,
+                   0,0,0])
+    A2 = np.array([-0.5*w2,0,0.5*w0,
+                   0,0.5,0,
+                   0,0,0])
+    A3 = np.array([0.5*w1,-0.5*w0,0,
+                   0,0,0.5,
+                   0,0,0])
+    
+    A4 = np.array([6*w0_O**2*(I_z-I_y), 0, (2*w0_O*w_s2*I_s2_z) / (J_x-I_s0_x),
+                   0, -w_s2*I_s2_z/(J_x-I_s0_x), w_s1*I_s1_y/(J_x-I_s0_x),
+                   0,0,0])
+    A5 = np.array([0, 6*w0_O**2*(I_z-I_x) + 2*w0_O**2*(J_x-J_z) / (J_y-I_s1_y) + (2*w0_O*w_s0*I_s0_x) / (J_y-I_s1_y), 0,
+                   -w_s2*I_s2_z/(J_y-I_s1_y),0, w0_O + w0_O*(J_x-J_z)/(J_y-I_s1_y) + w_s0*I_s0_x/(J_y-I_s1_y),
+                   0,0,-w0_O*I_s2_z/(J_y-I_s1_y)])
+    A6 = np.array([0, 0, -2*w0_O**2*(J_x-J_y) / (J_z-I_s2_z) - (2*w0_O*w_s0*I_s0_x) / (J_z-I_s2_z),
+                   -w_s1*(J_x-J_y)/(J_z-I_s2_z) , -w0_O + w0_O*(J_x-J_y)/(J_z-I_s2_z) + w_s0*I_s0_x/(J_z-I_s2_z), 0,
+                   0,-w0_O*I_s1_y/(J_z-I_s2_z),0])
+    
+    A7 = np.array([0,0,-2*w0_O*w_s2*I_s2_z/(J_x-I_s0_x),
+                   0,w_s2*I_s2_z/(J_x-I_s0_x),-w_s1*I_s1_y/(J_x-I_s0_x), 
+                   0,0,0])
+    A8 = np.array([0, -2*w0_O**2*(J_x-J_z) / (J_y-I_s1_y) - (2*w0_O*w_s0*I_s0_x) / (J_y-I_s1_y), 0,
+                   w_s2*I_s2_z/(J_y-I_s1_y),0, -w0_O - w0_O*(J_x-J_z)/(J_y-I_s1_y) - w_s0*I_s0_x/(J_y-I_s1_y),
+                   0,0,w0_O*I_s2_z/(J_y-I_s1_y)])
+    A9 = np.array([0, 0, 2*w0_O**2*(J_x-J_y) / (J_z-I_s2_z) + (2*w0_O*w_s0*I_s0_x) / (J_z-I_s2_z),
+                   w_s1*(J_x-J_y)/(J_z-I_s2_z) , w0_O - w0_O*(J_x-J_y)/(J_z-I_s2_z) - w_s0*I_s0_x/(J_z-I_s2_z), 0,
+                   0,w0_O*I_s1_y/(J_z-I_s2_z),0])
     A_k = np.array([A1,A2,A3,A4,A5,A6,A7,A8,A9])
     
     return A_k     
@@ -139,20 +159,34 @@ def H_k_bar(b0,b1,b2,s0,s1,s2,I_s0_x,I_s1_y,I_s2_z):
     
     return H
 
+from scipy.signal import cont2discrete
 
 # Obtencion de las matrices A y B de manera discreta
 def A_B(I_x,I_y,I_z,w0_O, w0,w1,w2, I_s0_x, I_s1_y, I_s2_z, w_s0,w_s1,w_s2, J_x, J_y, J_z,deltat,h,b_orbit,b_body, s_body):
     
     A =A_PD(I_x,I_y,I_z,w0_O, w0,w1,w2, I_s0_x, I_s1_y, I_s2_z, w_s0,w_s1,w_s2, J_x, J_y, J_z)
     B = B_PD(w0_O,I_s0_x,I_s1_y,I_s2_z,J_x,J_y,J_z)
-    
-    # Define an identity matrix for C and a zero matrix for D to complete state-space model
-    # C = np.eye(6)  # Assuming a 6x6 identity matrix for C
-    C = H_k_bar(b_body[0],b_body[1],b_body[2], s_body[0],s_body[1],s_body[2],I_s0_x,I_s1_y,I_s2_z)
-    D = np.zeros((9, 3))  # Assuming D has the same number of rows as A and the same number of columns as B
+    # Definición de C
+    C = np.hstack([np.eye(6), np.zeros((6, 3))])
+    # Construcción de Aa
+    Aa = np.block([
+        [A, np.zeros((9, 6))],
+        [C, np.zeros((6, 6))]
+    ])
+    Ba = np.vstack([B, np.zeros((6, 3))])
 
+    # Define an identity matrix for C and a zero matrix for D to complete state-space model
+    # C = np.eye(9)  # Assuming a 6x6 identity matrix for C
+    # C = H_k_bar(b_body[0],b_body[1],b_body[2], s_body[0],s_body[1],s_body[2],I_s0_x,I_s1_y,I_s2_z)
+    # D = np.zeros((9, 3))  # Assuming D has the same number of rows as A and the same number of columns as B
+    Ca = np.eye(15)
+    Da = np.zeros((15,3))
+    
     # Create the continuous state-space model
-    sys_continuous = ctrl.StateSpace(A, B, C, D)
+    sys_continuous = ctrl.StateSpace(Aa, Ba, Ca, Da)
+    # sys_continuous = ctrl.StateSpace(A, B, C, D)
+
+    # A_discrete, B_discrete, _, _, _ = cont2discrete((Aa, Ba, Ca, Da), deltat, method='zoh')
 
     # Discretize the system
     sys_discrete = ctrl.c2d(sys_continuous, h, method='zoh')
@@ -160,9 +194,10 @@ def A_B(I_x,I_y,I_z,w0_O, w0,w1,w2, I_s0_x, I_s1_y, I_s2_z, w_s0,w_s1,w_s2, J_x,
     # Extract the discretized A and B matrices
     A_discrete = sys_discrete.A
     B_discrete = sys_discrete.B
-    C_discrete = sys_discrete.C
+    # C_discrete = sys_discrete.C
     
-    return A,B,C,A_discrete,B_discrete,C_discrete
+    # return Aa,Ba,C,A_discrete,B_discrete,C_discrete
+    return Aa,Ba,A_discrete,B_discrete
 
 #%% Modelo lineal continuo
 
@@ -329,7 +364,7 @@ def kalman_lineal(A, B, C, x, u, b_orbit,b_real, s_orbit,s_real, P_ki, sigma_b, 
     delta_qn = delta_q / np.linalg.norm(delta_q)
 
     q_posteriori = quat_mult(delta_qn,q_priori)
-    print("q posteriori multi:",q_posteriori,"\n")
+    # print("q posteriori multi:",q_posteriori,"\n")
     w_posteriori = w_priori + delta_w
     ws_posteriori = ws_priori + delta_ws
     

@@ -36,7 +36,7 @@ vsun_y = array_datos[:, 11]
 vsun_z = array_datos[:, 12]
 
 deltat = 2	
-limite = 1002
+limite = 10
 t = np.arange(0, limite, deltat)
 			
 
@@ -127,19 +127,19 @@ for i in range(len(t)-1):
     ww = np.array([w0[-1],w1[-1],w2[-1]])
     wws = np.array([ws0[-1],ws1[-1],ws2[-1]])
     xx = np.hstack((np.transpose(qq[:3]), np.transpose(ww),np.transpose(wws)))
-    uu = np.array([0.015,0.015,0.015])
+    uu = np.array([0.015,0.015,0.015])*0.01
     
     qq_disc = np.array([q0_disc[-1],q1_disc[-1],q2_disc[-1],q3_disc[-1]])
     ww_disc = np.array([w0_disc[-1],w1_disc[-1],w2_disc[-1]])
     wws_disc = np.array([ws0_disc[-1],ws1_disc[-1],ws2_disc[-1]])
     xx_disc = np.hstack((np.transpose(qq_disc[:3]), np.transpose(ww_disc),np.transpose(wws_disc)))
-    uu_disc = np.array([0.015,0.015,0.015])
+    uu_disc = np.array([0.015,0.015,0.015])*0.01
     
     qq_nl = np.array([q0_nl[-1],q1_nl[-1],q2_nl[-1],q3_nl[-1]])
     ww_nl = np.array([w0_nl[-1],w1_nl[-1],w2_nl[-1]])
     wws_nl = np.array([ws0_nl[-1],ws1_nl[-1],ws2_nl[-1]])
     xx_nl = np.hstack((np.transpose(qq_nl[:3]), np.transpose(ww_nl),np.transpose(wws_nl)))
-    uu_nl = np.array([0.015,0.015,0.015])
+    uu_nl = np.array([0.015,0.015,0.015])*0.01
 
     bb_orbit = [Bx_orbit[i],By_orbit[i],Bz_orbit[i]]
     ss_orbit = [vx_sun_orbit[i],vy_sun_orbit[i],vz_sun_orbit[i]]

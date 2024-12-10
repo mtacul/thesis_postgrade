@@ -33,7 +33,7 @@ else:
 
     # Define el tiempo de propagación en segundos 
     # propagation_time = 60*60*24*187
-    propagation_time = 60*60*24
+    propagation_time = 5502
 
 
     #posicion y velocidad del satelite en la fecha inicial
@@ -63,9 +63,9 @@ else:
     latitudes = [lla_i[0]]
     longitudes = [lla_i[1]]
     altitudes = [lla_i[2]]
-    Bx_IGRF = [Bi_f[0]]
-    By_IGRF = [Bi_f[1]]
-    Bz_IGRF = [Bi_f[2]]
+    Bx_IGRF = [Bi_fn[0]]
+    By_IGRF = [Bi_fn[1]]
+    Bz_IGRF = [Bi_fn[2]]
     vsun_x = [sunvectori[0]]
     vsun_y = [sunvectori[1]]
     vsun_z = [sunvectori[2]]

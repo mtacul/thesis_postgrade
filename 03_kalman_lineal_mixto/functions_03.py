@@ -293,7 +293,7 @@ def kalman_lineal(A, B, C, x, u, b_orbit,b_real, s_orbit,s_real, P_ki, sigma_b, 
     delta_q = np.hstack((delta_q_3, q3_delta))
     delta_qn = delta_q / np.linalg.norm(delta_q)
     q_posteriori = quat_mult(delta_qn,q_priori)
-    print("q posteriori multi:",q_posteriori,"\n")
+    # print("q posteriori multi:",q_posteriori,"\n")
     w_posteriori = w_priori + delta_w
     
     P_ki = P_posteriori(K_k, H_k, P_k_priori,R)

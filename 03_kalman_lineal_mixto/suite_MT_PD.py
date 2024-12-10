@@ -179,16 +179,16 @@ B_prom_mod = np.vstack((B_concanate_mod[0:3],B_concanate_mod[3:6],B_concanate_mo
 
 #%% Control PD
 
-# x0 = np.array([331.118,
-# 250.109,
-# 442.579,
-# 370.116,
-# 333.062,
-# 515.586
-# ])*0.1
+x0 = np.array([331.118,
+250.109,
+442.579,
+370.116,
+333.062,
+515.586
+])*0.1
 
-# optimal_x = functions_03.opt_K(A_discrete, B_prom, deltat, hh, x0)
-# K = np.hstack([np.diag(optimal_x[:3]), np.diag(optimal_x[3:])])
+optimal_x = functions_03.opt_K(A_discrete, B_prom, deltat, hh, x0)
+K = np.hstack([np.diag(optimal_x[:3]), np.diag(optimal_x[3:])])
 
 # xx = np.array([331.118,
 # 250.109,
@@ -198,14 +198,14 @@ B_prom_mod = np.vstack((B_concanate_mod[0:3],B_concanate_mod[3:6],B_concanate_mo
 # 515.586
 # ])
 
-xx = np.array([38.4185,
-25.3888,
-57.0654,
-64.6042,
-37.0606,
-82.303
-])
-K = np.hstack([np.diag(xx[:3]), np.diag(xx[3:])])
+# xx = np.array([38.4185,
+# 25.3888,
+# 57.0654,
+# 64.6042,
+# 37.0606,
+# 82.303
+# ])
+# K = np.hstack([np.diag(xx[:3]), np.diag(xx[3:])])
 
 
 #%% Simulacion dinamica de actitud

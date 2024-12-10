@@ -36,18 +36,19 @@ vsun_z = array_datos[:, 12]
 
 deltat = 2
 # limite =  5762*69
-limite =  5762*3
+# limite =  5762*5
+limite = 500
 t = np.arange(0, limite, deltat)
 
 #%% Parámetros geométricos y orbitales dados
 
-w0_O = 0.00163
+# w0_O = 0.00163
 
 I_x = 0.037
 I_y = 0.036
 I_z = 0.006
 
-# w0_O = 7.292115e-5 #rad/s
+w0_O = 7.292115e-5 #rad/s
 # I_x = 1030.17 #kgm^2
 # I_y = 3015.65 #kgm^2
 # I_z = 3030.43 #kgm^2
@@ -159,7 +160,7 @@ B_matrices_mod = [B_discrete_mod]
 for i in range(len(t[0:2882])-1):
 # for i in range(len(t)-1):
 
-    print(t[i+1])
+    # print(t[i+1])
     
     # u_est = np.array([15,15,15])
 
@@ -193,8 +194,13 @@ B_prom_mod = np.vstack((B_concanate_mod[0:3],B_concanate_mod[3:6],B_concanate_mo
 # 
 # diag_Q = np.array([100, 10, 100, 0.1, 0.1, 0.1])*1000000
 # diag_R = np.array([0.1,0.1,0.1])*100000
-diag_Q = np.array([10, 10, 10, 1000, 1000, 1000])
+
+# diag_Q = np.array([10, 10, 10, 1000, 1000, 1000])
+# diag_R = np.array([0.1,0.1,0.1])*10
+
+diag_Q = np.array([10000, 10000, 10000, 100000, 100000, 100000])
 diag_R = np.array([0.1,0.1,0.1])*10
+
 Q = np.diag(diag_Q)
 R = np.diag(diag_R)
 
@@ -211,16 +217,23 @@ P_ki = np.diag(diagonal_values)
 np.random.seed(42)
 us = []
 for i in range(len(t)-1):
-    print(t[i+1])
+    # print(t[i+1])
+    # print(x_real)
+    # print(np.dot(-K,x_real))
+
     q_est = np.array([q0_est[-1], q1_est[-1], q2_est[-1], q3_est[-1]])
     w_est = np.array([w0_est[-1], w1_est[-1], w2_est[-1]])
     x_est = np.hstack((np.transpose(q_est[:3]), np.transpose(w_est)))
     u_est = np.dot(-K,x_est)
+    # print(u_est)
     u_est = functions_03.torquer(u_est,lim)
     us.append(u_est)
     [xx_new_d, qq3_new_d] = functions_03.mod_lineal_disc(
         x_real, u_est, deltat, hh_mod, A_discrete_mod,B_prom_mod)
     
+    # print(u_est)
+    # print(xx_new_d)
+    # input()
     x_real = xx_new_d
     w_gyros = functions_03.simulate_gyros_reading(x_real[3:6],ruido_w,bias_w)
     q0_real.append(xx_new_d[0])
@@ -246,15 +259,24 @@ for i in range(len(t)-1):
     elif opcion == 1 or opcion == 2 or opcion == 3:
         [q_posteriori, w_posteriori, P_k_pos,K_k] = functions_03.kalman_lineal(A_discrete, B_prom,C_discrete, x_est, u_est, b_orbit,b_body_med, s_orbit,s_body_med, P_ki, sigma_b,sigma_ss, deltat,hh,sigma_b,sigma_ss)
 
-    q0_est.append(q_posteriori[0])
-    q1_est.append(q_posteriori[1])
-    q2_est.append(q_posteriori[2])
-    q3_est.append(q_posteriori[3])
-    w0_est.append(w_posteriori[0])
-    w1_est.append(w_posteriori[1])
-    w2_est.append(w_posteriori[2])
+    # q0_est.append(q_posteriori[0])
+    # q1_est.append(q_posteriori[1])
+    # q2_est.append(q_posteriori[2])
+    # q3_est.append(q_posteriori[3])
+    # w0_est.append(w_posteriori[0])
+    # w1_est.append(w_posteriori[1])
+    # w2_est.append(w_posteriori[2])
+    q0_est.append(q0_real[-1])
+    q1_est.append(q1_real[-1])
+    q2_est.append(q2_real[-1])
+    q3_est.append(q3_real[-1])
+    w0_est.append(w0_real[-1])
+    w1_est.append(w1_real[-1])
+    w2_est.append(w2_real[-1])
 
     P_ki = P_k_pos
+    
+    
     
 [MSE_cuat, MSE_omega]  = functions_03.cuat_MSE_NL(q0_real, q1_real, q2_real, q3_real, w0_real, w1_real, w2_real, q0_est, q1_est, q2_est, q3_est, w0_est, w1_est, w2_est)   
 [RPY_all_est,RPY_all_id,mse_roll,mse_pitch,mse_yaw] = functions_03.RPY_MSE(t, q0_est, q1_est, q2_est, q3_est, q0_real, q1_real, q2_real, q3_real)   
@@ -404,14 +426,14 @@ axes0[0].set_xlabel('Tiempo [s]')
 axes0[0].set_ylabel('Roll [°]')
 axes0[0].legend()
 axes0[0].grid()
-axes0[0].set_xlim(0, 30000)  # Ajusta los límites en el eje Y
+# axes0[0].set_xlim(0, 30000)  # Ajusta los límites en el eje Y
 
 axes0[1].plot(t, RPY_all_id[:,1], label={'magnetorquer'},color='orange')
 axes0[1].set_xlabel('Tiempo [s]')
 axes0[1].set_ylabel('Pitch [°]')
 axes0[1].legend()
 axes0[1].grid()
-axes0[1].set_xlim(0, 30000) # Ajusta los límites en el eje Y
+# axes0[1].set_xlim(0, 30000) # Ajusta los límites en el eje Y
 # axes0[1].set_ylim(-20, -5)  # Ajusta los límites en el eje Y
 
 axes0[2].plot(t, RPY_all_id[:,2], label={'magnetorquer'},color='green')
@@ -419,7 +441,7 @@ axes0[2].set_xlabel('Tiempo [s]')
 axes0[2].set_ylabel('Yaw [°]')
 axes0[2].legend()
 axes0[2].grid()
-axes0[2].set_xlim(0, 30000)  # Ajusta los límites en el eje Y
+# axes0[2].set_xlim(0, 30000)  # Ajusta los límites en el eje Y
 
 plt.tight_layout()
 
