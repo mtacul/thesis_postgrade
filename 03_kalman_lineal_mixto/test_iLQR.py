@@ -15,7 +15,7 @@ import control as ctrl
 
 deltat = 2
 # limite =  5762*69
-limite =  5762*1
+limite =  5762*0.1
 t = np.arange(0, limite, deltat)
 
 #%% Parámetros geométricos y orbitales dados
@@ -72,46 +72,46 @@ s_body_i = [0.776906,
 
 [A,B,A_discrete,B_discrete] = functions_03_rw.A_B(I_x,I_y,I_z,w0_O,0,0,0 , I_s0_x, I_s1_y, I_s2_z, 0,0,0, J_x, J_y, J_z, deltat, hh, bi_orbit,b_body_i, s_body_i)
 
-# # Índices correspondientes a las filas y columnas
-# indices_0 = [0, 3, 6]
-# indices_1 = [1, 4, 7]
-# indices_2 = [2, 5, 8]
-
-# # Seleccionar la primera columna y las filas deseadas
-# B_discrete_3x1_0 = B_discrete[indices_0, 0]
-# B_discrete_3x1_1 = B_discrete[indices_1, 1]
-# B_discrete_3x1_2 = B_discrete[indices_2, 2]
-
-# # Convertir a una matriz columna (3x1)
-# B_discrete_0 = B_discrete_3x1_0.reshape(-1, 1)# Extraer submatriz de 3x3
-# B_discrete_1 = B_discrete_3x1_1.reshape(-1, 1)# Extraer submatriz de 3x3
-# B_discrete_2 = B_discrete_3x1_2.reshape(-1, 1)# Extraer submatriz de 3x3
-
-# A_discrete_0 = A_discrete[np.ix_(indices_0, indices_0)]
-# A_discrete_1 = A_discrete[np.ix_(indices_1, indices_1)]
-# A_discrete_2 = A_discrete[np.ix_(indices_2, indices_2)]
-
-C = np.eye(3)
-D = np.zeros((3, 1))  # Assuming D has the same number of rows as A and the same number of columns as B
-
 # Índices correspondientes a las filas y columnas
 indices_0 = [0, 3, 6]
 indices_1 = [1, 4, 7]
 indices_2 = [2, 5, 8]
 
 # Seleccionar la primera columna y las filas deseadas
-B_3x1_0 = B[indices_0, 0]
-B_3x1_1 = B[indices_1, 1]
-B_3x1_2 = B[indices_2, 2]
+B_discrete_3x1_0 = B_discrete[indices_0, 0]
+B_discrete_3x1_1 = B_discrete[indices_1, 1]
+B_discrete_3x1_2 = B_discrete[indices_2, 2]
 
 # Convertir a una matriz columna (3x1)
-B_0 = B_3x1_0.reshape(-1, 1)# Extraer submatriz de 3x3
-B_1 = B_3x1_1.reshape(-1, 1)# Extraer submatriz de 3x3
-B_2 = B_3x1_2.reshape(-1, 1)# Extraer submatriz de 3x3
+B_discrete_0 = B_discrete_3x1_0.reshape(-1, 1)# Extraer submatriz de 3x3
+B_discrete_1 = B_discrete_3x1_1.reshape(-1, 1)# Extraer submatriz de 3x3
+B_discrete_2 = B_discrete_3x1_2.reshape(-1, 1)# Extraer submatriz de 3x3
 
-A_0 = A[np.ix_(indices_0, indices_0)]
-A_1 = A[np.ix_(indices_1, indices_1)]
-A_2 = A[np.ix_(indices_2, indices_2)]
+A_discrete_0 = A_discrete[np.ix_(indices_0, indices_0)]
+A_discrete_1 = A_discrete[np.ix_(indices_1, indices_1)]
+A_discrete_2 = A_discrete[np.ix_(indices_2, indices_2)]
+
+C = np.eye(3)
+D = np.zeros((3, 1))  # Assuming D has the same number of rows as A and the same number of columns as B
+
+# # Índices correspondientes a las filas y columnas
+# indices_0 = [0, 3, 6]
+# indices_1 = [1, 4, 7]
+# indices_2 = [2, 5, 8]
+
+# # Seleccionar la primera columna y las filas deseadas
+# B_3x1_0 = B[indices_0, 0]
+# B_3x1_1 = B[indices_1, 1]
+# B_3x1_2 = B[indices_2, 2]
+
+# # Convertir a una matriz columna (3x1)
+# B_0 = B_3x1_0.reshape(-1, 1)# Extraer submatriz de 3x3
+# B_1 = B_3x1_1.reshape(-1, 1)# Extraer submatriz de 3x3
+# B_2 = B_3x1_2.reshape(-1, 1)# Extraer submatriz de 3x3
+
+# A_0 = A[np.ix_(indices_0, indices_0)]
+# A_1 = A[np.ix_(indices_1, indices_1)]
+# A_2 = A[np.ix_(indices_2, indices_2)]
 
 
 
@@ -140,32 +140,32 @@ A_2 = A[np.ix_(indices_2, indices_2)]
 #%% Control LQR en cada matriz
 
 # Definir las matrices Q y R del coste del LQR
-diag_Q1 = np.array([10, 100, 1000])*100
+diag_Q1 = np.array([1, 1, 1])*100
 # diag_Q = np.array([10, 10, 10, 0.1, 0.1, 0.1, 10, 10, 10])*1
 diag_R1 = np.array([1])
 Q1 = np.diag(diag_Q1)
 R1 = np.diag(diag_R1)
 
-diag_Q2 = np.array([10, 1, 0.01])*10000
+diag_Q2 = np.array([1, 1, 1])*100
 # diag_Q = np.array([10, 10, 10, 0.1, 0.1, 0.1, 10, 10, 10])*1
-diag_R2 = np.array([10000])
+diag_R2 = np.array([1])
 Q2 = np.diag(diag_Q2)
 R2 = np.diag(diag_R2)
 
-diag_Q3 = np.array([10, 10, 0.1])*10000
+diag_Q3 = np.array([10, 10, 10])*100
 # diag_Q = np.array([10, 10, 10, 0.1, 0.1, 0.1, 10, 10, 10])*1
-diag_R3 = np.array([10000])
+diag_R3 = np.array([10])
 Q3 = np.diag(diag_Q3)
 R3 = np.diag(diag_R3)
 
 
-K1, P1, eigenvalues1 = ctrl.lqr(A_0, B_0, Q1, R1)
-K2, P2, eigenvalues2 = ctrl.lqr(A_1, B_1, Q2, R2)
-K3, P3, eigenvalues3 = ctrl.lqr(A_2, B_2, Q3, R3)
+# K1, P1, eigenvalues1 = ctrl.lqr(A_0, B_0, Q1, R1)
+# K2, P2, eigenvalues2 = ctrl.lqr(A_1, B_1, Q2, R2)
+# K3, P3, eigenvalues3 = ctrl.lqr(A_2, B_2, Q3, R3)
 
-# K1, P1, eigenvalues1 = ctrl.dlqr(A_discrete_0, B_discrete_0, Q1, R1)
-# K2, P2, eigenvalues2 = ctrl.dlqr(A_discrete_1, B_discrete_1, Q2, R2)
-# K3, P3, eigenvalues3 = ctrl.dlqr(A_discrete_2, B_discrete_2, Q3, R3)
+K1, P1, eigenvalues1 = ctrl.dlqr(A_discrete_0, B_discrete_0, Q1, R1)
+K2, P2, eigenvalues2 = ctrl.dlqr(A_discrete_1, B_discrete_1, Q2, R2)
+K3, P3, eigenvalues3 = ctrl.dlqr(A_discrete_2, B_discrete_2, Q3, R3)
 
 K1_1 = np.array([K1[0][0],K1[0][1],K1[0][2]])
 # K1_1 = np.diag(K1_1)
@@ -181,16 +181,29 @@ Kk2 = np.array([0,K2_1[0],0,0,K2_1[1],0,0,K2_1[2],0])
 Kk3 = np.array([0,0,K3_1[0],0,0,K3_1[1],0,0,K3_1[2]])
 
 K = np.vstack((Kk1,Kk2,Kk3))
-asad,vect = np.linalg.eig(A-B@K)
-asad1,vect1 = np.linalg.eig(A_0-B_0@K1)
-asad2,vect2 = np.linalg.eig(A_1-B_1@K2)
-asad3,vect3 = np.linalg.eig(A_2-B_2@K3)
-# asad,vect = np.linalg.eig(A_discrete-B_discrete@K)
-# asad1,vect1 = np.linalg.eig(A_discrete_0-B_discrete_0@K1)
-# asad2,vect2 = np.linalg.eig(A_discrete_1-B_discrete_1@K2)
-# asad3,vect3 = np.linalg.eig(A_discrete_2-B_discrete_2@K3)
+# asad,vect = np.linalg.eig(A-B@K)
+# asad1,vect1 = np.linalg.eig(A_0-B_0@K1)
+# asad2,vect2 = np.linalg.eig(A_1-B_1@K2)
+# asad3,vect3 = np.linalg.eig(A_2-B_2@K3)
+asad,vect = np.linalg.eig(A_discrete-B_discrete@K)
 
+
+asad1,vect1 = np.linalg.eig(A_discrete_0-B_discrete_0@K1)
+asad2,vect2 = np.linalg.eig(A_discrete_1-B_discrete_1@K2)
+asad3,vect3 = np.linalg.eig(A_discrete_2-B_discrete_2@K3)
+# asad[7] = 0.999
+## asad[7] = 0.989
+asad[8] = 0.99999
+# asad[6] = 0.999
+asad[5] = 0.1
+asad[1] = 0.1
+# asad[6] = 0.35
+
+k_place = ctrl.place(A_discrete,B_discrete,asad)
+
+asad_place,vect_place = np.linalg.eig(A_discrete-B_discrete@k_place)
 q = np.array([0.0789,0.0941,0.0789,0.9893])
+# q = np.array([0.7077,0,0,0.7077])
 w = np.array([0.0001, 0.0001, 0.0001])
 ws = np.array([0.00001, 0.00001, 0.00001])
 
@@ -209,17 +222,17 @@ w_body = np.array([w0_real[-1], w1_real[-1], w2_real[-1]])
 w_gyros = functions_03_rw.simulate_gyros_reading(w_body, 0,0)
 ws_real = np.array([w0s_real[-1], w1s_real[-1], w2s_real[-1]])
 x_real = np.hstack((np.transpose(q_real[:3]), np.transpose(w_gyros), np.transpose(ws_real)))
-
+aus = []
 for i in range(len(t)-1):
     print(t[i+1])
     # print(x_real)
     # print(np.dot(-K*10,x_real))
     
 
-    u_est = np.dot(-K,x_real)
+    u_est = np.dot(-k_place,x_real)
     # print(u_est)
-    u_est = functions_03_rw.torquer(u_est,100000)
-    
+    u_est = functions_03_rw.torquer(u_est,1)
+    aus.append(u_est)
     [xx_new_d, qq3_new_d] = functions_03_rw.mod_lineal_disc(
         x_real, u_est, deltat, hh, A_discrete,B_discrete)
     

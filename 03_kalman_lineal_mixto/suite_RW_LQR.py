@@ -9,7 +9,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from scipy.linalg import solve_discrete_are
-import control
+import control as ctrl
 
 # %% Cargar datos del .csv obtenido
 
@@ -37,7 +37,7 @@ vsun_z = array_datos[:, 12]
 
 deltat = 2
 # limite =  5762*69
-limite =  5762*3
+limite =  5762*1
 t = np.arange(0, limite, deltat)
 
 #%% Parámetros geométricos y orbitales dados
@@ -116,8 +116,8 @@ bias_w = bias_w_values[opcion]
 
 # Definir los valores
 lim_tau_values = {
-    1: 0.025,
-    2: 0.07,
+    1: 1e-3,   
+    2: 0.025,
     3: 0.250
 }
 
@@ -138,7 +138,7 @@ ws = np.array([0.00001, 0.00001, 0.00001])
 # q_est= np.array([0.0120039,0.0116517,0.0160542,0.999731])
 q_est = np.array([0.0789,0.0941,0.0789,0.9893])
 
-q0_est = [q_est[0]]
+q0_est = [q_est[0]]  
 q1_est = [q_est[1]]
 q2_est = [q_est[2]]
 q3_est = [q_est[3]]
@@ -178,55 +178,109 @@ hh_mod = 0.2
 
 [A,B,A_discrete,B_discrete] = functions_03_rw.A_B(I_x,I_y,I_z,w0_O,0,0,0 , I_s0_x, I_s1_y, I_s2_z, 0,0,0, J_x, J_y, J_z, deltat, hh, bi_orbit,b_body_i, s_body_i)
 [A_mod,B_mod,A_discrete_mod,B_discrete_mod] = functions_03_rw.A_B(I_x,I_y,I_z,w0_O,0,0,0 , I_s0_x, I_s1_y, I_s2_z, 0,0,0, J_x, J_y, J_z, deltat, hh_mod, bi_orbit,b_body_i, s_body_i)
-# asd
-#%% Control LQR
+
+
+# Índices correspondientes a las filas y columnas
+indices_0 = [0, 3, 6]
+indices_1 = [1, 4, 7]
+indices_2 = [2, 5, 8]
+
+# Seleccionar la primera columna y las filas deseadas
+B_discrete_3x1_0 = B_discrete[indices_0, 0]
+B_discrete_3x1_1 = B_discrete[indices_1, 1]
+B_discrete_3x1_2 = B_discrete[indices_2, 2]
+
+# Convertir a una matriz columna (3x1)
+B_discrete_0 = B_discrete_3x1_0.reshape(-1, 1)# Extraer submatriz de 3x3
+B_discrete_1 = B_discrete_3x1_1.reshape(-1, 1)# Extraer submatriz de 3x3
+B_discrete_2 = B_discrete_3x1_2.reshape(-1, 1)# Extraer submatriz de 3x3
+
+A_discrete_0 = A_discrete[np.ix_(indices_0, indices_0)]
+A_discrete_1 = A_discrete[np.ix_(indices_1, indices_1)]
+A_discrete_2 = A_discrete[np.ix_(indices_2, indices_2)]
+
+C = np.eye(3)
+D = np.zeros((3, 1))  # Assuming D has the same number of rows as A and the same number of columns as B
+
+#%% Control LQR en cada matriz
 
 # Definir las matrices Q y R del coste del LQR
-# diag_Q = np.array([100, 1000000, 10000, 0.1, 0.1, 0.10, 0.01, 10, 10])*10000
-# diag_R = np.array([0.1,0.1,0.1])*100000
-# diag_Q = np.array([100000, 100000, 1000000, 10000, 10000, 10000, 1000000, 1000000, 1000000])*1000
-# diag_R = np.array([0.1,10,0.1])*10
-diag_Q = np.array([10, 10, 10, 0.1, 0.1, 0.1, 10, 10, 10, 10, 10, 10, 0.1, 0.1, 0.1])
-diag_R = np.array([diag_Q[6],diag_Q[7],diag_Q[8]])
-Q = np.diag(diag_Q)
-R = np.diag(diag_R)
+diag_Q1 = np.array([1, 1, 1])*100
+diag_R1 = np.array([1])
+Q1 = np.diag(diag_Q1)
+R1 = np.diag(diag_R1)
 
-# Resolver la ecuación de Riccati
-# P = solve_discrete_are(A_discrete, B_discrete, Q, R)
+diag_Q2 = np.array([1, 1, 1])*100
+diag_R2 = np.array([1])
+Q2 = np.diag(diag_Q2)
+R2 = np.diag(diag_R2)
 
-# Calcular la matriz de retroalimentación K
-# K = np.linalg.in1v(B_discrete.T @ P @ B_discrete + R) @ (B_discrete.T @ P @ A_discrete)
-K, P, eigenvalues = control.dlqr(A_discrete, B_discrete, Q, R)
+diag_Q3 = np.array([10, 10, 10])*100
+diag_R3 = np.array([10])
+Q3 = np.diag(diag_Q3)
+R3 = np.diag(diag_R3)
 
-us = []
+K1, P1, eigenvalues1 = ctrl.dlqr(A_discrete_0, B_discrete_0, Q1, R1)
+K2, P2, eigenvalues2 = ctrl.dlqr(A_discrete_1, B_discrete_1, Q2, R2)
+K3, P3, eigenvalues3 = ctrl.dlqr(A_discrete_2, B_discrete_2, Q3, R3)
+
+K1_1 = np.array([K1[0][0],K1[0][1],K1[0][2]])
+K2_1 = np.array([K2[0][0],K2[0][1],K2[0][2]])
+K3_1 = np.array([K3[0][0],K3[0][1],K3[0][2]])
+
+Kk1 = np.array([K1_1[0],0,0,K1_1[1],0,0,K1_1[2],0,0])
+Kk2 = np.array([0,K2_1[0],0,0,K2_1[1],0,0,K2_1[2],0])
+Kk3 = np.array([0,0,K3_1[0],0,0,K3_1[1],0,0,K3_1[2]])
+
+K = np.vstack((Kk1,Kk2,Kk3))
+asad,vect = np.linalg.eig(A_discrete-B_discrete@K)
+
+
+asad1,vect1 = np.linalg.eig(A_discrete_0-B_discrete_0@K1)
+asad2,vect2 = np.linalg.eig(A_discrete_1-B_discrete_1@K2)
+asad3,vect3 = np.linalg.eig(A_discrete_2-B_discrete_2@K3)
+# asad[5] = 0.91
+# asad[7] = 0.92
+asad[8] = 0.999 # este es
+# asad[6] = 0.93
+# asad[4] = 0.94
+# asad[1] = 0.1
+# asad[6] = 0.35
+# asad[0] = 0.01
+# asad[1] = 0.01
+# asad[2] = 0.01
+
+k_place = ctrl.place(A_discrete,B_discrete,asad)
+
+asad_place,vect_place = np.linalg.eig(A_discrete-B_discrete@k_place)
 
 #%% Simulacion dinamica de actitud
-
+aus = []
 diagonal_values = np.array([0.5**2, 0.5**2, 0.5**2, 0.1**2, 0.1**2, 0.1**2,0.01**2,0.01**2,0.01**2])
 P_ki = np.diag(diagonal_values)
 np.random.seed(42)
 
 for i in range(len(t)-1):
     print(t[i+1])
-    print(x_real)
-    print(np.dot(-K*10,x_real))
+    # print(x_real)
+    # print(np.dot(-K*10,x_real))
     
     q_est = np.array([q0_est[-1], q1_est[-1], q2_est[-1], q3_est[-1]])
     w_est = np.array([w0_est[-1], w1_est[-1], w2_est[-1]])
     ws_est = np.array([w0s_est[-1], w1s_est[-1], w2s_est[-1]])
 
     x_est = np.hstack((np.transpose(q_est[:3]), np.transpose(w_est), np.transpose(ws_est)))
-    u_est = np.dot(-K,x_est)
-    print(u_est)
+    u_est = np.dot(-k_place,x_est)
+    # print(u_est)
     u_est = functions_03_rw.torquer(u_est,lim)
-    us.append(u_est)
+    aus.append(u_est)
 
     [xx_new_d, qq3_new_d] = functions_03_rw.mod_lineal_disc(
         x_real, u_est, deltat, hh_mod, A_discrete_mod,B_discrete_mod)
     
-    print(u_est)
-    print(xx_new_d)
-    input()
+    # print(u_est)
+    # print(xx_new_d)
+    # input()
     x_real = xx_new_d
     w_gyros = functions_03_rw.simulate_gyros_reading(x_real[3:6],ruido_w,bias_w)
     ws_real = x_real[6:9]
@@ -249,34 +303,34 @@ for i in range(len(t)-1):
     s_orbit = [vx_sun_orbit[i],vy_sun_orbit[i],vz_sun_orbit[i]]
     s_body_med = functions_03_rw.rotacion_v(q_real, s_orbit,sigma_ss)
 
-    [A,B,C,A_discrete,B_discrete,C_discrete] = functions_03_rw.A_B(I_x,I_y,I_z,w0_O, 0,0,0, I_s0_x, I_s1_y, I_s2_z,0,0,0, J_x, J_y, J_z,  deltat, hh,b_orbit, b_body_med, s_body_med)
+    [A,B,C,A_discrete,B_discrete,C_discrete] = functions_03_rw.A_B_kalman(I_x,I_y,I_z,w0_O, 0,0,0, I_s0_x, I_s1_y, I_s2_z,0,0,0, J_x, J_y, J_z,  deltat, hh,b_orbit, b_body_med, s_body_med)
     
     if opcion == 4:
         [q_posteriori, w_posteriori, P_k_pos,K_k, ws_posteriori] = functions_03_rw.kalman_lineal(A_discrete, B_discrete,C_discrete, x_est, u_est, b_orbit,b_body_med, s_orbit, s_body_med, P_ki, sigma_b,sigma_ss, deltat,hh,h_real,I_s0_x, I_s1_y, I_s2_z,1,1)
     elif opcion == 1 or opcion == 2 or opcion == 3:
         [q_posteriori, w_posteriori, P_k_pos,K_k, ws_posteriori] = functions_03_rw.kalman_lineal(A_discrete, B_discrete,C_discrete, x_est, u_est, b_orbit,b_body_med, s_orbit, s_body_med, P_ki, sigma_b, sigma_ss, deltat,hh,h_real,I_s0_x, I_s1_y, I_s2_z, sigma_b, sigma_ss)
     
-    # q0_est.append(q_posteriori[0])
-    # q1_est.append(q_posteriori[1])
-    # q2_est.append(q_posteriori[2])
-    # q3_est.append(q_posteriori[3])
-    # w0_est.append(w_posteriori[0])
-    # w1_est.append(w_posteriori[1])
-    # w2_est.append(w_posteriori[2])
-    # w0s_est.append(ws_posteriori[0])
-    # w1s_est.append(ws_posteriori[1])
-    # w2s_est.append(ws_posteriori[2])
+    q0_est.append(q_posteriori[0])
+    q1_est.append(q_posteriori[1])
+    q2_est.append(q_posteriori[2])
+    q3_est.append(q_posteriori[3])
+    w0_est.append(w_posteriori[0])
+    w1_est.append(w_posteriori[1])
+    w2_est.append(w_posteriori[2])
+    w0s_est.append(ws_posteriori[0])
+    w1s_est.append(ws_posteriori[1])
+    w2s_est.append(ws_posteriori[2])
     
-    q0_est.append(q0_real[-1])
-    q1_est.append(q1_real[-1])
-    q2_est.append(q2_real[-1])
-    q3_est.append(q3_real[-1])
-    w0_est.append(w0_real[-1])
-    w1_est.append(w1_real[-1])
-    w2_est.append(w2_real[-1])
-    w0s_est.append(w0s_real[-1])
-    w1s_est.append(w1s_real[-1])
-    w2s_est.append(w2s_real[-1])
+    # q0_est.append(q0_real[-1])
+    # q1_est.append(q1_real[-1])
+    # q2_est.append(q2_real[-1])
+    # q3_est.append(q3_real[-1])
+    # w0_est.append(w0_real[-1])
+    # w1_est.append(w1_real[-1])
+    # w2_est.append(w2_real[-1])
+    # w0s_est.append(w0s_real[-1])
+    # w1s_est.append(w1s_real[-1])
+    # w2s_est.append(w2s_real[-1])
     
     P_ki = P_k_pos
     
@@ -423,7 +477,7 @@ axes0[3].set_ylabel('Angulos de Euler [°]')
 axes0[3].legend()
 axes0[3].set_title('Angulos de Euler estimados por el filtro de kalman lineal discreto')
 axes0[3].grid()
-axes0[3].set_ylim(-10, 10)  # Ajusta los límites en el eje Y
+axes0[3].set_ylim(-5, 5)  # Ajusta los límites en el eje Y
 
 plt.tight_layout()
 plt.show()
@@ -481,3 +535,25 @@ df_resultados = pd.DataFrame(datos)
 df_resultados.to_csv(nombre_archivo, index=False)
 
 print(f"Los resultados se han guardado en {nombre_archivo}")
+
+
+#%% Control LQR
+
+# Definir las matrices Q y R del coste del LQR
+# diag_Q = np.array([100, 1000000, 10000, 0.1, 0.1, 0.10, 0.01, 10, 10])*10000
+# diag_R = np.array([0.1,0.1,0.1])*100000
+# diag_Q = np.array([100000, 100000, 1000000, 10000, 10000, 10000, 1000000, 1000000, 1000000])*1000
+# diag_R = np.array([0.1,10,0.1])*10
+# diag_Q = np.array([10, 10, 10, 0.1, 0.1, 0.1, 10, 10, 10, 10, 10, 10, 0.1, 0.1, 0.1])
+# diag_R = np.array([diag_Q[6],diag_Q[7],diag_Q[8]])
+# Q = np.diag(diag_Q)
+# R = np.diag(diag_R)
+
+# Resolver la ecuación de Riccati
+# P = solve_discrete_are(A_discrete, B_discrete, Q, R)
+
+# Calcular la matriz de retroalimentación K
+# K = np.linalg.in1v(B_discrete.T @ P @ B_discrete + R) @ (B_discrete.T @ P @ A_discrete)
+# K, P, eigenvalues = control.dlqr(A_discrete, B_discrete, Q, R)
+
+# us = []

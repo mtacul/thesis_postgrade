@@ -159,6 +159,44 @@ def H_k_bar(b0,b1,b2,s0,s1,s2,I_s0_x,I_s1_y,I_s2_z):
     
     return H
 
+# Obtencion de las matrices A y B de manera discreta
+def A_B_kalman(I_x,I_y,I_z,w0_O, w0,w1,w2, I_s0_x, I_s1_y, I_s2_z, w_s0,w_s1,w_s2, J_x, J_y, J_z,deltat,h,b_orbit,b_body, s_body):
+    
+    A =A_PD(I_x,I_y,I_z,w0_O, w0,w1,w2, I_s0_x, I_s1_y, I_s2_z, w_s0,w_s1,w_s2, J_x, J_y, J_z)
+    B = B_PD(w0_O,I_s0_x,I_s1_y,I_s2_z,J_x,J_y,J_z)
+    # # Definición de C
+    # C = np.hstack([np.eye(6), np.zeros((6, 3))])
+    
+    # # Construcción de Aa
+    # Aa = np.block([
+    #     [A, np.zeros((9, 6))],
+    #     [C, np.zeros((6, 6))]
+    # ])
+    # Ba = np.vstack([B, np.zeros((6, 3))])
+
+    # Define an identity matrix for C and a zero matrix for D to complete state-space model
+    # C = np.eye(9)  # Assuming a 6x6 identity matrix for C
+    C = H_k_bar(b_body[0],b_body[1],b_body[2], s_body[0],s_body[1],s_body[2],I_s0_x,I_s1_y,I_s2_z)
+    D = np.zeros((9, 3))  # Assuming D has the same number of rows as A and the same number of columns as B
+    # Ca = np.eye(15)
+    # Da = np.zeros((15,3))
+    
+    # Create the continuous state-space model
+    # sys_continuous = ctrl.StateSpace(Aa, Ba, Ca, Da)
+    sys_continuous = ctrl.StateSpace(A, B, C, D)
+
+    # A_discrete, B_discrete, _, _, _ = cont2discrete((Aa, Ba, Ca, Da), deltat, method='zoh')
+
+    # Discretize the system
+    sys_discrete = ctrl.c2d(sys_continuous, h, method='zoh')
+
+    # Extract the discretized A and B matrices
+    A_discrete = sys_discrete.A
+    B_discrete = sys_discrete.B
+    C_discrete = sys_discrete.C
+    
+    # return Aa,Ba,C,A_discrete,B_discrete,C_discrete
+    return A,B,C,A_discrete,B_discrete,C_discrete
 
 # Obtencion de las matrices A y B de manera discreta
 def A_B(I_x,I_y,I_z,w0_O, w0,w1,w2, I_s0_x, I_s1_y, I_s2_z, w_s0,w_s1,w_s2, J_x, J_y, J_z,deltat,h,b_orbit,b_body, s_body):

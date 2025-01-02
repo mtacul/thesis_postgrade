@@ -37,7 +37,7 @@ vsun_z = array_datos[:, 12]
 deltat = 2
 # limite =  5762*69
 # limite =  5762*5
-limite = 500
+limite = 5762*0.1
 t = np.arange(0, limite, deltat)
 
 #%% Parámetros geométricos y orbitales dados
@@ -259,20 +259,20 @@ for i in range(len(t)-1):
     elif opcion == 1 or opcion == 2 or opcion == 3:
         [q_posteriori, w_posteriori, P_k_pos,K_k] = functions_03.kalman_lineal(A_discrete, B_prom,C_discrete, x_est, u_est, b_orbit,b_body_med, s_orbit,s_body_med, P_ki, sigma_b,sigma_ss, deltat,hh,sigma_b,sigma_ss)
 
-    # q0_est.append(q_posteriori[0])
-    # q1_est.append(q_posteriori[1])
-    # q2_est.append(q_posteriori[2])
-    # q3_est.append(q_posteriori[3])
-    # w0_est.append(w_posteriori[0])
-    # w1_est.append(w_posteriori[1])
-    # w2_est.append(w_posteriori[2])
-    q0_est.append(q0_real[-1])
-    q1_est.append(q1_real[-1])
-    q2_est.append(q2_real[-1])
-    q3_est.append(q3_real[-1])
-    w0_est.append(w0_real[-1])
-    w1_est.append(w1_real[-1])
-    w2_est.append(w2_real[-1])
+    q0_est.append(q_posteriori[0])
+    q1_est.append(q_posteriori[1])
+    q2_est.append(q_posteriori[2])
+    q3_est.append(q_posteriori[3])
+    w0_est.append(w_posteriori[0])
+    w1_est.append(w_posteriori[1])
+    w2_est.append(w_posteriori[2])
+    # q0_est.append(q0_real[-1])
+    # q1_est.append(q1_real[-1])
+    # q2_est.append(q2_real[-1])
+    # q3_est.append(q3_real[-1])
+    # w0_est.append(w0_real[-1])
+    # w1_est.append(w1_real[-1])
+    # w2_est.append(w2_real[-1])
 
     P_ki = P_k_pos
     
