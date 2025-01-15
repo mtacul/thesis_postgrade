@@ -35,7 +35,7 @@ vsun_z = array_datos[:, 12]
 
 deltat = 2
 # limite =  5762*69
-limite =  5762*3
+limite =  5762*1
 t = np.arange(0, limite, deltat)
 
 #%% Parámetros geométricos y orbitales dados
@@ -151,7 +151,7 @@ B_matrices_mod = [B_discrete_mod]
 for i in range(len(t[0:2882])-1):
 # for i in range(len(t)-1):
 
-    print(t[i+1])
+    # print(t[i+1])
     
     # u_est = np.array([15,15,15])
 
@@ -214,7 +214,7 @@ diagonal_values = np.array([0.5**2, 0.5**2, 0.5**2, 0.1**2, 0.1**2, 0.1**2])
 P_ki = np.diag(diagonal_values)
 np.random.seed(42)
 for i in range(len(t)-1):
-    print(t[i+1])
+    # print(t[i+1])
     q_est = np.array([q0_est[-1], q1_est[-1], q2_est[-1], q3_est[-1]])
     w_est = np.array([w0_est[-1], w1_est[-1], w2_est[-1]])
     x_est = np.hstack((np.transpose(q_est[:3]), np.transpose(w_est)))

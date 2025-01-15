@@ -129,14 +129,14 @@ lim = lim_tau_values[opcion_tau]
 
 #%% Condiciones iniciales reales y estimadas
 
-# q= np.array([0.7071,0,0,0.7071])
+q= np.array([0.7071,0,0,0.7071])
 # q= np.array([0,0,0,1])
-q = np.array([0.0789,0.0941,0.0789,0.9893])
+# q = np.array([0.0789,0.0941,0.0789,0.9893])
 w = np.array([0.0001, 0.0001, 0.0001])
 ws = np.array([0.00001, 0.00001, 0.00001])
-# q_est = np.array([0.70703804,0.00985969, 0.00985969, 0.70703804])
+q_est = np.array([0.70703804,0.00985969, 0.00985969, 0.70703804])
 # q_est= np.array([0.0120039,0.0116517,0.0160542,0.999731])
-q_est = np.array([0.0789,0.0941,0.0789,0.9893])
+# q_est = np.array([0.0789,0.0941,0.0789,0.9893])
 
 q0_est = [q_est[0]]  
 q1_est = [q_est[1]]
@@ -176,6 +176,7 @@ s_body_i = functions_03_rw.rotacion_v(q_real, si_orbit, sigma_ss)
 hh = deltat
 hh_mod = 0.2
 
+#%%
 [A,B,A_discrete,B_discrete] = functions_03_rw.A_B(I_x,I_y,I_z,w0_O,0,0,0 , I_s0_x, I_s1_y, I_s2_z, 0,0,0, J_x, J_y, J_z, deltat, hh, bi_orbit,b_body_i, s_body_i)
 [A_mod,B_mod,A_discrete_mod,B_discrete_mod] = functions_03_rw.A_B(I_x,I_y,I_z,w0_O,0,0,0 , I_s0_x, I_s1_y, I_s2_z, 0,0,0, J_x, J_y, J_z, deltat, hh_mod, bi_orbit,b_body_i, s_body_i)
 
@@ -205,17 +206,17 @@ D = np.zeros((3, 1))  # Assuming D has the same number of rows as A and the same
 #%% Control LQR en cada matriz
 
 # Definir las matrices Q y R del coste del LQR
-diag_Q1 = np.array([1, 1, 1])*100
+diag_Q1 = np.array([1, 1, 1])*10000
 diag_R1 = np.array([1])
 Q1 = np.diag(diag_Q1)
 R1 = np.diag(diag_R1)
 
-diag_Q2 = np.array([1, 1, 1])*100
+diag_Q2 = np.array([1, 1, 1])*10000
 diag_R2 = np.array([1])
 Q2 = np.diag(diag_Q2)
 R2 = np.diag(diag_R2)
 
-diag_Q3 = np.array([10, 10, 10])*100
+diag_Q3 = np.array([1, 1, 1])*10000
 diag_R3 = np.array([10])
 Q3 = np.diag(diag_Q3)
 R3 = np.diag(diag_R3)
@@ -231,24 +232,40 @@ K3_1 = np.array([K3[0][0],K3[0][1],K3[0][2]])
 Kk1 = np.array([K1_1[0],0,0,K1_1[1],0,0,K1_1[2],0,0])
 Kk2 = np.array([0,K2_1[0],0,0,K2_1[1],0,0,K2_1[2],0])
 Kk3 = np.array([0,0,K3_1[0],0,0,K3_1[1],0,0,K3_1[2]])
-
 K = np.vstack((Kk1,Kk2,Kk3))
-asad,vect = np.linalg.eig(A_discrete-B_discrete@K)
 
+#%% Control LQR
+
+# # Definir las matrices Q y R del coste del LQR
+# diag_Q = np.array([10, 10, 10, 10, 10, 10, 10, 10, 10])*10
+# diag_R = np.array([0.1,0.1,0.1])*10
+
+# Q = np.diag(diag_Q)
+# R = np.diag(diag_R)
+
+
+# # Calcular la matriz de retroalimentación K
+# K, P, eigenvalues = ctrl.dlqr(A_discrete, B_discrete, Q, R)
+
+
+asad,vect = np.linalg.eig(A_discrete-B_discrete@K)
+print(asad)
 
 asad1,vect1 = np.linalg.eig(A_discrete_0-B_discrete_0@K1)
 asad2,vect2 = np.linalg.eig(A_discrete_1-B_discrete_1@K2)
 asad3,vect3 = np.linalg.eig(A_discrete_2-B_discrete_2@K3)
-# asad[5] = 0.91
-# asad[7] = 0.92
-asad[8] = 0.999 # este es
-# asad[6] = 0.93
-# asad[4] = 0.94
-# asad[1] = 0.1
-# asad[6] = 0.35
-# asad[0] = 0.01
-# asad[1] = 0.01
-# asad[2] = 0.01
+
+
+### valores propios entero
+# asad[0] = 0.37
+# asad[1] = 0.17
+# asad[2] = 0.888
+
+### valores propios conjugado
+asad[1] = 0.08
+asad[4] = 0.3
+asad[5] = 0.3296
+asad[8] = 0.9999999 # este es
 
 k_place = ctrl.place(A_discrete,B_discrete,asad)
 
@@ -261,7 +278,7 @@ P_ki = np.diag(diagonal_values)
 np.random.seed(42)
 
 for i in range(len(t)-1):
-    print(t[i+1])
+    # print(t[i+1])
     # print(x_real)
     # print(np.dot(-K*10,x_real))
     
@@ -336,7 +353,7 @@ for i in range(len(t)-1):
     
 [MSE_cuat, MSE_omega]  = functions_03_rw.cuat_MSE_NL(q0_real, q1_real, q2_real, q3_real, w0_real, w1_real, w2_real, q0_est, q1_est, q2_est, q3_est, w0_est, w1_est, w2_est)   
 [RPY_all_est,RPY_all_id,mse_roll,mse_pitch,mse_yaw] = functions_03_rw.RPY_MSE(t, q0_est, q1_est, q2_est, q3_est, q0_real, q1_real, q2_real, q3_real)   
-    
+print(aus[0])
 # %% Gráficas de los resultados obtenidos en la suite de simulacion
 
 fig0, axes0 = plt.subplots(nrows=1, ncols=2, figsize=(16, 4))

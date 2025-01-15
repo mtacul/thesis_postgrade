@@ -37,7 +37,7 @@ vsun_z = array_datos[:, 12]
 deltat = 2
 # limite =  5762*69
 # limite =  5762*5
-limite = 5762*0.1
+limite = 5762*1
 t = np.arange(0, limite, deltat)
 
 #%% Parámetros geométricos y orbitales dados

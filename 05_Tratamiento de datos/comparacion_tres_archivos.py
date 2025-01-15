@@ -791,6 +791,7 @@ nombre_archivo_3 = os.path.splitext(os.path.basename(archivos_seleccionados[2]))
 
 #%%
 
+
 fig0, axes0 = plt.subplots(nrows=3, ncols=3, figsize=(17, 8))
 
 axes0[0,0].plot(t_aux, Roll_1, label= {nombre_archivo_1})
@@ -944,7 +945,7 @@ plt.show()
 
 # pdf_path
 #%%
-xticks = range(0, 60001, 20000)
+xticks = range(0, 6000, 1000)
 fig0, axes0 = plt.subplots(nrows=1, ncols=3, figsize=(15,4.5))
 
 axes0[0].plot(t_aux, norms_RPY_1, label= {nombre_archivo_1})
@@ -954,7 +955,7 @@ axes0[0].tick_params(axis='both', which='major', labelsize=15)  # Ajusta el tama
 axes0[0].set_xticks(xticks)
 axes0[0].legend(fontsize=12)
 axes0[0].grid()
-axes0[0].set_xlim(0, 60000)   # Ajusta los límites en el eje Y
+# axes0[0].set_xlim(0, 60000)   # Ajusta los límites en el eje Y
 
 axes0[1].plot(t_aux, norms_RPY_2, label={nombre_archivo_2},color='orange')
 axes0[1].set_xlabel('Tiempo [s]', fontsize=15)
@@ -963,7 +964,7 @@ axes0[1].tick_params(axis='both', which='major', labelsize=15)
 axes0[1].set_xticks(xticks)
 axes0[1].legend(fontsize=12)
 axes0[1].grid()
-axes0[1].set_xlim(0, 60000)   # Ajusta los límites en el eje Y
+# axes0[1].set_xlim(0, 60000)   # Ajusta los límites en el eje Y
 # axes0[1].set_ylim(-20, -5)  # Ajusta los límites en el eje Y
 # axes0[1].set_xlim(150000, 400000)  # Ajusta los límites en el eje Y
 
@@ -974,7 +975,7 @@ axes0[2].tick_params(axis='both', which='major', labelsize=15)
 axes0[2].set_xticks(xticks)
 axes0[2].legend(fontsize=12)
 axes0[2].grid()
-axes0[2].set_xlim(0, 60000)  # Ajusta los límites en el eje Y
+# axes0[2].set_xlim(0, 60000)  # Ajusta los límites en el eje Y
 
 
 plt.tight_layout()
@@ -985,156 +986,156 @@ plt.savefig('norm.svg', format='svg')
 plt.show()
 
 
-#%%
-fig0, ax = plt.subplots(figsize=(15,5))  # Crea un solo set de ejes
+# #%%
+# fig0, ax = plt.subplots(figsize=(15,5))  # Crea un solo set de ejes
 
-# Graficar los tres conjuntos de datos en la misma gráfica
-ax.plot(t_aux, norms_RPY_1, label='Costo bajo')
-ax.plot(t_aux, norms_RPY_2, label='Costo medio', color='orange')
-ax.plot(t_aux, norms_RPY_3, label='Costo alto', color='green')
+# # Graficar los tres conjuntos de datos en la misma gráfica
+# ax.plot(t_aux, norms_RPY_1, label='Costo bajo')
+# ax.plot(t_aux, norms_RPY_2, label='Costo medio', color='orange')
+# ax.plot(t_aux, norms_RPY_3, label='Costo alto', color='green')
 
-# Configurar etiquetas, leyenda y grid
-ax.set_xlabel('Tiempo [s]', fontsize=18)
-ax.set_ylabel('Error en ángulo de orientación [°]', fontsize=18)
-ax.legend(fontsize=18)
-ax.grid()
+# # Configurar etiquetas, leyenda y grid
+# ax.set_xlabel('Tiempo [s]', fontsize=18)
+# ax.set_ylabel('Error en ángulo de orientación [°]', fontsize=18)
+# ax.legend(fontsize=18)
+# ax.grid()
 
-# Ajustar límites del eje X
-ax.set_xlim(0, 60000)
+# # Ajustar límites del eje X
+# ax.set_xlim(0, 60000)
 
-# Ajustar el tamaño de las etiquetas de los ticks
-ax.tick_params(axis='both', which='major', labelsize=18)
+# # Ajustar el tamaño de las etiquetas de los ticks
+# ax.tick_params(axis='both', which='major', labelsize=18)
 
-plt.tight_layout()
+# plt.tight_layout()
 
-# Guardar la gráfica como archivo SVG
-plt.savefig('norm.svg', format='svg')
+# # Guardar la gráfica como archivo SVG
+# plt.savefig('norm.svg', format='svg')
 
-# Mostrar la gráfica
-plt.show()
-#%%
-fig0, axes0 = plt.subplots(nrows=3, ncols=3, figsize=(17, 8))
+# # Mostrar la gráfica
+# plt.show()
+# #%%
+# fig0, axes0 = plt.subplots(nrows=3, ncols=3, figsize=(17, 8))
 
-axes0[0,0].plot(t_aux, Roll_low_pass_1, label= {nombre_archivo_1})
-axes0[0,0].set_xlabel('Tiempo [s]')
-axes0[0,0].set_ylabel('Roll [°]')
-axes0[0,0].legend()
-axes0[0,0].grid()
-axes0[0,0].set_ylim(-5, 5)  # Ajusta los límites en el eje Y
-axes0[0,0].set_xlim(0, 5000)   # Ajusta los límites en el eje Y
+# axes0[0,0].plot(t_aux, Roll_low_pass_1, label= {nombre_archivo_1})
+# axes0[0,0].set_xlabel('Tiempo [s]')
+# axes0[0,0].set_ylabel('Roll [°]')
+# axes0[0,0].legend()
+# axes0[0,0].grid()
+# axes0[0,0].set_ylim(-5, 5)  # Ajusta los límites en el eje Y
+# axes0[0,0].set_xlim(0, 5000)   # Ajusta los límites en el eje Y
 
-axes0[0,1].plot(t_aux, Roll_low_pass_2, label= {nombre_archivo_2})
-axes0[0,1].set_xlabel('Tiempo [s]')
-axes0[0,1].set_ylabel('Roll [°]')
-axes0[0,1].legend()
-axes0[0,1].grid()
-axes0[0,1].set_ylim(-5, 5)  # Ajusta los límites en el eje Y
-axes0[0,1].set_xlim(0, 5000)   # Ajusta los límites en el eje Y
+# axes0[0,1].plot(t_aux, Roll_low_pass_2, label= {nombre_archivo_2})
+# axes0[0,1].set_xlabel('Tiempo [s]')
+# axes0[0,1].set_ylabel('Roll [°]')
+# axes0[0,1].legend()
+# axes0[0,1].grid()
+# axes0[0,1].set_ylim(-5, 5)  # Ajusta los límites en el eje Y
+# axes0[0,1].set_xlim(0, 5000)   # Ajusta los límites en el eje Y
 
-axes0[0,2].plot(t_aux, Roll_low_pass_3, label= {nombre_archivo_3})
-axes0[0,2].set_xlabel('Tiempo [s]')
-axes0[0,2].set_ylabel('Roll [°]')
-axes0[0,2].legend()
-axes0[0,2].grid()
-axes0[0,2].set_ylim(-5, 5)  # Ajusta los límites en el eje Y
-axes0[0,2].set_xlim(0, 5000)   # Ajusta los límites en el eje Y
+# axes0[0,2].plot(t_aux, Roll_low_pass_3, label= {nombre_archivo_3})
+# axes0[0,2].set_xlabel('Tiempo [s]')
+# axes0[0,2].set_ylabel('Roll [°]')
+# axes0[0,2].legend()
+# axes0[0,2].grid()
+# axes0[0,2].set_ylim(-5, 5)  # Ajusta los límites en el eje Y
+# axes0[0,2].set_xlim(0, 5000)   # Ajusta los límites en el eje Y
 
-axes0[1,0].plot(t_aux, Pitch_low_pass_1, label={nombre_archivo_1})
-axes0[1,0].set_xlabel('Tiempo [s]')
-axes0[1,0].set_ylabel('Pitch [°]')
-axes0[1,0].legend()
-axes0[1,0].grid()
-axes0[1,0].set_ylim(-7, 7)  # Ajusta los límites en el eje Y
-axes0[1,0].set_xlim(0, 5000)   # Ajusta los límites en el eje Y
-
-# axes0[1].set_ylim(-20, -5)  # Ajusta los límites en el eje Y
-# axes0[1].set_xlim(150000, 400000)  # Ajusta los límites en el eje Y
-
-axes0[1,1].plot(t_aux, Pitch_low_pass_2, label={nombre_archivo_2})
-axes0[1,1].set_xlabel('Tiempo [s]')
-axes0[1,1].set_ylabel('Pitch [°]')
-axes0[1,1].legend()
-axes0[1,1].grid()
-axes0[1,1].set_ylim(-7, 7)  # Ajusta los límites en el eje Y
-axes0[1,1].set_xlim(0, 5000)   # Ajusta los límites en el eje Y
+# axes0[1,0].plot(t_aux, Pitch_low_pass_1, label={nombre_archivo_1})
+# axes0[1,0].set_xlabel('Tiempo [s]')
+# axes0[1,0].set_ylabel('Pitch [°]')
+# axes0[1,0].legend()
+# axes0[1,0].grid()
+# axes0[1,0].set_ylim(-7, 7)  # Ajusta los límites en el eje Y
+# axes0[1,0].set_xlim(0, 5000)   # Ajusta los límites en el eje Y
 
 # axes0[1].set_ylim(-20, -5)  # Ajusta los límites en el eje Y
 # axes0[1].set_xlim(150000, 400000)  # Ajusta los límites en el eje Y
 
-axes0[1,2].plot(t_aux, Pitch_low_pass_3, label={nombre_archivo_3})
-axes0[1,2].set_xlabel('Tiempo [s]')
-axes0[1,2].set_ylabel('Pitch [°]')
-axes0[1,2].legend()
-axes0[1,2].grid()
-axes0[1,2].set_ylim(-7, 7)  # Ajusta los límites en el eje Y
-axes0[1,2].set_xlim(0, 5000)   # Ajusta los límites en el eje Y
+# axes0[1,1].plot(t_aux, Pitch_low_pass_2, label={nombre_archivo_2})
+# axes0[1,1].set_xlabel('Tiempo [s]')
+# axes0[1,1].set_ylabel('Pitch [°]')
+# axes0[1,1].legend()
+# axes0[1,1].grid()
+# axes0[1,1].set_ylim(-7, 7)  # Ajusta los límites en el eje Y
+# axes0[1,1].set_xlim(0, 5000)   # Ajusta los límites en el eje Y
 
-# axes0[1].set_ylim(-20, -5)  # Ajusta los límites en el eje Y
-# axes0[1].set_xlim(150000, 400000)  # Ajusta los límites en el eje Y
+# # axes0[1].set_ylim(-20, -5)  # Ajusta los límites en el eje Y
+# # axes0[1].set_xlim(150000, 400000)  # Ajusta los límites en el eje Y
 
-axes0[2,0].plot(t_aux, Yaw_low_pass_1, label={nombre_archivo_1})
-axes0[2,0].set_xlabel('Tiempo [s]')
-axes0[2,0].set_ylabel('Yaw [°]')
-axes0[2,0].legend()
-axes0[2,0].grid()
-axes0[2,0].set_ylim(-5, 5)  # Ajusta los límites en el eje Y
-axes0[2,0].set_xlim(0, 5000)   # Ajusta los límites en el eje Y
+# axes0[1,2].plot(t_aux, Pitch_low_pass_3, label={nombre_archivo_3})
+# axes0[1,2].set_xlabel('Tiempo [s]')
+# axes0[1,2].set_ylabel('Pitch [°]')
+# axes0[1,2].legend()
+# axes0[1,2].grid()
+# axes0[1,2].set_ylim(-7, 7)  # Ajusta los límites en el eje Y
+# axes0[1,2].set_xlim(0, 5000)   # Ajusta los límites en el eje Y
 
-axes0[2,1].plot(t_aux, Yaw_low_pass_2, label={nombre_archivo_2})
-axes0[2,1].set_xlabel('Tiempo [s]')
-axes0[2,1].set_ylabel('Yaw [°]')
-axes0[2,1].legend()
-axes0[2,1].grid()
-axes0[2,1].set_ylim(-5, 5)  # Ajusta los límites en el eje Y
-axes0[2,1].set_xlim(0, 5000)   # Ajusta los límites en el eje Y
+# # axes0[1].set_ylim(-20, -5)  # Ajusta los límites en el eje Y
+# # axes0[1].set_xlim(150000, 400000)  # Ajusta los límites en el eje Y
 
-axes0[2,2].plot(t_aux, Yaw_low_pass_3, label={nombre_archivo_3})
-axes0[2,2].set_xlabel('Tiempo [s]')
-axes0[2,2].set_ylabel('Yaw [°]')
-axes0[2,2].legend()
-axes0[2,2].grid()
-axes0[2,2].set_ylim(-5, 5)  # Ajusta los límites en el eje Y
-axes0[2,2].set_xlim(0, 5000)   # Ajusta los límites en el eje Y
-# axes0[2].set_ylim(-20, -5)  # Ajusta los límites en el eje Y
-# axes0[2].set_xlim(150000, 400000)  # Ajusta los límites en el eje Y
+# axes0[2,0].plot(t_aux, Yaw_low_pass_1, label={nombre_archivo_1})
+# axes0[2,0].set_xlabel('Tiempo [s]')
+# axes0[2,0].set_ylabel('Yaw [°]')
+# axes0[2,0].legend()
+# axes0[2,0].grid()
+# axes0[2,0].set_ylim(-5, 5)  # Ajusta los límites en el eje Y
+# axes0[2,0].set_xlim(0, 5000)   # Ajusta los límites en el eje Y
 
-plt.tight_layout()
-plt.show()
+# axes0[2,1].plot(t_aux, Yaw_low_pass_2, label={nombre_archivo_2})
+# axes0[2,1].set_xlabel('Tiempo [s]')
+# axes0[2,1].set_ylabel('Yaw [°]')
+# axes0[2,1].legend()
+# axes0[2,1].grid()
+# axes0[2,1].set_ylim(-5, 5)  # Ajusta los límites en el eje Y
+# axes0[2,1].set_xlim(0, 5000)   # Ajusta los límites en el eje Y
 
-#%%
-fig0, axes0 = plt.subplots(nrows=3, ncols=1, figsize=(10, 10))
+# axes0[2,2].plot(t_aux, Yaw_low_pass_3, label={nombre_archivo_3})
+# axes0[2,2].set_xlabel('Tiempo [s]')
+# axes0[2,2].set_ylabel('Yaw [°]')
+# axes0[2,2].legend()
+# axes0[2,2].grid()
+# axes0[2,2].set_ylim(-5, 5)  # Ajusta los límites en el eje Y
+# axes0[2,2].set_xlim(0, 5000)   # Ajusta los límites en el eje Y
+# # axes0[2].set_ylim(-20, -5)  # Ajusta los límites en el eje Y
+# # axes0[2].set_xlim(150000, 400000)  # Ajusta los límites en el eje Y
 
-axes0[0].plot(t_aux, norms_RPY_low_pass_1, label= {nombre_archivo_1})
-axes0[0].set_xlabel('Tiempo [s]')
-axes0[0].set_ylabel('Norma lp_RPY [°]')
-axes0[0].legend()
-axes0[0].grid()
-axes0[0].set_xlim(0, 60000)   # Ajusta los límites en el eje Y
-axes0[0].set_ylim(-7, 7)  # Ajusta los límites en el eje Y
+# plt.tight_layout()
+# plt.show()
 
-axes0[1].plot(t_aux, norms_RPY_low_pass_2, label={nombre_archivo_2},color='orange')
-axes0[1].set_xlabel('Tiempo [s]')
-axes0[1].set_ylabel('Norma lp_RPY [°]')
-axes0[1].legend()
-axes0[1].grid()
-axes0[1].set_xlim(0, 60000)   # Ajusta los límites en el eje Y
-axes0[1].set_ylim(-7, 7)  # Ajusta los límites en el eje Y
+# #%%
+# fig0, axes0 = plt.subplots(nrows=3, ncols=1, figsize=(10, 10))
 
-axes0[2].plot(t_aux, norms_RPY_low_pass_3, label={nombre_archivo_3},color='green')
-axes0[2].set_xlabel('Tiempo [s]')
-axes0[2].set_ylabel('Norma lp_RPY [°]')
-axes0[2].legend()
-axes0[2].grid()
-axes0[2].set_xlim(0, 60000)  # Ajusta los límites en el eje Y
-axes0[2].set_ylim(-7, 7)  # Ajusta los límites en el eje Y
+# axes0[0].plot(t_aux, norms_RPY_low_pass_1, label= {nombre_archivo_1})
+# axes0[0].set_xlabel('Tiempo [s]')
+# axes0[0].set_ylabel('Norma lp_RPY [°]')
+# axes0[0].legend()
+# axes0[0].grid()
+# # axes0[0].set_xlim(0, 60000)   # Ajusta los límites en el eje Y
+# axes0[0].set_ylim(-7, 7)  # Ajusta los límites en el eje Y
+
+# axes0[1].plot(t_aux, norms_RPY_low_pass_2, label={nombre_archivo_2},color='orange')
+# axes0[1].set_xlabel('Tiempo [s]')
+# axes0[1].set_ylabel('Norma lp_RPY [°]')
+# axes0[1].legend()
+# axes0[1].grid()
+# # axes0[1].set_xlim(0, 60000)   # Ajusta los límites en el eje Y
+# axes0[1].set_ylim(-7, 7)  # Ajusta los límites en el eje Y
+
+# axes0[2].plot(t_aux, norms_RPY_low_pass_3, label={nombre_archivo_3},color='green')
+# axes0[2].set_xlabel('Tiempo [s]')
+# axes0[2].set_ylabel('Norma lp_RPY [°]')
+# axes0[2].legend()
+# axes0[2].grid()
+# # axes0[2].set_xlim(0, 60000)  # Ajusta los límites en el eje Y
+# axes0[2].set_ylim(-7, 7)  # Ajusta los límites en el eje Y
 
 
-plt.tight_layout()
-# # Save the plot as an SVG file
-# plt.savefig('plot.svg', format='svg')
+# plt.tight_layout()
+# # # Save the plot as an SVG file
+# # plt.savefig('plot.svg', format='svg')
 
-# Mostrar el gráfico
-plt.show()
+# # Mostrar el gráfico
+# plt.show()
 #%%
 
 [MSE_cuat_1, MSE_omega_1]  = functions_05.cuat_MSE_NL(q0_real_1, q1_real_1, q2_real_1, q3_real_1, w0_real_1, w1_real_1, w2_real_1, q0_est_1, q1_est_1, q2_est_1, q3_est_1, w0_est_1, w1_est_1, w2_est_1)   
@@ -1147,45 +1148,46 @@ plt.show()
 [asd,asd,mse_roll_3,mse_pitch_3,mse_yaw_3] = functions_05.RPY_MSE(t_aux, q0_est_3, q1_est_3, q2_est_3, q3_est_3, q0_real_3, q1_real_3, q2_real_3, q3_real_3)   
 
 
-quats = np.array([0,1,2,3])
-plt.figure(figsize=(12, 6))
-plt.scatter(quats[0], MSE_cuat_1[0], label='mse q0_1', color='r',marker='*')
-plt.scatter(quats[1], MSE_cuat_1[1], label='mse q1_1', color='b',marker='*')
-plt.scatter(quats[2], MSE_cuat_1[2], label='mse q2_1', color='k',marker='*')
-plt.scatter(quats[3], MSE_cuat_1[3], label='mse q3_1', color='g',marker='*')
-plt.xlabel('Cuaterniones')
-plt.ylabel('Mean Square Error [-]')
-plt.legend()
-plt.title('MSE de cada cuaternion entre lineal discreto y kalman lineal discreto sen1_act1_RW')
-# plt.xlim(20000,100000)
-# plt.ylim(-0.005,0.005)
-plt.grid()
-plt.show()
 
-plt.figure(figsize=(12, 6))
-plt.scatter(quats[0], MSE_cuat_2[0], label='mse q0_2', color='r',marker='*')
-plt.scatter(quats[1], MSE_cuat_2[1], label='mse q1_2', color='b',marker='*')
-plt.scatter(quats[2], MSE_cuat_2[2], label='mse q2_2', color='k',marker='*')
-plt.scatter(quats[3], MSE_cuat_2[3], label='mse q3_2', color='g',marker='*')
-plt.xlabel('Cuaterniones')
-plt.ylabel('Mean Square Error [-]')
-plt.legend()
-plt.title('MSE de cada cuaternion entre lineal discreto y kalman lineal discreto opcion 2')
-# plt.xlim(20000,100000)
-# plt.ylim(-0.005,0.005)
-plt.grid()
-plt.show()
+# quats = np.array([0,1,2,3])
+# plt.figure(figsize=(12, 6))
+# plt.scatter(quats[0], MSE_cuat_1[0], label='mse q0_1', color='r',marker='*')
+# plt.scatter(quats[1], MSE_cuat_1[1], label='mse q1_1', color='b',marker='*')
+# plt.scatter(quats[2], MSE_cuat_1[2], label='mse q2_1', color='k',marker='*')
+# plt.scatter(quats[3], MSE_cuat_1[3], label='mse q3_1', color='g',marker='*')
+# plt.xlabel('Cuaterniones')
+# plt.ylabel('Mean Square Error [-]')
+# plt.legend()
+# plt.title('MSE de cada cuaternion entre lineal discreto y kalman lineal discreto sen1_act1_RW')
+# # plt.xlim(20000,100000)
+# # plt.ylim(-0.005,0.005)
+# plt.grid()
+# plt.show()
 
-plt.figure(figsize=(12, 6))
-plt.scatter(quats[0], MSE_cuat_3[0], label='mse q0_3', color='r',marker='*')
-plt.scatter(quats[1], MSE_cuat_3[1], label='mse q1_3', color='b',marker='*')
-plt.scatter(quats[2], MSE_cuat_3[2], label='mse q2_3', color='k',marker='*')
-plt.scatter(quats[3], MSE_cuat_3[3], label='mse q3_3', color='g',marker='*')
-plt.xlabel('Cuaterniones')
-plt.ylabel('Mean Square Error [-]')
-plt.legend()
-plt.title('MSE de cada cuaternion entre lineal discreto y kalman lineal discreto opcion 3')
-# plt.xlim(20000,100000)
-# plt.ylim(-0.005,0.005)
-plt.grid()
-plt.show()
+# plt.figure(figsize=(12, 6))
+# plt.scatter(quats[0], MSE_cuat_2[0], label='mse q0_2', color='r',marker='*')
+# plt.scatter(quats[1], MSE_cuat_2[1], label='mse q1_2', color='b',marker='*')
+# plt.scatter(quats[2], MSE_cuat_2[2], label='mse q2_2', color='k',marker='*')
+# plt.scatter(quats[3], MSE_cuat_2[3], label='mse q3_2', color='g',marker='*')
+# plt.xlabel('Cuaterniones')
+# plt.ylabel('Mean Square Error [-]')
+# plt.legend()
+# plt.title('MSE de cada cuaternion entre lineal discreto y kalman lineal discreto opcion 2')
+# # plt.xlim(20000,100000)
+# # plt.ylim(-0.005,0.005)
+# plt.grid()
+# plt.show()
+
+# plt.figure(figsize=(12, 6))
+# plt.scatter(quats[0], MSE_cuat_3[0], label='mse q0_3', color='r',marker='*')
+# plt.scatter(quats[1], MSE_cuat_3[1], label='mse q1_3', color='b',marker='*')
+# plt.scatter(quats[2], MSE_cuat_3[2], label='mse q2_3', color='k',marker='*')
+# plt.scatter(quats[3], MSE_cuat_3[3], label='mse q3_3', color='g',marker='*')
+# plt.xlabel('Cuaterniones')
+# plt.ylabel('Mean Square Error [-]')
+# plt.legend()
+# plt.title('MSE de cada cuaternion entre lineal discreto y kalman lineal discreto opcion 3')
+# # plt.xlim(20000,100000)
+# # plt.ylim(-0.005,0.005)
+# plt.grid()
+# plt.show()
