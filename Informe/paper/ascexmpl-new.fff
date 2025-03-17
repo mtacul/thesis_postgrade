@@ -1,0 +1,9 @@
+\begin{figure}
+\centering
+\framebox[3.00in]{\rule[0in]{0in}{1.00in}}
+\caption{An example figure (just a box).
+This particular figure has a caption with more information
+than the figure itself, a very poor practice indeed.
+A reference here \protect\cite{Stahl:2004a}.}
+\label{fig:box_fig}
+\end{figure}

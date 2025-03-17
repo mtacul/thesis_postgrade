@@ -217,9 +217,9 @@ def dynamics(A, x, B, u):
     return np.dot(A, x) + np.dot(B, u)
 
 def mod_lineal_cont(x,u,deltat,h,A,B):
-    
+    x_new = x    
     for j in range(int(deltat/h)):
-        q_rot,w_new = rk4_step_PD(dynamics, x, A, B, u, h)
+        q_rot,w_new = rk4_step_PD(dynamics, x_new, A, B, u, h)
         if  1-q_rot[0]**2-q_rot[1]**2-q_rot[2]**2 < 0:
             q_rot = q_rot / np.linalg.norm(q_rot)
             x_new = np.hstack((np.transpose(q_rot), np.transpose(w_new)))

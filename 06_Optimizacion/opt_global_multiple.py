@@ -44,12 +44,12 @@ def objective(x, *args):
                1,1,0,   
                0,0,0]
         if type_act == 0:
-            lim = 5
+            lim = 1
         elif type_act == 1:
             lim = 0.1
     elif S_A_both == 1:
         lim = x
-        std_sensor_sol, std_magnetometros = 0.68, 1e-9  # Valores fijos o iniciales
+        std_sensor_sol, std_magnetometros = 0.5, 1.5e-10  # Valores fijos o iniciales
         
         P_i = [1,1,1,
                0,0,0, 
@@ -114,13 +114,15 @@ file_result = "optimizacion.txt"
 # Iterar sobre diferentes combinaciones de parámetros
 # type_act_values = [0, 1]  # Por ejemplo: magnetorquer(0) o rueda de reacción(1)
 type_act_values = [0]  
-# S_A_both_values = [0, 1, 2]  # Diferentes combinaciones de sensor y actuador 0:sensor, 1:actuador, 2: ambos
-S_A_both_values = [0]  
+S_A_both_values = [0, 1, 2]  # Diferentes combinaciones de sensor y actuador 0:sensor, 1:actuador, 2: ambos
+# S_A_both_values = [0]  
 # type_rend_values = ['acc', 'time', 'acc_time', 'acc_psd', 'psd_time','all']  # Diferentes tipos de rendimiento
 # type_rend_values = ['acc','acc_time','all'] 
-type_rend_values = ['acc'] 
+type_rend_values = ['acc','time','all'] 
 
-type_solver_values = ['L-BFGS-B','Powell','Nelder-Mead']
+# type_solver_values = ['L-BFGS-B','Powell','Nelder-Mead']
+type_solver_values = ['Powell']
+
 # hacer 'psd' por separado
 
 # Pesos para la optimización
@@ -144,7 +146,7 @@ for type_solver in type_solver_values:
                     bnds = ((0.01, 1.67), (0.012e-9, 3e-9))
                     # initial_guess = [0.5, 1.5e-9]
                     # initial_guess = [1.6, 3e-9]  # std_sensor_sol, std_magnetometros y lim
-                    initial_guess = [0.05, 0.015e-9]  # std_sensor_sol, std_magnetometros y lim
+                    initial_guess = [0.5, 1.5e-10]  # std_sensor_sol, std_magnetometros y lim
 
                 elif S_A_both == 1:
                     if type_act == 0:
@@ -158,11 +160,11 @@ for type_solver in type_solver_values:
                         bnds = ((0.01, 1.67), (0.012e-9, 3e-9), (0.29, 70))  # Para std_sensor_sol, std_magnetometros y lim
                         # initial_guess = [0.5, 1.5e-9, 1]  # std_sensor_sol, std_magnetometros y lim
                         # initial_guess = [1.6, 3e-9, 0.5]  # std_sensor_sol, std_magnetometros y lim
-                        initial_guess = [0.05, 0.015e-9, 40]  # std_sensor_sol, std_magnetometros y lim
+                        initial_guess = [0.5, 1.5e-10, 1]  # std_sensor_sol, std_magnetometros y lim
 
                     elif type_act == 1:
                         bnds = ((0.01, 1.67), (0.012e-9, 3e-9), (0.001, 0.25))  # Para std_sensor_sol, std_magnetometros y lim
-                        initial_guess = [0.5, 1.5e-9, 0.1]  # std_sensor_sol, std_magnetometros y lim
+                        initial_guess = [0.5, 1.5e-10, 0.1]  # std_sensor_sol, std_magnetometros y lim
     
     
                 # Ejecutar la optimización

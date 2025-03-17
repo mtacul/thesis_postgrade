@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.9.16)  9 DEC 2024 23:57
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.9.16)  13 MAR 2025 21:09
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1178,7 +1178,17 @@ Package: float 2001/11/08 v1.3d Float enhancements (AL)
 (./C6-Aplicacion_de_optimizacion_en_Python.aux) (./C8-Conclusiones.aux)
 (./Z1-CartaGantt.aux) (./Z2-Torques.aux) (./Z3-Conversion.aux) (./Z4-EKF.aux)
 (./Z5-Magnetorquer.aux) (./Z6-RuedaReaccion.aux) (./Z7-Componentes.aux)
-(./Z8-MoP.aux) (./Z9-Funcionescosto.aux) (./Z10-Codigo.aux))
+(./Z8-MoP.aux) (./Z9-Funcionescosto.aux
+
+LaTeX Warning: Label `fig:masa_magn' multiply defined.
+
+
+LaTeX Warning: Label `sub@fig:masa_magn' multiply defined.
+
+
+LaTeX Warning: Label `fig:magn_aj' multiply defined.
+
+) (./Z10-Codigo.aux))
 \openout1 = `Formato-MT-Latex.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 73.
@@ -2267,39 +2277,55 @@ Package pdftex.def Info: yaw_DNormal.pdf  used on input line 92.
 \openout2 = `Z9-Funcionescosto.aux'.
 
  (./Z9-Funcionescosto.tex
-<potencia_ss.pdf, id=1933, 433.62pt x 289.08pt>
-File: potencia_ss.pdf Graphic file (type pdf)
-<use potencia_ss.pdf>
-Package pdftex.def Info: potencia_ss.pdf  used on input line 8.
+File: potencia_magn.pdf Graphic file (type pdf)
+<use potencia_magn.pdf>
+Package pdftex.def Info: potencia_magn.pdf  used on input line 9.
 (pdftex.def)             Requested size: 291.75752pt x 194.51627pt.
-<masa_ss.pdf, id=1934, 433.62pt x 289.08pt>
+<masa_ss.pdf, id=1933, 433.62pt x 289.08pt>
 File: masa_ss.pdf Graphic file (type pdf)
 <use masa_ss.pdf>
-Package pdftex.def Info: masa_ss.pdf  used on input line 14.
+Package pdftex.def Info: masa_ss.pdf  used on input line 15.
 (pdftex.def)             Requested size: 291.75752pt x 194.51627pt.
+
+Underfull \hbox (badness 1735) in paragraph at lines 17--17
+[]\OT1/cmr/bx/n/10.95 (b) |\OT1/cmr/m/n/10.95 Gr^^Safica desviaci^^Son est^^San
+dar vs masa de los mag-
+ []
+
+<potencia_ss.pdf, id=1934, 433.62pt x 289.08pt>
+File: potencia_ss.pdf Graphic file (type pdf)
+<use potencia_ss.pdf>
+Package pdftex.def Info: potencia_ss.pdf  used on input line 26.
+(pdftex.def)             Requested size: 291.75752pt x 194.51627pt.
+File: masa_ss.pdf Graphic file (type pdf)
+<use masa_ss.pdf>
+Package pdftex.def Info: masa_ss.pdf  used on input line 32.
+(pdftex.def)             Requested size: 291.75752pt x 194.51627pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
 <potencia_MT.pdf, id=1935, 433.62pt x 289.08pt>
 File: potencia_MT.pdf Graphic file (type pdf)
 <use potencia_MT.pdf>
-Package pdftex.def Info: potencia_MT.pdf  used on input line 26.
+Package pdftex.def Info: potencia_MT.pdf  used on input line 44.
 (pdftex.def)             Requested size: 291.75752pt x 194.51627pt.
 <masa_MT.pdf, id=1936, 433.62pt x 289.08pt>
 File: masa_MT.pdf Graphic file (type pdf)
 <use masa_MT.pdf>
-Package pdftex.def Info: masa_MT.pdf  used on input line 32.
+Package pdftex.def Info: masa_MT.pdf  used on input line 50.
 (pdftex.def)             Requested size: 291.75752pt x 194.51627pt.
-
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
 <potencia_RW.pdf, id=1937, 433.62pt x 289.08pt>
 File: potencia_RW.pdf Graphic file (type pdf)
 <use potencia_RW.pdf>
-Package pdftex.def Info: potencia_RW.pdf  used on input line 44.
+Package pdftex.def Info: potencia_RW.pdf  used on input line 62.
 (pdftex.def)             Requested size: 291.75752pt x 194.51627pt.
 <masa_RW.pdf, id=1938, 433.62pt x 289.08pt>
 File: masa_RW.pdf Graphic file (type pdf)
 <use masa_RW.pdf>
-Package pdftex.def Info: masa_RW.pdf  used on input line 50.
+Package pdftex.def Info: masa_RW.pdf  used on input line 68.
 (pdftex.def)             Requested size: 291.75752pt x 194.51627pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
@@ -2310,16 +2336,18 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 
 
 
- <./potencia_ss.pdf> <./masa_ss.pdf>]
+ <./masa_ss.pdf>]
 
-[103 <./potencia_MT.pdf> <./masa_MT.pdf>]
+[103 <./potencia_ss.pdf>]
 
-[104 <./potencia_RW.pdf> <./masa_RW.pdf>]
+[104 <./potencia_MT.pdf> <./masa_MT.pdf>]
+
+[105 <./potencia_RW.pdf> <./masa_RW.pdf>]
 \openout2 = `Z10-Codigo.aux'.
 
  (./Z10-Codigo.tex)
 
-[105
+[106
 
 
 
@@ -2338,12 +2366,16 @@ enddocument/afterlastpage: lastpage setting LastPage.
 LaTeX2e <2024-06-01> patch level 2
 L3 programming layer <2024-08-30>
  ***********
+
+
+LaTeX Warning: There were multiply-defined labels.
+
  ) 
 Here is how much of TeX's memory you used:
- 24692 strings out of 473578
- 472462 string characters out of 5732242
- 971888 words of memory out of 5000000
- 46982 multiletter control sequences out of 15000+600000
+ 24694 strings out of 473578
+ 472494 string characters out of 5732242
+ 972023 words of memory out of 5000000
+ 46984 multiletter control sequences out of 15000+600000
  569672 words of font info for 75 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  94i,17n,93p,2400b,982s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -2367,10 +2399,10 @@ ve/2024/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb><c:/texlive/2024/te
 xmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb><c:/texlive/2024/texmf-dist/f
 onts/type1/public/cm-super/sfrm1095.pfb><c:/texlive/2024/texmf-dist/fonts/type1
 /public/cm-super/sfrm1200.pfb>
-Output written on Formato-MT-Latex.pdf (112 pages, 8451625 bytes).
+Output written on Formato-MT-Latex.pdf (113 pages, 8452270 bytes).
 PDF statistics:
- 2353 PDF objects out of 2487 (max. 8388607)
- 636 compressed objects within 7 object streams
+ 2356 PDF objects out of 2487 (max. 8388607)
+ 638 compressed objects within 7 object streams
  0 named destinations out of 1000 (max. 500000)
  323 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -108,28 +108,30 @@ def objective(x, *args):
 file_result = "optimizacion.txt"
    
 # Definir valores de type_act, S_A_both, type_rend y Pesos P_i
-type_act = 0  # 0: magnetorquer, 1: rueda de reacción
-S_A_both = 0  # 0: solo sensor, 1: solo actuador, 2: ambos
-type_rend = 'acc'  # Puede ser 'acc', 'psd', 'time', 'acc_time', 'acc_psd', 'psd_time' y 'all'
+type_act = float(input("Ingrese el numero 0 o 1 en base al tipo de actuador a optimizar (0: magnetorquer, 1: rueda de reacción): "))
+S_A_both = float(input("Ingrese el numero 0, 1 o 2 en base a que optimizar (0: solo sensor, 1: solo actuador, 2: ambos): "))
+type_rend = input("Ingrese 'acc', 'psd', 'time', 'acc_time', 'acc_psd', 'psd_time' y 'all' en base al parámetro a optimizar: ")
 
 P_i = [1,1,1,   #Pesos: 0,1,2 -> acc,psd,time
-       0,0,0,   #Pesos: 3,4,5 -> pot, masa y vol magnetometro
-       0,0,0,   #Pesos: 6,7,8 -> pot, masa y vol sensor de sol
-       0,0,0]   #Pesos: 9,10,11 -> pot, masa y vol actuador
+       1,1,0,   #Pesos: 3,4,5 -> pot, masa y vol magnetometro
+       1,1,0,   #Pesos: 6,7,8 -> pot, masa y vol sensor de sol
+       1,1,0]   #Pesos: 9,10,11 -> pot, masa y vol actuador
 
 filename = f"resultados_typeact{type_act}_saboth{S_A_both}_typerend{type_rend}.txt"
 
 
 # Definir límites y condiciones iniciales según los valores actuales
 if S_A_both == 0:
-    # Ingreso de valor para `lim`
     if type_act == 0:
         lim = float(input("Ingrese el valor de 'lim' de magnetorquer de 0.29 a 70: "))
     elif type_act == 1:
         lim = float(input("Ingrese el valor de 'lim' de rueda de reacción de 0.001 a 0.25: "))
-        
+    
+    ini_guess_std_ss= float(input("Ingrese el valor inicial de optimizacion de 'std_sensor_sol' 0.01 a 1.67: "))
+    ini_guess_std_b= float(input("Ingrese el valor inicial de optimizacion de 'std_magnetometros' 1.2e-11 a 3e-9: "))
+
     bnds = ((0.01, 1.67), (0.012e-9, 3e-9))
-    initial_guess = [0.5, 1.5e-9]   
+    initial_guess = [ini_guess_std_ss, ini_guess_std_b]
     # Definición de argumentos para la optimización
     argss = (type_act, S_A_both, type_rend, P_i, filename, lim)  
     # Ejecución de la optimización
@@ -139,14 +141,16 @@ if S_A_both == 0:
     save_res_txt(result.x, result.fun, file_result, filename)
 elif S_A_both == 1:
     # Ingreso de valores para `std_sensor_sol` y `std_magnetometros`
-    std_sensor_sol = float(input("Ingrese el valor de 'std_sensor_sol': "))
-    std_magnetometros = float(input("Ingrese el valor de 'std_magnetometros': "))
+    std_sensor_sol = float(input("Ingrese el valor de 'std_sensor_sol' de 0.01 a 1.67: "))
+    std_magnetometros = float(input("Ingrese el valor de 'std_magnetometros' de 1.2e-11 a 3e-9: "))
     if type_act == 0:
-        bnds = ((0.29, 70),)
-        initial_guess = [1]
+        bnds = [(0.29, 70)]
+        initial_guess= float(input("Ingrese el valor inicial de optimizacion de 'lim' 0.29 a 70: "))
+
     elif type_act == 1:
-        bnds = ((0.001, 0.25),)
-        initial_guess = [0.10]
+        bnds = [(0.001, 0.25)]
+        initial_guess= float(input("Ingrese el valor inicial de optimizacion de 'lim' 0.001 a 0.25: "))
+
     # Definición de argumentos para la optimización
     argss = (type_act, S_A_both, type_rend, P_i, filename, std_sensor_sol, std_magnetometros) 
     # Ejecución de la optimización
@@ -158,12 +162,19 @@ elif S_A_both == 1:
 elif S_A_both == 2:
     if type_act == 0:
         bnds = ((0.01, 1.67), (0.012e-9, 3e-9), (0.29, 70))  # Para std_sensor_sol, std_magnetometros y lim
-        initial_guess = [0.5, 1.5e-9, 1]  # std_sensor_sol, std_magnetometros y lim
+        ini_guess_std_ss= float(input("Ingrese el valor inicial de optimizacion de 'std_sensor_sol' 0.01 a 1.67: "))
+        ini_guess_std_b= float(input("Ingrese el valor inicial de optimizacion de 'std_magnetometros' 1.2e-11 a 3e-9: "))
+        ini_guess= float(input("Ingrese el valor inicial de optimizacion de 'lim' 0.29 a 70: "))
 
+        initial_guess = [ini_guess_std_ss, ini_guess_std_b, ini_guess]
+        
     elif type_act == 1:
         bnds = ((0.01, 1.67), (0.012e-9, 3e-9), (0.001, 0.25))  # Para std_sensor_sol, std_magnetometros y lim
-        initial_guess = [0.5, 1.5e-9, 0.1]  # std_sensor_sol, std_magnetometros y lim
-    # Ejecución de la optimización
+        ini_guess_std_ss= float(input("Ingrese el valor inicial de optimizacion de 'std_sensor_sol' 0.01 a 1.67: "))
+        ini_guess_std_b= float(input("Ingrese el valor inicial de optimizacion de 'std_magnetometros' 1.2e-11 a 3e-9: "))
+        ini_guess= float(input("Ingrese el valor inicial de optimizacion de 'lim' 0.001 a 0.25: "))
+
+        initial_guess = [ini_guess_std_ss, ini_guess_std_b, ini_guess]       # Ejecución de la optimización
     # result = differential_evolution(objective, bounds=bnds, args=argss)
     result = minimize(objective, initial_guess, args=(type_act, S_A_both, type_rend, P_i, filename), method='Powell', bounds=bnds)
     # Ejecutar la optimización

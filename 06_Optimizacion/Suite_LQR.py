@@ -130,8 +130,9 @@ def suite_sim(sigma_ss, sigma_b,lim,type_act,S_A_both):
         
         si_orbit = [vx_sun_orbit[0],vy_sun_orbit[0],vz_sun_orbit[0]]
         s_body_i = functions_06.rotacion_v(q_real, si_orbit, 0.036)
-        hh =0.01
-        
+        hh = deltat
+        hh_mod = 0.2
+
     elif type_act == 1:
         q = np.array([0.0789,0.0941,0.0789,0.9893])
         w = np.array([0.0001, 0.0001, 0.0001])
@@ -183,8 +184,11 @@ def suite_sim(sigma_ss, sigma_b,lim,type_act,S_A_both):
     
     if type_act == 0:
         [A,B,C,A_discrete,B_discrete,C_discrete] = functions_06.A_B(I_x, I_y, I_z, w0_O, 0, 0, 0, deltat, hh, bi_orbit,b_body_i, s_body_i)
+        [A_mod,B_mod,C_mod,A_discrete_mod,B_discrete_mod,C_discrete_mod] = functions_06.A_B(I_x, I_y, I_z, w0_O, 0, 0, 0, deltat, hh_mod, bi_orbit,b_body_i, s_body_i)
+
         B_matrices = [B_discrete]
-        
+        B_matrices_mod = [B_discrete_mod]
+
         for i in range(len(t[0:2882])-1):
         
             # print(t[i+1])
@@ -192,17 +196,25 @@ def suite_sim(sigma_ss, sigma_b,lim,type_act,S_A_both):
             b_orbit = [Bx_orbit[i+1],By_orbit[i+1],Bz_orbit[i+1]]
         
             [A,B,C,A_discrete,B_discrete,C_discrete] = functions_06.A_B(I_x, I_y, I_z, w0_O, 0, 0, 0, deltat, hh,b_orbit, np.zeros(3), np.zeros(3))
-        
+            [A_mod,B_mod,C_mod,A_discrete_mod,B_discrete_mod,C_discrete_mod] = functions_06.A_B(I_x, I_y, I_z, w0_O, 0, 0, 0, deltat, hh_mod,b_orbit, np.zeros(3), np.zeros(3))
+
             B_matrices.append(B_discrete)
-        
+            B_matrices_mod.append(B_discrete_mod)
+
         Bs_a = np.array(B_matrices)
-        
+        Bs_a_mod = np.array(B_matrices_mod)
+
         B_concanate = []    
+        B_concanate_mod = []    
+
         for ii in range(len(Bs_a[0,:,0])):
             for jj in range(len(Bs_a[0,0,:])):
                 B_concanate.append(np.sum(Bs_a[:,ii,jj]) / len(Bs_a[:,ii,jj]))
-        
+                B_concanate_mod.append(np.sum(Bs_a_mod[:,ii,jj]) / len(Bs_a_mod[:,ii,jj]))
+
         B_prom = np.vstack((B_concanate[0:3],B_concanate[3:6],B_concanate[6:9],B_concanate[9:12],B_concanate[12:15],B_concanate[15:18]))
+        B_prom_mod = np.vstack((B_concanate_mod[0:3],B_concanate_mod[3:6],B_concanate_mod[6:9],B_concanate_mod[9:12],B_concanate_mod[12:15],B_concanate_mod[15:18]))
+
     elif type_act == 1:
         None
     else: 
@@ -215,8 +227,8 @@ def suite_sim(sigma_ss, sigma_b,lim,type_act,S_A_both):
         # Definir las matrices Q y R del coste del LQR
         # diag_Q = np.array([100, 1000000, 10000, 0.1, 0.1, 0.10, 0.01, 10, 10])*10000
         # diag_R = np.array([0.1,0.1,0.1])*100000
-        diag_Q = np.array([100, 10, 100, 0.1, 0.1, 0.1])*1000000
-        diag_R = np.array([0.1,0.1,0.1])*100000
+        diag_Q = np.array([10000, 10000, 10000, 100000, 100000, 100000])
+        diag_R = np.array([0.1,0.1,0.1])*10
         
         Q = np.diag(diag_Q)
         R = np.diag(diag_R)
@@ -255,7 +267,7 @@ def suite_sim(sigma_ss, sigma_b,lim,type_act,S_A_both):
             u_est = functions_06.torquer(u_est,lim)
         
             [xx_new_d, qq3_new_d] = functions_06.mod_lineal_disc(
-                x_real, u_est, deltat, hh, A_discrete,B_prom)
+                x_real, u_est, deltat, hh_mod, A_discrete_mod,B_prom_mod)
             
             x_real = xx_new_d
             w_gyros = functions_06.simulate_gyros_reading(x_real[3:6],ruido_w,bias_w)
@@ -560,7 +572,7 @@ def suite_sim(sigma_ss, sigma_b,lim,type_act,S_A_both):
         time_cost = ti_1[2]
     
     if type_act == 0:
-        time_cost = time_cost/14876
+        time_cost = time_cost/200
     if type_act == 1:
         time_cost = time_cost/1000
     # norm_time = np.linalg.norm(ti_1)
