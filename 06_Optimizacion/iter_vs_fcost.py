@@ -14,7 +14,8 @@ from tkinter import Tk
 # carpeta = "TNC"
 # carpeta = "Powell"
 # carpeta = "L-BFGS-B"
-carpeta = "articulo"
+# carpeta = "articulo"
+carpeta = "articulo_2"
 
 if not os.path.exists(carpeta):
     os.makedirs(carpeta)
@@ -28,8 +29,8 @@ root.withdraw()
 
 # Definir valores de type_act, S_A_both, type_rend y Pesos P_i
 type_act = 0  # 0: magnetorquer, 1: rueda de reacción
-S_A_both = 1  # 0: solo sensor, 1: solo actuador, 2: ambos
-type_rend = 'all'  # Puede ser 'acc', 'psd', 'time', 'acc_time', 'acc_psd', 'psd_time' y 'all'
+S_A_both = 2  # 0: solo sensor, 1: solo actuador, 2: ambos
+type_rend = 'acc'  # Puede ser 'acc', 'psd', 'time', 'acc_time', 'acc_psd', 'psd_time' y 'all'
 
 
 # Valores iniciales para las desviaciones estándar o lim según el caso
@@ -201,60 +202,156 @@ y = [sublista[0] for sublista in valores_f]  # Eje Y (tomando el primer valor de
 acc = [sublistaa[0] for sublistaa in valores_MoPs]
 time = [sublistaaa[2] for sublistaaa in valores_MoPs]
 
+# Encontrar valores mínimos
+min_acc = min(acc)
+min_time = min(time)
+min_f = min(y)
+
+max_acc = max(acc)
+max_time = max(time)
+max_f = max(y)
+
+# Filtrar valores que no excedan 10 veces el mínimo y mantener los índices válidos
+filtered_indices = [i for i in range(len(acc)) if acc[i] <= 10 * min_acc and time[i] <= 10 * min_time and y[i] <= 10 * min_f]
+
+# Filtrar listas según los índices válidos
+filtered_x = [x[i] for i in filtered_indices]
+filtered_acc = [acc[i] for i in filtered_indices]
+filtered_time = [time[i] for i in filtered_indices]
+filtered_y = [y[i] for i in filtered_indices]
+
+acc_norm = [a / max_acc for a in filtered_acc]
+time_norm = [b / max_time for b in filtered_time]
+y_norm = [c/max_f for c in filtered_y]
 
 # Convertir los pares ordenados en cadenas de texto
-# pares_x = [f"({format(sublista[0], '.3g')} [°], {format(sublista[1], '.3g')} [T])" 
-#             if len(sublista) >= 2 else f"({format(sublista[0], '.3g')}, ?)" 
-#             for sublista in valores_numericos_por_sublista if len(sublista) > 0]
-
-pares_x = [f"({format(sublista[0], '.3g')} [Am2])" 
-            if len(sublista) >= 1 else f"({format(sublista[0], '.3g')})" 
+pares_x = [f"({format(sublista[0], '.3g')} [°], {format(sublista[1], '.3g')} [T])" 
+            if len(sublista) >= 2 else f"({format(sublista[0], '.3g')}, ?)" 
             for sublista in valores_numericos_por_sublista if len(sublista) > 0]
 
+# pares_x = [f"({format(sublista[0], '.3g')} [Am2])" 
+#             if len(sublista) >= 1 else f"({format(sublista[0], '.3g')})" 
+#             for sublista in valores_numericos_por_sublista if len(sublista) > 0]
 
-# Crear figura con 2 subgráficos (1 fila, 2 columnas)
-fig, axes = plt.subplots(3, 1, figsize=(10, 10))
+#%%
+# Crear figura
+fig, ax = plt.subplots(figsize=(10, 6))
 
-# Primer gráfico: x vs. y
-axes[0].plot(x, y, marker='o', linestyle='-')
-axes[0].set_xlabel("X Values")
-axes[0].set_ylabel("f cost values")
-# axes[0].set_ylim(2, 4)
-axes[0].set_title("Iterations vs F Cost")
-axes[0].grid()
+# Graficar las tres funciones en la misma gráfica
+ax.plot(filtered_x, filtered_y, marker='o', linestyle='-', label='F Cost', color='blue')
+ax.plot(filtered_x, filtered_acc, marker='o', linestyle='-', label='Acc [°]', color='red')
+ax.plot(filtered_x, filtered_time, marker='o', linestyle='-', label='Settling Time/200 [-]', color='green')
 
-# Segundo gráfico: x vs. acc
-axes[1].plot(x, acc, marker='o', linestyle='-', color='red')
-axes[1].set_xlabel("X Values")
-axes[1].set_ylabel("acc values [°]")
-axes[1].set_title("Iterations vs Acc")
-axes[1].grid()
+# Etiquetas de los ejes
+# target.set_xlabel("X Values")
+ax.set_ylabel("Values")
+ax.set_title("Iterations vs F Cost, Acc, and Settling Time")
+# ax.set_ylim(0,4)
+ax.grid()
 
-# tercer gráfico: x vs. time
-axes[2].plot(x, time, marker='o', linestyle='-', color='green')
-axes[2].set_xlabel("X Values")
-axes[2].set_ylabel("Scaled time values [-]")
-# axes[2].set_ylim(-0.5, 0.5)
-axes[2].set_title("Iterations vs Settling time/200")
-axes[2].grid()
+# Ajustar etiquetas del eje X
+ax.set_xticks(range(0, len(x), 2))
+# ax.set_xticks(range(0, len(x), 3))
+ax.set_xticklabels([pares_x[i] for i in range(0, len(pares_x), 2)], rotation=45)
+            
+# ax.set_xticklabels([pares_x[i] for i in range(0, len(pares_x), 3)], rotation=45)
 
-# Ajustar etiquetas del eje X en ambos gráficos
-for ax in axes:
-    # ax.set_xticks(range(0, len(x), 2))
-    ax.set_xticks(range(0, len(x), 3))
-    # ax.set_xticklabels([pares_x[i] for i in range(0, len(pares_x), 2)], rotation=45)
-    ax.set_xticklabels([pares_x[i] for i in range(0, len(pares_x), 3)], rotation=45)
-
+# Agregar leyenda
+ax.legend()
 
 # Ajustar diseño para evitar sobreposiciones
 plt.tight_layout()
 
 # Guardar el gráfico
 # plt.savefig('case_1.pdf', format='pdf', bbox_inches='tight')
-plt.savefig('case_2.pdf', format='pdf', bbox_inches='tight')
+# plt.savefig('case_2.pdf', format='pdf', bbox_inches='tight')
 
 # Mostrar el gráfico
 plt.show()
+
+# Crear figura
+fig, ax = plt.subplots(figsize=(10, 6))
+
+
+
+# Graficar las tres funciones en la misma gráfica
+ax.plot(filtered_x, y_norm, marker='o', linestyle='-', label='F Cost', color='blue')
+ax.plot(filtered_x, acc_norm, marker='o', linestyle='-', label='Acc [°]', color='red')
+ax.plot(filtered_x, time_norm, marker='o', linestyle='-', label='Settling Time/200', color='green')
+
+# Etiquetas de los ejes
+# target.set_xlabel("X Values")
+ax.set_ylabel("Values [-]")
+ax.set_title("Iterations vs F Cost, Acc, and Settling Time normalized")
+# ax.set_ylim(0,4)
+ax.grid()
+
+# Ajustar etiquetas del eje X
+ax.set_xticks(range(0, len(x), 2))
+# ax.set_xticks(range(0, len(x), 3))
+ax.set_xticklabels([pares_x[i] for i in range(0, len(pares_x), 2)], rotation=45)
+            
+# ax.set_xticklabels([pares_x[i] for i in range(0, len(pares_x), 3)], rotation=45)
+
+# Agregar leyenda
+ax.legend()
+
+# Ajustar diseño para evitar sobreposiciones
+plt.tight_layout()
+
+# Guardar el gráfico
+# plt.savefig('case_1_norm.pdf', format='pdf', bbox_inches='tight')
+# plt.savefig('case_2_norm.pdf', format='pdf', bbox_inches='tight')
+
+# Mostrar el gráfico
+plt.show()
+
+
+#%%
+
+# # Crear figura con 2 subgráficos (1 fila, 2 columnas)
+# fig, axes = plt.subplots(3, 1, figsize=(10, 10))
+
+# # Primer gráfico: x vs. y
+# axes[0].plot(x, y, marker='o', linestyle='-')
+# axes[0].set_xlabel("X Values")
+# axes[0].set_ylabel("f cost values")
+# # axes[0].set_ylim(2, 4)
+# axes[0].set_title("Iterations vs F Cost")
+# axes[0].grid()
+
+# # Segundo gráfico: x vs. acc
+# axes[1].plot(x, acc, marker='o', linestyle='-', color='red')
+# axes[1].set_xlabel("X Values")
+# axes[1].set_ylabel("acc values [°]")
+# axes[1].set_title("Iterations vs Acc")
+# axes[1].grid()
+
+# # tercer gráfico: x vs. time
+# axes[2].plot(x, time, marker='o', linestyle='-', color='green')
+# axes[2].set_xlabel("X Values")
+# axes[2].set_ylabel("Scaled time values [-]")
+# # axes[2].set_ylim(-0.5, 0.5)
+# axes[2].set_title("Iterations vs Settling time/200")
+# axes[2].grid()
+
+# # Ajustar etiquetas del eje X en ambos gráficos
+# for ax in axes:
+#     # ax.set_xticks(range(0, len(x), 2))
+#     ax.set_xticks(range(0, len(x), 3))
+#     # ax.set_xticklabels([pares_x[i] for i in range(0, len(pares_x), 2)], rotation=45)
+#     ax.set_xticklabels([pares_x[i] for i in range(0, len(pares_x), 3)], rotation=45)
+
+
+# # Ajustar diseño para evitar sobreposiciones
+# plt.tight_layout()
+
+# # Guardar el gráfico
+# # plt.savefig('case_1.pdf', format='pdf', bbox_inches='tight')
+# plt.savefig('case_2.pdf', format='pdf', bbox_inches='tight')
+
+# # Mostrar el gráfico
+# plt.show()
 
 #%%
 

@@ -693,9 +693,9 @@ def suite_sim(sigma_ss, sigma_b,lim,type_act,S_A_both):
     
     if type_act == 0:
         #Magnetorquers
-        pot_act = 6.27e-1*(lim)**(0.34) / 2.658
-        masa_act = 9.58e-2*(lim)**(0.68) / 1.722
-        vol_act = 1.99e2*(lim)**(0.18)
+        pot_act = 1.77e-3*(lim)**(2.74)
+        masa_act = 4.65e-2*(lim)**(0.99)
+        vol_act = 7.15*(lim)**(1.76)
     elif type_act == 1:
         #Ruedas de reaccion
         pot_act = 1.75e1*(lim)**(0.35) / 10.77 #maximo 10.77

@@ -79,19 +79,19 @@ params_vol, _ = curve_fit(func_lin, sigmas_b, vol_b)
 a_vol, b_vol = params_vol
 
 # Crear valores de x para la curva ajustada
-x_fit = np.linspace(min(sigmas_b), max(sigmas_b), 100)
+x_fit_b = np.linspace(min(sigmas_b), max(sigmas_b), 100)
 
 # Calcular los valores ajustados
-y_potencial = func_potencial(x_fit, a_pot, b_pot)
-y_mass = func_potencial(x_fit, a_mass, b_mass)
+y_potencial_b = func_potencial(x_fit_b, a_pot, b_pot)
+y_mass_b = func_potencial(x_fit_b, a_mass, b_mass)
 # y_vol = func_potencial(x_fit, a_vol, b_vol)
-y_vol = func_lin(x_fit, a_vol, b_vol)
+y_vol_b = func_lin(x_fit_b, a_vol, b_vol)
 
 # Graficar los datos originales
 # plt.scatter(sigmas_b, potencias_b, label='Datos originales potencia')
 plt.scatter(sigmas_b, potencias_b, label='Original Power Data')
 # plt.plot(x_fit, y_potencial, label=f'Ajuste Potencial: $y = {a_pot:.2e} x^{{{b_pot:.2f}}}$', color='green')
-plt.plot(x_fit, y_potencial, label=f'Potential adjust: $y = {a_pot:.2e} x^{{{b_pot:.2f}}}$', color='green')
+plt.plot(x_fit_b, y_potencial_b, label=f'Potential adjust: $y = {a_pot:.2e} x^{{{b_pot:.2f}}}$', color='green')
 # plt.xlabel('Sigmas_b (T)')
 plt.xlabel('Magnetometer Standard deviation (T)')
 # plt.ylabel('Potencias_b (W)')
@@ -104,7 +104,7 @@ plt.show()
 # plt.scatter(sigmas_b, masas_b, label='Datos originales masa')
 plt.scatter(sigmas_b, masas_b, label='Original Mass Data')
 # plt.plot(x_fit, y_mass, label=f'Ajuste Potencial: $y = {a_mass:.2e} x^{{{b_mass:.2f}}}$', color='green')
-plt.plot(x_fit, y_mass, label=f'Potential adjust: $y = {a_mass:.2e} x^{{{b_mass:.2f}}}$', color='green')
+plt.plot(x_fit_b, y_mass_b, label=f'Potential adjust: $y = {a_mass:.2e} x^{{{b_mass:.2f}}}$', color='green')
 # plt.xlabel('Sigmas_b (T)')
 plt.xlabel('Magnetometer Standard deviation (T)')
 plt.ylabel('Magnetometer Mass (kg)')
@@ -112,7 +112,6 @@ plt.legend()
 plt.grid
 plt.savefig('mass_magn.pdf', format='pdf')
 plt.show()
-
 # plt.scatter(sigmas_b, vol_b, label='Datos originales volumen')
 # plt.plot(x_fit, y_vol, label=f'Ajuste Potencial: $y = {a_vol}x+{{{b_vol:.2e}}}$', color='green')
 # plt.xlabel('Sigmas_b (T)')
@@ -211,31 +210,28 @@ params_vol, _ = curve_fit(func_potencial, sigmas_ss, vol_ss)
 a_vol, b_vol = params_vol
 
 # Crear valores de x para la curva ajustada
-x_fit = np.linspace(min(sigmas_ss), max(sigmas_ss), 100)
+x_fit_ss = np.linspace(min(sigmas_ss), max(sigmas_ss), 100)
 
 # Calcular los valores ajustados
-y_potencial = func_potencial(x_fit, a_pot, b_pot)
-y_mass = func_potencial(x_fit, a_mass, b_mass)
+y_potencial_ss = func_potencial(x_fit_ss, a_pot, b_pot)
+y_mass_ss = func_potencial(x_fit_ss, a_mass, b_mass)
 # y_vol = func_log(x_fit, a_vol, b_vol)
-y_vol = func_potencial(x_fit, a_vol, b_vol)
+y_vol_ss = func_potencial(x_fit_ss, a_vol, b_vol)
 
 # Graficar los datos originales
 # plt.scatter(sigmas_ss, potencias_ss, label='Datos originales potencia')
 plt.scatter(sigmas_ss, potencias_ss, label='Original Power Data')
 # plt.plot(x_fit, y_potencial, label=f'Ajuste Potencial: $y = {a_pot:.2e} x^{{{b_pot:.2f}}}$', color='green')
-plt.plot(x_fit, y_potencial, label=f'Potential adjust: $y = {a_pot:.2e} x^{{{b_pot:.2f}}}$', color='green')
+plt.plot(x_fit_ss, y_potencial_ss, label=f'Potential adjust: $y = {a_pot:.2e} x^{{{b_pot:.2f}}}$', color='green')
 # plt.xlabel('Sigmas_ss (°)')
 plt.xlabel('Sun sensor Standard deviation (°)')
 # plt.ylabel('Potencias_ss (W)')
-plt.ylabel('Sun sensor Mean Power (W)')
-plt.legend()
-plt.savefig('potencia_ss.pdf', format='pdf')
-plt.show()
+plt.ylabel('Sun sensor Mean Power (W)')# Graficar los datos originales
 
 # plt.scatter(sigmas_ss, masas_ss, label='Datos originales masa')
-plt.scatter(sigmas_ss, masas_ss, label='Original Power Data')
+plt.scatter(sigmas_ss, masas_ss, label='Original Mass Data')
 # plt.plot(x_fit, y_mass, label=f'Ajuste Potencial: $y = {a_mass:.2e} x^{{{b_mass:.2f}}}$', color='green')
-plt.plot(x_fit, y_mass, label=f'Potential adjust: $y = {a_mass:.2e} x^{{{b_mass:.2f}}}$', color='green')
+plt.plot(x_fit_ss, y_mass_ss, label=f'Potential adjust: $y = {a_mass:.2e} x^{{{b_mass:.2f}}}$', color='green')
 # plt.xlabel('Sigmas_ss (°)')
 plt.xlabel('Sun sensor Standard deviation (°)')
 # plt.ylabel('Masas_ss (kg)')
@@ -245,7 +241,7 @@ plt.savefig('masa_ss.pdf', format='pdf')
 plt.show()
 
 plt.scatter(sigmas_ss, vol_ss, label='Datos originales volumen')
-plt.plot(x_fit, y_vol, label=f'Ajuste Potencial: $y = {a_vol:.2e} x^{{{b_vol:.2f}}}$', color='green')
+plt.plot(x_fit_ss, y_vol_ss, label=f'Ajuste Potencial: $y = {a_vol:.2e} x^{{{b_vol:.2f}}}$', color='green')
 plt.xlabel('Sigmas_ss (°)')
 plt.ylabel('Vol_ss (cm3)')
 plt.legend()
@@ -264,8 +260,8 @@ lim_MT = np.array([0.29,  #NCTR-M003 (NewSpace Systems)
                    10, #Tamam MT 1286-0003 (IAI)
                    10, #MQ10 (OCE Technology)
                    10, #GMAT-10 (Michigan Aerospace Manufacturers Association)
-                   15, #Magnetic Torquer (Chang Guang Satellite Technology)
-                   70 #Tamam MT 1286-0010 (IAI)
+                   15 #Magnetic Torquer (Chang Guang Satellite Technology)
+                   # 70 #Tamam MT 1286-0010 (IAI)
                    ])   
 
 masas_MT = np.array([0.03,  #NCTR-M003 (NewSpace Systems)
@@ -274,8 +270,8 @@ masas_MT = np.array([0.03,  #NCTR-M003 (NewSpace Systems)
                      0.26, #Tamam MT 1286-0003 (IAI)
                      0.45, #MQ10 (OCE Technology)
                      0.66, #GMAT-10 (Michigan Aerospace Manufacturers Association)
-                     0.67, #Magnetic Torquer (Chang Guang Satellite Technology)
-                     1.7 #Tamam MT 1286-0010 (IAI)
+                     0.67 #Magnetic Torquer (Chang Guang Satellite Technology)
+                     # 1.7 #Tamam MT 1286-0010 (IAI)
                      ])   
 
 potencias_MT = np.array([0.25,  #NCTR-M003 (NewSpace Systems) 
@@ -284,8 +280,8 @@ potencias_MT = np.array([0.25,  #NCTR-M003 (NewSpace Systems)
                          1.1, #Tamam MT 1286-0003 (IAI)
                          0.4, #MQ10 (OCE Technology)
                          1.4, #GMAT-10 (Michigan Aerospace Manufacturers Association)
-                         3, #Magnetic Torquer (Chang Guang Satellite Technology)
-                         2.5 #Tamam MT 1286-0010 (IAI)
+                         3 #Magnetic Torquer (Chang Guang Satellite Technology)
+                         # 2.5 #Tamam MT 1286-0010 (IAI)
                     ])
 
 vol_MT = np.array([7.2* 1.5*1.3, #NCTR-M003 (NewSpace Systems)    
@@ -294,8 +290,8 @@ vol_MT = np.array([7.2* 1.5*1.3, #NCTR-M003 (NewSpace Systems)
                    (1.1/2)**2*np.pi*27, #Tamam MT 1286-0003 (IAI)
                    31.0 * 5.6 * 4.4 , #MQ10 (OCE Technology)
                    24.5*5.0*3.6, #GMAT-10 (Michigan Aerospace Manufacturers Association)
-                   28*5.6*5.35, #Magnetic Torquer (Chang Guang Satellite Technology)
-                   (1.1/2)**2*np.pi*60, #Tamam MT 1286-0010 (IAI)
+                   28*5.6*5.35 #Magnetic Torquer (Chang Guang Satellite Technology)
+                   # (1.1/2)**2*np.pi*60, #Tamam MT 1286-0010 (IAI)
                    ])
 
 precio_MT = np.array([0,
@@ -325,17 +321,17 @@ params_vol, _ = curve_fit(func_potencial, lim_MT, vol_MT)
 a_vol, b_vol = params_vol
 
 # Crear valores de x para la curva ajustada
-x_fit = np.linspace(min(lim_MT), max(lim_MT), 100)
+x_fit_tau = np.linspace(min(lim_MT), max(lim_MT), 100)
 
 # Calcular los valores ajustados
-y_potencial = func_potencial(x_fit, a_pot, b_pot)
-y_mass = func_potencial(x_fit, a_mass, b_mass)
+y_potencial_tau = func_potencial(x_fit_tau, a_pot, b_pot)
+y_mass_tau = func_potencial(x_fit_tau, a_mass, b_mass)
 # y_vol = func_log(x_fit, a_vol, b_vol)
-y_vol = func_potencial(x_fit, a_vol, b_vol)
+y_vol_tau = func_potencial(x_fit_tau, a_vol, b_vol)
 
 # Graficar los datos originales
 plt.scatter(lim_MT, potencias_MT, label='Datos originales potencia')
-plt.plot(x_fit, y_potencial, label=f'Ajuste Potencial: $y = {a_pot:.2e} x^{{{b_pot:.2f}}}$', color='green')
+plt.plot(x_fit_tau, y_potencial_tau, label=f'Ajuste Potencial: $y = {a_pot:.2e} x^{{{b_pot:.2f}}}$', color='green')
 plt.xlabel('lim_MT (Am2)')
 plt.ylabel('Potencias_MT (W)')
 plt.legend()
@@ -343,7 +339,7 @@ plt.savefig('potencia_MT.pdf', format='pdf')
 plt.show()
 
 plt.scatter(lim_MT, masas_MT, label='Datos originales masa')
-plt.plot(x_fit, y_mass, label=f'Ajuste Potencial: $y = {a_mass:.2e} x^{{{b_mass:.2f}}}$', color='green')
+plt.plot(x_fit_tau, y_mass_tau, label=f'Ajuste Potencial: $y = {a_mass:.2e} x^{{{b_mass:.2f}}}$', color='green')
 plt.xlabel('lim_MT (Am2)')
 plt.ylabel('Masas_MT (kg)')
 plt.legend()
@@ -351,7 +347,7 @@ plt.savefig('masa_MT.pdf', format='pdf')
 plt.show()
 
 plt.scatter(lim_MT, vol_MT, label='Datos originales volumen')
-plt.plot(x_fit, y_vol, label=f'Ajuste Potencial: $y = {a_vol:.2e} x^{{{b_vol:.2f}}}$', color='green')
+plt.plot(x_fit_tau, y_vol_tau, label=f'Ajuste Potencial: $y = {a_vol:.2e} x^{{{b_vol:.2f}}}$', color='green')
 plt.xlabel('lim_MT (Am2)')
 plt.ylabel('Vol_MT (cm3)')
 plt.legend()
@@ -466,3 +462,74 @@ plt.show()
 # plt.ylabel('Vol_RW (cm3)')
 # plt.legend()
 # plt.show()
+
+#%%
+
+fig, axs = plt.subplots(3, 2, figsize=(12, 12))  # 3 filas, 2 columnas
+
+# === 1. Magnetorquers ===
+# Power
+axs[0, 0].scatter(lim_MT, potencias_MT, label='Original Power Data')
+axs[0, 0].plot(x_fit_tau, y_potencial_tau, label=f'Fit: $y = {a_pot:.2e} x^{{{b_pot:.2f}}}$', color='green')
+axs[0, 0].set_xlabel('lim_MT (Am²)')
+axs[0, 0].set_ylabel('Power (W)')
+axs[0, 0].set_xlim([min(lim_MT)-3, max(lim_MT)+3])
+axs[0, 0].set_ylim([min(potencias_MT)-0.1, max(potencias_MT)+0.1])
+axs[0, 0].legend()
+axs[0, 0].grid(True)
+
+# Mass
+axs[0, 1].scatter(lim_MT, masas_MT, label='Original Mass Data')
+axs[0, 1].plot(x_fit_tau, y_mass_tau, label=f'Fit: $y = {a_mass:.2e} x^{{{b_mass:.2f}}}$', color='green')
+axs[0, 1].set_xlabel('lim_MT (Am²)')
+axs[0, 1].set_ylabel('Mass (kg)')
+axs[0, 1].set_xlim([min(lim_MT)-3, max(lim_MT)+3])
+axs[0, 1].set_ylim([min(masas_MT)-0.1, max(masas_MT)+0.1])
+axs[0, 1].legend()
+axs[0, 1].grid(True)
+
+# === 2. Sun Sensors ===
+# Power
+axs[1, 0].scatter(sigmas_ss, potencias_ss, label='Original Power Data')
+axs[1, 0].plot(x_fit_ss, y_potencial_ss, label=f'Fit: $y = {a_pot:.2e} x^{{{b_pot:.2f}}}$', color='green')
+axs[1, 0].set_xlabel('Sun sensor σ (°)')
+axs[1, 0].set_ylabel('Power (W)')
+axs[1, 0].set_xlim([min(sigmas_ss)-0.1, max(sigmas_ss)+0.1])
+axs[1, 0].set_ylim([min(potencias_ss)-0.1, max(potencias_ss)+0.1])
+axs[1, 0].legend()
+axs[1, 0].grid(True)
+
+# Mass
+axs[1, 1].scatter(sigmas_ss, masas_ss, label='Original Mass Data')
+axs[1, 1].plot(x_fit_ss, y_mass_ss, label=f'Fit: $y = {a_mass:.2e} x^{{{b_mass:.2f}}}$', color='green')
+axs[1, 1].set_xlabel('Sun sensor σ (°)')
+axs[1, 1].set_ylabel('Mass (kg)')
+axs[1, 1].set_xlim([min(sigmas_ss)-0.1, max(sigmas_ss)+0.1])
+axs[1, 1].set_ylim([min(masas_ss)-0.1, max(masas_ss)+0.1])
+axs[1, 1].legend()
+axs[1, 1].grid(True)
+
+# === 3. Magnetometers ===
+# Power
+axs[2, 0].scatter(sigmas_b, potencias_b, label='Original Power Data')
+axs[2, 0].plot(x_fit_b, y_potencial_b, label=f'Fit: $y = {a_pot:.2e} x^{{{b_pot:.2f}}}$', color='green')
+axs[2, 0].set_xlabel('Magnetometer σ (T)')
+axs[2, 0].set_ylabel('Power (W)')
+axs[2, 0].set_xlim([min(sigmas_b)-0.5e-9, max(sigmas_b)+0.5e-9])
+axs[2, 0].set_ylim([min(potencias_b)-0.1, max(potencias_b)+0.1])
+axs[2, 0].legend()
+axs[2, 0].grid(True)
+
+# Mass
+axs[2, 1].scatter(sigmas_b, masas_b, label='Original Mass Data')
+axs[2, 1].plot(x_fit_b, y_mass_b, label=f'Fit: $y = {a_mass:.2e} x^{{{b_mass:.2f}}}$', color='green')
+axs[2, 1].set_xlabel('Magnetometer σ (T)')
+axs[2, 1].set_ylabel('Mass (kg)')
+axs[2, 1].set_xlim([min(sigmas_b)-0.5e-9, max(sigmas_b)+0.5e-9])
+axs[2, 1].set_ylim([min(masas_b)-0.05, max(masas_b)+0.05])
+axs[2, 1].legend()
+axs[2, 1].grid(True)
+
+plt.tight_layout()
+plt.savefig('componentes_fisicos.pdf', format='pdf')
+plt.show()

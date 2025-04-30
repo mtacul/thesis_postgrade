@@ -10,12 +10,13 @@ from Suite_LQR import suite_sim
 from scipy.optimize import minimize
 
 
-def save_res_txt(x,funi,file_name,text,type_solver):
+# def save_res_txt(x,funi,file_name,text,type_solver):
+def save_res_txt(x,funi,file_name,text):
     with open(file_name, 'a') as f:
         # Escribir valores de x y resultados de la simulación
         f.write(f"x {text}: {x}\n")
         f.write(f"f {text}: {funi}\n")
-        f.write(f"type_solver: {type_solver}\n")
+        # f.write(f"type_solver: {type_solver}\n")
         f.write(f"------------------------\n")
         
 # Función para escribir en archivo .txt
@@ -110,70 +111,69 @@ def objective(x, *args):
         return funi          
 
 #%%
-file_result = "optimizacion.txt"
-# Iterar sobre diferentes combinaciones de parámetros
-# type_act_values = [0, 1]  # Por ejemplo: magnetorquer(0) o rueda de reacción(1)
-type_act_values = [0]  
-S_A_both_values = [0, 1, 2]  # Diferentes combinaciones de sensor y actuador 0:sensor, 1:actuador, 2: ambos
-# S_A_both_values = [0]  
-# type_rend_values = ['acc', 'time', 'acc_time', 'acc_psd', 'psd_time','all']  # Diferentes tipos de rendimiento
-# type_rend_values = ['acc','acc_time','all'] 
-type_rend_values = ['acc','time','all'] 
+# file_result = "optimizacion.txt"
+# # Iterar sobre diferentes combinaciones de parámetros
+# # type_act_values = [0, 1]  # Por ejemplo: magnetorquer(0) o rueda de reacción(1)
+# type_act_values = [0]  
+# # S_A_both_values = [0, 1, 2]  # Diferentes combinaciones de sensor y actuador 0:sensor, 1:actuador, 2: ambos
+# S_A_both_values = [2]  
+# # type_rend_values = ['acc', 'time', 'acc_time', 'acc_psd', 'psd_time','all']  # Diferentes tipos de rendimiento
+# # type_rend_values = ['acc','acc_time','all'] 
+# type_rend_values = ['acc','time','psd'] 
 
-# type_solver_values = ['L-BFGS-B','Powell','Nelder-Mead']
-type_solver_values = ['Powell']
+# # type_solver_values = ['L-BFGS-B','Powell','Nelder-Mead']
+# type_solver_values = ['Powell']
+# # hacer 'psd' por separado
 
-# hacer 'psd' por separado
+# # Pesos para la optimización
+# P_i = [1,1,1,   #Pesos: 0,1,2 -> acc,psd,time
+#        1,1,0,   #Pesos: 3,4,5 -> pot, masa y vol magnetometro
+#        1,1,0,   #Pesos: 6,7,8 -> pot, masa y vol sensor de sol
+#        1,1,0]   #Pesos: 9,10,11 -> pot, masa y vol actuador
 
-# Pesos para la optimización
-P_i = [1,1,1,   #Pesos: 0,1,2 -> acc,psd,time
-       1,1,0,   #Pesos: 3,4,5 -> pot, masa y vol magnetometro
-       1,1,0,   #Pesos: 6,7,8 -> pot, masa y vol sensor de sol
-       1,1,0]   #Pesos: 9,10,11 -> pot, masa y vol actuador
-
-results = []
-functions = []
-# Bucle para probar diferentes configuraciones
-for type_solver in type_solver_values:
-    for type_act in type_act_values:
-        for S_A_both in S_A_both_values:
-            for type_rend in type_rend_values:
-                # Crear un nombre de archivo único para cada configuración
-                filename = f"resultados_typeact{type_act}_saboth{S_A_both}_typerend{type_rend}_typesolver{type_solver}.txt"
+# results = []
+# functions = []
+# # Bucle para probar diferentes configuraciones
+# for type_solver in type_solver_values:
+#     for type_act in type_act_values:
+#         for S_A_both in S_A_both_values:
+#             for type_rend in type_rend_values:
+#                 # Crear un nombre de archivo único para cada configuración
+#                 filename = f"resultados_typeact{type_act}_saboth{S_A_both}_typerend{type_rend}_typesolver{type_solver}.txt"
     
-                # Definir límites y condiciones iniciales según los valores actuales
-                if S_A_both == 0:
-                    bnds = ((0.01, 1.67), (0.012e-9, 3e-9))
-                    # initial_guess = [0.5, 1.5e-9]
-                    # initial_guess = [1.6, 3e-9]  # std_sensor_sol, std_magnetometros y lim
-                    initial_guess = [0.5, 1.5e-10]  # std_sensor_sol, std_magnetometros y lim
+#                 # Definir límites y condiciones iniciales según los valores actuales
+#                 if S_A_both == 0:
+#                     bnds = ((0.01, 1.67), (0.012e-9, 3e-9))
+#                     # initial_guess = [0.5, 1.5e-9]
+#                     # initial_guess = [1.6, 3e-9]  # std_sensor_sol, std_magnetometros y lim
+#                     initial_guess = [0.5, 1.5e-10]  # std_sensor_sol, std_magnetometros y lim
 
-                elif S_A_both == 1:
-                    if type_act == 0:
-                        bnds = ((0.29, 70),)
-                        initial_guess = [1]
-                    elif type_act == 1:
-                        bnds = ((0.001, 0.25),)
-                        initial_guess = [0.10]
-                elif S_A_both == 2:
-                    if type_act == 0:
-                        bnds = ((0.01, 1.67), (0.012e-9, 3e-9), (0.29, 70))  # Para std_sensor_sol, std_magnetometros y lim
-                        # initial_guess = [0.5, 1.5e-9, 1]  # std_sensor_sol, std_magnetometros y lim
-                        # initial_guess = [1.6, 3e-9, 0.5]  # std_sensor_sol, std_magnetometros y lim
-                        initial_guess = [0.5, 1.5e-10, 1]  # std_sensor_sol, std_magnetometros y lim
+#                 elif S_A_both == 1:
+#                     if type_act == 0:
+#                         bnds = ((0.29, 70),)
+#                         initial_guess = [1]
+#                     elif type_act == 1:
+#                         bnds = ((0.001, 0.25),)
+#                         initial_guess = [0.10]
+#                 elif S_A_both == 2:
+#                     if type_act == 0:
+#                         bnds = ((0.01, 1.67), (0.012e-9, 3e-9), (0.29, 70))  # Para std_sensor_sol, std_magnetometros y lim
+#                         # initial_guess = [0.5, 1.5e-9, 1]  # std_sensor_sol, std_magnetometros y lim
+#                         # initial_guess = [1.6, 3e-9, 0.5]  # std_sensor_sol, std_magnetometros y lim
+#                         initial_guess = [0.5, 1.5e-10, 1]  # std_sensor_sol, std_magnetometros y lim
 
-                    elif type_act == 1:
-                        bnds = ((0.01, 1.67), (0.012e-9, 3e-9), (0.001, 0.25))  # Para std_sensor_sol, std_magnetometros y lim
-                        initial_guess = [0.5, 1.5e-10, 0.1]  # std_sensor_sol, std_magnetometros y lim
+#                     elif type_act == 1:
+#                         bnds = ((0.01, 1.67), (0.012e-9, 3e-9), (0.001, 0.25))  # Para std_sensor_sol, std_magnetometros y lim
+#                         initial_guess = [0.5, 1.5e-10, 0.1]  # std_sensor_sol, std_magnetometros y lim
     
     
-                # Ejecutar la optimización
-                result = minimize(objective, initial_guess, args=(type_act, S_A_both, type_rend, P_i, filename), method=type_solver, bounds=bnds)
-                save_res_txt(result.x, result.fun, file_result, filename,type_solver)
-                # Imprimir resultados
-                print(f"Optimización completada para type_act={type_act}, S_A_both={S_A_both}, type_rend={type_rend},type_solver={type_solver}")
-                print(f"x óptimo: {result.x}")
-                print(f"Valor mínimo de la función objetivo: {result.fun}\n")
+#                 # Ejecutar la optimización
+#                 result = minimize(objective, initial_guess, args=(type_act, S_A_both, type_rend, P_i, filename), method=type_solver, bounds=bnds)
+#                 save_res_txt(result.x, result.fun, file_result, filename,type_solver)
+#                 # Imprimir resultados
+#                 print(f"Optimización completada para type_act={type_act}, S_A_both={S_A_both}, type_rend={type_rend},type_solver={type_solver}")
+#                 print(f"x óptimo: {result.x}")
+#                 print(f"Valor mínimo de la función objetivo: {result.fun}\n")
 
 # for type_solver in type_solver_values:
 #     for type_act in type_act_values:
@@ -211,3 +211,87 @@ for type_solver in type_solver_values:
 #                 print(f"x óptimo: {result.x}")
 #                 print(f"Valor mínimo de la función objetivo: {result.fun}\n")
 #Newton-CG y dogleg requieren jacobiano, CG y BFGS tiran error
+
+#%%
+import numpy as np
+from itertools import product
+
+def generate_initial_guesses(bounds, num_points_per_dim=6):
+    """
+    Genera una lista de initial guesses equiespaciados dentro de los bounds.
+    num_points_per_dim: cuántos puntos quieres por dimensión (3**3 = 27 si hay 3 variables).
+    """
+    grids = [np.linspace(low, high, num_points_per_dim) for (low, high) in bounds]
+    return list(product(*grids))  # devuelve todas las combinaciones
+
+
+file_result = "optimizacion.txt"
+# Iterar sobre diferentes combinaciones de parámetros
+# type_act_values = [0, 1]  # Por ejemplo: magnetorquer(0) o rueda de reacción(1)
+type_act_values = [0]  
+# S_A_both_values = [0, 1, 2]  # Diferentes combinaciones de sensor y actuador 0:sensor, 1:actuador, 2: ambos
+S_A_both_values = [2]  
+# type_rend_values = ['acc', 'time', 'acc_time', 'acc_psd', 'psd_time','all']  # Diferentes tipos de rendimiento
+# type_rend_values = ['acc','acc_time','all'] 
+type_rend_values = ['acc','time','psd'] 
+
+# type_solver_values = ['L-BFGS-B','Powell','Nelder-Mead']
+type_solver_values = ['Powell']
+# hacer 'psd' por separado
+
+# Pesos para la optimización
+P_i = [1,1,1,   #Pesos: 0,1,2 -> acc,psd,time
+       1,1,0,   #Pesos: 3,4,5 -> pot, masa y vol magnetometro
+       1,1,0,   #Pesos: 6,7,8 -> pot, masa y vol sensor de sol
+       1,1,0]   #Pesos: 9,10,11 -> pot, masa y vol actuador
+
+results = []
+functions = []
+# Bucle para probar diferentes configuraciones
+for type_solver in type_solver_values:
+    for type_act in type_act_values:
+        for S_A_both in S_A_both_values:
+            for type_rend in type_rend_values:
+                # Crear un nombre de archivo único para cada configuración
+                filename = f"resultados_typeact{type_act}_saboth{S_A_both}_typerend{type_rend}_typesolver{type_solver}.txt"
+    
+                # Definir límites y condiciones iniciales según los valores actuales
+                if S_A_both == 0:
+                    bnds = ((0.01, 1.67), (0.012e-9, 3e-9))
+                    # initial_guess = [0.5, 1.5e-9]
+                    # initial_guess = [1.6, 3e-9]  # std_sensor_sol, std_magnetometros y lim
+                    initial_guess = [0.5, 1.5e-10]  # std_sensor_sol, std_magnetometros y lim
+
+                elif S_A_both == 1:
+                    if type_act == 0:
+                        bnds = ((0.29, 15),)
+                        initial_guess = [1]
+                    elif type_act == 1:
+                        bnds = ((0.001, 0.25),)
+                        initial_guess = [0.10]
+                elif S_A_both == 2:
+                    if type_act == 0:
+                        bnds = ((0.01, 1.67), (0.012e-9, 3e-9), (0.29, 15))  # Para std_sensor_sol, std_magnetometros y lim
+                        # initial_guess = [0.5, 1.5e-9, 1]  # std_sensor_sol, std_magnetometros y lim
+                        # initial_guess = [1.6, 3e-9, 0.5]  # std_sensor_sol, std_magnetometros y lim
+                        initial_guesses = generate_initial_guesses(bnds, num_points_per_dim=3)
+                        
+                        for initial_guess in initial_guesses:
+                            # result = minimize(objective, initial_guess, args=(type_act, S_A_both, type_rend, P_i, filename), method=type_solver, bounds=bnds)
+                            result = minimize(objective, initial_guess, args=(type_act, S_A_both, type_rend, P_i, filename), method=type_solver, bounds=bnds)
+                            save_res_txt(result.x, result.fun, file_result, filename)
+                            print(f"Optimización para guess={initial_guess} completada:")
+                            print(f"  -> x óptimo: {result.x}")
+                            print(f"  -> Valor mínimo de la función objetivo: {result.fun}\n")
+                    elif type_act == 1:
+                        bnds = ((0.01, 1.67), (0.012e-9, 3e-9), (0.001, 0.25))  # Para std_sensor_sol, std_magnetometros y lim
+                        initial_guess = [0.5, 1.5e-10, 0.1]  # std_sensor_sol, std_magnetometros y lim
+    
+    
+                # Ejecutar la optimización
+                result = minimize(objective, initial_guess, args=(type_act, S_A_both, type_rend, P_i, filename), method=type_solver, bounds=bnds)
+                save_res_txt(result.x, result.fun, file_result, filename,type_solver)
+                # Imprimir resultados
+                print(f"Optimización completada para type_act={type_act}, S_A_both={S_A_both}, type_rend={type_rend},type_solver={type_solver}")
+                print(f"x óptimo: {result.x}")
+                print(f"Valor mínimo de la función objetivo: {result.fun}\n")
