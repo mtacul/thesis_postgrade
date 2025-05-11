@@ -572,7 +572,8 @@ def suite_sim(sigma_ss, sigma_b,lim,type_act,S_A_both):
         time_cost = ti_1[2]
     
     if type_act == 0:
-        time_cost = time_cost/200
+        # time_cost = time_cost/200
+        time_cost = time_cost/20000
     if type_act == 1:
         time_cost = time_cost/1000
     # norm_time = np.linalg.norm(ti_1)

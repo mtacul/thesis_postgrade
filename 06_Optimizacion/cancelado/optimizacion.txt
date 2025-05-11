@@ -1,0 +1,420 @@
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03440145e-01 1.15331444e-09 1.80812724e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880703157345
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59526650e-01 1.15331444e-09 3.08884206e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5530493944974905
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59526650e-01 1.15331444e-09 3.08884206e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5530493944974905
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59526650e-01 1.15331444e-09 3.08884206e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5530493944974905
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59526650e-01 1.15331444e-09 3.08884206e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5530493944974909
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59526650e-01 1.15331444e-09 3.08884206e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5530493944974909
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03440145e-01 1.15331444e-09 1.80812724e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880703157352
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59711025e-01 1.15331444e-09 3.09673238e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5529722224112065
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59711025e-01 1.15331444e-09 3.09673238e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5529722224112068
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59711025e-01 1.15331444e-09 3.09673238e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5529722224112065
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59711025e-01 1.15331444e-09 3.09673238e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5529722224112065
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59711025e-01 1.15331444e-09 3.09673238e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5529722224112065
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03440145e-01 1.15331444e-09 1.80812724e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880703157363
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59868501e-01 1.15331444e-09 3.10351350e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5529074731744775
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59868501e-01 1.15331444e-09 3.10351350e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5529074731744774
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59868501e-01 1.15331444e-09 3.10351350e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5529074731744775
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59868501e-01 1.15331444e-09 3.10351350e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5529074731744775
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59868501e-01 1.15331444e-09 3.10351350e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5529074731744775
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03440145e-01 1.15331444e-09 1.80812724e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880703157372
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03431930e-01 1.15331444e-09 1.80774227e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880707772969
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03431930e-01 1.15331444e-09 1.80774227e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880707772969
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03431930e-01 1.15331444e-09 1.80774227e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880707772969
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03431930e-01 1.15331444e-09 1.80774227e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880707772969
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03431930e-01 1.15331444e-09 1.80774227e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880707772969
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03440145e-01 1.15331444e-09 1.80812724e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880703157382
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03431930e-01 1.15331444e-09 1.80774227e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880707772969
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03431930e-01 1.15331444e-09 1.80774227e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880707772969
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03431930e-01 1.15331444e-09 1.80774227e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880707772969
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03431930e-01 1.15331444e-09 1.80774227e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880707772969
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03431930e-01 1.15331444e-09 1.80774227e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880707772969
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03440145e-01 1.15331444e-09 1.80812724e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.88070315739
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03431930e-01 1.15331444e-09 1.80774227e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880707772969
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03431930e-01 1.15331444e-09 1.80774227e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880707772969
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03431930e-01 1.15331444e-09 1.80774227e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880707772969
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03431930e-01 1.15331444e-09 1.80774227e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880707772969
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03431930e-01 1.15331444e-09 1.80774227e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880707772969
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03440145e-01 1.15331444e-09 1.80812724e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880703157345
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59526650e-01 1.15331444e-09 3.08884206e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5530493944974909
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59526650e-01 1.15331444e-09 3.08884206e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5530493944974909
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59526650e-01 1.15331444e-09 3.08884206e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5530493944974909
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59526650e-01 1.15331444e-09 3.08884206e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5530493944974909
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59526650e-01 1.15331444e-09 3.08884206e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5530493944974909
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03440145e-01 1.15331444e-09 1.80812724e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880703157352
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59711025e-01 1.15331444e-09 3.09673238e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5529722224112065
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59711025e-01 1.15331444e-09 3.09673238e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5529722224112068
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59711025e-01 1.15331444e-09 3.09673238e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5529722224112065
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59711025e-01 1.15331444e-09 3.09673238e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5529722224112065
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59711025e-01 1.15331444e-09 3.09673238e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5529722224112065
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03440145e-01 1.15331444e-09 1.80812724e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880703157363
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59868501e-01 1.15331444e-09 3.10351350e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5529074731744775
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59868501e-01 1.15331444e-09 3.10351350e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5529074731744774
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59868501e-01 1.15331444e-09 3.10351350e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5529074731744775
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59868501e-01 1.15331444e-09 3.10351350e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5529074731744775
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59868501e-01 1.15331444e-09 3.10351350e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5529074731744775
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03440145e-01 1.15331444e-09 1.80812724e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880703157372
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03431930e-01 1.15331444e-09 1.80774227e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880707772969
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03431930e-01 1.15331444e-09 1.80774227e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880707772969
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03431930e-01 1.15331444e-09 1.80774227e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880707772969
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03431930e-01 1.15331444e-09 1.80774227e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880707772969
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03431930e-01 1.15331444e-09 1.80774227e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880707772969
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03440145e-01 1.15331444e-09 1.80812724e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880703157382
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03431930e-01 1.15331444e-09 1.80774227e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880707772969
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03431930e-01 1.15331444e-09 1.80774227e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880707772969
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03431930e-01 1.15331444e-09 1.80774227e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880707772969
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03431930e-01 1.15331444e-09 1.80774227e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880707772969
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03431930e-01 1.15331444e-09 1.80774227e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880707772969
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03440145e-01 1.15331444e-09 1.80812724e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.88070315739
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03431930e-01 1.15331444e-09 1.80774227e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880707772969
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03431930e-01 1.15331444e-09 1.80774227e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880707772969
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03431930e-01 1.15331444e-09 1.80774227e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880707772969
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03431930e-01 1.15331444e-09 1.80774227e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880707772969
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03431930e-01 1.15331444e-09 1.80774227e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880707772969
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.54786824e-01 1.14974952e-09 2.88523311e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.555255610021227
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59526650e-01 1.15331444e-09 3.08884206e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5530493944974909
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59526650e-01 1.15331444e-09 3.08884206e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5530493944974909
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59526650e-01 1.15331444e-09 3.08884206e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5530493944974905
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59526650e-01 1.15331444e-09 3.08884206e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5530493944974909
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59526650e-01 1.15331444e-09 3.08884206e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5530493944974909
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.58279892e-01 1.15238444e-09 3.03534402e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5535910883032449
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59711025e-01 1.15331444e-09 3.09673238e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5529722224112065
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59711025e-01 1.15331444e-09 3.09673238e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5529722224112068
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59711025e-01 1.15331444e-09 3.09673238e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5529722224112065
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59711025e-01 1.15331444e-09 3.09673238e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5529722224112065
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59711025e-01 1.15331444e-09 3.09673238e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5529722224112065
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.58448708e-01 1.15330445e-09 3.04259773e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5535115086986198
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59869301e-01 1.15331489e-09 3.10351457e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5529066178532962
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59868501e-01 1.15331444e-09 3.10351350e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5529074731744774
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59868501e-01 1.15331444e-09 3.10351350e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5529074731744775
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59868501e-01 1.15331444e-09 3.10351350e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5529074731744775
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59868501e-01 1.15331444e-09 3.10351350e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5529074731744775
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.58605258e-01 1.15193175e-09 3.04931104e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5534511598550232
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03431930e-01 1.15331444e-09 1.80774227e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880707772969
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03431930e-01 1.15331444e-09 1.80774227e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880707772969
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03431930e-01 1.15331444e-09 1.80774227e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880707772969
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03431930e-01 1.15331444e-09 1.80774227e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880707772969
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03431930e-01 1.15331444e-09 1.80774227e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880707772969
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.58777482e-01 1.14817192e-09 3.05675949e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5533996786867017
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03431930e-01 1.15331444e-09 1.80774227e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880707772969
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03431930e-01 1.15331444e-09 1.80774227e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880707772969
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03431930e-01 1.15331444e-09 1.80774227e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880707772969
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03431930e-01 1.15331444e-09 1.80774227e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880707772969
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03431930e-01 1.15331444e-09 1.80774227e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880707772969
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.72474352e-01 1.93535707e-09 2.56953127e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8413.081306491458
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03431930e-01 1.15331444e-09 1.80774227e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880707772969
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03431930e-01 1.15331444e-09 1.80774227e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880707772969
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03431930e-01 1.15331444e-09 1.80774227e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880707772969
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03431930e-01 1.15331444e-09 1.80774227e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880707772969
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.03431930e-01 1.15331444e-09 1.80774227e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.880707772969
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.00424320e-01 1.15329958e-09 1.14940767e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.49641662907664624
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59526650e-01 1.15331444e-09 3.08884206e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5530493944974909
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59516594e-01 1.15331245e-09 3.08838177e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5530531663960052
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59517463e-01 1.15331267e-09 3.08841909e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5530528009315276
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59517244e-01 1.15331445e-09 3.08840964e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5530528819805575
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59517110e-01 1.15331180e-09 3.08840392e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5530529543121897
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.00573083e-01 1.15331310e-09 1.14941671e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.4962765912243259
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59703709e-01 1.15331324e-09 3.09641027e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5529751386875419
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59697169e-01 1.15331312e-09 3.09612968e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5529778558111701
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59709636e-01 1.15331365e-09 3.09666454e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5529726751893084
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59711405e-01 1.15331185e-09 3.09674046e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5529719519148184
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59712863e-01 1.15331121e-09 3.09680302e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5529713506083718
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.00741497e-01 1.15331822e-09 1.14942504e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.4961181916552276
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59863348e-01 1.15331451e-09 3.10325919e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5529090745294084
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59855216e-01 1.15331457e-09 3.10291036e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5529124278493468
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59860056e-01 1.15331446e-09 3.10311796e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5529104321918006
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59864251e-01 1.15331468e-09 3.10329792e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.552908701145052
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.59865030e-01 1.15331446e-09 3.10333138e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.552908380950427
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.00852575e-01 1.15335654e-09 1.14942977e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.4960135586132943
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [8.79391768e-01 9.81384946e-10 2.00720689e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8418.427641749546
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [9.70734698e-01 1.28618872e-09 3.96139980e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8418.411794051743
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [8.29301053e-01 1.21946005e-09 4.16910448e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8416.65605969687
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.91948521e-01 1.23014825e-09 3.78983854e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.836571323807
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.59586341e-01 1.21898631e-09 3.52658333e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.854925926862
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.00979918e-01 1.15338679e-09 1.14943550e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.4958937357605973
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [8.78102386e-01 8.19067923e-10 1.99760149e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8418.429798998843
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.45483335e-01 1.01190093e-09 2.32322738e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.56149359963182
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [8.30117957e-01 1.28274514e-09 4.18542803e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8416.655679700945
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.92577826e-01 1.30165894e-09 3.80439113e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.836104080749
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.60200009e-01 1.28021072e-09 3.54040023e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 8414.854410750975
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [7.01093726e-01 1.15341102e-09 1.14944032e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.4957867086770023
+------------------------
+x resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: [6.55222298e-01 9.29849731e-10 2.90698033e+00]
+f resultados_typeact0_saboth2_typerendtime_typesolverPowell.txt: 0.5566769566441042
+------------------------

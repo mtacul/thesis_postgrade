@@ -216,7 +216,7 @@ def objective(x, *args):
 import numpy as np
 from itertools import product
 
-def generate_initial_guesses(bounds, num_points_per_dim=6):
+def generate_initial_guesses(bounds, num_points_per_dim=4):
     """
     Genera una lista de initial guesses equiespaciados dentro de los bounds.
     num_points_per_dim: cuántos puntos quieres por dimensión (3**3 = 27 si hay 3 variables).
@@ -233,7 +233,8 @@ type_act_values = [0]
 S_A_both_values = [2]  
 # type_rend_values = ['acc', 'time', 'acc_time', 'acc_psd', 'psd_time','all']  # Diferentes tipos de rendimiento
 # type_rend_values = ['acc','acc_time','all'] 
-type_rend_values = ['acc','time','psd'] 
+# type_rend_values = ['acc','time','psd'] 
+type_rend_values = ['psd'] 
 
 # type_solver_values = ['L-BFGS-B','Powell','Nelder-Mead']
 type_solver_values = ['Powell']
@@ -274,7 +275,7 @@ for type_solver in type_solver_values:
                         bnds = ((0.01, 1.67), (0.012e-9, 3e-9), (0.29, 15))  # Para std_sensor_sol, std_magnetometros y lim
                         # initial_guess = [0.5, 1.5e-9, 1]  # std_sensor_sol, std_magnetometros y lim
                         # initial_guess = [1.6, 3e-9, 0.5]  # std_sensor_sol, std_magnetometros y lim
-                        initial_guesses = generate_initial_guesses(bnds, num_points_per_dim=3)
+                        initial_guesses = generate_initial_guesses(bnds, num_points_per_dim=4)
                         
                         for initial_guess in initial_guesses:
                             # result = minimize(objective, initial_guess, args=(type_act, S_A_both, type_rend, P_i, filename), method=type_solver, bounds=bnds)
@@ -288,10 +289,10 @@ for type_solver in type_solver_values:
                         initial_guess = [0.5, 1.5e-10, 0.1]  # std_sensor_sol, std_magnetometros y lim
     
     
-                # Ejecutar la optimización
-                result = minimize(objective, initial_guess, args=(type_act, S_A_both, type_rend, P_i, filename), method=type_solver, bounds=bnds)
-                save_res_txt(result.x, result.fun, file_result, filename,type_solver)
-                # Imprimir resultados
-                print(f"Optimización completada para type_act={type_act}, S_A_both={S_A_both}, type_rend={type_rend},type_solver={type_solver}")
-                print(f"x óptimo: {result.x}")
-                print(f"Valor mínimo de la función objetivo: {result.fun}\n")
+                # # Ejecutar la optimización
+                # result = minimize(objective, initial_guess, args=(type_act, S_A_both, type_rend, P_i, filename), method=type_solver, bounds=bnds)
+                # save_res_txt(result.x, result.fun, file_result, filename,type_solver)
+                # # Imprimir resultados
+                # print(f"Optimización completada para type_act={type_act}, S_A_both={S_A_both}, type_rend={type_rend},type_solver={type_solver}")
+                # print(f"x óptimo: {result.x}")
+                # print(f"Valor mínimo de la función objetivo: {result.fun}\n")
