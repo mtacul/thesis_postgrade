@@ -11,6 +11,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from scipy.linalg import solve_discrete_are
 from scipy.signal import welch
+import control as ctrl
 
 # %% Cargar datos del .csv obtenido
 
@@ -136,7 +137,6 @@ def suite_sim(sigma_ss, sigma_b,lim,type_act,S_A_both):
     elif type_act == 1:
         q = np.array([0.0789,0.0941,0.0789,0.9893])
         w = np.array([0.0001, 0.0001, 0.0001])
-        ws = np.array([0.00001, 0.00001, 0.00001])
         # q_est = np.array([0.70703804,0.00985969, 0.00985969, 0.70703804])
         # q_est= np.array([0.0120039,0.0116517,0.0160542,0.999731])
         q_est = np.array([0.0789,0.0941,0.0789,0.9893])
@@ -148,9 +148,7 @@ def suite_sim(sigma_ss, sigma_b,lim,type_act,S_A_both):
         w0_est = [w[0]]
         w1_est = [w[1]]
         w2_est = [w[2]]
-        w0s_est = [ws[0]]
-        w1s_est = [ws[1]]
-        w2s_est = [ws[2]]
+
 
         q0_real = [q[0]]
         q1_real = [q[1]]
@@ -159,23 +157,21 @@ def suite_sim(sigma_ss, sigma_b,lim,type_act,S_A_both):
         w0_real = [w[0]]
         w1_real = [w[1]]
         w2_real = [w[2]]
-        w0s_real = [ws[0]]
-        w1s_real = [ws[1]]
-        w2s_real = [ws[2]]
+        
         q_real = np.array([q0_real[-1],q1_real[-1],q2_real[-1],q3_real[-1]])
         w_body = np.array([w0_real[-1], w1_real[-1], w2_real[-1]])
         w_gyros = functions_06_rw.simulate_gyros_reading(w_body, 0,0)
-        ws_real = np.array([w0s_real[-1], w1s_real[-1], w2s_real[-1]])
-        x_real = np.hstack((np.transpose(q_real[:3]), np.transpose(w_gyros), np.transpose(ws_real)))
-        h_real = np.array([x_real[6]/I_s0_x-x_real[3], x_real[7]/I_s1_y-x_real[4], x_real[8]/I_s2_z-x_real[5]])
+        x_real = np.hstack((np.transpose(q_real[:3]), np.transpose(w_gyros)))
 
         bi_orbit = [Bx_orbit[0],By_orbit[0],Bz_orbit[0]]
         b_body_i = functions_06_rw.rotacion_v(q_real, bi_orbit, sigma_b)
 
         si_orbit = [vx_sun_orbit[0],vy_sun_orbit[0],vz_sun_orbit[0]]
         s_body_i = functions_06_rw.rotacion_v(q_real, si_orbit, sigma_ss)
-        hh =0.01
-        [A,B,C,A_discrete,B_discrete,C_discrete] = functions_06_rw.A_B(I_x,I_y,I_z,w0_O,0,0,0 , I_s0_x, I_s1_y, I_s2_z, 0,0,0, J_x, J_y, J_z, deltat, hh, bi_orbit,b_body_i, s_body_i)
+        hh =0.2
+        [A,B,C,A_discrete,B_discrete,C_discrete] = functions_06_rw.A_B(w0_O,0,0,0,J_x, J_y, J_z, deltat, hh, bi_orbit,b_body_i, s_body_i)
+        [A_mod,B_mod,C_mod,A_discrete_mod,B_discrete_mod,C_discrete_mod] = functions_06_rw.A_B(w0_O,0,0,0, J_x, J_y, J_z, deltat, hh_mod, bi_orbit,b_body_i, s_body_i)
+
     else:
         print("Solo puede poner en type_act el numero 0: Magnetorquer o 1:Rueda de reaccion")
              
@@ -240,18 +236,15 @@ def suite_sim(sigma_ss, sigma_b,lim,type_act,S_A_both):
         K = np.linalg.inv(B_prom.T @ P @ B_prom + R) @ (B_prom.T @ P @ A_discrete)
     elif type_act == 1:
         # Definir las matrices Q y R del coste del LQR
-        diag_Q = np.array([100, 1000000, 10000, 0.1, 0.1, 0.10, 0.01, 10, 10])*10000
-        diag_R = np.array([0.1,0.1,0.1])*100000
-
+        diag_Q = np.array([10, 10, 10, 10, 10, 10])*10000
+        diag_R = np.array([0.1,0.1,0.1])*10
+        
         Q = np.diag(diag_Q)
         R = np.diag(diag_R)
-
-        # Resolver la ecuación de Riccati
-        P = solve_discrete_are(A_discrete, B_discrete, Q, R)
-
+        
+        
         # Calcular la matriz de retroalimentación K
-        K = np.linalg.inv(B_discrete.T @ P @ B_discrete + R) @ (B_discrete.T @ P @ A_discrete)
-    
+        K, P, asad = ctrl.dlqr(A_discrete, B_discrete, Q, R)
     #%% Simulacion dinamica de actitud
     
     if type_act == 0:
@@ -305,16 +298,15 @@ def suite_sim(sigma_ss, sigma_b,lim,type_act,S_A_both):
             P_ki = P_k_pos
             
     elif type_act == 1:
-        diagonal_values = np.array([0.5**2, 0.5**2, 0.5**2, 0.1**2, 0.1**2, 0.1**2,0.01**2,0.01**2,0.01**2])
+        diagonal_values = np.array([0.5**2, 0.5**2, 0.5**2, 0.1**2, 0.1**2, 0.1**2])
         P_ki = np.diag(diagonal_values)
         np.random.seed(42)
         for i in range(len(t)-1):
             # print(t[i+1])
             q_est = np.array([q0_est[-1], q1_est[-1], q2_est[-1], q3_est[-1]])
             w_est = np.array([w0_est[-1], w1_est[-1], w2_est[-1]])
-            ws_est = np.array([w0s_est[-1], w1s_est[-1], w2s_est[-1]])
         
-            x_est = np.hstack((np.transpose(q_est[:3]), np.transpose(w_est), np.transpose(ws_est)))
+            x_est = np.hstack((np.transpose(q_est[:3]), np.transpose(w_est)))
             u_est = np.dot(-K,x_est)
         
             u_est = functions_06_rw.torquer(u_est,lim)
@@ -324,7 +316,6 @@ def suite_sim(sigma_ss, sigma_b,lim,type_act,S_A_both):
             
             x_real = xx_new_d
             w_gyros = functions_06_rw.simulate_gyros_reading(x_real[3:6],ruido_w,bias_w)
-            ws_real = x_real[6:9]
             q0_real.append(xx_new_d[0])
             q1_real.append(xx_new_d[1])
             q2_real.append(xx_new_d[2])
@@ -332,11 +323,7 @@ def suite_sim(sigma_ss, sigma_b,lim,type_act,S_A_both):
             w0_real.append(w_gyros[0])
             w1_real.append(w_gyros[1])
             w2_real.append(w_gyros[2])
-            w0s_real.append(ws_real[0])
-            w1s_real.append(ws_real[1])
-            w2s_real.append(ws_real[2])
             q_real = np.array([q0_real[-1],q1_real[-1],q2_real[-1],q3_real[-1]])
-            h_real = np.array([x_real[6]/I_s0_x-x_real[3], x_real[7]/I_s1_y-x_real[4], x_real[8]/I_s2_z-x_real[5]])
         
             b_orbit = [Bx_orbit[i+1],By_orbit[i+1],Bz_orbit[i+1]]
             b_body_med = functions_06_rw.rotacion_v(q_real, b_orbit,sigma_b)
@@ -344,12 +331,12 @@ def suite_sim(sigma_ss, sigma_b,lim,type_act,S_A_both):
             s_orbit = [vx_sun_orbit[i],vy_sun_orbit[i],vz_sun_orbit[i]]
             s_body_med = functions_06_rw.rotacion_v(q_real, s_orbit,sigma_ss)
         
-            [A,B,C,A_discrete,B_discrete,C_discrete] = functions_06_rw.A_B(I_x,I_y,I_z,w0_O, 0,0,0, I_s0_x, I_s1_y, I_s2_z,0,0,0, J_x, J_y, J_z,  deltat, hh,b_orbit, b_body_med, s_body_med)
+            [A,B,C,A_discrete,B_discrete,C_discrete] = functions_06_rw.A_B(w0_O,0,0,0,J_x, J_y, J_z, deltat, hh,b_orbit, b_body_med, s_body_med)
             
             if sigma_ss == 0 or sigma_b ==0:
-                [q_posteriori, w_posteriori, P_k_pos,K_k, ws_posteriori] = functions_06_rw.kalman_lineal(A_discrete, B_discrete,C_discrete, x_est, u_est, b_orbit,b_body_med, s_orbit, s_body_med, P_ki, sigma_b,sigma_ss, deltat,hh,h_real,I_s0_x, I_s1_y, I_s2_z,1,1)
+                [q_posteriori, w_posteriori, P_k_pos,K_k, ws_posteriori] = functions_06_rw.kalman_lineal(A_discrete, B_discrete,C_discrete, x_est, u_est, b_orbit,b_body_med, s_orbit, s_body_med, P_ki, sigma_b,sigma_ss, deltat,hh,1,1)
             else:
-                [q_posteriori, w_posteriori, P_k_pos,K_k, ws_posteriori] = functions_06_rw.kalman_lineal(A_discrete, B_discrete,C_discrete, x_est, u_est, b_orbit,b_body_med, s_orbit, s_body_med, P_ki, sigma_b, sigma_ss, deltat,hh,h_real,I_s0_x, I_s1_y, I_s2_z, sigma_b, sigma_ss)
+                [q_posteriori, w_posteriori, P_k_pos,K_k, ws_posteriori] = functions_06_rw.kalman_lineal(A_discrete, B_discrete,C_discrete, x_est, u_est, b_orbit,b_body_med, s_orbit, s_body_med, P_ki, sigma_b, sigma_ss, deltat,hh, sigma_b, sigma_ss)
             
             q0_est.append(q_posteriori[0])
             q1_est.append(q_posteriori[1])
@@ -358,9 +345,6 @@ def suite_sim(sigma_ss, sigma_b,lim,type_act,S_A_both):
             w0_est.append(w_posteriori[0])
             w1_est.append(w_posteriori[1])
             w2_est.append(w_posteriori[2])
-            w0s_est.append(ws_posteriori[0])
-            w1s_est.append(ws_posteriori[1])
-            w2s_est.append(ws_posteriori[2])
             P_ki = P_k_pos
         
     [MSE_cuat, MSE_omega]  = functions_06.cuat_MSE_NL(q0_real, q1_real, q2_real, q3_real, w0_real, w1_real, w2_real, q0_est, q1_est, q2_est, q3_est, w0_est, w1_est, w2_est)   

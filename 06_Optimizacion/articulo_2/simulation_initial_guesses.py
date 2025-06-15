@@ -152,6 +152,13 @@ for idx, ((x, f), guess) in enumerate(zip(results_psd, initial_guesses)):
 
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+from matplotlib.ticker import FuncFormatter
+
+# Función para formatear los valores del eje Y
+def y_formatter(y, _):
+    return f'{y*1e9:.1f}'  # puedes ajustar los decimales
+
+
 
 # Separamos los valores para graficar
 initial_x = [g[0] for g in initial_guesses]
@@ -170,20 +177,102 @@ optimal_x = [x[0] for x, _ in results_psd]
 optimal_y = [x[1] for x, _ in results_psd]
 optimal_z = [x[2] for x, _ in results_psd]
 
+
 # Crear el gráfico
 fig = plt.figure(figsize=(10, 7))
 ax = fig.add_subplot(111, projection='3d')
 
 # Graficar
 ax.scatter(initial_x, initial_y, initial_z, c='blue', label='Initial guesses')
-ax.scatter(optimal_x, optimal_y, optimal_z, c='red', label='Óptimos')
+ax.scatter(optimal_x, optimal_y, optimal_z, c='red', label='Optimal')
+
+# Aplicar el formateador
+ax.yaxis.set_major_formatter(FuncFormatter(y_formatter))
 
 # Etiquetas
-ax.set_xlabel('std_sensor_sol')
-ax.set_ylabel('std_magnetometros')
-ax.set_zlabel('lim')
+ax.set_xlabel('$\sigma_s$ [°]')
+ax.set_ylabel('$\sigma_b$ [nT]')
+ax.set_zlabel('$\tau$ [Am^2]')
 
 ax.legend()
 ax.grid(True)
-plt.title('Initial guesses y óptimos de optimización')
+# plt.title('Initial guesses and optimal values optimizing accuracy')
+# plt.title('Initial guesses and optimal values optimizing agility')
+plt.title('Initial guesses and optimal values optimizing jitter')
+# plt.savefig('opt_acc.pdf', format='pdf')
+# plt.savefig('opt_agility.pdf', format='pdf')
+plt.savefig('opt_jitter.pdf', format='pdf')
 plt.show()
+
+
+
+#%%
+
+
+# === GRÁFICO EN EL PLANO XZ ===
+fig = plt.figure(figsize=(10, 7))
+ax = fig.add_subplot(111)
+ax.scatter(initial_x, initial_z, c='blue', label='Initial guesses')
+ax.scatter(optimal_x, optimal_z, c='red', label='Optimal')
+ax.set_xlabel('$\sigma_s$ [°]', fontsize=19)
+ax.set_ylabel(r'$\tau$ [Am$^2$]', fontsize=19)
+ax.tick_params(labelsize=17)  # Tamaño de números en los ejes
+ax.grid(True)
+ax.legend(fontsize=16)        # Tamaño de la leyenda
+ax.set_title('XZ plane', fontsize=18)
+plt.tight_layout(rect=[0, 0, 1, 0.95])
+# plt.savefig('opt_acc_2D_XZ.pdf', format='pdf')
+# plt.savefig('opt_agility_2D_XZ.pdf', format='pdf')
+plt.savefig('opt_jitter_2D_XZ.pdf', format='pdf')
+plt.show()
+
+
+# === GRÁFICO EN EL PLANO XY ===
+fig = plt.figure(figsize=(10, 7))
+ax = fig.add_subplot(111)  # ← Esto también te faltaba
+ax.scatter(initial_x, initial_y, c='blue', label='Initial guesses')
+ax.scatter(optimal_x, optimal_y, c='red', label='Optimal')
+ax.set_xlabel('$\sigma_s$ [°]', fontsize=19)
+ax.set_ylabel('$\sigma_b$ [nT]',fontsize=19)
+ax.tick_params(labelsize=17)  # Tamaño de números en los ejes
+ax.grid(True)
+ax.legend(fontsize=16)        # Tamaño de la leyenda
+ax.set_title('XY plane', fontsize=18)
+plt.tight_layout(rect=[0, 0, 1, 0.95])
+# plt.savefig('opt_acc_2D_XY.pdf', format='pdf')
+# plt.savefig('opt_agility_2D_XY.pdf', format='pdf')
+plt.savefig('opt_jitter_2D_XY.pdf', format='pdf')
+plt.show()
+
+
+#%%
+# fig, axs = plt.subplots(1, 2, figsize=(15, 6))  # Dos subplots horizontales
+
+# # Plot en el plano XY
+# axs[0].scatter(initial_x, initial_y, c='blue', label='Initial guesses')
+# axs[0].scatter(optimal_x, optimal_y, c='red', label='Optimal')
+# axs[0].set_xlabel('$\sigma_s$ [°]')
+# axs[0].set_ylabel('$\sigma_b$ [nT]')
+# axs[0].yaxis.set_major_formatter(FuncFormatter(y_formatter))
+# axs[0].grid(True)
+# axs[0].legend()
+# axs[0].set_title('XY plane')
+
+# # Plot en el plano YZ
+# axs[1].scatter(initial_x, initial_z, c='blue', label='Initial guesses')
+# axs[1].scatter(optimal_x, optimal_z, c='red', label='Optimal')
+# axs[1].set_xlabel('$\sigma_s$ [°]')
+# axs[1].set_ylabel('$\tau$ [Am$^2$]')
+# # axs[1].xaxis.set_major_formatter(FuncFormatter(y_formatter))
+# axs[1].grid(True)
+# axs[1].legend()
+# axs[1].set_title('XZ plane')
+
+# # plt.suptitle('Initial guesses and optimal values optimizing accuracy')
+# # plt.suptitle('Initial guesses and optimal values optimizing agiity')
+# plt.suptitle('Initial guesses and optimal values optimizing jitter')
+# plt.tight_layout(rect=[0, 0, 1, 0.95])  # Ajuste para suptítulo
+# # plt.savefig('opt_acc_2D.pdf', format='pdf')
+# # plt.savefig('opt_agility_2D.pdf', format='pdf')
+# plt.savefig('opt_jitter_2D.pdf', format='pdf')
+# plt.show()

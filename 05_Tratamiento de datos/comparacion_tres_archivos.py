@@ -101,6 +101,9 @@ w2_real_1 = array_datos_1[:,17]
 Roll_low_pass_1 = array_datos_1[:,18]
 Pitch_low_pass_1 =  array_datos_1[:,19]
 Yaw_low_pass_1 =  array_datos_1[:,20]
+# ux_1 = array_datos_1[:,21]
+# uy_1 =  array_datos_1[:,22]
+# uz_1 =  array_datos_1[:,23]
 RPY_1 = np.transpose(np.vstack((Roll_1,Pitch_1,Yaw_1)))
 norms_RPY_1 = []
 for j in range(len(RPY_1)):
@@ -135,6 +138,9 @@ w2_real_2 = array_datos_2[:,17]
 Roll_low_pass_2 = array_datos_2[:,18]
 Pitch_low_pass_2 =  array_datos_2[:,19]
 Yaw_low_pass_2 =  array_datos_2[:,20]
+# ux_2 = array_datos_2[:,21]
+# uy_2 =  array_datos_2[:,22]
+# uz_2 =  array_datos_2[:,23]
 RPY_2 = np.transpose(np.vstack((Roll_2,Pitch_2,Yaw_2)))
 norms_RPY_2 = []
 for j in range(len(RPY_2)):
@@ -168,6 +174,9 @@ w2_real_3 = array_datos_3[:,17]
 Roll_low_pass_3 = array_datos_3[:,18]
 Pitch_low_pass_3 =  array_datos_3[:,19]
 Yaw_low_pass_3 =  array_datos_3[:,20]
+# ux_3 = array_datos_3[:,21]
+# uy_3 =  array_datos_3[:,22]
+# uz_3 =  array_datos_3[:,23]
 RPY_3 = np.transpose(np.vstack((Roll_3,Pitch_3,Yaw_3)))
 norms_RPY_3 = []
 for j in range(len(RPY_3)):
@@ -945,45 +954,244 @@ plt.show()
 
 # pdf_path
 #%%
-xticks = range(0, 6000, 1000)
-fig0, axes0 = plt.subplots(nrows=1, ncols=3, figsize=(15,4.5))
 
-axes0[0].plot(t_aux, norms_RPY_1, label= {nombre_archivo_1})
-axes0[0].set_xlabel('Tiempo [s]', fontsize=15)
-axes0[0].set_ylabel('Norma RPY [°]', fontsize=15)
+xticks = range(0, 6000, 1000)
+fig0, axes0 = plt.subplots(nrows=1, ncols=3, figsize=(15,4.9))
+
+axes0[0].plot(t_aux, norms_RPY_1, label= "Low level sensors")
+# axes0[0].plot(t_aux, norms_RPY_1, label= "Low level actuators")
+axes0[0].set_xlabel('Time [s]', fontsize=15)
+axes0[0].set_ylabel('$\eta$ [°]', fontsize=15)
 axes0[0].tick_params(axis='both', which='major', labelsize=15)  # Ajusta el tamaño de las etiquetas de los ejes
 axes0[0].set_xticks(xticks)
-axes0[0].legend(fontsize=12)
+axes0[0].legend(fontsize=14)
 axes0[0].grid()
 # axes0[0].set_xlim(0, 60000)   # Ajusta los límites en el eje Y
 
-axes0[1].plot(t_aux, norms_RPY_2, label={nombre_archivo_2},color='orange')
-axes0[1].set_xlabel('Tiempo [s]', fontsize=15)
-axes0[1].set_ylabel('Norma RPY [°]', fontsize=15)
+axes0[1].plot(t_aux, norms_RPY_2, label="Medium level sensors",color='orange')
+# axes0[1].plot(t_aux, norms_RPY_2, label="Medium level actuators",color='orange')
+axes0[1].set_xlabel('Time [s]', fontsize=15)
+axes0[1].set_ylabel('$\eta$ [°]', fontsize=15)
 axes0[1].tick_params(axis='both', which='major', labelsize=15)
 axes0[1].set_xticks(xticks)
-axes0[1].legend(fontsize=12)
+axes0[1].legend(fontsize=14)
 axes0[1].grid()
 # axes0[1].set_xlim(0, 60000)   # Ajusta los límites en el eje Y
 # axes0[1].set_ylim(-20, -5)  # Ajusta los límites en el eje Y
 # axes0[1].set_xlim(150000, 400000)  # Ajusta los límites en el eje Y
 
-axes0[2].plot(t_aux, norms_RPY_3, label={nombre_archivo_3},color='green')
-axes0[2].set_xlabel('Tiempo [s]', fontsize=15)
-axes0[2].set_ylabel('Norma RPY [°]', fontsize=15)
+axes0[2].plot(t_aux, norms_RPY_3, label="High level sensors",color='green')
+# axes0[2].plot(t_aux, norms_RPY_3, label="High level actuators",color='green')
+axes0[2].set_xlabel('Time [s]', fontsize=15)
+axes0[2].set_ylabel('$\eta$ [°]', fontsize=15)
 axes0[2].tick_params(axis='both', which='major', labelsize=15)
 axes0[2].set_xticks(xticks)
-axes0[2].legend(fontsize=12)
+axes0[2].legend(fontsize=14)
 axes0[2].grid()
 # axes0[2].set_xlim(0, 60000)  # Ajusta los límites en el eje Y
+period = 5760  # segundos
 
+for i in range(3):
+    ax = axes0[i]
+    ax2 = ax.twiny()  # eje superior
+    ax2.set_xlim(ax.get_xlim())
+    xticks_sec = ax.get_xticks()
+    xticks_orbit = xticks_sec / period
+    ax2.set_xticks(xticks_sec)
+    ax2.set_xticklabels([f"{o:.1f}" for o in xticks_orbit], fontsize=14)
+    ax2.set_xlabel("Orbits", fontsize=14)
 
 plt.tight_layout()
+
 # Save the plot as an SVG file
-plt.savefig('norm.svg', format='svg')
+plt.savefig('RW_LQR_sensores.pdf', format='pdf')
+# plt.savefig('RW_LQR_actuadores.pdf', format='pdf')
+# plt.savefig('MT_LQR_sensores.pdf', format='pdf')
+# plt.savefig('MT_LQR_actuadores.pdf', format='pdf')
 
 # Mostrar el gráfico
 plt.show()
+
+# %% Gráfica artículo
+
+# if opciones == [19,23,27]:
+    
+#     area_norm1x = np.trapz(ux_1, t_aux)
+#     area_norm1y = np.trapz(uy_1, t_aux)
+#     area_norm1z = np.trapz(uz_1, t_aux)
+#     area_norm1 = np.array([area_norm1x,area_norm1y,area_norm1z])
+#     area_norm1 = np.round(area_norm1,3)
+
+#     area_norm2x = np.trapz(ux_2, t_aux)
+#     area_norm2y = np.trapz(uy_2, t_aux)
+#     area_norm2z = np.trapz(uz_2, t_aux)
+#     area_norm2 = np.array([area_norm2x,area_norm2y,area_norm2z])
+#     area_norm2 = np.round(area_norm2,3)
+
+#     area_norm3x = np.trapz(ux_3, t_aux)
+#     area_norm3y = np.trapz(uy_3, t_aux)
+#     area_norm3z = np.trapz(uz_3, t_aux)
+#     area_norm3 = np.array([area_norm3x,area_norm3y,area_norm3z])
+#     area_norm3 = np.round(area_norm3,3)
+
+#     # Datos Q y R
+#     # diag_Q = np.array([1e4, 1e4, 1e4, 1e5, 1e5, 1e5])
+#     # diag_R = np.array([0.1, 0.1, 0.1]) * 10
+    
+#     # Q = np.diag(diag_Q)
+#     # R = np.diag(diag_R)
+    
+#     # def plot_norm_table_LQR(t, norm, diag_Q, diag_R, area, filename,letter):
+#     def plot_norm_table_LQR(t, norm, area, filename,letter):
+#         # Q1_str = f"[{', '.join([str(int(q)) for q in diag_Q[0:3]])}]"
+#         # Q2_str = f"[{', '.join([str(int(q)) for q in diag_Q[3:6]])}]"
+#         # R_str = f"[{', '.join([str(r) for r in diag_R])}]"
+#         area_str = f"[{', '.join([str(r) for r in area])}]"
+#         cell_text = [
+#             # ["diag(Q)[0:3]", Q1_str],
+#             # ["diag(Q)[3:6]", Q2_str],
+#             # ["diag(R)", R_str],
+#             # ["Area [$^\\circ \\cdot s$]", f"{area:.2f}"]
+#             ["Area [$Am^2 \\cdot s$]", area_str]
+#         ]
+        
+#         xticks = range(0, 6000, 1000)
+#         period = 5760
+    
+#         fig, ax = plt.subplots(figsize=(11, 7), dpi=300)  # dpi agregado
+#         ax.plot(t, norm, color='blue')
+#         ax.set_xlabel('Time [s]', fontsize=19)
+#         ax.set_ylabel('$\eta$ [°]', fontsize=19)
+#         ax.set_xticks(xticks)
+#         ax.tick_params(labelsize=18)
+#         ax.grid()
+#         ax.text(-0.075, 1.05, str(letter), transform=ax.transAxes, fontsize=35, fontweight='bold')
+
+#         # Eje superior en órbitas
+#         ax2 = ax.twiny()
+#         ax2.set_xlim(ax.get_xlim())
+#         xticks_sec = ax.get_xticks()
+#         xticks_orbit = xticks_sec / period
+#         ax2.set_xticks(xticks_sec)
+#         ax2.set_xticklabels([f"{o:.1f}" for o in xticks_orbit], fontsize=18)
+#         ax2.set_xlabel("Orbits", fontsize=18)
+    
+#         # Tabla dentro del gráfico
+#         table = ax.table(
+#             cellText=cell_text,
+#             colWidths=[0.78,1.2],
+#             cellLoc='left',
+#             loc='upper right',
+#             bbox=[0.35, 0.75, 0.6, 0.2]  # x, y, width, height (en coord. del gráfico)
+#         )
+#         table.auto_set_font_size(False)
+#         table.set_fontsize(19)
+    
+#         plt.tight_layout()
+#         plt.savefig(filename, format='pdf', bbox_inches='tight')
+#         plt.show()
+    
+#     # Llamadas
+#     # plot_norm_table_LQR(t_aux, norms_RPY_1, diag_Q, diag_R, area_norm1, "norm_LQR_low_table.pdf","(b)")
+#     # plot_norm_table_LQR(t_aux, norms_RPY_2, diag_Q, diag_R, area_norm2, "norm_LQR_medium_table.pdf","(d)")
+#     # plot_norm_table_LQR(t_aux, norms_RPY_3, diag_Q, diag_R, area_norm3, "norm_LQR_high_table.pdf","(f)")
+#     plot_norm_table_LQR(t_aux, norms_RPY_1, area_norm1, "norm_LQR_low_table.pdf","(b)")
+#     plot_norm_table_LQR(t_aux, norms_RPY_2, area_norm2, "norm_LQR_medium_table.pdf","(d)")
+#     plot_norm_table_LQR(t_aux, norms_RPY_3, area_norm3, "norm_LQR_high_table.pdf","(f)")
+
+# elif opciones == [10,14,18]:
+#     # area_norm1 = np.trapz(norms_RPY_1, t_aux)
+#     # area_norm2 = np.trapz(norms_RPY_2, t_aux)
+#     # area_norm3 = np.trapz(norms_RPY_3, t_aux)
+#     area_norm1x = np.trapz(ux_1, t_aux)
+#     area_norm1y = np.trapz(uy_1, t_aux)
+#     area_norm1z = np.trapz(uz_1, t_aux)
+#     area_norm1 = np.array([area_norm1x,area_norm1y,area_norm1z])
+#     area_norm1 = np.round(area_norm1,2)
+
+#     area_norm2x = np.trapz(ux_2, t_aux)
+#     area_norm2y = np.trapz(uy_2, t_aux)
+#     area_norm2z = np.trapz(uz_2, t_aux)
+#     area_norm2 = np.array([area_norm2x,area_norm2y,area_norm2z])
+#     area_norm2 = np.round(area_norm2,2)
+
+#     area_norm3x = np.trapz(ux_3, t_aux)
+#     area_norm3y = np.trapz(uy_3, t_aux)
+#     area_norm3z = np.trapz(uz_3, t_aux)
+#     area_norm3 = np.array([area_norm3x,area_norm3y,area_norm3z])
+#     area_norm3 = np.round(area_norm3,2)
+    
+#     # # Datos Q y R
+#     # diag_Kp = np.array([77.6523, 36.7972, 66.6921])
+#     # diag_Kd = np.array([94.1048, 74.1149, 98.26])
+    
+#     # K = np.hstack([np.diag(diag_Kp), np.diag(diag_Kd)])
+    
+    
+#     # def plot_norm_table_PD(t, norm, diag_Kp, diag_Kd, area, filename,letter):
+#     def plot_norm_table_PD(t, norm, area, filename,letter):
+#         # Kp_str = f"[{', '.join([str(int(q)) for q in diag_Kp])}]"
+#         # Kd_str = f"[{', '.join([str(int(q)) for q in diag_Kd])}]"
+#         area_str = f"[{', '.join([str(r) for r in area])}]"
+
+#         cell_text = [
+#             # ["diag(Kp)", Kp_str],
+#             # ["diag(Kd)", Kd_str],
+#             # ["Area [$^\\circ \\cdot s$]", f"{area:.2f}"]
+#             ["Area [$Am^2 \\cdot s$]", area_str]
+
+#         ]
+        
+#         xticks = range(0, 6000, 1000)
+#         period = 5760
+    
+#         fig, ax = plt.subplots(figsize=(11, 7), dpi=300)  # dpi agregado
+#         ax.plot(t, norm, color='blue')
+#         ax.set_xlabel('Time [s]', fontsize=19)
+#         ax.set_ylabel('$\eta$ [°]', fontsize=19)
+#         ax.set_xticks(xticks)
+#         ax.tick_params(labelsize=18)
+#         ax.grid()
+#         ax.text(-0.075, 1.05, str(letter), transform=ax.transAxes, fontsize=35, fontweight='bold')
+
+#         # Eje superior en órbitas
+#         ax2 = ax.twiny()
+#         ax2.set_xlim(ax.get_xlim())
+#         xticks_sec = ax.get_xticks()
+#         xticks_orbit = xticks_sec / period
+#         ax2.set_xticks(xticks_sec)
+#         ax2.set_xticklabels([f"{o:.1f}" for o in xticks_orbit], fontsize=18)
+#         ax2.set_xlabel("Orbits", fontsize=18)
+    
+#         # Tabla dentro del gráfico
+#         table = ax.table(
+#             cellText=cell_text,
+#             # colWidths=[0.8, 1.2],
+#             # cellLoc='left',
+#             # loc='upper right',
+#             # bbox=[0.35, 0.6, 0.5, 0.3]  # x, y, width, height (en coord. del gráfico)
+#             colWidths=[0.78,1.2],
+#             cellLoc='left',
+#             loc='upper right',
+#             bbox=[0.35, 0.75, 0.6, 0.2]  # x, y, width, height (en coord. del gráfico)
+#         )
+#         table.auto_set_font_size(False)
+#         table.set_fontsize(19)
+    
+#         plt.tight_layout()
+#         plt.savefig(filename, format='pdf', bbox_inches='tight')
+#         plt.show()
+    
+#     # Llamadas
+#     # plot_norm_table_PD(t_aux, norms_RPY_1, diag_Kp, diag_Kd, area_norm1, "norm_PD_low_table.pdf","(a)")
+#     # plot_norm_table_PD(t_aux, norms_RPY_2, diag_Kp, diag_Kd, area_norm2, "norm_PD_medium_table.pdf","(c)")
+#     # plot_norm_table_PD(t_aux, norms_RPY_3, diag_Kp, diag_Kd, area_norm3, "norm_PD_high_table.pdf","(e)")
+#     plot_norm_table_PD(t_aux, norms_RPY_1, area_norm1, "norm_PD_low_table.pdf","(a)")
+#     plot_norm_table_PD(t_aux, norms_RPY_2, area_norm2, "norm_PD_medium_table.pdf","(c)")
+#     plot_norm_table_PD(t_aux, norms_RPY_3, area_norm3, "norm_PD_high_table.pdf","(e)")
+
+
+#%%
 
 
 # #%%

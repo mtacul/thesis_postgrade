@@ -113,13 +113,15 @@ lim = lim_tau_values[opcion_tau]
 
 #%% Condiciones iniciales reales y estimadas
 
+q = np.array([0.1771,0.3063,0.1771,0.9202])
 # q= np.array([0,0.7071,0,0.7071])
 # q= np.array([0,0,0,1])
-q = np.array([0.0789,0.0941,0.0789,0.9893])
-w = np.array([0.0001, 0.0001, 0.0001])*100
+# q = np.array([0.0789,0.0941,0.0789,0.9893])
+w = np.array([0.0001, 0.0001, 0.0001])*1
 # q_est = np.array([0.00985969, 0.70703804, 0.00985969, 0.70703804])
 # q_est= np.array([0.0120039,0.0116517,0.0160542,0.999731])
-q_est = np.array([0.0789,0.0941,0.0789,0.9893])
+# q_est = np.array([0.0789,0.0941,0.0789,0.9893])
+q_est = np.array([0.1771,0.3063,0.1771,0.9202])
 
 q0_est = [q_est[0]]
 q1_est = [q_est[1]]
@@ -215,7 +217,10 @@ K = np.linalg.inv(B_prom.T @ P @ B_prom + R) @ (B_prom.T @ P @ A_discrete)
 diagonal_values = np.array([0.5**2, 0.5**2, 0.5**2, 0.1**2, 0.1**2, 0.1**2])
 P_ki = np.diag(diagonal_values)
 np.random.seed(42)
-us = []
+usx = []
+usy = []
+usz = []
+
 for i in range(len(t)-1):
     # print(t[i+1])
     # print(x_real)
@@ -227,7 +232,9 @@ for i in range(len(t)-1):
     u_est = np.dot(-K,x_est)
     # print(u_est)
     u_est = functions_03.torquer(u_est,lim)
-    us.append(u_est)
+    usx.append(u_est[0])
+    usy.append(u_est[1])
+    usz.append(u_est[2])
     [xx_new_d, qq3_new_d] = functions_03.mod_lineal_disc(
         x_real, u_est, deltat, hh_mod, A_discrete_mod,B_prom_mod)
     
@@ -276,7 +283,10 @@ for i in range(len(t)-1):
 
     P_ki = P_k_pos
     
-    
+u_est = np.dot(K,x_est)
+usx.append(u_est[0])
+usy.append(u_est[1])
+usz.append(u_est[2])
     
 [MSE_cuat, MSE_omega]  = functions_03.cuat_MSE_NL(q0_real, q1_real, q2_real, q3_real, w0_real, w1_real, w2_real, q0_est, q1_est, q2_est, q3_est, w0_est, w1_est, w2_est)   
 [RPY_all_est,RPY_all_id,mse_roll,mse_pitch,mse_yaw] = functions_03.RPY_MSE(t, q0_est, q1_est, q2_est, q3_est, q0_real, q1_real, q2_real, q3_real)   
@@ -478,6 +488,9 @@ datos = {
     'Roll_real': RPY_all_id[:,0],
     'Pitch_real': RPY_all_id[:,1],
     'Yaw_real': RPY_all_id[:,2],
+    'usx': usx,
+    'usy': usy,
+    'usz': usz,
 }
 
 # Crear un DataFrame de pandas a partir del diccionario

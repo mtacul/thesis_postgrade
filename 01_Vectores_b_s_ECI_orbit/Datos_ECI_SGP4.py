@@ -66,7 +66,7 @@ else:
     
     # Define el tiempo de propagación en segundos 
     # propagation_time = 5762 * 5
-    propagation_time = 5762 * 1
+    propagation_time = 5762 * 1 
     
     #%% Listas donde guardar las variables ECI y body
     
@@ -439,9 +439,9 @@ else:
     fig0, ax = plt.subplots(figsize=(10,6))  # Crea un solo set de ejes
     
     # Graficar los tres conjuntos de datos en la misma gráfica
-    ax.plot(t_aux,Bx_IGRF_n, label='x')
-    ax.plot(t_aux, By_IGRF_n, label='y')
-    ax.plot(t_aux, Bz_IGRF_n, label='z')
+    ax.plot(t_aux, Bx_ECI_n, label='x')
+    ax.plot(t_aux, By_ECI_n, label='y')
+    ax.plot(t_aux, Bz_ECI_n, label='z')
 
     # Configurar etiquetas, leyenda y grid
     ax.set_xlabel('Tiempo [s]', fontsize=18)
@@ -458,7 +458,7 @@ else:
     plt.tight_layout()
     
     # Guardar la gráfica como archivo SVG
-    # plt.savefig('bb.pdf', format='pdf')
+    plt.savefig('bb1.pdf', format='pdf')
     
     # Mostrar la gráfica
     plt.show()

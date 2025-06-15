@@ -233,8 +233,8 @@ type_act_values = [0]
 S_A_both_values = [2]  
 # type_rend_values = ['acc', 'time', 'acc_time', 'acc_psd', 'psd_time','all']  # Diferentes tipos de rendimiento
 # type_rend_values = ['acc','acc_time','all'] 
-# type_rend_values = ['acc','time','psd'] 
-type_rend_values = ['psd'] 
+type_rend_values = ['acc','time','psd'] 
+# type_rend_values = ['psd'] 
 
 # type_solver_values = ['L-BFGS-B','Powell','Nelder-Mead']
 type_solver_values = ['Powell']
@@ -273,8 +273,6 @@ for type_solver in type_solver_values:
                 elif S_A_both == 2:
                     if type_act == 0:
                         bnds = ((0.01, 1.67), (0.012e-9, 3e-9), (0.29, 15))  # Para std_sensor_sol, std_magnetometros y lim
-                        # initial_guess = [0.5, 1.5e-9, 1]  # std_sensor_sol, std_magnetometros y lim
-                        # initial_guess = [1.6, 3e-9, 0.5]  # std_sensor_sol, std_magnetometros y lim
                         initial_guesses = generate_initial_guesses(bnds, num_points_per_dim=4)
                         
                         for initial_guess in initial_guesses:

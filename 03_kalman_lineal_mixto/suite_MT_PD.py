@@ -106,11 +106,13 @@ lim = lim_tau_values[opcion_tau]
 #%%
 # q= np.array([0,0.7071,0,0.7071])
 # q= np.array([0,0,0,1])
-q = np.array([0.0789,0.0941,0.0789,0.9893])
+# q = np.array([0.0789,0.0941,0.0789,0.9893])
+q = np.array([0.1771,0.3063,0.1771,0.9202])
 w = np.array([0.0001, 0.0001, 0.0001])
 # q_est = np.array([0.00985969, 0.70703804, 0.00985969, 0.70703804])
 # q_est= np.array([0.0120039,0.0116517,0.0160542,0.999731])
-q_est = np.array([0.0789,0.0941,0.0789,0.9893])
+# q_est = np.array([0.0789,0.0941,0.0789,0.9893])
+q_est = np.array([0.1771,0.3063,0.1771,0.9202])
 
 q0_est = [q_est[0]]
 q1_est = [q_est[1]]
@@ -179,14 +181,20 @@ B_prom_mod = np.vstack((B_concanate_mod[0:3],B_concanate_mod[3:6],B_concanate_mo
 
 #%% Control PD
 
-x0 = np.array([331.118,
-250.109,
-442.579,
-370.116,
-333.062,
-515.586
-])*0.1
-
+# x0 = np.array([331.118,
+# 250.109,
+# 442.579,
+# 370.116,
+# 333.062,
+# 515.586
+# ])*0.1
+x0 = np.array([38.4185,
+25.3888,
+57.0654,
+64.6042,
+37.0606,
+82.303
+])
 optimal_x = functions_03.opt_K(A_discrete, B_prom, deltat, hh, x0)
 K = np.hstack([np.diag(optimal_x[:3]), np.diag(optimal_x[3:])])
 
@@ -213,6 +221,10 @@ K = np.hstack([np.diag(optimal_x[:3]), np.diag(optimal_x[3:])])
 diagonal_values = np.array([0.5**2, 0.5**2, 0.5**2, 0.1**2, 0.1**2, 0.1**2])
 P_ki = np.diag(diagonal_values)
 np.random.seed(42)
+usx = []
+usy = []
+usz = []
+
 for i in range(len(t)-1):
     # print(t[i+1])
     q_est = np.array([q0_est[-1], q1_est[-1], q2_est[-1], q3_est[-1]])
@@ -221,6 +233,9 @@ for i in range(len(t)-1):
 
     u_est = np.dot(K,x_est)
     u_est = functions_03.torquer(u_est,lim)
+    usx.append(u_est[0])
+    usy.append(u_est[1])
+    usz.append(u_est[2])
 
     [xx_new_d, qq3_new_d] = functions_03.mod_lineal_disc(
         x_real, u_est, deltat, hh_mod, A_discrete_mod,B_prom_mod)
@@ -259,6 +274,11 @@ for i in range(len(t)-1):
     w2_est.append(w_posteriori[2])
 
     P_ki = P_k_pos
+    
+u_est = np.dot(K,x_est)
+usx.append(u_est[0])
+usy.append(u_est[1])
+usz.append(u_est[2])
 
 [MSE_cuat, MSE_omega]  = functions_03.cuat_MSE_NL(q0_real, q1_real, q2_real, q3_real, w0_real, w1_real, w2_real, q0_est, q1_est, q2_est, q3_est, w0_est, w1_est, w2_est)   
 [RPY_all_est,RPY_all_id,mse_roll,mse_pitch,mse_yaw] = functions_03.RPY_MSE(t, q0_est, q1_est, q2_est, q3_est, q0_real, q1_real, q2_real, q3_real)   
@@ -459,6 +479,9 @@ datos = {
     'Roll_real': RPY_all_id[:,0],
     'Pitch_real': RPY_all_id[:,1],
     'Yaw_real': RPY_all_id[:,2],
+    'usx': usx,
+    'usy': usy,
+    'usz': usz,
 }
 
 # Crear un DataFrame de pandas a partir del diccionario

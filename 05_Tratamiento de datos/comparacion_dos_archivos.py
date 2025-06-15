@@ -676,63 +676,79 @@ plt.savefig('plot.pdf', format='pdf')
 # Show the plot (optional)
 plt.show()
 #%%
-xticks = range(0, 30001, 10000)
-fig0, axes0 = plt.subplots(nrows=1, ncols=2, figsize=(15,4.5))
 
-axes0[0].plot(t_aux, norms_RPY_1, label= {nombre_archivo_1})
-axes0[0].set_xlabel('Tiempo [s]', fontsize=15)
-axes0[0].set_ylabel('Norma RPY [°]', fontsize=15)
+xticks = range(0, 6000, 1000)
+fig0, axes0 = plt.subplots(nrows=1, ncols=2, figsize=(12,5))
+
+# axes0[0].plot(t_aux, norms_RPY_1, label= 'Reaction Wheel')
+axes0[0].plot(t_aux, norms_RPY_1, label= 'PD controller')
+axes0[0].set_xlabel('Time [s]', fontsize=15)
+axes0[0].set_ylabel('$\eta$ [°]', fontsize=15)
 axes0[0].tick_params(axis='both', which='major', labelsize=15)  # Ajusta el tamaño de las etiquetas de los ejes
 axes0[0].set_xticks(xticks)
-axes0[0].legend(fontsize=12)
+axes0[0].legend(fontsize=14)
 axes0[0].grid()
-axes0[0].set_xlim(0, 30000)   # Ajusta los límites en el eje Y
+# axes0[0].set_xlim(0, 60000)   # Ajusta los límites en el eje Y
 
-axes0[1].plot(t_aux, norms_RPY_2, label={nombre_archivo_2},color='orange')
-axes0[1].set_xlabel('Tiempo [s]', fontsize=15)
-axes0[1].set_ylabel('Norma RPY [°]', fontsize=15)
+# axes0[1].plot(t_aux, norms_RPY_2, label="Magnetic Torquer",color='orange')
+axes0[1].plot(t_aux, norms_RPY_2, label="LQR controller",color='orange')
+axes0[1].set_xlabel('Time [s]', fontsize=15)
+axes0[1].set_ylabel('$\eta$ [°]', fontsize=15)
 axes0[1].tick_params(axis='both', which='major', labelsize=15)
 axes0[1].set_xticks(xticks)
-axes0[1].legend(fontsize=12)
+axes0[1].legend(fontsize=14)
 axes0[1].grid()
-axes0[1].set_xlim(0, 30000)   # Ajusta los límites en el eje Y
+# axes0[1].set_xlim(0, 60000)   # Ajusta los límites en el eje Y
 # axes0[1].set_ylim(-20, -5)  # Ajusta los límites en el eje Y
 # axes0[1].set_xlim(150000, 400000)  # Ajusta los límites en el eje Y
 
+period = 5760  # segundos
+
+for i in range(2):
+    ax = axes0[i]
+    ax2 = ax.twiny()  # eje superior
+    ax2.set_xlim(ax.get_xlim())
+    xticks_sec = ax.get_xticks()
+    xticks_orbit = xticks_sec / period
+    ax2.set_xticks(xticks_sec)
+    ax2.set_xticklabels([f"{o:.1f}" for o in xticks_orbit], fontsize=14)
+    ax2.set_xlabel("Orbits", fontsize=14)
+
 plt.tight_layout()
+
 # Save the plot as an SVG file
-# plt.savefig('norm_2.svg', format='svg')
+plt.savefig('PD_LQR_nivel2.pdf', format='pdf')
+# plt.savefig('MT_RW_nivel2.pdf', format='pdf')
 
 # Mostrar el gráfico
 plt.show()
 
-# pdf_path
 #%%
-fig0, ax = plt.subplots(figsize=(15,5))  # Crea un solo set de ejes
+# fig0, ax = plt.subplots(figsize=(15,5))  # Crea un solo set de ejes
 
-# Graficar los tres conjuntos de datos en la misma gráfica
-ax.plot(t_aux, norms_RPY_1, label='Rueda de reacción')
-ax.plot(t_aux, norms_RPY_2, label='Magnetorquer', color='orange')
+# # Graficar los tres conjuntos de datos en la misma gráfica
+# ax.plot(t_aux, norms_RPY_1, label='Rueda de reacción')
+# ax.plot(t_aux, norms_RPY_2, label='Magnetorquer', color='orange')
 
-# Configurar etiquetas, leyenda y grid
-ax.set_xlabel('Tiempo [s]', fontsize=18)
-ax.set_ylabel('Error en ángulo de orientación [°]', fontsize=18)
-ax.legend(fontsize=18)
-ax.grid()
+# # Configurar etiquetas, leyenda y grid
+# ax.set_xlabel('Tiempo [s]', fontsize=18)
+# ax.set_ylabel('Error en ángulo de orientación [°]', fontsize=18)
+# ax.legend(fontsize=18)
+# ax.grid()
 
-# Ajustar límites del eje X
-ax.set_xlim(0, 30000)
+# # Ajustar límites del eje X
+# ax.set_xlim(0, 30000)
 
-# Ajustar el tamaño de las etiquetas de los ticks
-ax.tick_params(axis='both', which='major', labelsize=18)
+# # Ajustar el tamaño de las etiquetas de los ticks
+# ax.tick_params(axis='both', which='major', labelsize=18)
 
-plt.tight_layout()
+# plt.tight_layout()
 
-# Guardar la gráfica como archivo SVG
-# plt.savefig('norm2.svg', format='svg')
+# # Guardar la gráfica como archivo SVG
+# # plt.savefig('norm2.svg', format='svg')
 
-# Mostrar la gráfica
-plt.show()
+# # Mostrar la gráfica
+# plt.show()
 
 
 #%%

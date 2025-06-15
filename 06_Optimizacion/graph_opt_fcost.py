@@ -93,8 +93,8 @@ for carpeta in carpetas:
 
     # Combinaciones
     type_act_values = [0]  # Por ejemplo: magnetorquer(0) o rueda de reacción(1)
-    S_A_both_values = [0]  # Diferentes combinaciones de sensor y actuador 0: sensor, 1: actuador, 2: ambos
-    type_rend_values = ['acc']
+    S_A_both_values = [2]  # Diferentes combinaciones de sensor y actuador 0: sensor, 1: actuador, 2: ambos
+    type_rend_values = ['all']
 
     # Verificar si el archivo "optimizacion.txt" existe en la carpeta
     if not os.path.exists('optimizacion_4.txt'):
@@ -138,24 +138,24 @@ for carpeta in carpetas:
 
 iteraciones = list(range(0,len(f_costs)))
 
-fig0, ax = plt.subplots(figsize=(15,7))  # Crea un solo set de ejes
+fig0, ax = plt.subplots(figsize=(10,5))  # Crea un solo set de ejes
 
 # Graficar los tres conjuntos de datos en la misma gráfica
 ax.scatter(solver, valores_f, label= line)
 
 # Configurar etiquetas, leyenda y grid
-ax.set_xlabel('solver minimize', fontsize=18)
-ax.set_ylabel('función objetivo', fontsize=18)
+ax.set_xlabel('solver Scipy.minimize', fontsize=18)
+ax.set_ylabel('f [-]', fontsize=18)
 # ax.set_title('cond_iniciales [0.5, 1.5e-9]',fontsize=18)
 # ax.set_title('cond_iniciales [0.8, 0.5e-9]',fontsize=18)
 # ax.set_title('cond_iniciales [1.6, 3.0e-09]',fontsize=18)
-ax.set_title('cond_iniciales [0.05, 1.5e-11]',fontsize=18)
+# ax.set_title('cond_iniciales [0.05, 1.5e-11]',fontsize=18)
 # ax.set_title('cond_iniciales [0.5, 1.5e-9, 1]',fontsize=18)
 # ax.set_title('cond_iniciales [0.8, 0.5e-9, 1]',fontsize=18)
 # ax.set_title('cond_iniciales [1.6, 3.0e-09, 0.5]',fontsize=18)
-# ax.set_title('cond_iniciales [0.05, 1.5e-11, 40]',fontsize=18)
+ax.set_title('cond_iniciales [0.05, 1.5e-11, 40]',fontsize=18)
 
-ax.legend(fontsize=18)
+# ax.legend(fontsize=18)
 ax.grid()
 
 # # Ajustar límites del eje X
@@ -167,7 +167,14 @@ ax.tick_params(axis='both', which='major', labelsize=18)
 plt.tight_layout()
 
 # Guardar la gráfica como archivo SVG
-plt.savefig('potencia_RW.pdf', format='pdf')
+# plt.savefig('cond_iniciales_0.5_1.5e-9.pdf', format='pdf')
+# plt.savefig('cond_iniciales_0.8_0.5e-9.pdf', format='pdf')
+# plt.savefig('cond_iniciales_1.6_3.0e-9.pdf', format='pdf')
+# plt.savefig('cond_iniciales_0.05_1.5e-11.pdf', format='pdf')
+# plt.savefig('cond_iniciales_0.5_1.5e-9_1.pdf', format='pdf')
+# plt.savefig('cond_iniciales_0.8_0.5e-9_1.pdf', format='pdf')
+# plt.savefig('cond_iniciales_1.6_3.0e-9_0.5.pdf', format='pdf')
+plt.savefig('cond_iniciales_0.05_1.5e-11_40.pdf', format='pdf')
 
 # Mostrar la gráfica
 plt.show()

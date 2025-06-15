@@ -474,7 +474,7 @@ axs[0, 0].plot(x_fit_tau, y_potencial_tau, label=f'Fit: $y = {a_pot:.2e} x^{{{b_
 axs[0, 0].set_xlabel('lim_MT (Am²)')
 axs[0, 0].set_ylabel('Power (W)')
 axs[0, 0].set_xlim([min(lim_MT)-3, max(lim_MT)+3])
-axs[0, 0].set_ylim([min(potencias_MT)-0.1, max(potencias_MT)+0.1])
+axs[0, 0].set_ylim([min(potencias_MT)-0.5, max(potencias_MT)+0.1])
 axs[0, 0].legend()
 axs[0, 0].grid(True)
 
